@@ -13,7 +13,7 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.IOException;
 
-import pe.com.ricindigus.appednom2018.FileChooser;
+import pe.com.ricindigus.appednom2018.util.FileChooser;
 import pe.com.ricindigus.appednom2018.R;
 import pe.com.ricindigus.appednom2018.modelo.Data;
 import pe.com.ricindigus.appednom2018.modelo.UsuarioLocal;

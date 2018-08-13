@@ -21,6 +21,14 @@ import java.util.Map;
 
 import pe.com.ricindigus.appednom2018.R;
 import pe.com.ricindigus.appednom2018.adapters.ExpandListAdapter;
+import pe.com.ricindigus.appednom2018.fragments.ingreso_cajas_local.CajasInFragment;
+import pe.com.ricindigus.appednom2018.fragments.registro_control_asistencia.AsistAulaFragment;
+import pe.com.ricindigus.appednom2018.fragments.registro_control_asistencia.AsistLocalFragment;
+import pe.com.ricindigus.appednom2018.fragments.registro_control_inventario.InvCuaderFragment;
+import pe.com.ricindigus.appednom2018.fragments.registro_control_inventario.InvFichaFragment;
+import pe.com.ricindigus.appednom2018.fragments.registro_control_inventario.InvListAsisFragment;
+import pe.com.ricindigus.appednom2018.fragments.salida_cajas_local.CajasOutFragment;
+import pe.com.ricindigus.appednom2018.util.TipoFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -51,11 +59,7 @@ public class MainActivity extends AppCompatActivity {
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         enableExpandableList();
-//        FragmentManager fragmentManager = getSupportFragmentManager();
-//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//        EntradaFragment entradaFragment = new EntradaFragment(sede,MainActivity.this);
-//        fragmentTransaction.replace(R.id.fragment_layout, entradaFragment);
-//        fragmentTransaction.commit();
+        setFragment(TipoFragment.CAJAS_IN);
     }
 
     @Override
@@ -71,6 +75,43 @@ public class MainActivity extends AppCompatActivity {
     public void ocultarTeclado(View view){
         InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         mgr.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+
+    public void setFragment(int tipoFragment){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        switch (tipoFragment){
+            case TipoFragment.CAJAS_IN:
+                CajasInFragment cajasInFragment = new CajasInFragment();
+                fragmentTransaction.replace(R.id.fragment_layout, cajasInFragment);
+                break;
+            case TipoFragment.CAJAS_OUT:
+                CajasOutFragment cajasOutFragment = new CajasOutFragment();
+                fragmentTransaction.replace(R.id.fragment_layout, cajasOutFragment);
+                break;
+            case TipoFragment.REGISTRO_ASISTENCIA_AULA:
+                AsistAulaFragment asistAulaFragment = new AsistAulaFragment();
+                fragmentTransaction.replace(R.id.fragment_layout, asistAulaFragment);
+                break;
+            case TipoFragment.REGISTRO_ASISTENCIA_LOCAL:
+                AsistLocalFragment asistLocalFragment = new AsistLocalFragment();
+                fragmentTransaction.replace(R.id.fragment_layout, asistLocalFragment);
+                break;
+            case TipoFragment.REGISTRO_INVENTARIO_CUADERNILLO:
+                InvCuaderFragment invCuaderFragment = new InvCuaderFragment();
+                fragmentTransaction.replace(R.id.fragment_layout, invCuaderFragment);
+                break;
+            case TipoFragment.REGISTRO_INVENTARIO_FICHA:
+                InvFichaFragment invFichaFragment = new InvFichaFragment();
+                fragmentTransaction.replace(R.id.fragment_layout, invFichaFragment);
+                break;
+            case TipoFragment.REGISTRO_INVENTARIO_LISTA_ASISTENCIA:
+                InvListAsisFragment invListAsisFragment = new InvListAsisFragment();
+                fragmentTransaction.replace(R.id.fragment_layout, invListAsisFragment);
+                break;
+        }
+        fragmentTransaction.commit();
     }
 
     private void enableExpandableList() {
@@ -89,30 +130,37 @@ public class MainActivity extends AppCompatActivity {
                     case 0:
                         switch (childPosition){
                             case 0:
+                                setFragment(TipoFragment.CAJAS_IN);
                                 Toast.makeText(MainActivity.this, "Ingreso de cajas al local: Cajas", Toast.LENGTH_SHORT).show();break;
                         }
                         break;
                     case 1:
                         switch (childPosition){
                             case 0:
+                                setFragment(TipoFragment.REGISTRO_ASISTENCIA_LOCAL);
                                 Toast.makeText(MainActivity.this, "Registro de control de Asistencia: Local", Toast.LENGTH_SHORT).show();break;
                             case 1:
+                                setFragment(TipoFragment.REGISTRO_ASISTENCIA_AULA);
                                 Toast.makeText(MainActivity.this, "Registro de control de Asistencia: Aula", Toast.LENGTH_SHORT).show();break;
                         }
                         break;
                     case 2:
                         switch (childPosition){
                             case 0:
+                                setFragment(TipoFragment.REGISTRO_INVENTARIO_FICHA);
                                 Toast.makeText(MainActivity.this, "Registro de Control de Inventario: Ficha", Toast.LENGTH_SHORT).show();break;
                             case 1:
+                                setFragment(TipoFragment.REGISTRO_INVENTARIO_CUADERNILLO);
                                 Toast.makeText(MainActivity.this, "Registro de Control de Inventario: Cuadernillo", Toast.LENGTH_SHORT).show();break;
                             case 2:
+                                setFragment(TipoFragment.REGISTRO_INVENTARIO_LISTA_ASISTENCIA);
                                 Toast.makeText(MainActivity.this, "Registro de Control de Inventario: Lista de Asistencia", Toast.LENGTH_SHORT).show();break;
                         }
                         break;
                     case 3:
                         switch (childPosition){
                             case 0:
+                                setFragment(TipoFragment.CAJAS_OUT);
                                 Toast.makeText(MainActivity.this, "Salida de Cajas del Local: Cajas", Toast.LENGTH_SHORT).show();break;
                         }
                         break;
@@ -143,6 +191,8 @@ public class MainActivity extends AppCompatActivity {
                         }
                         break;
                 }
+                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
                 return false;
             }
         });

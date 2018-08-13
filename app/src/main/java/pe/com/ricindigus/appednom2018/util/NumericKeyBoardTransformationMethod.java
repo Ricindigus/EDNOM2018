@@ -1,4 +1,4 @@
-package pe.com.ricindigus.appednom2018;
+package pe.com.ricindigus.appednom2018.util;
 
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
