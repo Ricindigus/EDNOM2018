@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1086758273642",
+    "firebase_url": "https://proyecto-ednom.firebaseio.com",
+    "project_id": "proyecto-ednom",
+    "storage_bucket": "proyecto-ednom.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1086758273642:android:ec36e0aaedce0dea",
+        "android_client_info": {
+          "package_name": "pe.com.ricindigus.appednom2018"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1086758273642-gcoaqvm1iv5phaue8v4e5reicepaeoqj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "pe.com.ricindigus.appednom2018",
+            "certificate_hash": "9df97ac86063d6ce6c2c2c8f8a94aa12656ec39e"
+          }
+        },
+        {
+          "client_id": "1086758273642-g3bcgh4usgsnmq8rgv2rcn6kq670mrri.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBAu4V5MMB5iS3Q9E5QvZ6fW3ewKQS7fk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1086758273642-g3bcgh4usgsnmq8rgv2rcn6kq670mrri.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
