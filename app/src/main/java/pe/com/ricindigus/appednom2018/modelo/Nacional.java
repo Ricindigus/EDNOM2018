@@ -3,7 +3,7 @@ package pe.com.ricindigus.appednom2018.modelo;
 public class Nacional {
     private String _id;
     private String sede;
-    private String nro_local;
+    private int nro_local;
     private String local_aplicacion;
     private String aula;
     private String codigo_pagina;
@@ -11,13 +11,13 @@ public class Nacional {
     private String apepat;
     private String apemat;
     private String nombres;
-    private String estatus;
-    private String s_aula;
-    private String s_ficha;
-    private String s_cartilla;
-    private String s_listaasistencia;
-    private String id_local;
-    private String id_aula;
+    private int estatus;
+    private int s_aula;
+    private int s_ficha;
+    private int s_cartilla;
+    private int s_listaasistencia;
+    private int id_local;
+    private int id_aula;
     private String direccion;
     private String codficha;
     private String codcartilla;
@@ -27,13 +27,13 @@ public class Nacional {
     private String discapacidad;
     private String version;
     private String tipo_concurso;
-    private String estatus2;
-    private String estatus3;
+    private int estatus2;
+    private int estatus3;
     private String new_aula_ficha;
     private String new_aula_cartilla;
 
 
-    public Nacional(String _id, String sede, String nro_local, String local_aplicacion, String aula, String codigo_pagina, String ins_numdoc, String apepat, String apemat, String nombres, String estatus, String s_aula, String s_ficha, String s_cartilla, String s_listaasistencia, String id_local, String id_aula, String direccion, String codficha, String codcartilla, String new_aula, String new_local, String tipo, String discapacidad, String version, String tipo_concurso, String estatus2, String estatus3, String new_aula_ficha, String new_aula_cartilla) {
+    public Nacional(String _id, String sede, int nro_local, String local_aplicacion, String aula, String codigo_pagina, String ins_numdoc, String apepat, String apemat, String nombres, int estatus, int s_aula, int s_ficha, int s_cartilla, int s_listaasistencia, int id_local, int id_aula, String direccion, String codficha, String codcartilla, String new_aula, String new_local, String tipo, String discapacidad, String version, String tipo_concurso, int estatus2, int estatus3, String new_aula_ficha, String new_aula_cartilla) {
         this._id = _id;
         this.sede = sede;
         this.nro_local = nro_local;
@@ -69,7 +69,7 @@ public class Nacional {
     public Nacional() {
         this._id = "";
         this.sede = "";
-        this.nro_local = "";
+        this.nro_local = 0;
         this.local_aplicacion = "";
         this.aula = "";
         this.codigo_pagina = "";
@@ -77,13 +77,13 @@ public class Nacional {
         this.apepat = "";
         this.apemat = "";
         this.nombres = "";
-        this.estatus = "";
-        this.s_aula = "";
-        this.s_ficha = "";
-        this.s_cartilla = "";
-        this.s_listaasistencia = "";
-        this.id_local = "";
-        this.id_aula = "";
+        this.estatus = 0;
+        this.s_aula = 0;
+        this.s_ficha = 0;
+        this.s_cartilla = 0;
+        this.s_listaasistencia = 0;
+        this.id_local = 0;
+        this.id_aula = 0;
         this.direccion = "";
         this.codficha = "";
         this.codcartilla = "";
@@ -93,8 +93,8 @@ public class Nacional {
         this.discapacidad = "";
         this.version = "";
         this.tipo_concurso = "";
-        this.estatus2 = "";
-        this.estatus3 = "";
+        this.estatus2 = 0;
+        this.estatus3 = 0;
         this.new_aula_ficha = "";
         this.new_aula_cartilla = "";
     }
@@ -115,11 +115,11 @@ public class Nacional {
         this.sede = sede;
     }
 
-    public String getNro_local() {
+    public int getNro_local() {
         return nro_local;
     }
 
-    public void setNro_local(String nro_local) {
+    public void setNro_local(int nro_local) {
         this.nro_local = nro_local;
     }
 
@@ -179,59 +179,59 @@ public class Nacional {
         this.nombres = nombres;
     }
 
-    public String getEstatus() {
+    public int getEstatus() {
         return estatus;
     }
 
-    public void setEstatus(String estatus) {
+    public void setEstatus(int estatus) {
         this.estatus = estatus;
     }
 
-    public String getS_aula() {
+    public int getS_aula() {
         return s_aula;
     }
 
-    public void setS_aula(String s_aula) {
+    public void setS_aula(int s_aula) {
         this.s_aula = s_aula;
     }
 
-    public String getS_ficha() {
+    public int getS_ficha() {
         return s_ficha;
     }
 
-    public void setS_ficha(String s_ficha) {
+    public void setS_ficha(int s_ficha) {
         this.s_ficha = s_ficha;
     }
 
-    public String getS_cartilla() {
+    public int getS_cartilla() {
         return s_cartilla;
     }
 
-    public void setS_cartilla(String s_cartilla) {
+    public void setS_cartilla(int s_cartilla) {
         this.s_cartilla = s_cartilla;
     }
 
-    public String getS_listaasistencia() {
+    public int getS_listaasistencia() {
         return s_listaasistencia;
     }
 
-    public void setS_listaasistencia(String s_listaasistencia) {
+    public void setS_listaasistencia(int s_listaasistencia) {
         this.s_listaasistencia = s_listaasistencia;
     }
 
-    public String getId_local() {
+    public int getId_local() {
         return id_local;
     }
 
-    public void setId_local(String id_local) {
+    public void setId_local(int id_local) {
         this.id_local = id_local;
     }
 
-    public String getId_aula() {
+    public int getId_aula() {
         return id_aula;
     }
 
-    public void setId_aula(String id_aula) {
+    public void setId_aula(int id_aula) {
         this.id_aula = id_aula;
     }
 
@@ -307,19 +307,19 @@ public class Nacional {
         this.tipo_concurso = tipo_concurso;
     }
 
-    public String getEstatus2() {
+    public int getEstatus2() {
         return estatus2;
     }
 
-    public void setEstatus2(String estatus2) {
+    public void setEstatus2(int estatus2) {
         this.estatus2 = estatus2;
     }
 
-    public String getEstatus3() {
+    public int getEstatus3() {
         return estatus3;
     }
 
-    public void setEstatus3(String estatus3) {
+    public void setEstatus3(int estatus3) {
         this.estatus3 = estatus3;
     }
 

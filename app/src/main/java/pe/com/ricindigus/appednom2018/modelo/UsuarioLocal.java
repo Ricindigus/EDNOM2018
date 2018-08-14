@@ -1,20 +1,20 @@
 package pe.com.ricindigus.appednom2018.modelo;
 
 public class UsuarioLocal {
-    private String _id;
+    private int _id;
     private String usuario;
     private String clave;
-    private String rol;
-    private String nro_local;
+    private int rol;
+    private int nro_local;
     private String nombreLocal;
-    private String naulas;
-    private String ncontingencia;
-    private String codsede;
+    private int naulas;
+    private int ncontingencia;
+    private int codsede;
     private String sede;
     private String nombre;
 
 
-    public UsuarioLocal(String _id, String usuario, String clave, String rol, String nro_local, String nombreLocal, String naulas, String ncontingencia, String codsede, String sede, String nombre) {
+    public UsuarioLocal(int _id, String usuario, String clave, int rol, int nro_local, String nombreLocal, int naulas, int ncontingencia, int codsede, String sede, String nombre) {
         this._id = _id;
         this.usuario = usuario;
         this.clave = clave;
@@ -29,24 +29,24 @@ public class UsuarioLocal {
     }
 
     public UsuarioLocal() {
-        this._id = "";
+        this._id = 0;
         this.usuario = "";
         this.clave = "";
-        this.rol = "";
-        this.nro_local = "";
+        this.rol = 0;
+        this.nro_local = 0;
         this.nombreLocal = "";
-        this.naulas = "";
-        this.ncontingencia = "";
-        this.codsede = "";
+        this.naulas = 0;
+        this.ncontingencia = 0;
+        this.codsede = 0;
         this.sede = "";
         this.nombre = "";
     }
 
-    public String get_id() {
+    public int get_id() {
         return _id;
     }
 
-    public void set_id(String _id) {
+    public void set_id(int _id) {
         this._id = _id;
     }
 
@@ -66,19 +66,19 @@ public class UsuarioLocal {
         this.clave = clave;
     }
 
-    public String getRol() {
+    public int getRol() {
         return rol;
     }
 
-    public void setRol(String rol) {
+    public void setRol(int rol) {
         this.rol = rol;
     }
 
-    public String getNro_local() {
+    public int getNro_local() {
         return nro_local;
     }
 
-    public void setNro_local(String nro_local) {
+    public void setNro_local(int nro_local) {
         this.nro_local = nro_local;
     }
 
@@ -90,27 +90,27 @@ public class UsuarioLocal {
         this.nombreLocal = nombreLocal;
     }
 
-    public String getNaulas() {
+    public int getNaulas() {
         return naulas;
     }
 
-    public void setNaulas(String naulas) {
+    public void setNaulas(int naulas) {
         this.naulas = naulas;
     }
 
-    public String getNcontingencia() {
+    public int getNcontingencia() {
         return ncontingencia;
     }
 
-    public void setNcontingencia(String ncontingencia) {
+    public void setNcontingencia(int ncontingencia) {
         this.ncontingencia = ncontingencia;
     }
 
-    public String getCodsede() {
+    public int getCodsede() {
         return codsede;
     }
 
-    public void setCodsede(String codsede) {
+    public void setCodsede(int codsede) {
         this.codsede = codsede;
     }
 

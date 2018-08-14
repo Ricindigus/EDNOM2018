@@ -32,7 +32,7 @@ import pe.com.ricindigus.appednom2018.util.TipoFragment;
 
 public class MainActivity extends AppCompatActivity {
 
-    String sede;
+    int nroLocal;
     private ArrayList<String> listDataHeader;
     private ExpandableListView expListView;
     private HashMap<String, List<String>> listDataChild;
@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        sede = getIntent().getExtras().getString("sede");
+        nroLocal = getIntent().getExtras().getInt("nrolocal");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
                 fragmentTransaction.replace(R.id.fragment_layout, asistAulaFragment);
                 break;
             case TipoFragment.REGISTRO_ASISTENCIA_LOCAL:
-                AsistLocalFragment asistLocalFragment = new AsistLocalFragment();
+                AsistLocalFragment asistLocalFragment = new AsistLocalFragment(nroLocal,MainActivity.this);
                 fragmentTransaction.replace(R.id.fragment_layout, asistLocalFragment);
                 break;
             case TipoFragment.REGISTRO_INVENTARIO_CUADERNILLO:

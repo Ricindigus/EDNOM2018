@@ -9,16 +9,16 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import pe.com.ricindigus.appednom2018.R;
-import pe.com.ricindigus.appednom2018.modelo.RegistroAsistencia;
+import pe.com.ricindigus.appednom2018.modelo.Asistencia;
 
 import java.util.ArrayList;
 
-public class RegistradoAdapter extends RecyclerView.Adapter<RegistradoAdapter.ViewHolder>{
-    ArrayList<RegistroAsistencia> registroAsistencias;
+public class AsistenciaAdapter extends RecyclerView.Adapter<AsistenciaAdapter.ViewHolder>{
+    ArrayList<Asistencia> asistencias;
     Context context;
 
-    public RegistradoAdapter(ArrayList<RegistroAsistencia> registroAsistencias, Context context) {
-        this.registroAsistencias = registroAsistencias;
+    public AsistenciaAdapter(ArrayList<Asistencia> asistencias, Context context) {
+        this.asistencias = asistencias;
         this.context = context;
     }
 
@@ -31,16 +31,16 @@ public class RegistradoAdapter extends RecyclerView.Adapter<RegistradoAdapter.Vi
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        RegistroAsistencia registroAsistencia = registroAsistencias.get(position);
-        holder.txtDni.setText(registroAsistencia.getCodigo());
-        holder.txtNombres.setText(registroAsistencia.getNombres());
-        holder.txtSede.setText(registroAsistencia.getSede());
-        holder.txtAula.setText(registroAsistencia.getAula());
-        holder.txtFecha.setText(checkDigito(registroAsistencia.getDia()) + "-" + checkDigito(registroAsistencia.getMes()) + "-" + checkDigito(registroAsistencia.getAnio()));
-        holder.txtEntrada.setText(checkDigito(registroAsistencia.getHoraEntrada()) + ":" + checkDigito(registroAsistencia.getMinutoEntrada()));
-        holder.txtSalida.setText(checkDigito(registroAsistencia.getHoraSalida()) + ":" + checkDigito(registroAsistencia.getMinutoSalida()));
+        Asistencia asistencia = asistencias.get(position);
+//        holder.txtDni.setText(asistencia.getCodigo());
+//        holder.txtNombres.setText(asistencia.getNombres());
+//        holder.txtSede.setText(asistencia.getSede());
+//        holder.txtAula.setText(asistencia.getAula());
+//        holder.txtFecha.setText(checkDigito(asistencia.getDia()) + "-" + checkDigito(asistencia.getMes()) + "-" + checkDigito(asistencia.getAnio()));
+//        holder.txtEntrada.setText(checkDigito(asistencia.getHoraEntrada()) + ":" + checkDigito(asistencia.getMinutoEntrada()));
+//        holder.txtSalida.setText(checkDigito(asistencia.getHoraSalida()) + ":" + checkDigito(asistencia.getMinutoSalida()));
 
-//        if(registroAsistencia.getSubidoEntrada() == 1){
+//        if(asistencia.getSubidoEntrada() == 1){
 //            holder.cv.setCardBackgroundColor(Color.WHITE);
 //        }else{
 //            holder.cv.setCardBackgroundColor(Color.rgb(227,242,253));
@@ -53,7 +53,7 @@ public class RegistradoAdapter extends RecyclerView.Adapter<RegistradoAdapter.Vi
 
     @Override
     public int getItemCount() {
-        return registroAsistencias.size();
+        return asistencias.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
