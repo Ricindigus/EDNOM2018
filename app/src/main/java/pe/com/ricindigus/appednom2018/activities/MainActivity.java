@@ -1,11 +1,13 @@
 package pe.com.ricindigus.appednom2018.activities;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -14,6 +16,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +31,8 @@ import pe.com.ricindigus.appednom2018.fragments.registro_control_inventario.InvC
 import pe.com.ricindigus.appednom2018.fragments.registro_control_inventario.InvFichaFragment;
 import pe.com.ricindigus.appednom2018.fragments.registro_control_inventario.InvListAsisFragment;
 import pe.com.ricindigus.appednom2018.fragments.salida_cajas_local.CajasOutFragment;
+import pe.com.ricindigus.appednom2018.modelo.Data;
+import pe.com.ricindigus.appednom2018.modelo.SQLConstantes;
 import pe.com.ricindigus.appednom2018.util.TipoFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -91,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
                 fragmentTransaction.replace(R.id.fragment_layout, cajasOutFragment);
                 break;
             case TipoFragment.REGISTRO_ASISTENCIA_AULA:
-                AsistAulaFragment asistAulaFragment = new AsistAulaFragment();
+                AsistAulaFragment asistAulaFragment = new AsistAulaFragment(nroLocal,MainActivity.this);
                 fragmentTransaction.replace(R.id.fragment_layout, asistAulaFragment);
                 break;
             case TipoFragment.REGISTRO_ASISTENCIA_LOCAL:
@@ -138,10 +143,10 @@ public class MainActivity extends AppCompatActivity {
                         switch (childPosition){
                             case 0:
                                 setFragment(TipoFragment.REGISTRO_ASISTENCIA_LOCAL);
-                                Toast.makeText(MainActivity.this, "Registro de control de Asistencia: Local", Toast.LENGTH_SHORT).show();break;
+                                Toast.makeText(MainActivity.this, "Registro de control de AsistenciaLocal: Local", Toast.LENGTH_SHORT).show();break;
                             case 1:
                                 setFragment(TipoFragment.REGISTRO_ASISTENCIA_AULA);
-                                Toast.makeText(MainActivity.this, "Registro de control de Asistencia: Aula", Toast.LENGTH_SHORT).show();break;
+                                Toast.makeText(MainActivity.this, "Registro de control de AsistenciaLocal: Aula", Toast.LENGTH_SHORT).show();break;
                         }
                         break;
                     case 2:
@@ -154,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
                                 Toast.makeText(MainActivity.this, "Registro de Control de Inventario: Cuadernillo", Toast.LENGTH_SHORT).show();break;
                             case 2:
                                 setFragment(TipoFragment.REGISTRO_INVENTARIO_LISTA_ASISTENCIA);
-                                Toast.makeText(MainActivity.this, "Registro de Control de Inventario: Lista de Asistencia", Toast.LENGTH_SHORT).show();break;
+                                Toast.makeText(MainActivity.this, "Registro de Control de Inventario: Lista de AsistenciaLocal", Toast.LENGTH_SHORT).show();break;
                         }
                         break;
                     case 3:
@@ -190,6 +195,45 @@ public class MainActivity extends AppCompatActivity {
                                 Toast.makeText(MainActivity.this, "reportes: cuadro resumen salida de cajas", Toast.LENGTH_SHORT).show();break;
                         }
                         break;
+                    case 5:
+                        switch (childPosition){
+                            case 0:
+                                Toast.makeText(MainActivity.this, "Verificar padrón nacional", Toast.LENGTH_SHORT).show();break;
+                        }
+                        break;
+                    case 6:
+                        switch (childPosition){
+                            case 0:
+                                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                                builder.setMessage("¿Está seguro que desea borrar los datos?")
+                                        .setTitle("Aviso").setCancelable(false)
+                                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                dialog.cancel();
+                                            }
+                                        })
+                                        .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                try {
+                                                    Data data = new Data(MainActivity.this);
+                                                    data.open();
+                                                    data.deleteAllElementosFromTabla(SQLConstantes.tablaasistencia);
+                                                    data.close();
+//                                        ListadoFragment listadoFragment = new ListadoFragment(sede,MainActivity.this);
+//                                        FragmentManager fragmentManage = getSupportFragmentManager();
+//                                        FragmentTransaction fragmentTransact = fragmentManage.beginTransaction();
+//                                        fragmentTransact.replace(R.id.fragment_layout, listadoFragment);
+//                                        fragmentTransact.commit();
+                                                } catch (IOException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        });
+                                AlertDialog alert = builder.create();
+                                alert.show();
+                        }
+                        break;
+
                 }
                 DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
                 drawer.closeDrawer(GravityCompat.START);
@@ -202,7 +246,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Adding child data
         listDataHeader.add("Ingreso de Cajas al Local");
-        listDataHeader.add("Registro de Control de Asistencia");
+        listDataHeader.add("Registro de Control de AsistenciaLocal");
         listDataHeader.add("Registro de control de Inventario");
         listDataHeader.add("Salida de Cajas del Local");
         listDataHeader.add("Reportes");
@@ -221,21 +265,21 @@ public class MainActivity extends AppCompatActivity {
         List<String> registroInventario = new ArrayList<String>();
         registroInventario.add("Ficha");
         registroInventario.add("Cuadernillo");
-        registroInventario.add("Lista de Asistencia");
+        registroInventario.add("Lista de AsistenciaLocal");
 
         List<String> salidaCajas = new ArrayList<String>();
         salidaCajas.add("Cajas");
 
         List<String> reportes = new ArrayList<String>();
         reportes.add("Listado Ingreso Cajas a Local");
-        reportes.add("Listado de Asistencia Local");
+        reportes.add("Listado de AsistenciaLocal Local");
         reportes.add("Listado de asistencia por Aula");
         reportes.add("Listado de Inventario - Ficha");
         reportes.add("Listado de Inventario - Cuadernillo");
-        reportes.add("Listado de Inventario - Listado de Asistencia");
+        reportes.add("Listado de Inventario - Listado de AsistenciaLocal");
         reportes.add("Listado Salida de cajas del local");
         reportes.add("Cuadro Resumen Ingreso Cajas");
-        reportes.add("Cuadro Resumen Asistencia");
+        reportes.add("Cuadro Resumen AsistenciaLocal");
         reportes.add("Cuadro Resumen Inventario");
         reportes.add("Cuadro Resumen Salida Cajas");
 

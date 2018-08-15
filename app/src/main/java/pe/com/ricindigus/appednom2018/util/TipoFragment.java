@@ -8,4 +8,9 @@ public class TipoFragment {
     public static final int REGISTRO_INVENTARIO_CUADERNILLO = 5;
     public static final int REGISTRO_INVENTARIO_FICHA = 6;
     public static final int REGISTRO_INVENTARIO_LISTA_ASISTENCIA = 7;
+    public static final int REPORTES_LISTADO_INGRESO_CAJAS = 8;
+    public static final int REPORTES_LISTADO_ASISTENCIA_LOCAL = 9;
+    public static final int REPORTES_LISTADO_ASISTENCIA_AULA = 10;
+
+
 }

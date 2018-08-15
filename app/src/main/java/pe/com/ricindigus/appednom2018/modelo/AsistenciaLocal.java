@@ -2,7 +2,7 @@ package pe.com.ricindigus.appednom2018.modelo;
 
 import android.content.ContentValues;
 
-public class Asistencia {
+public class AsistenciaLocal {
     private String _id;
     private String dni;
     private String nombres;
@@ -24,7 +24,7 @@ public class Asistencia {
     private int subido;
 
 
-    public Asistencia(String _id, String dni, String nombres, String apepat, String apemat, String sede, String local, String aula, int local_dia, int local_mes, int local_anio, int local_hora, int local_minuto, int aula_dia, int aula_mes, int aula_anio, int aula_hora, int aula_minuto, int subido) {
+    public AsistenciaLocal(String _id, String dni, String nombres, String apepat, String apemat, String sede, String local, String aula, int local_dia, int local_mes, int local_anio, int local_hora, int local_minuto, int aula_dia, int aula_mes, int aula_anio, int aula_hora, int aula_minuto, int subido) {
         this._id = _id;
         this.dni = dni;
         this.nombres = nombres;
@@ -46,7 +46,7 @@ public class Asistencia {
         this.subido = subido;
     }
 
-    public Asistencia() {
+    public AsistenciaLocal() {
         this._id = "";
         this.dni = "";
         this.nombres = "";
