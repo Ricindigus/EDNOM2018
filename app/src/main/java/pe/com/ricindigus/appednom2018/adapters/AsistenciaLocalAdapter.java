@@ -9,16 +9,16 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import pe.com.ricindigus.appednom2018.R;
-import pe.com.ricindigus.appednom2018.modelo.AsistenciaLocal;
+import pe.com.ricindigus.appednom2018.modelo.Asistencia;
 
 import java.util.ArrayList;
 
 public class AsistenciaLocalAdapter extends RecyclerView.Adapter<AsistenciaLocalAdapter.ViewHolder>{
-    ArrayList<AsistenciaLocal> asistenciaLocals;
+    ArrayList<Asistencia> asistencias;
     Context context;
 
-    public AsistenciaLocalAdapter(ArrayList<AsistenciaLocal> asistenciaLocals, Context context) {
-        this.asistenciaLocals = asistenciaLocals;
+    public AsistenciaLocalAdapter(ArrayList<Asistencia> asistencias, Context context) {
+        this.asistencias = asistencias;
         this.context = context;
     }
 
@@ -31,15 +31,15 @@ public class AsistenciaLocalAdapter extends RecyclerView.Adapter<AsistenciaLocal
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        AsistenciaLocal asistenciaLocal = asistenciaLocals.get(position);
-        holder.txtDni.setText(asistenciaLocal.getDni());
-        holder.txtNombres.setText(asistenciaLocal.getNombres());
-        holder.txtAula.setText(asistenciaLocal.getAula());
-        holder.txtFecha.setText(checkDigito(asistenciaLocal.getLocal_dia()) + "-"
-                + checkDigito(asistenciaLocal.getAula_mes()) + "-" + checkDigito(asistenciaLocal.getLocal_anio()) + " "
-                + checkDigito(asistenciaLocal.getLocal_hora()) + ":" + checkDigito(asistenciaLocal.getLocal_minuto()));
+        Asistencia asistencia = asistencias.get(position);
+        holder.txtDni.setText(asistencia.getDni());
+        holder.txtNombres.setText(asistencia.getNombres() + " " + asistencia.getApepat() + " " +asistencia.getApemat());
+        holder.txtAula.setText(asistencia.getAula());
+        holder.txtFecha.setText(checkDigito(asistencia.getLocal_dia()) + "-"
+                + checkDigito(asistencia.getAula_mes()) + "-" + checkDigito(asistencia.getLocal_anio()) + " "
+                + checkDigito(asistencia.getLocal_hora()) + ":" + checkDigito(asistencia.getLocal_minuto()));
 
-//        if(asistenciaLocal.getSubidoEntrada() == 1){
+//        if(asistencia.getSubidoEntrada() == 1){
 //            holder.cv.setCardBackgroundColor(Color.WHITE);
 //        }else{
 //            holder.cv.setCardBackgroundColor(Color.rgb(227,242,253));
@@ -52,7 +52,7 @@ public class AsistenciaLocalAdapter extends RecyclerView.Adapter<AsistenciaLocal
 
     @Override
     public int getItemCount() {
-        return asistenciaLocals.size();
+        return asistencias.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{

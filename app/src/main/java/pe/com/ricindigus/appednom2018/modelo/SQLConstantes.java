@@ -71,7 +71,8 @@ public class SQLConstantes {
     public static String asistencia_apepat = "apepat";
     public static String asistencia_apemat = "apemat";
     public static String asistencia_sede = "sede";
-    public static String asistencia_local = "local";
+    public static String asistencia_id_local = "id_local";
+    public static String asistencia_nombre_local = "local";
     public static String asistencia_aula = "aula";
     public static String asistencia_local_dia = "local_dia";
     public static String asistencia_local_mes = "local_mes";
@@ -83,22 +84,8 @@ public class SQLConstantes {
     public static String asistencia_aula_anio = "aula_anio";
     public static String asistencia_aula_hora = "aula_hora";
     public static String asistencia_aula_minuto = "aula_minuto";
-    public static String asistencia_subido = "subido";
-
-
-    //TABLA ASISTENCIA AULA
-    public static String asis_aula_id = "_id";
-    public static String asis_aula_dni = "dni";
-    public static String asis_aula_nombres = "nombres";
-    public static String asis_aula_apepat = "apepat";
-    public static String asis_aula_apemat = "apemat";
-    public static String asis_aula_aula = "aula";
-    public static String asis_aula_aula_dia = "aula_dia";
-    public static String asis_aula_aula_mes = "aula_mes";
-    public static String asis_aula_aula_anio = "aula_anio";
-    public static String asis_aula_aula_hora = "aula_hora";
-    public static String asis_aula_aula_minuto = "aula_minuto";
-    public static String asis_aula_subido = "subido";
+    public static String asistencia_subido_local = "subido_local";
+    public static String asistencia_subido_aula = "subido_aula";
 
 
     public static final String SQL_CREATE_TABLA_ASISTENCIA =
@@ -109,7 +96,8 @@ public class SQLConstantes {
                     asistencia_apepat + " TEXT," +
                     asistencia_apemat + " TEXT," +
                     asistencia_sede + " TEXT," +
-                    asistencia_local + " TEXT," +
+                    asistencia_id_local + " TEXT," +
+                    asistencia_nombre_local + " TEXT," +
                     asistencia_aula + " TEXT," +
                     asistencia_local_dia + " INTEGER," +
                     asistencia_local_mes + " INTEGER," +
@@ -121,29 +109,14 @@ public class SQLConstantes {
                     asistencia_aula_anio + " INTEGER," +
                     asistencia_aula_hora + " INTEGER," +
                     asistencia_aula_minuto + " INTEGER," +
-                    asistencia_subido + " INTEGER" + ");"
+                    asistencia_subido_local + " INTEGER," +
+                    asistencia_subido_aula + " INTEGER" + ");"
             ;
-
-    public static final String SQL_CREATE_TABLA_ASIS_AULA =
-            "CREATE TABLE " + tablaasisaula + "(" +
-                    asis_aula_id + " TEXT PRIMARY KEY," +
-                    asis_aula_dni + " TEXT," +
-                    asis_aula_nombres + " TEXT," +
-                    asis_aula_apepat + " TEXT," +
-                    asis_aula_apemat + " TEXT," +
-                    asis_aula_aula + " TEXT," +
-                    asis_aula_aula_dia + " INTEGER," +
-                    asis_aula_aula_mes + " INTEGER," +
-                    asis_aula_aula_anio + " INTEGER," +
-                    asis_aula_aula_hora + " INTEGER," +
-                    asis_aula_aula_minuto + " INTEGER," +
-                    asis_aula_subido + " INTEGER" + ");"
-            ;
-
 
     public static final String WHERE_CLAUSE_CLAVE = "clave=?";
     public static final String WHERE_CLAUSE_DNI = "ins_numdoc=?";
     public static final String WHERE_CLAUSE_NRO_LOCAL = "nro_local=?";
+    public static final String WHERE_CLAUSE_LOCAL = "local=?";
     public static final String WHERE_CLAUSE_NRO_AULA = "aula=?";
     public static final String WHERE_CLAUSE_DNI_ASISTENCIA = "dni=?";
     public static final String WHERE_CLAUSE_NOMBRE_AULA = "nombre=?";

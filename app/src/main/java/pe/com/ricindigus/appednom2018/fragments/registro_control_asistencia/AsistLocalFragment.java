@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.util.Calendar;
 
 import pe.com.ricindigus.appednom2018.R;
-import pe.com.ricindigus.appednom2018.modelo.AsistenciaLocal;
+import pe.com.ricindigus.appednom2018.modelo.Asistencia;
 import pe.com.ricindigus.appednom2018.modelo.Data;
 import pe.com.ricindigus.appednom2018.modelo.Nacional;
 import pe.com.ricindigus.appednom2018.modelo.SQLConstantes;
@@ -138,13 +138,14 @@ public class AsistLocalFragment extends Fragment {
                 try {
                     Data data = new Data(context);
                     data.open();
-                    AsistenciaLocal asis = new AsistenciaLocal();
+                    Asistencia asis = new Asistencia();
                     asis.set_id(nacional.getIns_numdoc());
                     asis.setDni(nacional.getIns_numdoc());
                     asis.setNombres(nacional.getNombres());
                     asis.setApepat(nacional.getApepat());
                     asis.setApemat(nacional.getApemat());
                     asis.setSede(nacional.getSede());
+                    asis.setId_local(nacional.getNro_local());
                     asis.setLocal(nacional.getLocal_aplicacion());
                     asis.setAula(nacional.getAula());
                     Calendar calendario = Calendar.getInstance();
@@ -158,11 +159,12 @@ public class AsistLocalFragment extends Fragment {
                     asis.setLocal_anio(yy);
                     asis.setLocal_hora(hora);
                     asis.setLocal_minuto(minuto);
+                    asis.setSubido_local(0);
                     data.insertarAsistencia(asis);
                     data.close();
                     mostrarCorrecto(asis.getDni(),asis.getNombres() +" "+ asis.getApepat() +" "+ asis.getApemat(),asis.getSede(),asis.getLocal(),asis.getAula());
                     final String c = asis.getDni();
-                    asis.setSubido(1);
+                    asis.setSubido_local(1);
                     FirebaseFirestore.getInstance().collection(getResources().getString(R.string.nombre_coleccion_asistencia))
                             .document(asis.getDni()).set(asis)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -173,7 +175,7 @@ public class AsistLocalFragment extends Fragment {
                                         Data data1 = new Data(context);
                                         data1.open();
                                         ContentValues contentValues = new ContentValues();
-                                        contentValues.put(SQLConstantes.asistencia_subido,1);
+                                        contentValues.put(SQLConstantes.asistencia_subido_local,1);
                                         data1.actualizarAsistencia(c,contentValues);
                                         data1.close();
                                     } catch (IOException e) {
@@ -201,7 +203,7 @@ public class AsistLocalFragment extends Fragment {
         try {
             Data d = new Data(context);
             d.open();
-            AsistenciaLocal a = d.getAsistenciaLocal(dni);
+            Asistencia a = d.getAsistencia(dni);
             if(a != null){
                 existe = true;
                 mostrarYaRegistrado(a.getDni(),a.getNombres() + " " + a.getApepat() + " " + a.getApemat(),a.getAula(),

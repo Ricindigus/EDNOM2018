@@ -49,20 +49,16 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void ingresar(String clave){
-        try{
-            Data data = new Data(LoginActivity.this);
-            data.open();
-            UsuarioLocal usuarioLocal = data.getUsuarioLocal(clave);
-            data.close();
-            if (usuarioLocal != null){
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                intent.putExtra("nrolocal", usuarioLocal.getNro_local());
-                startActivity(intent);
-            }else{
-                Toast.makeText(this, "CLAVE INCORRECTA", Toast.LENGTH_SHORT).show();
-            }
-        } catch (IOException e){
-            e.printStackTrace();
+        Data data = new Data(LoginActivity.this);
+        data.open();
+        UsuarioLocal usuarioLocal = data.getUsuarioLocal(clave);
+        data.close();
+        if (usuarioLocal != null){
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            intent.putExtra("nrolocal", usuarioLocal.getNro_local());
+            startActivity(intent);
+        }else{
+            Toast.makeText(this, "CLAVE INCORRECTA", Toast.LENGTH_SHORT).show();
         }
     }
 

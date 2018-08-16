@@ -30,6 +30,8 @@ import pe.com.ricindigus.appednom2018.fragments.registro_control_asistencia.Asis
 import pe.com.ricindigus.appednom2018.fragments.registro_control_inventario.InvCuaderFragment;
 import pe.com.ricindigus.appednom2018.fragments.registro_control_inventario.InvFichaFragment;
 import pe.com.ricindigus.appednom2018.fragments.registro_control_inventario.InvListAsisFragment;
+import pe.com.ricindigus.appednom2018.fragments.reportes.ListAsisAulaFragment;
+import pe.com.ricindigus.appednom2018.fragments.reportes.ListAsisLocalFragment;
 import pe.com.ricindigus.appednom2018.fragments.salida_cajas_local.CajasOutFragment;
 import pe.com.ricindigus.appednom2018.modelo.Data;
 import pe.com.ricindigus.appednom2018.modelo.SQLConstantes;
@@ -91,10 +93,6 @@ public class MainActivity extends AppCompatActivity {
                 CajasInFragment cajasInFragment = new CajasInFragment();
                 fragmentTransaction.replace(R.id.fragment_layout, cajasInFragment);
                 break;
-            case TipoFragment.CAJAS_OUT:
-                CajasOutFragment cajasOutFragment = new CajasOutFragment();
-                fragmentTransaction.replace(R.id.fragment_layout, cajasOutFragment);
-                break;
             case TipoFragment.REGISTRO_ASISTENCIA_AULA:
                 AsistAulaFragment asistAulaFragment = new AsistAulaFragment(nroLocal,MainActivity.this);
                 fragmentTransaction.replace(R.id.fragment_layout, asistAulaFragment);
@@ -114,6 +112,18 @@ public class MainActivity extends AppCompatActivity {
             case TipoFragment.REGISTRO_INVENTARIO_LISTA_ASISTENCIA:
                 InvListAsisFragment invListAsisFragment = new InvListAsisFragment();
                 fragmentTransaction.replace(R.id.fragment_layout, invListAsisFragment);
+                break;
+            case TipoFragment.CAJAS_OUT:
+                CajasOutFragment cajasOutFragment = new CajasOutFragment();
+                fragmentTransaction.replace(R.id.fragment_layout, cajasOutFragment);
+                break;
+            case TipoFragment.REPORTES_LISTADO_ASISTENCIA_LOCAL:
+                ListAsisLocalFragment listAsisLocalFragment = new ListAsisLocalFragment(MainActivity.this,nroLocal);
+                fragmentTransaction.replace(R.id.fragment_layout, listAsisLocalFragment);
+                break;
+            case TipoFragment.REPORTES_LISTADO_ASISTENCIA_AULA:
+                ListAsisAulaFragment listAsisAulaFragment = new ListAsisAulaFragment(MainActivity.this,nroLocal);
+                fragmentTransaction.replace(R.id.fragment_layout, listAsisAulaFragment);
                 break;
         }
         fragmentTransaction.commit();
@@ -143,10 +153,10 @@ public class MainActivity extends AppCompatActivity {
                         switch (childPosition){
                             case 0:
                                 setFragment(TipoFragment.REGISTRO_ASISTENCIA_LOCAL);
-                                Toast.makeText(MainActivity.this, "Registro de control de AsistenciaLocal: Local", Toast.LENGTH_SHORT).show();break;
+                                Toast.makeText(MainActivity.this, "Registro de control de Asistencia: Local", Toast.LENGTH_SHORT).show();break;
                             case 1:
                                 setFragment(TipoFragment.REGISTRO_ASISTENCIA_AULA);
-                                Toast.makeText(MainActivity.this, "Registro de control de AsistenciaLocal: Aula", Toast.LENGTH_SHORT).show();break;
+                                Toast.makeText(MainActivity.this, "Registro de control de Asistencia: Aula", Toast.LENGTH_SHORT).show();break;
                         }
                         break;
                     case 2:
@@ -159,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
                                 Toast.makeText(MainActivity.this, "Registro de Control de Inventario: Cuadernillo", Toast.LENGTH_SHORT).show();break;
                             case 2:
                                 setFragment(TipoFragment.REGISTRO_INVENTARIO_LISTA_ASISTENCIA);
-                                Toast.makeText(MainActivity.this, "Registro de Control de Inventario: Lista de AsistenciaLocal", Toast.LENGTH_SHORT).show();break;
+                                Toast.makeText(MainActivity.this, "Registro de Control de Inventario: Lista de Asistencia", Toast.LENGTH_SHORT).show();break;
                         }
                         break;
                     case 3:
@@ -174,24 +184,24 @@ public class MainActivity extends AppCompatActivity {
                             case 0:
                                 Toast.makeText(MainActivity.this, "reportes: Listado ingreso cajas al local", Toast.LENGTH_SHORT).show();break;
                             case 1:
-                                Toast.makeText(MainActivity.this, "reportes: Listado de asistencia local", Toast.LENGTH_SHORT).show();break;
+                                setFragment(TipoFragment.REPORTES_LISTADO_ASISTENCIA_LOCAL);break;
+                            case 2:
+                                setFragment(TipoFragment.REPORTES_LISTADO_ASISTENCIA_AULA);break;
                             case 3:
-                                Toast.makeText(MainActivity.this, "reportes: Listado de asistencia por aula", Toast.LENGTH_SHORT).show();break;
-                            case 4:
                                 Toast.makeText(MainActivity.this, "reportes: Listado de inventario - ficha", Toast.LENGTH_SHORT).show();break;
-                            case 5:
+                            case 4:
                                 Toast.makeText(MainActivity.this, "reportes: Listado de inventario - cuadernillo", Toast.LENGTH_SHORT).show();break;
-                            case 6:
+                            case 5:
                                 Toast.makeText(MainActivity.this, "reportes: Listado inventario - listado de asistencia", Toast.LENGTH_SHORT).show();break;
-                            case 7:
+                            case 6:
                                 Toast.makeText(MainActivity.this, "reportes: Listado salida cajas del local", Toast.LENGTH_SHORT).show();break;
-                            case 8:
+                            case 7:
                                 Toast.makeText(MainActivity.this, "reportes: cuadro resumen ingreso de cajas", Toast.LENGTH_SHORT).show();break;
-                            case 9:
+                            case 8:
                                 Toast.makeText(MainActivity.this, "reportes: cuadro resumen asistencia", Toast.LENGTH_SHORT).show();break;
-                            case 10:
+                            case 9:
                                 Toast.makeText(MainActivity.this, "reportes: cuadro resumen inventario", Toast.LENGTH_SHORT).show();break;
-                            case 11:
+                            case 10:
                                 Toast.makeText(MainActivity.this, "reportes: cuadro resumen salida de cajas", Toast.LENGTH_SHORT).show();break;
                         }
                         break;
@@ -214,19 +224,15 @@ public class MainActivity extends AppCompatActivity {
                                         })
                                         .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
                                             public void onClick(DialogInterface dialog, int id) {
-                                                try {
-                                                    Data data = new Data(MainActivity.this);
-                                                    data.open();
-                                                    data.deleteAllElementosFromTabla(SQLConstantes.tablaasistencia);
-                                                    data.close();
+                                                Data data = new Data(MainActivity.this);
+                                                data.open();
+                                                data.deleteAllElementosFromTabla(SQLConstantes.tablaasistencia);
+                                                data.close();
 //                                        ListadoFragment listadoFragment = new ListadoFragment(sede,MainActivity.this);
 //                                        FragmentManager fragmentManage = getSupportFragmentManager();
 //                                        FragmentTransaction fragmentTransact = fragmentManage.beginTransaction();
 //                                        fragmentTransact.replace(R.id.fragment_layout, listadoFragment);
 //                                        fragmentTransact.commit();
-                                                } catch (IOException e) {
-                                                    e.printStackTrace();
-                                                }
                                             }
                                         });
                                 AlertDialog alert = builder.create();
@@ -246,7 +252,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Adding child data
         listDataHeader.add("Ingreso de Cajas al Local");
-        listDataHeader.add("Registro de Control de AsistenciaLocal");
+        listDataHeader.add("Registro de Control de Asistencia");
         listDataHeader.add("Registro de control de Inventario");
         listDataHeader.add("Salida de Cajas del Local");
         listDataHeader.add("Reportes");
@@ -265,21 +271,21 @@ public class MainActivity extends AppCompatActivity {
         List<String> registroInventario = new ArrayList<String>();
         registroInventario.add("Ficha");
         registroInventario.add("Cuadernillo");
-        registroInventario.add("Lista de AsistenciaLocal");
+        registroInventario.add("Lista de Asistencia");
 
         List<String> salidaCajas = new ArrayList<String>();
         salidaCajas.add("Cajas");
 
         List<String> reportes = new ArrayList<String>();
         reportes.add("Listado Ingreso Cajas a Local");
-        reportes.add("Listado de AsistenciaLocal Local");
-        reportes.add("Listado de asistencia por Aula");
+        reportes.add("Listado de Asistencia por Local");
+        reportes.add("Listado de Asistencia por Aula");
         reportes.add("Listado de Inventario - Ficha");
         reportes.add("Listado de Inventario - Cuadernillo");
-        reportes.add("Listado de Inventario - Listado de AsistenciaLocal");
+        reportes.add("Listado de Inventario - Listado de Asistencia");
         reportes.add("Listado Salida de cajas del local");
         reportes.add("Cuadro Resumen Ingreso Cajas");
-        reportes.add("Cuadro Resumen AsistenciaLocal");
+        reportes.add("Cuadro Resumen Asistencia");
         reportes.add("Cuadro Resumen Inventario");
         reportes.add("Cuadro Resumen Salida Cajas");
 

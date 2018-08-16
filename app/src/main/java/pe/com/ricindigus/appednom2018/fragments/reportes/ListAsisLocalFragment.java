@@ -1,6 +1,7 @@
 package pe.com.ricindigus.appednom2018.fragments.reportes;
 
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.os.Bundle;
@@ -27,7 +28,7 @@ import java.util.Calendar;
 
 import pe.com.ricindigus.appednom2018.R;
 import pe.com.ricindigus.appednom2018.adapters.AsistenciaLocalAdapter;
-import pe.com.ricindigus.appednom2018.modelo.AsistenciaLocal;
+import pe.com.ricindigus.appednom2018.modelo.Asistencia;
 import pe.com.ricindigus.appednom2018.modelo.Data;
 import pe.com.ricindigus.appednom2018.modelo.SQLConstantes;
 
@@ -38,9 +39,9 @@ public class ListAsisLocalFragment extends Fragment {
 
     RecyclerView recyclerView;
     Context context;
-    ArrayList<AsistenciaLocal> registroAsistencias;
-    ArrayList<AsistenciaLocal> datosNoEnviados;
-    String sede;
+    ArrayList<Asistencia> registroAsistencias;
+    ArrayList<Asistencia> datosNoEnviados;
+    int nroLocal;
     Data data;
     FloatingActionButton fabUpLoad;
     TextView txtNumero;
@@ -50,6 +51,11 @@ public class ListAsisLocalFragment extends Fragment {
         // Required empty public constructor
     }
 
+    @SuppressLint("ValidFragment")
+    public ListAsisLocalFragment(Context context, int nroLocal) {
+        this.context = context;
+        this.nroLocal = nroLocal;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -93,8 +99,8 @@ public class ListAsisLocalFragment extends Fragment {
                 if(datosNoEnviados.size() > 0){
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                     Toast.makeText(context, "Subiendo...", Toast.LENGTH_SHORT).show();
-                    for (final AsistenciaLocal registroAsistencia : datosNoEnviados){
-                        registroAsistencia.setSubido(1);
+                    for (final Asistencia registroAsistencia : datosNoEnviados){
+                        registroAsistencia.setSubido_local(1);
                         final String c = registroAsistencia.getDni();
                         db.collection(getResources().getString(R.string.nombre_coleccion_asistencia)).document(registroAsistencia.getDni()).set(registroAsistencia)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -109,7 +115,7 @@ public class ListAsisLocalFragment extends Fragment {
                                             data = new Data(context);
                                             data.open();
                                             ContentValues contentValues = new ContentValues();
-                                            contentValues.put(SQLConstantes.asistencia_subido,1);
+                                            contentValues.put(SQLConstantes.asistencia_subido_local,1);
                                             data.actualizarAsistencia(c,contentValues);
                                             cargaData();
                                             asistenciaLocalAdapter.notifyDataSetChanged();
@@ -135,7 +141,7 @@ public class ListAsisLocalFragment extends Fragment {
     }
 
     public void cargaData(){
-        registroAsistencias = new ArrayList<AsistenciaLocal>();
+        registroAsistencias = new ArrayList<Asistencia>();
         try {
             Data data = new Data(context);
             data.open();
@@ -143,7 +149,7 @@ public class ListAsisLocalFragment extends Fragment {
             int yy = calendario.get(Calendar.YEAR);
             int mm = calendario.get(Calendar.MONTH)+1;
             int dd = calendario.get(Calendar.DAY_OF_MONTH);
-            registroAsistencias = data.getAllAsistenciaLocal();
+            registroAsistencias = data.getAllAsistenciaLocal(nroLocal);
             txtNumero.setText("Total registros: " + registroAsistencias.size());
             data.close();
         } catch (IOException e) {

@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import pe.com.ricindigus.appednom2018.R;
-import pe.com.ricindigus.appednom2018.modelo.AsistenciaAula;
+import pe.com.ricindigus.appednom2018.modelo.Asistencia;
 import pe.com.ricindigus.appednom2018.modelo.Data;
 import pe.com.ricindigus.appednom2018.modelo.Nacional;
 
@@ -107,34 +107,26 @@ public class AsistAulaFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        try {
-            Data data =  new Data(context);
-            data.open();
-            ArrayList<String> aulas =  data.getArrayAulas(nroLocal);
-            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, aulas);
-            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spAulas.setAdapter(dataAdapter);
-            data.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Data data =  new Data(context);
+        data.open();
+        ArrayList<String> aulas =  data.getArrayAulas(nroLocal);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, aulas);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spAulas.setAdapter(dataAdapter);
+        data.close();
 
         btnBuscar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String dni = edtDni.getText().toString();
-                try {
-                    Data data = new Data(context);
-                    data.open();
-                    Nacional nacional = data.getNacionalxDNI(dni);
-                    data.close();
-                    if(nacional == null){
-                        mostrarErrorDni();
-                    }else{
-                        registrarAsistencia(nacional);
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
+                Data data = new Data(context);
+                data.open();
+                Nacional nacional = data.getNacionalxDNI(dni);
+                data.close();
+                if(nacional == null){
+                    mostrarErrorDni();
+                }else{
+                    registrarAsistencia(nacional);
                 }
                 edtDni.setText("");
             }
@@ -144,26 +136,27 @@ public class AsistAulaFragment extends Fragment {
     public void registrarAsistencia(Nacional nacional){
         String aula = spAulas.getSelectedItem().toString();
         int nroAula = 0;
-        try {
-            Data da = new Data(context);
-            da.open();
-            nroAula = da.getNumeroAula(aula,nroLocal);
-            da.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Data da = new Data(context);
+        da.open();
+        nroAula = da.getNumeroAula(aula,nroLocal);
+        da.close();
+
+
 
         if(nroLocal == nacional.getNro_local() && nroAula == nacional.getId_aula()){
             if(!existeAsistenciaAula(nacional.getIns_numdoc())){
-                try {
+
                     Data data = new Data(context);
                     data.open();
-                    AsistenciaAula asis = new AsistenciaAula();
+                    Asistencia asis = new Asistencia();
                     asis.set_id(nacional.getIns_numdoc());
                     asis.setDni(nacional.getIns_numdoc());
                     asis.setNombres(nacional.getNombres());
                     asis.setApepat(nacional.getApepat());
                     asis.setApemat(nacional.getApemat());
+                    asis.setSede(nacional.getSede());
+                    asis.setId_local(nacional.getNro_local());
+                    asis.setLocal(nacional.getLocal_aplicacion());
                     asis.setAula(nacional.getAula());
                     Calendar calendario = Calendar.getInstance();
                     int yy = calendario.get(Calendar.YEAR);
@@ -171,16 +164,17 @@ public class AsistAulaFragment extends Fragment {
                     int dd = calendario.get(Calendar.DAY_OF_MONTH);
                     int hora = calendario.get(Calendar.HOUR_OF_DAY);
                     int minuto = calendario.get(Calendar.MINUTE);
-                    asis.setAula_dia(dd);
-                    asis.setAula_mes(mm);
-                    asis.setAula_anio(yy);
-                    asis.setAula_hora(hora);
-                    asis.setAula_minuto(minuto);
-                    data.insertarAsisAula(asis);
+                    asis.setLocal_dia(dd);
+                    asis.setLocal_mes(mm);
+                    asis.setLocal_anio(yy);
+                    asis.setLocal_hora(hora);
+                    asis.setLocal_minuto(minuto);
+                    asis.setSubido_aula(0);
+                    data.insertarAsistencia(asis);
                     data.close();
                     mostrarCorrecto(asis.getDni(),asis.getNombres() +" "+ asis.getApepat() +" "+ asis.getApemat(),asis.getAula());
                     final String c = asis.getDni();
-                    asis.setSubido(1);
+                    asis.setSubido_aula(1);
 
                     WriteBatch batch = FirebaseFirestore.getInstance().batch();
                     DocumentReference documentReference = FirebaseFirestore.getInstance().
@@ -202,9 +196,9 @@ public class AsistAulaFragment extends Fragment {
                             Toast.makeText(context, "NO GUARDO", Toast.LENGTH_SHORT).show();
                         }
                     });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+
+            }else{
+
             }
         }else{
             mostrarErrorLocal(nacional.getSede(),nacional.getLocal_aplicacion(),nacional.getDireccion(),"Aula " + nacional.getAula());
@@ -213,19 +207,19 @@ public class AsistAulaFragment extends Fragment {
 
     public boolean existeAsistenciaAula(String dni){
         boolean existe = false;
-        try {
+
             Data d = new Data(context);
             d.open();
-            AsistenciaAula a = d.getAsistenciaAula(dni);
+            Asistencia a = d.getAsistencia(dni);
             if(a != null){
-                existe = true;
-                mostrarYaRegistrado(a.getDni(),a.getNombres() + " " + a.getApepat() + " " + a.getApemat(),a.getAula(),
-                        checkDigito(a.getAula_dia()) +"/"+ checkDigito(a.getAula_mes()) +"/"+ a.getAula_anio() +
-                                " " + checkDigito(a.getAula_hora()) + ":" + checkDigito(a.getAula_minuto()));
+                if(a.getSubido_aula() != -1){
+                    existe = true;
+                    mostrarYaRegistrado(a.getDni(),a.getNombres() + " " + a.getApepat() + " " + a.getApemat(),a.getAula(),
+                            checkDigito(a.getAula_dia()) +"/"+ checkDigito(a.getAula_mes()) +"/"+ a.getAula_anio() +
+                                    " " + checkDigito(a.getAula_hora()) + ":" + checkDigito(a.getAula_minuto()));
+                }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
         return existe;
     }
 
