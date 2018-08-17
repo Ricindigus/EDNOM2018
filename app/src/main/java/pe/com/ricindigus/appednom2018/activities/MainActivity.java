@@ -153,10 +153,10 @@ public class MainActivity extends AppCompatActivity {
                         switch (childPosition){
                             case 0:
                                 setFragment(TipoFragment.REGISTRO_ASISTENCIA_LOCAL);
-                                Toast.makeText(MainActivity.this, "Registro de control de Asistencia: Local", Toast.LENGTH_SHORT).show();break;
+                                Toast.makeText(MainActivity.this, "Registro de control de AsistenciaLocal: Local", Toast.LENGTH_SHORT).show();break;
                             case 1:
                                 setFragment(TipoFragment.REGISTRO_ASISTENCIA_AULA);
-                                Toast.makeText(MainActivity.this, "Registro de control de Asistencia: Aula", Toast.LENGTH_SHORT).show();break;
+                                Toast.makeText(MainActivity.this, "Registro de control de AsistenciaLocal: Aula", Toast.LENGTH_SHORT).show();break;
                         }
                         break;
                     case 2:
@@ -169,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
                                 Toast.makeText(MainActivity.this, "Registro de Control de Inventario: Cuadernillo", Toast.LENGTH_SHORT).show();break;
                             case 2:
                                 setFragment(TipoFragment.REGISTRO_INVENTARIO_LISTA_ASISTENCIA);
-                                Toast.makeText(MainActivity.this, "Registro de Control de Inventario: Lista de Asistencia", Toast.LENGTH_SHORT).show();break;
+                                Toast.makeText(MainActivity.this, "Registro de Control de Inventario: Lista de AsistenciaLocal", Toast.LENGTH_SHORT).show();break;
                         }
                         break;
                     case 3:
@@ -226,7 +226,8 @@ public class MainActivity extends AppCompatActivity {
                                             public void onClick(DialogInterface dialog, int id) {
                                                 Data data = new Data(MainActivity.this);
                                                 data.open();
-                                                data.deleteAllElementosFromTabla(SQLConstantes.tablaasistencia);
+                                                data.deleteAllElementosFromTabla(SQLConstantes.tablaasisaula);
+                                                data.deleteAllElementosFromTabla(SQLConstantes.tablaasislocal);
                                                 data.close();
 //                                        ListadoFragment listadoFragment = new ListadoFragment(sede,MainActivity.this);
 //                                        FragmentManager fragmentManage = getSupportFragmentManager();

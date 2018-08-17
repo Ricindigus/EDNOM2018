@@ -25,7 +25,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.Calendar;
 
 import pe.com.ricindigus.appednom2018.R;
-import pe.com.ricindigus.appednom2018.modelo.Asistencia;
+import pe.com.ricindigus.appednom2018.modelo.AsistenciaLocal;
 import pe.com.ricindigus.appednom2018.modelo.Data;
 import pe.com.ricindigus.appednom2018.modelo.Nacional;
 import pe.com.ricindigus.appednom2018.modelo.SQLConstantes;
@@ -138,7 +138,7 @@ public class AsistLocalFragment extends Fragment {
             if(!existeRegistro(nacional.getIns_numdoc())){
                     Data data = new Data(context);
                     data.open();
-                    Asistencia asis = new Asistencia();
+                    AsistenciaLocal asis = new AsistenciaLocal();
                     asis.set_id(nacional.getIns_numdoc());
                     asis.setDni(nacional.getIns_numdoc());
                     asis.setNombres(nacional.getNombres());
@@ -160,7 +160,7 @@ public class AsistLocalFragment extends Fragment {
                     asis.setLocal_hora(hora);
                     asis.setLocal_minuto(minuto);
                     asis.setSubido_local(0);
-                    data.insertarAsistencia(asis);
+                    data.insertarAsistenciaLocal(asis);
                     data.close();
                     mostrarCorrecto(asis.getDni(),asis.getNombres() +" "+ asis.getApepat() +" "+ asis.getApemat(),asis.getSede(),asis.getLocal(),asis.getAula());
                     final String c = asis.getDni();
@@ -171,12 +171,11 @@ public class AsistLocalFragment extends Fragment {
                                 @Override
                                 public void onSuccess(Void aVoid) {
                                     Log.d("FIRESTORE", "DocumentSnapshot successfully written!");
-
                                         Data data1 = new Data(context);
                                         data1.open();
                                         ContentValues contentValues = new ContentValues();
-                                        contentValues.put(SQLConstantes.asistencia_subido_local,1);
-                                        data1.actualizarAsistencia(c,contentValues);
+                                        contentValues.put(SQLConstantes.asistencia_local_subido_local,1);
+                                        data1.actualizarAsistenciaLocal(c,contentValues);
                                         data1.close();
                                 }
                             })
@@ -198,7 +197,7 @@ public class AsistLocalFragment extends Fragment {
 
             Data d = new Data(context);
             d.open();
-            Asistencia a = d.getAsistenciaLocal(dni);
+            AsistenciaLocal a = d.getAsistenciaLocal(dni);
             if(a != null){
                 existe = true;
                 mostrarYaRegistrado(a.getDni(),a.getNombres() + " " + a.getApepat() + " " + a.getApemat(),a.getAula(),

@@ -22,13 +22,12 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
 import pe.com.ricindigus.appednom2018.R;
 import pe.com.ricindigus.appednom2018.adapters.AsistenciaLocalAdapter;
-import pe.com.ricindigus.appednom2018.modelo.Asistencia;
+import pe.com.ricindigus.appednom2018.modelo.AsistenciaLocal;
 import pe.com.ricindigus.appednom2018.modelo.Data;
 import pe.com.ricindigus.appednom2018.modelo.SQLConstantes;
 
@@ -39,8 +38,8 @@ public class ListAsisLocalFragment extends Fragment {
 
     RecyclerView recyclerView;
     Context context;
-    ArrayList<Asistencia> registroAsistencias;
-    ArrayList<Asistencia> datosNoEnviados;
+    ArrayList<AsistenciaLocal> registroAsistenciaLocals;
+    ArrayList<AsistenciaLocal> datosNoEnviados;
     int nroLocal;
     Data data;
     FloatingActionButton fabUpLoad;
@@ -75,7 +74,7 @@ public class ListAsisLocalFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);
         cargaData();
-        final AsistenciaLocalAdapter asistenciaLocalAdapter = new AsistenciaLocalAdapter(registroAsistencias,context);
+        final AsistenciaLocalAdapter asistenciaLocalAdapter = new AsistenciaLocalAdapter(registroAsistenciaLocals,context);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(asistenciaLocalAdapter);
 
@@ -96,10 +95,10 @@ public class ListAsisLocalFragment extends Fragment {
                 if(datosNoEnviados.size() > 0){
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                     Toast.makeText(context, "Subiendo...", Toast.LENGTH_SHORT).show();
-                    for (final Asistencia registroAsistencia : datosNoEnviados){
-                        registroAsistencia.setSubido_local(1);
-                        final String c = registroAsistencia.getDni();
-                        db.collection(getResources().getString(R.string.nombre_coleccion_asistencia)).document(registroAsistencia.getDni()).set(registroAsistencia)
+                    for (final AsistenciaLocal registroAsistenciaLocal : datosNoEnviados){
+                        registroAsistenciaLocal.setSubido_local(1);
+                        final String c = registroAsistenciaLocal.getDni();
+                        db.collection(getResources().getString(R.string.nombre_coleccion_asistencia)).document(registroAsistenciaLocal.getDni()).set(registroAsistenciaLocal)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
@@ -111,8 +110,8 @@ public class ListAsisLocalFragment extends Fragment {
                                         data = new Data(context);
                                         data.open();
                                         ContentValues contentValues = new ContentValues();
-                                        contentValues.put(SQLConstantes.asistencia_subido_local,1);
-                                        data.actualizarAsistencia(c,contentValues);
+                                        contentValues.put(SQLConstantes.asistencia_local_subido_local,1);
+                                        data.actualizarAsistenciaLocal(c,contentValues);
                                         cargaData();
                                         asistenciaLocalAdapter.notifyDataSetChanged();
                                         data.close();
@@ -134,15 +133,15 @@ public class ListAsisLocalFragment extends Fragment {
     }
 
     public void cargaData(){
-        registroAsistencias = new ArrayList<Asistencia>();
+        registroAsistenciaLocals = new ArrayList<AsistenciaLocal>();
         Data data = new Data(context);
         data.open();
         Calendar calendario = Calendar.getInstance();
         int yy = calendario.get(Calendar.YEAR);
         int mm = calendario.get(Calendar.MONTH)+1;
         int dd = calendario.get(Calendar.DAY_OF_MONTH);
-        registroAsistencias = data.getAllAsistenciaLocal(nroLocal);
-        txtNumero.setText("Total registros: " + registroAsistencias.size());
+        registroAsistenciaLocals = data.getAllAsistenciaLocal(nroLocal);
+        txtNumero.setText("Total registros: " + registroAsistenciaLocals.size());
         data.close();
     }
 

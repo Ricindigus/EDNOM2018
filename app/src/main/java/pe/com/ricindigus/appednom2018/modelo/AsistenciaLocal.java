@@ -2,7 +2,7 @@ package pe.com.ricindigus.appednom2018.modelo;
 
 import android.content.ContentValues;
 
-public class Asistencia {
+public class AsistenciaLocal {
     private String _id;
     private String dni;
     private String nombres;
@@ -17,23 +17,17 @@ public class Asistencia {
     private int local_anio;
     private int local_hora;
     private int local_minuto;
-    private int aula_dia;
-    private int aula_mes;
-    private int aula_anio;
-    private int aula_hora;
-    private int aula_minuto;
     private int subido_local;
-    private int subido_aula;
 
 
-    public Asistencia(String _id, String dni, String nombres, String apepat, String apemat, String sede, int nroLocal, String local, String aula, int local_dia, int local_mes, int local_anio, int local_hora, int local_minuto, int aula_dia, int aula_mes, int aula_anio, int aula_hora, int aula_minuto, int subido_local, int subido_aula) {
+    public AsistenciaLocal(String _id, String dni, String nombres, String apepat, String apemat, String sede, int id_local, String local, String aula, int local_dia, int local_mes, int local_anio, int local_hora, int local_minuto, int subido_local) {
         this._id = _id;
         this.dni = dni;
         this.nombres = nombres;
         this.apepat = apepat;
         this.apemat = apemat;
         this.sede = sede;
-        this.id_local = nroLocal;
+        this.id_local = id_local;
         this.local = local;
         this.aula = aula;
         this.local_dia = local_dia;
@@ -41,16 +35,10 @@ public class Asistencia {
         this.local_anio = local_anio;
         this.local_hora = local_hora;
         this.local_minuto = local_minuto;
-        this.aula_dia = aula_dia;
-        this.aula_mes = aula_mes;
-        this.aula_anio = aula_anio;
-        this.aula_hora = aula_hora;
-        this.aula_minuto = aula_minuto;
         this.subido_local = subido_local;
-        this.subido_aula = subido_aula;
     }
 
-    public Asistencia() {
+    public AsistenciaLocal() {
         this._id = "";
         this.dni = "";
         this.nombres = "";
@@ -65,13 +53,7 @@ public class Asistencia {
         this.local_anio = 0;
         this.local_hora = 0;
         this.local_minuto = 0;
-        this.aula_dia = 0;
-        this.aula_mes = 0;
-        this.aula_anio = 0;
-        this.aula_hora = 0;
-        this.aula_minuto = 0;
         this.subido_local = -1;
-        this.subido_aula = -1;
     }
 
 
@@ -179,46 +161,6 @@ public class Asistencia {
         this.local_minuto = local_minuto;
     }
 
-    public int getAula_dia() {
-        return aula_dia;
-    }
-
-    public void setAula_dia(int aula_dia) {
-        this.aula_dia = aula_dia;
-    }
-
-    public int getAula_mes() {
-        return aula_mes;
-    }
-
-    public void setAula_mes(int aula_mes) {
-        this.aula_mes = aula_mes;
-    }
-
-    public int getAula_anio() {
-        return aula_anio;
-    }
-
-    public void setAula_anio(int aula_anio) {
-        this.aula_anio = aula_anio;
-    }
-
-    public int getAula_hora() {
-        return aula_hora;
-    }
-
-    public void setAula_hora(int aula_hora) {
-        this.aula_hora = aula_hora;
-    }
-
-    public int getAula_minuto() {
-        return aula_minuto;
-    }
-
-    public void setAula_minuto(int aula_minuto) {
-        this.aula_minuto = aula_minuto;
-    }
-
     public int getId_local() {
         return id_local;
     }
@@ -235,37 +177,23 @@ public class Asistencia {
         this.subido_local = subido_local;
     }
 
-    public int getSubido_aula() {
-        return subido_aula;
-    }
-
-    public void setSubido_aula(int subido_aula) {
-        this.subido_aula = subido_aula;
-    }
-
     public ContentValues toValues(){
         ContentValues contentValues = new ContentValues();
-        contentValues.put(SQLConstantes.asistencia_id,_id);
-        contentValues.put(SQLConstantes.asistencia_dni,dni);
-        contentValues.put(SQLConstantes.asistencia_nombres,nombres);
-        contentValues.put(SQLConstantes.asistencia_apepat,apepat);
-        contentValues.put(SQLConstantes.asistencia_apemat,apemat);
-        contentValues.put(SQLConstantes.asistencia_sede,sede);
-        contentValues.put(SQLConstantes.asistencia_id_local,id_local);
-        contentValues.put(SQLConstantes.asistencia_nombre_local,local);
-        contentValues.put(SQLConstantes.asistencia_aula,aula);
-        contentValues.put(SQLConstantes.asistencia_local_dia,local_dia);
-        contentValues.put(SQLConstantes.asistencia_local_mes,local_mes);
-        contentValues.put(SQLConstantes.asistencia_local_anio,local_anio);
-        contentValues.put(SQLConstantes.asistencia_local_hora,local_hora);
-        contentValues.put(SQLConstantes.asistencia_local_minuto,local_minuto);
-        contentValues.put(SQLConstantes.asistencia_aula_dia,aula_dia);
-        contentValues.put(SQLConstantes.asistencia_aula_mes,aula_mes);
-        contentValues.put(SQLConstantes.asistencia_aula_anio,aula_anio);
-        contentValues.put(SQLConstantes.asistencia_aula_hora,aula_hora);
-        contentValues.put(SQLConstantes.asistencia_aula_minuto,aula_minuto);
-        contentValues.put(SQLConstantes.asistencia_subido_local,subido_local);
-        contentValues.put(SQLConstantes.asistencia_subido_aula,subido_aula);
+        contentValues.put(SQLConstantes.asistencia_local_id,_id);
+        contentValues.put(SQLConstantes.asistencia_local_dni,dni);
+        contentValues.put(SQLConstantes.asistencia_local_nombres,nombres);
+        contentValues.put(SQLConstantes.asistencia_local_apepat,apepat);
+        contentValues.put(SQLConstantes.asistencia_local_apemat,apemat);
+        contentValues.put(SQLConstantes.asistencia_local_sede,sede);
+        contentValues.put(SQLConstantes.asistencia_local_id_local,id_local);
+        contentValues.put(SQLConstantes.asistencia_local_nombre_local,local);
+        contentValues.put(SQLConstantes.asistencia_local_aula,aula);
+        contentValues.put(SQLConstantes.asistencia_local_local_dia,local_dia);
+        contentValues.put(SQLConstantes.asistencia_local_local_mes,local_mes);
+        contentValues.put(SQLConstantes.asistencia_local_local_anio,local_anio);
+        contentValues.put(SQLConstantes.asistencia_local_local_hora,local_hora);
+        contentValues.put(SQLConstantes.asistencia_local_local_minuto,local_minuto);
+        contentValues.put(SQLConstantes.asistencia_local_subido_local,subido_local);
         return contentValues;
     }
 }

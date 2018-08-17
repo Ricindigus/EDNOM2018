@@ -29,7 +29,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import pe.com.ricindigus.appednom2018.R;
-import pe.com.ricindigus.appednom2018.modelo.Asistencia;
+import pe.com.ricindigus.appednom2018.modelo.AsistenciaAula;
+import pe.com.ricindigus.appednom2018.modelo.AsistenciaLocal;
 import pe.com.ricindigus.appednom2018.modelo.Data;
 import pe.com.ricindigus.appednom2018.modelo.Nacional;
 
@@ -149,7 +150,7 @@ public class AsistAulaFragment extends Fragment {
             if(!existeAsistenciaAula(nacional.getIns_numdoc())){
                 Data data = new Data(context);
                 data.open();
-                Asistencia asis = new Asistencia();
+                AsistenciaAula asis = new AsistenciaAula();
                 asis.set_id(nacional.getIns_numdoc());
                 asis.setDni(nacional.getIns_numdoc());
                 asis.setNombres(nacional.getNombres());
@@ -165,13 +166,13 @@ public class AsistAulaFragment extends Fragment {
                 int dd = calendario.get(Calendar.DAY_OF_MONTH);
                 int hora = calendario.get(Calendar.HOUR_OF_DAY);
                 int minuto = calendario.get(Calendar.MINUTE);
-                asis.setLocal_dia(dd);
-                asis.setLocal_mes(mm);
-                asis.setLocal_anio(yy);
-                asis.setLocal_hora(hora);
-                asis.setLocal_minuto(minuto);
+                asis.setAula_dia(dd);
+                asis.setAula_mes(mm);
+                asis.setAula_anio(yy);
+                asis.setAula_hora(hora);
+                asis.setAula_minuto(minuto);
                 asis.setSubido_aula(0);
-                data.insertarAsistencia(asis);
+                data.insertarAsistenciaAula(asis);
                 data.close();
                 mostrarCorrecto(asis.getDni(),asis.getNombres() +" "+ asis.getApepat() +" "+ asis.getApemat(),asis.getAula());
                 final String c = asis.getDni();
@@ -207,7 +208,7 @@ public class AsistAulaFragment extends Fragment {
         boolean existe = false;
         Data d = new Data(context);
         d.open();
-        Asistencia a = d.getAsistenciaAula(dni);
+        AsistenciaAula a = d.getAsistenciaAula(dni);
         if(a != null){
             existe = true;
             mostrarYaRegistrado(a.getDni(),a.getNombres() + " " + a.getApepat() + " " + a.getApemat(),a.getAula(),
