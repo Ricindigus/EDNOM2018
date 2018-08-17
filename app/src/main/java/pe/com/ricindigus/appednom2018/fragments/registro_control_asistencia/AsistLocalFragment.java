@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,7 +22,6 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.io.IOException;
 import java.util.Calendar;
 
 import pe.com.ricindigus.appednom2018.R;
@@ -113,29 +113,29 @@ public class AsistLocalFragment extends Fragment {
         btnBuscar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ocultarTeclado(edtDni);
                 String dni = edtDni.getText().toString();
-                try {
-                    Data data = new Data(context);
-                    data.open();
-                    Nacional nacional = data.getNacionalxDNI(dni);
-                    data.close();
-                    if(nacional == null){
-                        mostrarErrorDni();
-                    }else{
-                        registrarAsistencia(nacional);
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
+                Data data = new Data(context);
+                data.open();
+                Nacional nacional = data.getNacionalxDNI(dni);
+                data.close();
+                if(nacional == null){
+                    mostrarErrorDni();
+                }else{
+                    registrarAsistencia(nacional);
                 }
                 edtDni.setText("");
+
             }
         });
     }
-
+    public void ocultarTeclado(View view){
+        InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        mgr.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
     public void registrarAsistencia(Nacional nacional){
         if(numeroLocal == nacional.getNro_local()){
             if(!existeRegistro(nacional.getIns_numdoc())){
-                try {
                     Data data = new Data(context);
                     data.open();
                     Asistencia asis = new Asistencia();
@@ -171,16 +171,13 @@ public class AsistLocalFragment extends Fragment {
                                 @Override
                                 public void onSuccess(Void aVoid) {
                                     Log.d("FIRESTORE", "DocumentSnapshot successfully written!");
-                                    try {
+
                                         Data data1 = new Data(context);
                                         data1.open();
                                         ContentValues contentValues = new ContentValues();
                                         contentValues.put(SQLConstantes.asistencia_subido_local,1);
                                         data1.actualizarAsistencia(c,contentValues);
                                         data1.close();
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
@@ -189,9 +186,7 @@ public class AsistLocalFragment extends Fragment {
                                     Log.w("FIRESTORE", "Error writing document", e);
                                 }
                             });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+
             }
         }else{
             mostrarErrorLocal(nacional.getSede(),nacional.getLocal_aplicacion(),nacional.getDireccion(),"Aula" + nacional.getAula());
@@ -200,10 +195,10 @@ public class AsistLocalFragment extends Fragment {
 
     public boolean existeRegistro(String dni){
         boolean existe = false;
-        try {
+
             Data d = new Data(context);
             d.open();
-            Asistencia a = d.getAsistencia(dni);
+            Asistencia a = d.getAsistenciaLocal(dni);
             if(a != null){
                 existe = true;
                 mostrarYaRegistrado(a.getDni(),a.getNombres() + " " + a.getApepat() + " " + a.getApemat(),a.getAula(),
@@ -211,9 +206,7 @@ public class AsistLocalFragment extends Fragment {
                         " " + checkDigito(a.getLocal_hora()) + ":" + checkDigito(a.getLocal_minuto()));
             }
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
         return existe;
     }
 

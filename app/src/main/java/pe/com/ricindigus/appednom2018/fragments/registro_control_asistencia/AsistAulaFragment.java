@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -24,7 +25,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.WriteBatch;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -118,6 +118,7 @@ public class AsistAulaFragment extends Fragment {
         btnBuscar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ocultarTeclado(edtDni);
                 String dni = edtDni.getText().toString();
                 Data data = new Data(context);
                 data.open();
@@ -132,7 +133,10 @@ public class AsistAulaFragment extends Fragment {
             }
         });
     }
-
+    public void ocultarTeclado(View view){
+        InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        mgr.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
     public void registrarAsistencia(Nacional nacional){
         String aula = spAulas.getSelectedItem().toString();
         int nroAula = 0;
@@ -141,64 +145,58 @@ public class AsistAulaFragment extends Fragment {
         nroAula = da.getNumeroAula(aula,nroLocal);
         da.close();
 
-
-
         if(nroLocal == nacional.getNro_local() && nroAula == nacional.getId_aula()){
             if(!existeAsistenciaAula(nacional.getIns_numdoc())){
+                Data data = new Data(context);
+                data.open();
+                Asistencia asis = new Asistencia();
+                asis.set_id(nacional.getIns_numdoc());
+                asis.setDni(nacional.getIns_numdoc());
+                asis.setNombres(nacional.getNombres());
+                asis.setApepat(nacional.getApepat());
+                asis.setApemat(nacional.getApemat());
+                asis.setSede(nacional.getSede());
+                asis.setId_local(nacional.getNro_local());
+                asis.setLocal(nacional.getLocal_aplicacion());
+                asis.setAula(nacional.getAula());
+                Calendar calendario = Calendar.getInstance();
+                int yy = calendario.get(Calendar.YEAR);
+                int mm = calendario.get(Calendar.MONTH)+1;
+                int dd = calendario.get(Calendar.DAY_OF_MONTH);
+                int hora = calendario.get(Calendar.HOUR_OF_DAY);
+                int minuto = calendario.get(Calendar.MINUTE);
+                asis.setLocal_dia(dd);
+                asis.setLocal_mes(mm);
+                asis.setLocal_anio(yy);
+                asis.setLocal_hora(hora);
+                asis.setLocal_minuto(minuto);
+                asis.setSubido_aula(0);
+                data.insertarAsistencia(asis);
+                data.close();
+                mostrarCorrecto(asis.getDni(),asis.getNombres() +" "+ asis.getApepat() +" "+ asis.getApemat(),asis.getAula());
+                final String c = asis.getDni();
+                asis.setSubido_aula(1);
 
-                    Data data = new Data(context);
-                    data.open();
-                    Asistencia asis = new Asistencia();
-                    asis.set_id(nacional.getIns_numdoc());
-                    asis.setDni(nacional.getIns_numdoc());
-                    asis.setNombres(nacional.getNombres());
-                    asis.setApepat(nacional.getApepat());
-                    asis.setApemat(nacional.getApemat());
-                    asis.setSede(nacional.getSede());
-                    asis.setId_local(nacional.getNro_local());
-                    asis.setLocal(nacional.getLocal_aplicacion());
-                    asis.setAula(nacional.getAula());
-                    Calendar calendario = Calendar.getInstance();
-                    int yy = calendario.get(Calendar.YEAR);
-                    int mm = calendario.get(Calendar.MONTH)+1;
-                    int dd = calendario.get(Calendar.DAY_OF_MONTH);
-                    int hora = calendario.get(Calendar.HOUR_OF_DAY);
-                    int minuto = calendario.get(Calendar.MINUTE);
-                    asis.setLocal_dia(dd);
-                    asis.setLocal_mes(mm);
-                    asis.setLocal_anio(yy);
-                    asis.setLocal_hora(hora);
-                    asis.setLocal_minuto(minuto);
-                    asis.setSubido_aula(0);
-                    data.insertarAsistencia(asis);
-                    data.close();
-                    mostrarCorrecto(asis.getDni(),asis.getNombres() +" "+ asis.getApepat() +" "+ asis.getApemat(),asis.getAula());
-                    final String c = asis.getDni();
-                    asis.setSubido_aula(1);
-
-                    WriteBatch batch = FirebaseFirestore.getInstance().batch();
-                    DocumentReference documentReference = FirebaseFirestore.getInstance().
-                            collection(getResources().getString(R.string.nombre_coleccion_asistencia))
-                            .document(asis.getDni());
-                    batch.update(documentReference, "aula_dia", dd);
-                    batch.update(documentReference, "aula_mes", mm);
-                    batch.update(documentReference, "aula_anio", yy);
-                    batch.update(documentReference, "aula_hora", hora);
-                    batch.update(documentReference, "aula_minuto", minuto);
-                    batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Toast.makeText(context, "GUARDADO", Toast.LENGTH_SHORT).show();
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(context, "NO GUARDO", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-
-            }else{
-
+                WriteBatch batch = FirebaseFirestore.getInstance().batch();
+                DocumentReference documentReference = FirebaseFirestore.getInstance().
+                        collection(getResources().getString(R.string.nombre_coleccion_asistencia))
+                        .document(asis.getDni());
+                batch.update(documentReference, "aula_dia", dd);
+                batch.update(documentReference, "aula_mes", mm);
+                batch.update(documentReference, "aula_anio", yy);
+                batch.update(documentReference, "aula_hora", hora);
+                batch.update(documentReference, "aula_minuto", minuto);
+                batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(context, "GUARDADO", Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(context, "NO GUARDO", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         }else{
             mostrarErrorLocal(nacional.getSede(),nacional.getLocal_aplicacion(),nacional.getDireccion(),"Aula " + nacional.getAula());
@@ -207,19 +205,15 @@ public class AsistAulaFragment extends Fragment {
 
     public boolean existeAsistenciaAula(String dni){
         boolean existe = false;
-
-            Data d = new Data(context);
-            d.open();
-            Asistencia a = d.getAsistencia(dni);
-            if(a != null){
-                if(a.getSubido_aula() != -1){
-                    existe = true;
-                    mostrarYaRegistrado(a.getDni(),a.getNombres() + " " + a.getApepat() + " " + a.getApemat(),a.getAula(),
-                            checkDigito(a.getAula_dia()) +"/"+ checkDigito(a.getAula_mes()) +"/"+ a.getAula_anio() +
-                                    " " + checkDigito(a.getAula_hora()) + ":" + checkDigito(a.getAula_minuto()));
-                }
-            }
-
+        Data d = new Data(context);
+        d.open();
+        Asistencia a = d.getAsistenciaAula(dni);
+        if(a != null){
+            existe = true;
+            mostrarYaRegistrado(a.getDni(),a.getNombres() + " " + a.getApepat() + " " + a.getApemat(),a.getAula(),
+                    checkDigito(a.getAula_dia()) +"/"+ checkDigito(a.getAula_mes()) +"/"+ a.getAula_anio() +
+                            " " + checkDigito(a.getAula_hora()) + ":" + checkDigito(a.getAula_minuto()));
+        }
         return existe;
     }
 

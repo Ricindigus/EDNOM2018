@@ -117,6 +117,7 @@ public class SQLConstantes {
     public static final String WHERE_CLAUSE_DNI = "ins_numdoc=?";
     public static final String WHERE_CLAUSE_NRO_LOCAL = "nro_local=?";
     public static final String WHERE_CLAUSE_LOCAL = "local=?";
+    public static final String WHERE_CLAUSE_ID_LOCAL = "id_local=?";
     public static final String WHERE_CLAUSE_NRO_AULA = "aula=?";
     public static final String WHERE_CLAUSE_DNI_ASISTENCIA = "dni=?";
     public static final String WHERE_CLAUSE_NOMBRE_AULA = "nombre=?";
