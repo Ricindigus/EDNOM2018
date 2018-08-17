@@ -136,10 +136,6 @@ public class ListAsisLocalFragment extends Fragment {
         registroAsistenciaLocals = new ArrayList<AsistenciaLocal>();
         Data data = new Data(context);
         data.open();
-        Calendar calendario = Calendar.getInstance();
-        int yy = calendario.get(Calendar.YEAR);
-        int mm = calendario.get(Calendar.MONTH)+1;
-        int dd = calendario.get(Calendar.DAY_OF_MONTH);
         registroAsistenciaLocals = data.getAllAsistenciaLocal(nroLocal);
         txtNumero.setText("Total registros: " + registroAsistenciaLocals.size());
         data.close();

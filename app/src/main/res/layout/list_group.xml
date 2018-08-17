@@ -10,7 +10,7 @@
         android:id="@+id/lblListHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="16dp"
+        android:paddingLeft="24dp"
         android:textSize="16sp"
         android:text="Capitulo"
         android:textColor="@color/colorPrimary"/>

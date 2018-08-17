@@ -33,6 +33,8 @@ public class LoginActivity extends AppCompatActivity {
         btnIngresar = (Button) findViewById(R.id.login_btnIngresar);
         txtAquiMarco = (TextView) findViewById(R.id.login_txtAquiMarco);
 
+        edtClave.setText("VOE5XM");
+
         btnIngresar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
