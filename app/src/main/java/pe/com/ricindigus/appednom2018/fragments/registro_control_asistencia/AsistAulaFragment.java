@@ -2,6 +2,7 @@ package pe.com.ricindigus.appednom2018.fragments.registro_control_asistencia;
 
 
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -33,6 +34,7 @@ import pe.com.ricindigus.appednom2018.modelo.AsistenciaAula;
 import pe.com.ricindigus.appednom2018.modelo.AsistenciaLocal;
 import pe.com.ricindigus.appednom2018.modelo.Data;
 import pe.com.ricindigus.appednom2018.modelo.Nacional;
+import pe.com.ricindigus.appednom2018.modelo.SQLConstantes;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -176,11 +178,8 @@ public class AsistAulaFragment extends Fragment {
                 data.close();
                 mostrarCorrecto(asis.getDni(),asis.getNombres() +" "+ asis.getApepat() +" "+ asis.getApemat(),asis.getAula());
                 final String c = asis.getDni();
-                asis.setSubido_aula(1);
-
                 WriteBatch batch = FirebaseFirestore.getInstance().batch();
-                DocumentReference documentReference = FirebaseFirestore.getInstance().
-                        collection(getResources().getString(R.string.nombre_coleccion_asistencia))
+                DocumentReference documentReference = FirebaseFirestore.getInstance().collection(getResources().getString(R.string.nombre_coleccion_asistencia))
                         .document(asis.getDni());
                 batch.update(documentReference, "aula_dia", dd);
                 batch.update(documentReference, "aula_mes", mm);
@@ -190,7 +189,12 @@ public class AsistAulaFragment extends Fragment {
                 batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Toast.makeText(context, "GUARDADO", Toast.LENGTH_SHORT).show();
+                        Data data = new Data(context);
+                        data.open();
+                        ContentValues contentValues = new ContentValues();
+                        contentValues.put(SQLConstantes.asistencia_local_subido_local,1);
+                        data.actualizarAsistenciaLocal(c,contentValues);
+                        data.close();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override

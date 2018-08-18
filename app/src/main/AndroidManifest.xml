@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="pe.com.ricindigus.appednom2018">
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/professor"
@@ -10,19 +12,22 @@
         android:roundIcon="@drawable/professor"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.LoginActivity"
-            android:screenOrientation="landscape"
-            android:configChanges="screenSize|orientation|keyboardHidden">
+        <activity
+            android:name=".activities.LoginActivity"
+            android:configChanges="screenSize|orientation|keyboardHidden"
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.MainActivity"
-            android:screenOrientation="landscape"
+        <activity
+            android:name=".activities.MainActivity"
             android:configChanges="screenSize|orientation|keyboardHidden"
-            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden"></activity>
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden" />
+        <activity android:name=".activities.SubirDataActivity"></activity>
     </application>
 
 </manifest>

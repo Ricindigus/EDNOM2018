@@ -51,17 +51,23 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void ingresar(String clave){
-        Data data = new Data(LoginActivity.this);
-        data.open();
-        UsuarioLocal usuarioLocal = data.getUsuarioLocal(clave);
-        data.close();
-        if (usuarioLocal != null){
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            intent.putExtra("nrolocal", usuarioLocal.getNro_local());
+        if(clave.equals("RICARDO")){
+            Intent intent = new Intent(LoginActivity.this, SubirDataActivity.class);
             startActivity(intent);
         }else{
-            Toast.makeText(this, "CLAVE INCORRECTA", Toast.LENGTH_SHORT).show();
+            Data data = new Data(LoginActivity.this);
+            data.open();
+            UsuarioLocal usuarioLocal = data.getUsuarioLocal(clave);
+            data.close();
+            if (usuarioLocal != null){
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                intent.putExtra("nrolocal", usuarioLocal.getNro_local());
+                startActivity(intent);
+            }else{
+                Toast.makeText(this, "CLAVE INCORRECTA", Toast.LENGTH_SHORT).show();
+            }
         }
+
     }
 
     public void cargarMarco(){

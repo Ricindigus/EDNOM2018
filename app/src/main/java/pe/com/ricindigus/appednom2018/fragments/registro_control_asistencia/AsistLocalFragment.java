@@ -17,10 +17,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.WriteBatch;
 
 import java.util.Calendar;
 
@@ -163,28 +166,31 @@ public class AsistLocalFragment extends Fragment {
                     data.insertarAsistenciaLocal(asis);
                     data.close();
                     mostrarCorrecto(asis.getDni(),asis.getNombres() +" "+ asis.getApepat() +" "+ asis.getApemat(),asis.getSede(),asis.getLocal(),asis.getAula());
+                    WriteBatch batch = FirebaseFirestore.getInstance().batch();
+                    DocumentReference documentReference = FirebaseFirestore.getInstance().collection(getResources().
+                            getString(R.string.nombre_coleccion_asistencia)).document(asis.getDni());
+                    batch.update(documentReference, "local_dia", asis.getLocal_dia());
+                    batch.update(documentReference, "local_mes", asis.getLocal_mes());
+                    batch.update(documentReference, "local_anio", asis.getLocal_anio());
+                    batch.update(documentReference, "local_hora", asis.getLocal_hora());
+                    batch.update(documentReference, "local_minuto", asis.getLocal_minuto());
                     final String c = asis.getDni();
-                    asis.setSubido_local(1);
-                    FirebaseFirestore.getInstance().collection(getResources().getString(R.string.nombre_coleccion_asistencia))
-                            .document(asis.getDni()).set(asis)
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    Log.d("FIRESTORE", "DocumentSnapshot successfully written!");
-                                        Data data1 = new Data(context);
-                                        data1.open();
-                                        ContentValues contentValues = new ContentValues();
-                                        contentValues.put(SQLConstantes.asistencia_local_subido_local,1);
-                                        data1.actualizarAsistenciaLocal(c,contentValues);
-                                        data1.close();
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.w("FIRESTORE", "Error writing document", e);
-                                }
-                            });
+                    batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Data data = new Data(context);
+                        data.open();
+                        ContentValues contentValues = new ContentValues();
+                        contentValues.put(SQLConstantes.asistencia_local_subido_local,1);
+                        data.actualizarAsistenciaLocal(c,contentValues);
+                        data.close();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(context, "NO GUARDO", Toast.LENGTH_SHORT).show();
+                    }
+                });
 
             }
         }else{
