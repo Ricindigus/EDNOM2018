@@ -139,58 +139,80 @@ public class AsistLocalFragment extends Fragment {
     public void registrarAsistencia(Nacional nacional){
         if(numeroLocal == nacional.getNro_local()){
             if(!existeRegistro(nacional.getIns_numdoc())){
-                    Data data = new Data(context);
-                    data.open();
-                    AsistenciaLocal asis = new AsistenciaLocal();
-                    asis.set_id(nacional.getIns_numdoc());
-                    asis.setDni(nacional.getIns_numdoc());
-                    asis.setNombres(nacional.getNombres());
-                    asis.setApepat(nacional.getApepat());
-                    asis.setApemat(nacional.getApemat());
-                    asis.setSede(nacional.getSede());
-                    asis.setId_local(nacional.getNro_local());
-                    asis.setLocal(nacional.getLocal_aplicacion());
-                    asis.setAula(nacional.getAula());
-                    Calendar calendario = Calendar.getInstance();
-                    int yy = calendario.get(Calendar.YEAR);
-                    int mm = calendario.get(Calendar.MONTH)+1;
-                    int dd = calendario.get(Calendar.DAY_OF_MONTH);
-                    int hora = calendario.get(Calendar.HOUR_OF_DAY);
-                    int minuto = calendario.get(Calendar.MINUTE);
-                    asis.setLocal_dia(dd);
-                    asis.setLocal_mes(mm);
-                    asis.setLocal_anio(yy);
-                    asis.setLocal_hora(hora);
-                    asis.setLocal_minuto(minuto);
-                    asis.setSubido_local(0);
-                    data.insertarAsistenciaLocal(asis);
-                    data.close();
-                    mostrarCorrecto(asis.getDni(),asis.getNombres() +" "+ asis.getApepat() +" "+ asis.getApemat(),asis.getSede(),asis.getLocal(),asis.getAula());
-                    WriteBatch batch = FirebaseFirestore.getInstance().batch();
-                    DocumentReference documentReference = FirebaseFirestore.getInstance().collection(getResources().
-                            getString(R.string.nombre_coleccion_asistencia)).document(asis.getDni());
-                    batch.update(documentReference, "local_dia", asis.getLocal_dia());
-                    batch.update(documentReference, "local_mes", asis.getLocal_mes());
-                    batch.update(documentReference, "local_anio", asis.getLocal_anio());
-                    batch.update(documentReference, "local_hora", asis.getLocal_hora());
-                    batch.update(documentReference, "local_minuto", asis.getLocal_minuto());
-                    final String c = asis.getDni();
-                    batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Data data = new Data(context);
-                        data.open();
-                        ContentValues contentValues = new ContentValues();
-                        contentValues.put(SQLConstantes.asistencia_local_subido_local,1);
-                        data.actualizarAsistenciaLocal(c,contentValues);
-                        data.close();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(context, "NO GUARDO", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                Data data = new Data(context);
+                data.open();
+                AsistenciaLocal asis = new AsistenciaLocal();
+                asis.set_id(nacional.getIns_numdoc());
+                asis.setDni(nacional.getIns_numdoc());
+                asis.setNombres(nacional.getNombres());
+                asis.setApepat(nacional.getApepat());
+                asis.setApemat(nacional.getApemat());
+                asis.setSede(nacional.getSede());
+                asis.setId_local(nacional.getNro_local());
+                asis.setLocal(nacional.getLocal_aplicacion());
+                asis.setAula(nacional.getAula());
+                Calendar calendario = Calendar.getInstance();
+                int yy = calendario.get(Calendar.YEAR);
+                int mm = calendario.get(Calendar.MONTH)+1;
+                int dd = calendario.get(Calendar.DAY_OF_MONTH);
+                int hora = calendario.get(Calendar.HOUR_OF_DAY);
+                int minuto = calendario.get(Calendar.MINUTE);
+                asis.setLocal_dia(dd);
+                asis.setLocal_mes(mm);
+                asis.setLocal_anio(yy);
+                asis.setLocal_hora(hora);
+                asis.setLocal_minuto(minuto);
+                asis.setSubido_local(0);
+                data.insertarAsistenciaLocal(asis);
+                data.close();
+                mostrarCorrecto(asis.getDni(),asis.getNombres() +" "+ asis.getApepat() +" "+ asis.getApemat(),asis.getSede(),asis.getLocal(),asis.getAula());
+                final String c = asis.getDni();
+                FirebaseFirestore.getInstance().collection("asistencia_local").document(asis.getDni())
+                        .set(asis.toMap())
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Data data = new Data(context);
+                                data.open();
+                                ContentValues contentValues = new ContentValues();
+                                contentValues.put(SQLConstantes.asistencia_local_subido_local,1);
+                                data.actualizarAsistenciaLocal(c,contentValues);
+                                data.close();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w("FIRESTORE", "Error writing document", e);
+                            }
+                        });
+
+
+//                    WriteBatch batch = FirebaseFirestore.getInstance().batch();
+//                    DocumentReference documentReference = FirebaseFirestore.getInstance().collection(getResources().
+//                            getString(R.string.nombre_coleccion_asistencia)).document(asis.getDni());
+//                    batch.update(documentReference, "local_dia", asis.getLocal_dia());
+//                    batch.update(documentReference, "local_mes", asis.getLocal_mes());
+//                    batch.update(documentReference, "local_anio", asis.getLocal_anio());
+//                    batch.update(documentReference, "local_hora", asis.getLocal_hora());
+//                    batch.update(documentReference, "local_minuto", asis.getLocal_minuto());
+//                    final String c = asis.getDni();
+//                    batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
+//                    @Override
+//                    public void onSuccess(Void aVoid) {
+//                        Data data = new Data(context);
+//                        data.open();
+//                        ContentValues contentValues = new ContentValues();
+//                        contentValues.put(SQLConstantes.asistencia_local_subido_local,1);
+//                        data.actualizarAsistenciaLocal(c,contentValues);
+//                        data.close();
+//                    }
+//                }).addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        Toast.makeText(context, "NO GUARDO", Toast.LENGTH_SHORT).show();
+//                    }
+//                });
 
             }
         }else{

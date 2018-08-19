@@ -93,7 +93,6 @@ public class ListAsisAulaFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(asistenciaAulaAdapter);
 
-
         spAulas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -108,7 +107,6 @@ public class ListAsisAulaFragment extends Fragment {
             }
         });
 
-
         fabUpLoad.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -122,33 +120,54 @@ public class ListAsisAulaFragment extends Fragment {
                 datosNoEnviados = data.getAllAsistenciaAulaSinEnviar(nroLocal,nroAula);
                 data.close();
                 if(datosNoEnviados.size() > 0){
+                    final int total = datosNoEnviados.size();
+                    int i = 0;
                     for (final AsistenciaAula asistenciaAula : datosNoEnviados){
+                        final int j = i++;
                         final String c = asistenciaAula.getDni();
-                        WriteBatch batch = FirebaseFirestore.getInstance().batch();
-                        DocumentReference documentReference = FirebaseFirestore.getInstance().
-                                collection(getResources().getString(R.string.nombre_coleccion_asistencia))
-                                .document(asistenciaAula.getDni());
-                        batch.update(documentReference, "aula_dia", asistenciaAula.getAula_dia());
-                        batch.update(documentReference, "aula_mes", asistenciaAula.getAula_mes());
-                        batch.update(documentReference, "aula_anio", asistenciaAula.getAula_anio());
-                        batch.update(documentReference, "aula_hora", asistenciaAula.getAula_hora());
-                        batch.update(documentReference, "aula_minuto", asistenciaAula.getAula_minuto());
-                        batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                data = new Data(context);
-                                data.open();
-                                ContentValues contentValues = new ContentValues();
-                                contentValues.put(SQLConstantes.asistencia_local_subido_local,1);
-                                data.actualizarAsistenciaLocal(c,contentValues);
-                                data.close();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(context, "NO GUARDO", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                        FirebaseFirestore.getInstance().collection("asistencia_aula").document(asistenciaAula.getDni())
+                                .set(asistenciaAula.toMap())
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Data data = new Data(context);
+                                        data.open();
+                                        data.actualizarAsistenciaAulaSubido(c);
+                                        data.close();
+                                        if (j == total) Toast.makeText(context, total + " registros subidos", Toast.LENGTH_SHORT).show();
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w("FIRESTORE", "Error writing document", e);
+                                    }
+                                });
+//                        WriteBatch batch = FirebaseFirestore.getInstance().batch();
+//                        DocumentReference documentReference = FirebaseFirestore.getInstance().
+//                                collection(getResources().getString(R.string.nombre_coleccion_asistencia))
+//                                .document(asistenciaAula.getDni());
+//                        batch.update(documentReference, "aula_dia", asistenciaAula.getAula_dia());
+//                        batch.update(documentReference, "aula_mes", asistenciaAula.getAula_mes());
+//                        batch.update(documentReference, "aula_anio", asistenciaAula.getAula_anio());
+//                        batch.update(documentReference, "aula_hora", asistenciaAula.getAula_hora());
+//                        batch.update(documentReference, "aula_minuto", asistenciaAula.getAula_minuto());
+//                        batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
+//                            @Override
+//                            public void onSuccess(Void aVoid) {
+//                                data = new Data(context);
+//                                data.open();
+//                                ContentValues contentValues = new ContentValues();
+//                                contentValues.put(SQLConstantes.asistencia_local_subido_local,1);
+//                                data.actualizarAsistenciaLocal(c,contentValues);
+//                                data.close();
+//                            }
+//                        }).addOnFailureListener(new OnFailureListener() {
+//                            @Override
+//                            public void onFailure(@NonNull Exception e) {
+//                                Toast.makeText(context, "NO GUARDO", Toast.LENGTH_SHORT).show();
+//                            }
+//                        });
                     }
                 }else{
                     Toast.makeText(context, "No hay registros nuevos para subir", Toast.LENGTH_SHORT).show();
@@ -168,7 +187,6 @@ public class ListAsisAulaFragment extends Fragment {
         txtNumero.setText("Total registros: " + asistenciaAulas.size());
         d.close();
     }
-
     public String checkDigito (int number) {
         return number <= 9 ? "0" + number : String.valueOf(number);
     }

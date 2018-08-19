@@ -2,6 +2,9 @@ package pe.com.ricindigus.appednom2018.modelo;
 
 import android.content.ContentValues;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class AsistenciaLocal {
     private String _id;
     private String dni;
@@ -195,5 +198,23 @@ public class AsistenciaLocal {
         contentValues.put(SQLConstantes.asistencia_local_local_minuto,local_minuto);
         contentValues.put(SQLConstantes.asistencia_local_subido_local,subido_local);
         return contentValues;
+    }
+
+    public Map<String, Object> toMap(){
+        Map<String, Object> asistencia = new HashMap<>();
+        asistencia.put("dni", dni);
+        asistencia.put("nombres", nombres);
+        asistencia.put("apepat", apepat);
+        asistencia.put("apemat", apemat);
+        asistencia.put("sede", sede);
+        asistencia.put("id_local", id_local);
+        asistencia.put("local", local);
+        asistencia.put("aula", aula);
+        asistencia.put("local_dia", local_dia);
+        asistencia.put("local_mes", local_mes);
+        asistencia.put("local_anio", local_anio);
+        asistencia.put("local_hora", local_hora);
+        asistencia.put("local_minuto", local_minuto);
+        return asistencia;
     }
 }

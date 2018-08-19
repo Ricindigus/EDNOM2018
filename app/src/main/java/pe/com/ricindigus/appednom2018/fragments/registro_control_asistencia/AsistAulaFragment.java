@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -178,30 +179,49 @@ public class AsistAulaFragment extends Fragment {
                 data.close();
                 mostrarCorrecto(asis.getDni(),asis.getNombres() +" "+ asis.getApepat() +" "+ asis.getApemat(),asis.getAula());
                 final String c = asis.getDni();
-                WriteBatch batch = FirebaseFirestore.getInstance().batch();
-                DocumentReference documentReference = FirebaseFirestore.getInstance().collection(getResources().getString(R.string.nombre_coleccion_asistencia))
-                        .document(asis.getDni());
-                batch.update(documentReference, "aula_dia", dd);
-                batch.update(documentReference, "aula_mes", mm);
-                batch.update(documentReference, "aula_anio", yy);
-                batch.update(documentReference, "aula_hora", hora);
-                batch.update(documentReference, "aula_minuto", minuto);
-                batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Data data = new Data(context);
-                        data.open();
-                        ContentValues contentValues = new ContentValues();
-                        contentValues.put(SQLConstantes.asistencia_local_subido_local,1);
-                        data.actualizarAsistenciaLocal(c,contentValues);
-                        data.close();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(context, "NO GUARDO", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                FirebaseFirestore.getInstance().collection("asistencia_aula").document(asis.getDni())
+                        .set(asis.toMap())
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Data data = new Data(context);
+                                data.open();
+                                ContentValues contentValues = new ContentValues();
+                                contentValues.put(SQLConstantes.asistencia_aula_subido_aula,1);
+                                data.actualizarAsistenciaLocal(c,contentValues);
+                                data.close();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w("FIRESTORE", "Error writing document", e);
+                            }
+                        });
+//                WriteBatch batch = FirebaseFirestore.getInstance().batch();
+//                DocumentReference documentReference = FirebaseFirestore.getInstance().collection(getResources().getString(R.string.nombre_coleccion_asistencia))
+//                        .document(asis.getDni());
+//                batch.update(documentReference, "aula_dia", dd);
+//                batch.update(documentReference, "aula_mes", mm);
+//                batch.update(documentReference, "aula_anio", yy);
+//                batch.update(documentReference, "aula_hora", hora);
+//                batch.update(documentReference, "aula_minuto", minuto);
+//                batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
+//                    @Override
+//                    public void onSuccess(Void aVoid) {
+//                        Data data = new Data(context);
+//                        data.open();
+//                        ContentValues contentValues = new ContentValues();
+//                        contentValues.put(SQLConstantes.asistencia_aula_subido_aula,1);
+//                        data.actualizarAsistenciaLocal(c,contentValues);
+//                        data.close();
+//                    }
+//                }).addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        Toast.makeText(context, "NO GUARDO", Toast.LENGTH_SHORT).show();
+//                    }
+//                });
             }
         }else{
             mostrarErrorLocal(nacional.getSede(),nacional.getLocal_aplicacion(),nacional.getDireccion(),"Aula " + nacional.getAula());

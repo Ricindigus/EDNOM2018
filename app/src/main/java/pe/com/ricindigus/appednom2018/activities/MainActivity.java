@@ -102,11 +102,11 @@ public class MainActivity extends AppCompatActivity {
                 fragmentTransaction.replace(R.id.fragment_layout, asistLocalFragment);
                 break;
             case TipoFragment.REGISTRO_INVENTARIO_CUADERNILLO:
-                InvCuaderFragment invCuaderFragment = new InvCuaderFragment();
+                InvCuaderFragment invCuaderFragment = new InvCuaderFragment(nroLocal,MainActivity.this);
                 fragmentTransaction.replace(R.id.fragment_layout, invCuaderFragment);
                 break;
             case TipoFragment.REGISTRO_INVENTARIO_FICHA:
-                InvFichaFragment invFichaFragment = new InvFichaFragment();
+                InvFichaFragment invFichaFragment = new InvFichaFragment(nroLocal,MainActivity.this);
                 fragmentTransaction.replace(R.id.fragment_layout, invFichaFragment);
                 break;
             case TipoFragment.REGISTRO_INVENTARIO_LISTA_ASISTENCIA:

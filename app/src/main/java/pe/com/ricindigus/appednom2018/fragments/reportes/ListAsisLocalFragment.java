@@ -90,31 +90,53 @@ public class ListAsisLocalFragment extends Fragment {
                 datosNoEnviados = data.getAllAsistenciaLocalSinEnviar(nroLocal);
                 data.close();
                 if(datosNoEnviados.size() > 0){
-                    WriteBatch batch = FirebaseFirestore.getInstance().batch();
+                    final int total = datosNoEnviados.size();
+                    int i = 0;
                     for (final AsistenciaLocal registroAsistenciaLocal : datosNoEnviados){
-                        DocumentReference documentReference = FirebaseFirestore.getInstance().collection(getResources().getString(R.string.nombre_coleccion_asistencia)).document(registroAsistenciaLocal.getDni());
-                        batch.update(documentReference, "local_dia", registroAsistenciaLocal.getLocal_dia());
-                        batch.update(documentReference, "local_mes", registroAsistenciaLocal.getLocal_mes());
-                        batch.update(documentReference, "local_anio", registroAsistenciaLocal.getLocal_anio());
-                        batch.update(documentReference, "local_hora", registroAsistenciaLocal.getLocal_hora());
-                        batch.update(documentReference, "local_minuto", registroAsistenciaLocal.getLocal_minuto());
+                        final int j = i++;
                         final String c = registroAsistenciaLocal.getDni();
-                        batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                data = new Data(context);
-                                data.open();
-                                ContentValues contentValues = new ContentValues();
-                                contentValues.put(SQLConstantes.asistencia_local_subido_local,1);
-                                data.actualizarAsistenciaLocal(c,contentValues);
-                                data.close();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(context, "NO GUARDO", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                        FirebaseFirestore.getInstance().collection("asistencia_local").document(registroAsistenciaLocal.getDni())
+                                .set(registroAsistenciaLocal.toMap())
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Data data = new Data(context);
+                                        data.open();
+                                        data.actualizarAsistenciaLocalSubido(c);
+                                        data.close();
+                                        if (j == total) Toast.makeText(context, total + " registros subidos", Toast.LENGTH_SHORT).show();
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w("FIRESTORE", "Error writing document", e);
+                                    }
+                                });
+//                        WriteBatch batch = FirebaseFirestore.getInstance().batch();
+//                        DocumentReference documentReference = FirebaseFirestore.getInstance().collection(getResources().getString(R.string.nombre_coleccion_asistencia)).document(registroAsistenciaLocal.getDni());
+//                        batch.update(documentReference, "local_dia", registroAsistenciaLocal.getLocal_dia());
+//                        batch.update(documentReference, "local_mes", registroAsistenciaLocal.getLocal_mes());
+//                        batch.update(documentReference, "local_anio", registroAsistenciaLocal.getLocal_anio());
+//                        batch.update(documentReference, "local_hora", registroAsistenciaLocal.getLocal_hora());
+//                        batch.update(documentReference, "local_minuto", registroAsistenciaLocal.getLocal_minuto());
+//                        final String c = registroAsistenciaLocal.getDni();
+//                        batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
+//                            @Override
+//                            public void onSuccess(Void aVoid) {
+//                                data = new Data(context);
+//                                data.open();
+//                                ContentValues contentValues = new ContentValues();
+//                                contentValues.put(SQLConstantes.asistencia_local_subido_local,1);
+//                                data.actualizarAsistenciaLocal(c,contentValues);
+//                                data.close();
+//                            }
+//                        }).addOnFailureListener(new OnFailureListener() {
+//                            @Override
+//                            public void onFailure(@NonNull Exception e) {
+//                                Toast.makeText(context, "NO GUARDO", Toast.LENGTH_SHORT).show();
+//                            }
+//                        });
                     }
                 }else{
                     Toast.makeText(context, "No hay registros nuevos para subir", Toast.LENGTH_SHORT).show();

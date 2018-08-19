@@ -9,6 +9,9 @@ public class SQLConstantes {
     public static String tablaaulalocal = "aulas_local";
     public static String tablaasislocal = "asis_local";
     public static String tablaasisaula = "asis_aula";
+    public static String tablafichas = "fichas";
+    public static String tablacuadernillos = "cuadernillos";
+
 
     //TABLA AULA
     public static String aulas_id = "_id";
@@ -81,27 +84,6 @@ public class SQLConstantes {
     public static String asistencia_local_local_minuto = "local_minuto";
     public static String asistencia_local_subido_local = "subido_local";
 
-
-
-    public static final String SQL_CREATE_TABLA_ASISTENCIA_LOCAL =
-            "CREATE TABLE " + tablaasislocal + "(" +
-                    asistencia_local_id + " TEXT PRIMARY KEY," +
-                    asistencia_local_dni + " TEXT," +
-                    asistencia_local_nombres + " TEXT," +
-                    asistencia_local_apepat + " TEXT," +
-                    asistencia_local_apemat + " TEXT," +
-                    asistencia_local_sede + " TEXT," +
-                    asistencia_local_id_local + " TEXT," +
-                    asistencia_local_nombre_local + " TEXT," +
-                    asistencia_local_aula + " TEXT," +
-                    asistencia_local_local_dia + " INTEGER," +
-                    asistencia_local_local_mes + " INTEGER," +
-                    asistencia_local_local_anio + " INTEGER," +
-                    asistencia_local_local_hora+ " INTEGER," +
-                    asistencia_local_local_minuto + " INTEGER," +
-                    asistencia_local_subido_local + " INTEGER" + ");"
-            ;
-
     //TABLA ASISTENCIA AULA
     public static String asistencia_aula_id = "_id";
     public static String asistencia_aula_dni = "dni";
@@ -118,6 +100,42 @@ public class SQLConstantes {
     public static String asistencia_aula_aula_hora = "aula_hora";
     public static String asistencia_aula_aula_minuto = "aula_minuto";
     public static String asistencia_aula_subido_aula = "subido_aula";
+
+    //TABLA FICHAS
+    public static String ficha_id = "_id";
+    public static String ficha_codficha = "codficha";
+    public static String ficha_dni = "dni";
+    public static String ficha_nombres = "nombres";
+    public static String ficha_apepat = "apepat";
+    public static String ficha_apemat = "apemat";
+    public static String ficha_sede = "sede";
+    public static String ficha_id_local = "id_local";
+    public static String ficha_nombre_local = "local";
+    public static String ficha_aula = "aula";
+    public static String ficha_dia = "dia";
+    public static String ficha_mes = "mes";
+    public static String ficha_anio = "anio";
+    public static String ficha_hora = "hora";
+    public static String ficha_minuto = "minuto";
+    public static String ficha_subido = "subido";
+
+    //TABLA CUADERNILLOS
+    public static String cuadernillo_id = "_id";
+    public static String cuadernillo_codcartilla = "codcartilla";
+    public static String cuadernillo_dni = "dni";
+    public static String cuadernillo_nombres = "nombres";
+    public static String cuadernillo_apepat = "apepat";
+    public static String cuadernillo_apemat = "apemat";
+    public static String cuadernillo_sede = "sede";
+    public static String cuadernillo_id_local = "id_local";
+    public static String cuadernillo_nombre_local = "local";
+    public static String cuadernillo_aula = "aula";
+    public static String cuadernillo_dia = "dia";
+    public static String cuadernillo_mes = "mes";
+    public static String cuadernillo_anio = "anio";
+    public static String cuadernillo_hora = "hora";
+    public static String cuadernillo_minuto = "minuto";
+    public static String cuadernillo_subido = "subido";
 
 
     public static final String SQL_CREATE_TABLA_ASISTENCIA_AULA =
@@ -139,6 +157,66 @@ public class SQLConstantes {
                     asistencia_aula_subido_aula + " INTEGER" + ");"
             ;
 
+
+    public static final String SQL_CREATE_TABLA_ASISTENCIA_LOCAL =
+            "CREATE TABLE " + tablaasislocal + "(" +
+                    asistencia_local_id + " TEXT PRIMARY KEY," +
+                    asistencia_local_dni + " TEXT," +
+                    asistencia_local_nombres + " TEXT," +
+                    asistencia_local_apepat + " TEXT," +
+                    asistencia_local_apemat + " TEXT," +
+                    asistencia_local_sede + " TEXT," +
+                    asistencia_local_id_local + " TEXT," +
+                    asistencia_local_nombre_local + " TEXT," +
+                    asistencia_local_aula + " TEXT," +
+                    asistencia_local_local_dia + " INTEGER," +
+                    asistencia_local_local_mes + " INTEGER," +
+                    asistencia_local_local_anio + " INTEGER," +
+                    asistencia_local_local_hora+ " INTEGER," +
+                    asistencia_local_local_minuto + " INTEGER," +
+                    asistencia_local_subido_local + " INTEGER" + ");"
+            ;
+
+    public static final String SQL_CREATE_TABLA_FICHAS =
+            "CREATE TABLE " + tablafichas + "(" +
+                    ficha_id + " TEXT PRIMARY KEY," +
+                    ficha_codficha + " TEXT," +
+                    ficha_dni + " TEXT," +
+                    ficha_nombres + " TEXT," +
+                    ficha_apepat + " TEXT," +
+                    ficha_apemat + " TEXT," +
+                    ficha_sede + " TEXT," +
+                    ficha_id_local + " TEXT," +
+                    ficha_nombre_local + " TEXT," +
+                    ficha_aula + " TEXT," +
+                    ficha_dia + " INTEGER," +
+                    ficha_mes + " INTEGER," +
+                    ficha_anio + " INTEGER," +
+                    ficha_hora + " INTEGER," +
+                    ficha_minuto + " INTEGER," +
+                    ficha_subido + " INTEGER" + ");"
+            ;
+
+    public static final String SQL_CREATE_TABLA_CUADERNILLOS =
+            "CREATE TABLE " + tablacuadernillos + "(" +
+                    cuadernillo_id + " TEXT PRIMARY KEY," +
+                    cuadernillo_codcartilla + " TEXT," +
+                    cuadernillo_dni + " TEXT," +
+                    cuadernillo_nombres + " TEXT," +
+                    cuadernillo_apepat + " TEXT," +
+                    cuadernillo_apemat + " TEXT," +
+                    cuadernillo_sede + " TEXT," +
+                    cuadernillo_id_local + " TEXT," +
+                    cuadernillo_nombre_local + " TEXT," +
+                    cuadernillo_aula + " TEXT," +
+                    cuadernillo_dia + " INTEGER," +
+                    cuadernillo_mes + " INTEGER," +
+                    cuadernillo_anio + " INTEGER," +
+                    cuadernillo_hora + " INTEGER," +
+                    cuadernillo_minuto + " INTEGER," +
+                    cuadernillo_subido + " INTEGER" + ");"
+            ;
+
     public static final String WHERE_CLAUSE_CLAVE = "clave=?";
     public static final String WHERE_CLAUSE_DNI = "ins_numdoc=?";
     public static final String WHERE_CLAUSE_NRO_LOCAL = "nro_local=?";
@@ -146,6 +224,8 @@ public class SQLConstantes {
     public static final String WHERE_CLAUSE_ID_LOCAL = "id_local=?";
     public static final String WHERE_CLAUSE_NRO_AULA = "aula=?";
     public static final String WHERE_CLAUSE_DNI_ASISTENCIA = "dni=?";
+    public static final String WHERE_CLAUSE_CODIGO_FICHA = "codficha=?";
+    public static final String WHERE_CLAUSE_CODIGO_CUADERNILLO = "codcartilla=?";
     public static final String WHERE_CLAUSE_NOMBRE_AULA = "nombre=?";
 
 
