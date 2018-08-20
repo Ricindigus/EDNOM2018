@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -111,24 +113,43 @@ public class InvListAsisFragment extends Fragment {
         spAulas.setAdapter(dataAdapter);
         data.close();
 
+        edtLista.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length() == 12) clickBoton();
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void afterTextChanged(Editable s) { }
+        });
+
         btnBuscar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ocultarTeclado(edtLista);
-                String codListado = edtLista.getText().toString();
-                Data data = new Data(context);
-                data.open();
-                Nacional nacional = data.getNacionalxCodPagina(codListado);
-                data.close();
-                if(nacional == null){
-                    mostrarErrorDni(codListado);
-                }else{
-                    registrarListado(nacional);
-                }
-                edtLista.setText("");
+                clickBoton();
             }
         });
     }
+
+    public void clickBoton(){
+        ocultarTeclado(edtLista);
+        String codListado = edtLista.getText().toString();
+        Data data = new Data(context);
+        data.open();
+        Nacional nacional = data.getNacionalxCodPagina(codListado);
+        data.close();
+        if(nacional == null){
+            mostrarErrorDni(codListado);
+        }else{
+            registrarListado(nacional);
+        }
+        edtLista.setText("");
+        edtLista.requestFocus();
+    }
+
     public void ocultarTeclado(View view){
         InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         mgr.hideSoftInputFromWindow(view.getWindowToken(), 0);
@@ -255,7 +276,7 @@ public class InvListAsisFragment extends Fragment {
         lytCorrecto.setVisibility(View.GONE);
         errorListaAulaTxtCodLista.setText(codLista);
         errorListaAulaTxtNroPostulantes.setText("NRO POSTULANTES: "+nroPostulantes);
-        errorListaAulaTxtAula.setText("AULA "+aula);
+        errorListaAulaTxtAula.setText(aula);
     }
     public void mostrarYaRegistrado(String codLista, int nroPostulantes, String aula){
         lytErrorLista.setVisibility(View.GONE);
@@ -264,7 +285,7 @@ public class InvListAsisFragment extends Fragment {
         lytCorrecto.setVisibility(View.GONE);
         yaRegistradoTxtCodLista.setText(codLista);
         yaRegistradoTxtNroPostulantes.setText("NRO POSTULANTES: "+nroPostulantes);
-        yaRegistradoTxtAula.setText("AULA "+aula);
+        yaRegistradoTxtAula.setText(aula);
     }
 
     public String checkDigito (int number) {

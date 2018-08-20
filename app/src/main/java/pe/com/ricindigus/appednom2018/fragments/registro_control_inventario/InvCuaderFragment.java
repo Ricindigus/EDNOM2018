@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -113,23 +115,42 @@ public class InvCuaderFragment extends Fragment {
         spAulas.setAdapter(dataAdapter);
         data.close();
 
+        edtCuadernillo.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length() == 6) clickBoton();
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void afterTextChanged(Editable s) { }
+        });
+
         btnBuscar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ocultarTeclado(edtCuadernillo);
-                String cuadernillo = edtCuadernillo.getText().toString();
-                Data data = new Data(context);
-                data.open();
-                Nacional nacional = data.getNacionalxCuadernillo(cuadernillo);
-                data.close();
-                if(nacional == null){
-                    mostrarErrorDni(cuadernillo);
-                }else{
-                    registrarCuadernillo(nacional);
-                }
-                edtCuadernillo.setText("");
+                clickBoton();
             }
         });
+
+    }
+
+    public void clickBoton(){
+        ocultarTeclado(edtCuadernillo);
+        String cuadernillo = edtCuadernillo.getText().toString();
+        Data data = new Data(context);
+        data.open();
+        Nacional nacional = data.getNacionalxCuadernillo(cuadernillo);
+        data.close();
+        if(nacional == null){
+            mostrarErrorDni(cuadernillo);
+        }else{
+            registrarCuadernillo(nacional);
+        }
+        edtCuadernillo.setText("");
+        edtCuadernillo.requestFocus();
     }
     public void ocultarTeclado(View view){
         InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);

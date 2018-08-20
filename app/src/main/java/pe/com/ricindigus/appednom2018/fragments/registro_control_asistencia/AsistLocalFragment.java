@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -113,24 +115,41 @@ public class AsistLocalFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        edtDni.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length() == 8) clickBoton();
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void afterTextChanged(Editable s) { }
+        });
+
         btnBuscar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ocultarTeclado(edtDni);
-                String dni = edtDni.getText().toString();
-                Data data = new Data(context);
-                data.open();
-                Nacional nacional = data.getNacionalxDNI(dni);
-                data.close();
-                if(nacional == null){
-                    mostrarErrorDni();
-                }else{
-                    registrarAsistencia(nacional);
-                }
-                edtDni.setText("");
-
+                clickBoton();
             }
         });
+    }
+
+    public void clickBoton(){
+        ocultarTeclado(edtDni);
+        String dni = edtDni.getText().toString();
+        Data data = new Data(context);
+        data.open();
+        Nacional nacional = data.getNacionalxDNI(dni);
+        data.close();
+        if(nacional == null){
+            mostrarErrorDni();
+        }else{
+            registrarAsistencia(nacional);
+        }
+        edtDni.setText("");
+        edtDni.requestFocus();
     }
     public void ocultarTeclado(View view){
         InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);

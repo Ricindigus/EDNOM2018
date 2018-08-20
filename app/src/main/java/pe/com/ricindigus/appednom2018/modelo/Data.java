@@ -17,6 +17,8 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import pe.com.ricindigus.appednom2018.util.TipoTotal;
+
 public class Data {
     Context contexto;
     SQLiteOpenHelper sqLiteOpenHelper;
@@ -1115,6 +1117,173 @@ public class Data {
         }
         return listados;
     }
+
+    public void insertarResumenAsistencia(ResumenAsistencia resumenAsistencia){
+        ContentValues contentValues = resumenAsistencia.toValues();
+        sqLiteDatabase.insert(SQLConstantes.tablaresumenasistencia,null,contentValues);
+    }
+
+    public void actualizarResumenAsistencia(int id_local,int id_aula, ContentValues valores){
+        String[] whereArgs = new String[]{String.valueOf(id_local),String.valueOf(id_aula)};
+        sqLiteDatabase.update(SQLConstantes.tablaresumenasistencia,valores,
+                SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
+                SQLConstantes.WHERE_CLAUSE_ID_AULA,whereArgs);
+    }
+
+    public void actualizarResumenAsistenciaAula(int id_local,int id_aula){
+        String[] whereArgs = new String[]{String.valueOf(id_local),String.valueOf(id_aula)};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablaresumenasistencia, null,
+                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
+                            SQLConstantes.WHERE_CLAUSE_ID_AULA
+                    ,whereArgs,null,null,null);
+            if(cursor.getCount() == 1){
+                cursor.moveToFirst();
+                int id = cursor.getInt(cursor.getColumnIndex(SQLConstantes.resumen_asistencia_id));
+                int numeroAsistenciasAula = cursor.getInt(cursor.getColumnIndex(SQLConstantes.resumen_asistencia_nro_asisaula));
+                numeroAsistenciasAula++;
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(SQLConstantes.resumen_asistencia_nro_asisaula,numeroAsistenciasAula);
+                sqLiteDatabase.update(SQLConstantes.tablaresumenasistencia,contentValues,SQLConstantes.WHERE_CLAUSE_ID,new String[]{String.valueOf(id)});
+            }
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+
+    }
+
+    public void actualizarResumenAsistenciaLocal(int id_local,int id_aula){
+        String[] whereArgs = new String[]{String.valueOf(id_local),String.valueOf(id_aula)};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablaresumenasistencia, null,
+                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
+                            SQLConstantes.WHERE_CLAUSE_ID_AULA
+                    ,whereArgs,null,null,null);
+            if(cursor.getCount() == 1){
+                cursor.moveToFirst();
+                int id = cursor.getInt(cursor.getColumnIndex(SQLConstantes.resumen_asistencia_id));
+                int numeroAsistenciasLocal = cursor.getInt(cursor.getColumnIndex(SQLConstantes.resumen_asistencia_nro_asislocal));
+                numeroAsistenciasLocal++;
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(SQLConstantes.resumen_asistencia_nro_asislocal,numeroAsistenciasLocal);
+                sqLiteDatabase.update(SQLConstantes.tablaresumenasistencia,contentValues,SQLConstantes.WHERE_CLAUSE_ID,new String[]{String.valueOf(id)});
+            }
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+
+    }
+
+    public void insertarResumenInventario(ResumenInventario resumenInventario){
+        ContentValues contentValues = resumenInventario.toValues();
+        sqLiteDatabase.insert(SQLConstantes.tablaresumeninventario,null,contentValues);
+    }
+
+    public void actualizarResumenInventario(int id_local,int id_aula, ContentValues valores){
+        String[] whereArgs = new String[]{String.valueOf(id_local),String.valueOf(id_aula)};
+        sqLiteDatabase.update(SQLConstantes.tablaresumeninventario,valores,
+                SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
+                        SQLConstantes.WHERE_CLAUSE_ID_AULA,whereArgs);
+    }
+
+    public void actualizarResumenInventarioFicha(int id_local,int id_aula){
+        String[] whereArgs = new String[]{String.valueOf(id_local),String.valueOf(id_aula)};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablaresumeninventario, null,
+                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
+                            SQLConstantes.WHERE_CLAUSE_ID_AULA
+                    ,whereArgs,null,null,null);
+            if(cursor.getCount() == 1){
+                cursor.moveToFirst();
+                int id = cursor.getInt(cursor.getColumnIndex(SQLConstantes.resumen_inventario_id));
+                int numeroInventarioFichas = cursor.getInt(cursor.getColumnIndex(SQLConstantes.resumen_inventario_nro_invfichas));
+                numeroInventarioFichas++;
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(SQLConstantes.resumen_inventario_nro_invfichas,numeroInventarioFichas);
+                sqLiteDatabase.update(SQLConstantes.tablaresumeninventario,contentValues,SQLConstantes.WHERE_CLAUSE_ID,new String[]{String.valueOf(id)});
+            }
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+
+    }
+
+    public void actualizarResumenInventarioCartilla(int id_local,int id_aula){
+        String[] whereArgs = new String[]{String.valueOf(id_local),String.valueOf(id_aula)};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablaresumeninventario, null,
+                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
+                            SQLConstantes.WHERE_CLAUSE_ID_AULA
+                    ,whereArgs,null,null,null);
+            if(cursor.getCount() == 1){
+                cursor.moveToFirst();
+                int id = cursor.getInt(cursor.getColumnIndex(SQLConstantes.resumen_inventario_id));
+                int numeroInventarioCartillas = cursor.getInt(cursor.getColumnIndex(SQLConstantes.resumen_inventario_nro_invcartillas));
+                numeroInventarioCartillas++;
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(SQLConstantes.resumen_inventario_nro_invcartillas,numeroInventarioCartillas);
+                sqLiteDatabase.update(SQLConstantes.tablaresumeninventario,contentValues,SQLConstantes.WHERE_CLAUSE_ID,new String[]{String.valueOf(id)});
+            }
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+    }
+
+    public void actualizarResumenInventarioListados(int id_local,int id_aula){
+        String[] whereArgs = new String[]{String.valueOf(id_local),String.valueOf(id_aula)};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablaresumeninventario, null,
+                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
+                            SQLConstantes.WHERE_CLAUSE_ID_AULA
+                    ,whereArgs,null,null,null);
+            if(cursor.getCount() == 1){
+                cursor.moveToFirst();
+                int id = cursor.getInt(cursor.getColumnIndex(SQLConstantes.resumen_inventario_id));
+                int numeroInventarioListados = cursor.getInt(cursor.getColumnIndex(SQLConstantes.resumen_inventario_nro_invlistados));
+                numeroInventarioListados++;
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(SQLConstantes.resumen_inventario_nro_invlistados,numeroInventarioListados);
+                sqLiteDatabase.update(SQLConstantes.tablaresumeninventario,contentValues,SQLConstantes.WHERE_CLAUSE_ID,new String[]{String.valueOf(id)});
+            }
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+    }
+
+    public void insertarResumenTotal(ResumenTotal resumenTotal){
+        ContentValues contentValues = resumenTotal.toValues();
+        sqLiteDatabase.insert(SQLConstantes.tablaresumentotal,null,contentValues);
+    }
+
+    public void actualizarResumenTotal(int id, ContentValues valores){
+        String[] whereArgs = new String[]{String.valueOf(id)};
+        sqLiteDatabase.update(SQLConstantes.tablaresumentotal,valores, SQLConstantes.WHERE_CLAUSE_ID ,whereArgs);
+    }
+
+    public void actualizarCantidadResumenTotal(int idTotal){
+        String[] whereArgs = new String[]{String.valueOf(idTotal)};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablaresumentotal, null,
+                    SQLConstantes.WHERE_CLAUSE_ID,whereArgs,null,null,null);
+            if(cursor.getCount() == 1){
+                cursor.moveToFirst();
+                int numeroResumenesTotal = cursor.getInt(cursor.getColumnIndex(SQLConstantes.resumen_total_cantidad));
+                numeroResumenesTotal++;
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(SQLConstantes.resumen_total_cantidad,numeroResumenesTotal);
+                sqLiteDatabase.update(SQLConstantes.tablaresumeninventario,contentValues,SQLConstantes.WHERE_CLAUSE_ID,whereArgs);
+            }
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+    }
+
 
     public void deleteAllElementosFromTabla(String nombreTabla){
         sqLiteDatabase.execSQL("delete from "+ nombreTabla);

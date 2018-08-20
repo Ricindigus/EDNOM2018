@@ -12,6 +12,12 @@ public class SQLConstantes {
     public static String tablafichas = "fichas";
     public static String tablacuadernillos = "cuadernillos";
     public static String tablalistados = "listados";
+    public static String tablaresumenasistencia = "resumen_asistencia";
+    public static String tablaresumeninventario = "resumen_inventario";
+    public static String tablaresumentotal = "resumen_total";
+
+
+
 
 
 
@@ -154,6 +160,27 @@ public class SQLConstantes {
     public static String listado_minuto = "minuto";
     public static String listado_subido = "subido";
 
+    //TABLA RESUMEN ASISTENCIA
+    public static String resumen_asistencia_id = "_id";
+    public static String resumen_asistencia_id_local = "id_local";
+    public static String resumen_asistencia_id_aula = "id_aula";
+    public static String resumen_asistencia_nro_asislocal = "nro_asislocal";
+    public static String resumen_asistencia_nro_asisaula = "nro_asisaula";
+
+    //TABLA RESUMEN INVENTARIO
+    public static String resumen_inventario_id = "_id";
+    public static String resumen_inventario_id_local = "id_local";
+    public static String resumen_inventario_id_aula = "id_aula";
+    public static String resumen_inventario_nro_invfichas = "nro_invfichas";
+    public static String resumen_inventario_nro_invcartillas = "nro_invcartillas";
+    public static String resumen_inventario_nro_invlistados = "nro_invlistados";
+
+    //TABLA RESUMEN TOTALES
+    public static String resumen_total_id = "_id";
+    public static String resumen_total_cantidad = "cantidad";
+
+
+
     public static final String SQL_CREATE_TABLA_ASISTENCIA_AULA =
             "CREATE TABLE " + tablaasisaula + "(" +
                     asistencia_aula_id + " TEXT PRIMARY KEY," +
@@ -250,28 +277,49 @@ public class SQLConstantes {
                     listado_subido + " INTEGER" + ");"
             ;
 
+    public static final String SQL_CREATE_TABLA_RESUMEN_ASISTENCIA =
+            "CREATE TABLE " + tablaresumenasistencia + "(" +
+                    resumen_asistencia_id + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    resumen_asistencia_id_local + " INTEGER," +
+                    resumen_asistencia_id_aula + " INTEGER," +
+                    resumen_asistencia_nro_asislocal + " INTEGER," +
+                    resumen_asistencia_nro_asisaula + " INTEGER" + ");"
+            ;
+
+    public static final String SQL_CREATE_TABLA_RESUMEN_INVENTARIO =
+            "CREATE TABLE " + tablaresumeninventario + "(" +
+                    resumen_inventario_id + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    resumen_inventario_id_aula + " INTEGER," +
+                    resumen_inventario_id_local + " INTEGER," +
+                    resumen_inventario_nro_invfichas + " INTEGER," +
+                    resumen_inventario_nro_invcartillas + " INTEGER," +
+                    resumen_inventario_nro_invlistados + " INTEGER" + ");"
+            ;
+
+    public static final String SQL_CREATE_TABLA_RESUMEN_TOTAL =
+            "CREATE TABLE " + tablaresumentotal + "(" +
+                    resumen_total_id + " INTEGER PRIMARY KEY," +
+                    resumen_total_cantidad + " INTEGER" + ");"
+            ;
+
+    public static final String WHERE_CLAUSE_ID = "_id=?";
     public static final String WHERE_CLAUSE_CLAVE = "clave=?";
     public static final String WHERE_CLAUSE_DNI = "ins_numdoc=?";
     public static final String WHERE_CLAUSE_NRO_LOCAL = "nro_local=?";
     public static final String WHERE_CLAUSE_LOCAL = "local=?";
     public static final String WHERE_CLAUSE_ID_LOCAL = "id_local=?";
+    public static final String WHERE_CLAUSE_ID_AULA = "id_aula=?";
     public static final String WHERE_CLAUSE_NRO_AULA = "aula=?";
     public static final String WHERE_CLAUSE_DNI_ASISTENCIA = "dni=?";
     public static final String WHERE_CLAUSE_CODIGO_FICHA = "codficha=?";
     public static final String WHERE_CLAUSE_CODIGO_CUADERNILLO = "codcartilla=?";
     public static final String WHERE_CLAUSE_CODIGO_PAGINA = "codigo_pagina=?";
     public static final String WHERE_CLAUSE_NOMBRE_AULA = "nombre=?";
-
-
     public static final String WHERE_CLAUSE_CODIGO = "codigo=?";
-
-
     public static final String WHERE_CLAUSE_SEDE = "sede=?";
     public static final String WHERE_CLAUSE_DIA = "dia=?";
     public static final String WHERE_CLAUSE_MES = "mes=?";
     public static final String WHERE_CLAUSE_ANIO = "anio=?";
-
-
     public static final String WHERE_CLAUSE_SUBIDO_ENTRADA = "subido_entrada=?";
     public static final String WHERE_CLAUSE_SUBIDO_SALIDA = "subido_salida=?";
 
