@@ -51,6 +51,7 @@ public class Data {
                 sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_ASISTENCIA_AULA);
                 sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_FICHAS);
                 sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_CUADERNILLOS);
+                sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_LISTADOS);
                 sqLiteDatabase.close();
             }catch (IOException e){
                 throw new Error("Error: copiando base de datos");
@@ -75,6 +76,7 @@ public class Data {
             sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_ASISTENCIA_AULA);
             sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_FICHAS);
             sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_CUADERNILLOS);
+            sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_LISTADOS);
             sqLiteDatabase.close();
         }catch (IOException e){
             throw new Error("Error: copiando base de datos");
@@ -307,6 +309,31 @@ public class Data {
         return nacional;
     }
 
+    public Nacional getNacionalxCodPagina(String codPagina){
+        Nacional nacional = null;
+        String[] whereArgs = new String[]{codPagina};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablanacional,
+                    null,SQLConstantes.WHERE_CLAUSE_CODIGO_PAGINA,whereArgs,null,null,null);
+            boolean obtenido = false;
+            while (cursor.moveToNext() && !obtenido){
+                nacional = new Nacional();
+                nacional.setSede(cursor.getString(cursor.getColumnIndex(SQLConstantes.nacional_sede)));
+                nacional.setNro_local(cursor.getInt(cursor.getColumnIndex(SQLConstantes.nacional_nro_local)));
+                nacional.setLocal_aplicacion(cursor.getString(cursor.getColumnIndex(SQLConstantes.nacional_local_aplicacion)));
+                nacional.setAula(cursor.getString(cursor.getColumnIndex(SQLConstantes.nacional_aula)));
+                nacional.setCodigo_pagina(cursor.getString(cursor.getColumnIndex(SQLConstantes.nacional_codigo_pagina)));
+                nacional.setId_local(cursor.getInt(cursor.getColumnIndex(SQLConstantes.nacional_id_local)));
+                nacional.setId_aula(cursor.getInt(cursor.getColumnIndex(SQLConstantes.nacional_id_aula)));
+                nacional.setDireccion(cursor.getString(cursor.getColumnIndex(SQLConstantes.nacional_direccion)));
+                obtenido = true;
+            }
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return nacional;
+    }
     public ArrayList<Nacional> getNacionalxNroLocal(int nroLocal){
         ArrayList<Nacional> nacionals = new ArrayList<>();
         String[] whereArgs = new String[]{String.valueOf(nroLocal)};
@@ -584,7 +611,6 @@ public class Data {
                             SQLConstantes.WHERE_CLAUSE_NRO_AULA
                     ,whereArgs,null,null,null);
             while(cursor.moveToNext()){
-
                     AsistenciaAula asistenciaAula = new AsistenciaAula();
                     asistenciaAula.set_id(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistencia_aula_id)));
                     asistenciaAula.setDni(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistencia_aula_dni)));
@@ -958,6 +984,136 @@ public class Data {
             if(cursor != null) cursor.close();
         }
         return cuadernillos;
+    }
+
+    public void insertarListado(Listado listado){
+        ContentValues contentValues = listado.toValues();
+        sqLiteDatabase.insert(SQLConstantes.tablalistados,null,contentValues);
+    }
+
+    public void actualizarListado(String codigo, ContentValues valores){
+        String[] whereArgs = new String[]{codigo};
+        sqLiteDatabase.update(SQLConstantes.tablalistados,valores,SQLConstantes.WHERE_CLAUSE_CODIGO_PAGINA,whereArgs);
+    }
+
+    public void actualizarListadoSubido(String codigo){
+        String[] whereArgs = new String[]{codigo};
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SQLConstantes.listado_subido,1);
+        sqLiteDatabase.update(SQLConstantes.tablalistados,contentValues,SQLConstantes.WHERE_CLAUSE_CODIGO_PAGINA,whereArgs);
+    }
+
+    public Listado getListado(String codPagina){
+        Listado listado = null;
+        String[] whereArgs = new String[]{codPagina};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablalistados, null,
+                    SQLConstantes.WHERE_CLAUSE_CODIGO_PAGINA
+                    ,whereArgs,null,null,null);
+
+            if(cursor.getCount() == 1){
+                cursor.moveToFirst();
+                listado = new Listado();
+                listado.set_id(cursor.getString(cursor.getColumnIndex(SQLConstantes.listado_id)));
+                listado.setCodigo_pagina(cursor.getString(cursor.getColumnIndex(SQLConstantes.listado_codigo_pagina)));
+                listado.setNro_postulantes(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_nro_postulantes)));
+                listado.setId_local(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_id_local)));
+                listado.setLocal(cursor.getString(cursor.getColumnIndex(SQLConstantes.listado_nombre_local)));
+                listado.setSede(cursor.getString(cursor.getColumnIndex(SQLConstantes.listado_sede)));
+                listado.setAula(cursor.getString(cursor.getColumnIndex(SQLConstantes.listado_aula)));
+                listado.setDia(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_dia)));
+                listado.setMes(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_mes)));
+                listado.setAnio(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_anio)));
+                listado.setHora(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_hora)));
+                listado.setMinuto(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_minuto)));
+                listado.setSubido(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_subido)));
+            }
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return listado;
+    }
+
+    public int getNroPostulantesListado(String codPagina){
+        int nroPostulantes = 0;
+        String[] whereArgs = new String[]{codPagina};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablanacional, null,
+                    SQLConstantes.WHERE_CLAUSE_CODIGO_PAGINA
+                    ,whereArgs,null,null,null);
+            if(cursor!= null) nroPostulantes = cursor.getCount();
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return nroPostulantes;
+    }
+
+    public ArrayList<Listado> getAllListados(int nroLocal, int nroAula){
+        ArrayList<Listado> listados = new ArrayList<Listado>();
+        String[] whereArgs = new String[]{String.valueOf(nroLocal), String.valueOf(nroAula)};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablalistados, null,
+                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
+                            SQLConstantes.WHERE_CLAUSE_NRO_AULA
+                    ,whereArgs,null,null,null);
+            while(cursor.moveToNext()){
+                Listado listado = new Listado();
+                listado.set_id(cursor.getString(cursor.getColumnIndex(SQLConstantes.listado_id)));
+                listado.setCodigo_pagina(cursor.getString(cursor.getColumnIndex(SQLConstantes.listado_codigo_pagina)));
+                listado.setId_local(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_id_local)));
+                listado.setLocal(cursor.getString(cursor.getColumnIndex(SQLConstantes.listado_nombre_local)));
+                listado.setSede(cursor.getString(cursor.getColumnIndex(SQLConstantes.listado_sede)));
+                listado.setAula(cursor.getString(cursor.getColumnIndex(SQLConstantes.listado_aula)));
+                listado.setDia(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_dia)));
+                listado.setMes(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_mes)));
+                listado.setAnio(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_anio)));
+                listado.setHora(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_hora)));
+                listado.setMinuto(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_minuto)));
+                listado.setNro_postulantes(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_nro_postulantes)));
+                listado.setSubido(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_subido)));
+                listados.add(listado);
+            }
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return listados;
+    }
+
+    public ArrayList<Listado> getAllListadosSinEnviar(int nroLocal, int nroAula){
+        ArrayList<Listado> listados = new ArrayList<Listado>();
+        String[] whereArgs = new String[]{String.valueOf(nroLocal), String.valueOf(nroAula)};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablalistados, null,
+                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
+                            SQLConstantes.WHERE_CLAUSE_NRO_AULA
+                    ,whereArgs,null,null,null);
+            while(cursor.moveToNext()){
+                if (cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_subido)) == 0){
+                    Listado listado = new Listado();
+                    listado.set_id(cursor.getString(cursor.getColumnIndex(SQLConstantes.listado_id)));
+                    listado.setCodigo_pagina(cursor.getString(cursor.getColumnIndex(SQLConstantes.listado_codigo_pagina)));
+                    listado.setId_local(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_id_local)));
+                    listado.setLocal(cursor.getString(cursor.getColumnIndex(SQLConstantes.listado_nombre_local)));
+                    listado.setNro_postulantes(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_nro_postulantes)));
+                    listado.setSede(cursor.getString(cursor.getColumnIndex(SQLConstantes.listado_sede)));
+                    listado.setAula(cursor.getString(cursor.getColumnIndex(SQLConstantes.listado_aula)));
+                    listado.setDia(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_dia)));
+                    listado.setMes(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_mes)));
+                    listado.setAnio(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_anio)));
+                    listado.setHora(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_hora)));
+                    listado.setMinuto(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_minuto)));
+                    listado.setSubido(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_subido)));
+                    listados.add(listado);
+                }
+            }
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return listados;
     }
 
     public void deleteAllElementosFromTabla(String nombreTabla){

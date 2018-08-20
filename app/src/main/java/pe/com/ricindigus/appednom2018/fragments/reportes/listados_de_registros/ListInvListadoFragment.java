@@ -1,8 +1,7 @@
-package pe.com.ricindigus.appednom2018.fragments.reportes;
+package pe.com.ricindigus.appednom2018.fragments.reportes.listados_de_registros;
 
 
 import android.annotation.SuppressLint;
-import android.content.ContentValues;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,45 +14,47 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.WriteBatch;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 import pe.com.ricindigus.appednom2018.R;
-import pe.com.ricindigus.appednom2018.adapters.AsistenciaLocalAdapter;
-import pe.com.ricindigus.appednom2018.modelo.AsistenciaLocal;
+import pe.com.ricindigus.appednom2018.adapters.InventarioFichaAdapter;
+import pe.com.ricindigus.appednom2018.adapters.InventarioListadoAdapter;
 import pe.com.ricindigus.appednom2018.modelo.Data;
-import pe.com.ricindigus.appednom2018.modelo.SQLConstantes;
+import pe.com.ricindigus.appednom2018.modelo.Ficha;
+import pe.com.ricindigus.appednom2018.modelo.Listado;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ListAsisLocalFragment extends Fragment {
-
-    RecyclerView recyclerView;
+public class ListInvListadoFragment extends Fragment {
     Context context;
-    ArrayList<AsistenciaLocal> registroAsistenciaLocals;
-    ArrayList<AsistenciaLocal> datosNoEnviados;
     int nroLocal;
+    Spinner spAulas;
+    RecyclerView recyclerView;
+    ArrayList<Listado> listados;
+    ArrayList<Listado> datosNoEnviados;
     Data data;
     FloatingActionButton fabUpLoad;
     TextView txtNumero;
+    InventarioListadoAdapter inventarioListadoAdapter;
     boolean b = false;
 
-    public ListAsisLocalFragment() {
+    public ListInvListadoFragment() {
         // Required empty public constructor
     }
 
     @SuppressLint("ValidFragment")
-    public ListAsisLocalFragment(Context context, int nroLocal) {
+    public ListInvListadoFragment(Context context, int nroLocal) {
         this.context = context;
         this.nroLocal = nroLocal;
     }
@@ -62,23 +63,44 @@ public class ListAsisLocalFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView =  inflater.inflate(R.layout.fragment_list_asis_local, container, false);
-        recyclerView = (RecyclerView) rootView.findViewById(R.id.listado_recycler);
-        fabUpLoad = (FloatingActionButton) rootView.findViewById(R.id.listado_btnUpload);
-        txtNumero = (TextView) rootView.findViewById(R.id.listado_txtNumero);
+        View rootView = inflater.inflate(R.layout.fragment_lis_inv_listado, container, false);
+        spAulas = (Spinner) rootView.findViewById(R.id.lista_spAula);
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.lista_recycler);
+        fabUpLoad = (FloatingActionButton) rootView.findViewById(R.id.lista_btnUpload);
+        txtNumero = (TextView) rootView.findViewById(R.id.lista_txtNumero);
         return rootView;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        Data d =  new Data(context);
+        d.open();
+        ArrayList<String> aulas =  d.getArrayAulas(nroLocal);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, aulas);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spAulas.setAdapter(dataAdapter);
+        d.close();
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);
         cargaData();
-        final AsistenciaLocalAdapter asistenciaLocalAdapter = new AsistenciaLocalAdapter(registroAsistenciaLocals,context);
+        inventarioListadoAdapter = new InventarioListadoAdapter(listados,context);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(asistenciaLocalAdapter);
+        recyclerView.setAdapter(inventarioListadoAdapter);
+
+        spAulas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                cargaData();
+                inventarioListadoAdapter = new InventarioListadoAdapter(listados,context);
+                recyclerView.setAdapter(inventarioListadoAdapter);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         fabUpLoad.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,22 +109,27 @@ public class ListAsisLocalFragment extends Fragment {
                 datosNoEnviados = new ArrayList<>();
                 data = new Data(context);
                 data.open();
-                datosNoEnviados = data.getAllAsistenciaLocalSinEnviar(nroLocal);
+                String aula = spAulas.getSelectedItem().toString();
+                int nroAula = 0;
+                nroAula = data.getNumeroAula(aula,nroLocal);
+                datosNoEnviados = data.getAllListadosSinEnviar(nroLocal,nroAula);
                 data.close();
                 if(datosNoEnviados.size() > 0){
                     final int total = datosNoEnviados.size();
                     int i = 0;
-                    for (final AsistenciaLocal registroAsistenciaLocal : datosNoEnviados){
-                        final int j = i++;
-                        final String c = registroAsistenciaLocal.getDni();
-                        FirebaseFirestore.getInstance().collection("asistencia_local").document(registroAsistenciaLocal.getDni())
-                                .set(registroAsistenciaLocal.toMap())
+                    for (final Listado listado : datosNoEnviados){
+                        i++;
+                        final int j = i;
+                        final String c = listado.getCodigo_pagina();
+                        FirebaseFirestore.getInstance().collection("inventario_listado").document(listado.getCodigo_pagina())
+                                .set(listado.toMap())
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
+                                        if(j==1) Toast.makeText(context, "Subiendo...", Toast.LENGTH_SHORT).show();
                                         Data data = new Data(context);
                                         data.open();
-                                        data.actualizarAsistenciaLocalSubido(c);
+                                        data.actualizarListadoSubido(c);
                                         data.close();
                                         if (j == total) Toast.makeText(context, total + " registros subidos", Toast.LENGTH_SHORT).show();
                                     }
@@ -114,13 +141,14 @@ public class ListAsisLocalFragment extends Fragment {
                                     }
                                 });
 //                        WriteBatch batch = FirebaseFirestore.getInstance().batch();
-//                        DocumentReference documentReference = FirebaseFirestore.getInstance().collection(getResources().getString(R.string.nombre_coleccion_asistencia)).document(registroAsistenciaLocal.getDni());
-//                        batch.update(documentReference, "local_dia", registroAsistenciaLocal.getLocal_dia());
-//                        batch.update(documentReference, "local_mes", registroAsistenciaLocal.getLocal_mes());
-//                        batch.update(documentReference, "local_anio", registroAsistenciaLocal.getLocal_anio());
-//                        batch.update(documentReference, "local_hora", registroAsistenciaLocal.getLocal_hora());
-//                        batch.update(documentReference, "local_minuto", registroAsistenciaLocal.getLocal_minuto());
-//                        final String c = registroAsistenciaLocal.getDni();
+//                        DocumentReference documentReference = FirebaseFirestore.getInstance().
+//                                collection(getResources().getString(R.string.nombre_coleccion_asistencia))
+//                                .document(asistenciaAula.getDni());
+//                        batch.update(documentReference, "aula_dia", asistenciaAula.getAula_dia());
+//                        batch.update(documentReference, "aula_mes", asistenciaAula.getAula_mes());
+//                        batch.update(documentReference, "aula_anio", asistenciaAula.getAula_anio());
+//                        batch.update(documentReference, "aula_hora", asistenciaAula.getAula_hora());
+//                        batch.update(documentReference, "aula_minuto", asistenciaAula.getAula_minuto());
 //                        batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
 //                            @Override
 //                            public void onSuccess(Void aVoid) {
@@ -145,16 +173,17 @@ public class ListAsisLocalFragment extends Fragment {
             }
         });
     }
-
     public void cargaData(){
-        registroAsistenciaLocals = new ArrayList<AsistenciaLocal>();
-        Data data = new Data(context);
-        data.open();
-        registroAsistenciaLocals = data.getAllAsistenciaLocal(nroLocal);
-        txtNumero.setText("Total registros: " + registroAsistenciaLocals.size());
-        data.close();
+        listados = new ArrayList<Listado>();
+        Data d = new Data(context);
+        d.open();
+        String aula = spAulas.getSelectedItem().toString();
+        int nroAula = 0;
+        nroAula = d.getNumeroAula(aula,nroLocal);
+        listados = d.getAllListados(nroLocal,nroAula);
+        txtNumero.setText("Total registros: " + listados.size());
+        d.close();
     }
-
     public String checkDigito (int number) {
         return number <= 9 ? "0" + number : String.valueOf(number);
     }

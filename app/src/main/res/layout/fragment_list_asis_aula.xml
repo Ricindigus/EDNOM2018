@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/margin16dp"
-    tools:context=".fragments.reportes.ListAsisAulaFragment">
+    tools:context=".fragments.reportes.listados_de_registros.ListAsisAulaFragment">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -19,4 +19,5 @@ public class TipoFragment {
     public static final int REPORTES_RESUMEN_ASISTENCIA = 16;
     public static final int REPORTES_RESUMEN_INVENTARIO = 17;
     public static final int REPORTES_RESUMEN_SALIDA_CAJAS = 18;
+    public static final int CONSULTA_PADRON_NACIONAL = 19;
 }

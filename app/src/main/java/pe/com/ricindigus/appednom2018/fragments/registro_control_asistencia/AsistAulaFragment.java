@@ -186,9 +186,7 @@ public class AsistAulaFragment extends Fragment {
                             public void onSuccess(Void aVoid) {
                                 Data data = new Data(context);
                                 data.open();
-                                ContentValues contentValues = new ContentValues();
-                                contentValues.put(SQLConstantes.asistencia_aula_subido_aula,1);
-                                data.actualizarAsistenciaLocal(c,contentValues);
+                                data.actualizarAsistenciaAulaSubido(c);
                                 data.close();
                             }
                         })

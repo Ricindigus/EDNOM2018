@@ -1,8 +1,7 @@
-package pe.com.ricindigus.appednom2018.fragments.reportes;
+package pe.com.ricindigus.appednom2018.fragments.reportes.listados_de_registros;
 
 
 import android.annotation.SuppressLint;
-import android.content.ContentValues;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -23,43 +22,39 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.WriteBatch;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 import pe.com.ricindigus.appednom2018.R;
-import pe.com.ricindigus.appednom2018.adapters.AsistenciaAulaAdapter;
-import pe.com.ricindigus.appednom2018.adapters.AsistenciaLocalAdapter;
-import pe.com.ricindigus.appednom2018.modelo.AsistenciaAula;
-import pe.com.ricindigus.appednom2018.modelo.AsistenciaLocal;
+import pe.com.ricindigus.appednom2018.adapters.InventarioCuadernilloAdapter;
+import pe.com.ricindigus.appednom2018.adapters.InventarioFichaAdapter;
+import pe.com.ricindigus.appednom2018.modelo.Cuadernillo;
 import pe.com.ricindigus.appednom2018.modelo.Data;
-import pe.com.ricindigus.appednom2018.modelo.SQLConstantes;
+import pe.com.ricindigus.appednom2018.modelo.Ficha;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ListAsisAulaFragment extends Fragment {
+public class ListInvCuadernilloFragment extends Fragment {
     Context context;
     int nroLocal;
     Spinner spAulas;
     RecyclerView recyclerView;
-    ArrayList<AsistenciaAula> asistenciaAulas;
-    ArrayList<AsistenciaAula> datosNoEnviados;
+    ArrayList<Cuadernillo> cuadernillos;
+    ArrayList<Cuadernillo> datosNoEnviados;
     Data data;
     FloatingActionButton fabUpLoad;
     TextView txtNumero;
-    AsistenciaAulaAdapter asistenciaAulaAdapter;
+    InventarioCuadernilloAdapter inventarioCuadernilloAdapter;
     boolean b = false;
 
-    public ListAsisAulaFragment() {
+    public ListInvCuadernilloFragment() {
         // Required empty public constructor
     }
 
     @SuppressLint("ValidFragment")
-    public ListAsisAulaFragment(Context context, int nroLocal) {
+    public ListInvCuadernilloFragment(Context context, int nroLocal) {
         this.context = context;
         this.nroLocal = nroLocal;
     }
@@ -68,11 +63,11 @@ public class ListAsisAulaFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_list_asis_aula, container, false);
-        spAulas = (Spinner) rootView.findViewById(R.id.asistencia_aula_spAula);
-        recyclerView = (RecyclerView) rootView.findViewById(R.id.listado_recycler);
-        fabUpLoad = (FloatingActionButton) rootView.findViewById(R.id.listado_btnUpload);
-        txtNumero = (TextView) rootView.findViewById(R.id.listado_txtNumero);
+        View rootView = inflater.inflate(R.layout.fragment_lis_inv_cuadernillo, container, false);
+        spAulas = (Spinner) rootView.findViewById(R.id.lista_spAula);
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.lista_recycler);
+        fabUpLoad = (FloatingActionButton) rootView.findViewById(R.id.lista_btnUpload);
+        txtNumero = (TextView) rootView.findViewById(R.id.lista_txtNumero);
         return rootView;
     }
 
@@ -89,16 +84,16 @@ public class ListAsisAulaFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);
         cargaData();
-        asistenciaAulaAdapter = new AsistenciaAulaAdapter(asistenciaAulas,context);
+        inventarioCuadernilloAdapter = new InventarioCuadernilloAdapter(cuadernillos,context);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(asistenciaAulaAdapter);
+        recyclerView.setAdapter(inventarioCuadernilloAdapter);
 
         spAulas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 cargaData();
-                asistenciaAulaAdapter = new AsistenciaAulaAdapter(asistenciaAulas,context);
-                recyclerView.setAdapter(asistenciaAulaAdapter);
+                inventarioCuadernilloAdapter = new InventarioCuadernilloAdapter(cuadernillos,context);
+                recyclerView.setAdapter(inventarioCuadernilloAdapter);
             }
 
             @Override
@@ -111,28 +106,30 @@ public class ListAsisAulaFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 b = false;
-                datosNoEnviados = new ArrayList<>();
+                datosNoEnviados = new ArrayList<Cuadernillo>();
                 data = new Data(context);
                 data.open();
                 String aula = spAulas.getSelectedItem().toString();
                 int nroAula = 0;
                 nroAula = data.getNumeroAula(aula,nroLocal);
-                datosNoEnviados = data.getAllAsistenciaAulaSinEnviar(nroLocal,nroAula);
+                datosNoEnviados = data.getAllCuadernillosSinEnviar(nroLocal,nroAula);
                 data.close();
                 if(datosNoEnviados.size() > 0){
                     final int total = datosNoEnviados.size();
                     int i = 0;
-                    for (final AsistenciaAula asistenciaAula : datosNoEnviados){
-                        final int j = i++;
-                        final String c = asistenciaAula.getDni();
-                        FirebaseFirestore.getInstance().collection("asistencia_aula").document(asistenciaAula.getDni())
-                                .set(asistenciaAula.toMap())
+                    for (final Cuadernillo cuadernillo : datosNoEnviados){
+                        i++;
+                        final int j = i;
+                        final String c = cuadernillo.getCodcartilla();
+                        FirebaseFirestore.getInstance().collection("inventario_cuadernillo").document(cuadernillo.getCodcartilla())
+                                .set(cuadernillo.toMap())
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
+                                        if(j==1) Toast.makeText(context, "Subiendo...", Toast.LENGTH_SHORT).show();
                                         Data data = new Data(context);
                                         data.open();
-                                        data.actualizarAsistenciaAulaSubido(c);
+                                        data.actualizarCuadernilloSubido(c);
                                         data.close();
                                         if (j == total) Toast.makeText(context, total + " registros subidos", Toast.LENGTH_SHORT).show();
                                     }
@@ -177,24 +174,17 @@ public class ListAsisAulaFragment extends Fragment {
         });
     }
     public void cargaData(){
-        asistenciaAulas = new ArrayList<AsistenciaAula>();
+        cuadernillos = new ArrayList<Cuadernillo>();
         Data d = new Data(context);
         d.open();
         String aula = spAulas.getSelectedItem().toString();
         int nroAula = 0;
         nroAula = d.getNumeroAula(aula,nroLocal);
-        asistenciaAulas = d.getAllAsistenciaAula(nroLocal,nroAula);
-        txtNumero.setText("Total registros: " + asistenciaAulas.size());
+        cuadernillos = d.getAllCuadernillos(nroLocal,nroAula);
+        txtNumero.setText("Total registros: " + cuadernillos.size());
         d.close();
     }
     public String checkDigito (int number) {
         return number <= 9 ? "0" + number : String.valueOf(number);
     }
-
-//    public void actualizaLista(int nAula){
-//        cargaData();
-//        final AsistenciaAulaAdapter asistenciaAulaAdapter = new AsistenciaAulaAdapter(asistenciaAulas,context);
-//        recyclerView.setLayoutManager(layoutManager);
-//        recyclerView.setAdapter(asistenciaAulaAdapter);
-//    }
 }

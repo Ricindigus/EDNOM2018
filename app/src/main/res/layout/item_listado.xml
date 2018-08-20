@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_listado_cv"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="1dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp">
+        <TextView
+            android:id="@+id/item_listado_txtAula"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:text="13"
+            android:textColor="@color/colorPrimaryDark"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/item_listado_txtCodigo"
+            android:layout_weight="2"
+            android:layout_width="0dp"
+            android:textColor="@color/colorPrimaryDark"
+            android:text="000123"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/item_listado_txtNroPostulantes"
+            android:text="20"
+            android:layout_weight="2"
+            android:layout_width="0dp"
+            android:textColor="#3e2723"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/item_listado_txtFecha"
+            android:text="2018-05-02 16:30"
+            android:layout_weight="2"
+            android:layout_width="0dp"
+            android:textColor="#b71c1c"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</android.support.v7.widget.CardView>

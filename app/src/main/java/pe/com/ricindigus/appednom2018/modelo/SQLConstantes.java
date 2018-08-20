@@ -11,6 +11,8 @@ public class SQLConstantes {
     public static String tablaasisaula = "asis_aula";
     public static String tablafichas = "fichas";
     public static String tablacuadernillos = "cuadernillos";
+    public static String tablalistados = "listados";
+
 
 
     //TABLA AULA
@@ -137,6 +139,20 @@ public class SQLConstantes {
     public static String cuadernillo_minuto = "minuto";
     public static String cuadernillo_subido = "subido";
 
+    //TABLA LISTAS
+    public static String listado_id = "_id";
+    public static String listado_codigo_pagina = "codigo_pagina";
+    public static String listado_sede = "sede";
+    public static String listado_id_local = "id_local";
+    public static String listado_nombre_local = "local";
+    public static String listado_aula = "aula";
+    public static String listado_nro_postulantes = "nro_postulantes";
+    public static String listado_dia = "dia";
+    public static String listado_mes = "mes";
+    public static String listado_anio = "anio";
+    public static String listado_hora = "hora";
+    public static String listado_minuto = "minuto";
+    public static String listado_subido = "subido";
 
     public static final String SQL_CREATE_TABLA_ASISTENCIA_AULA =
             "CREATE TABLE " + tablaasisaula + "(" +
@@ -217,6 +233,23 @@ public class SQLConstantes {
                     cuadernillo_subido + " INTEGER" + ");"
             ;
 
+    public static final String SQL_CREATE_TABLA_LISTADOS =
+            "CREATE TABLE " + tablalistados + "(" +
+                    listado_id + " TEXT PRIMARY KEY," +
+                    listado_codigo_pagina + " TEXT," +
+                    listado_sede + " TEXT," +
+                    listado_id_local + " TEXT," +
+                    listado_nombre_local + " TEXT," +
+                    listado_aula + " TEXT," +
+                    listado_nro_postulantes + " INTEGER," +
+                    listado_dia + " INTEGER," +
+                    listado_mes + " INTEGER," +
+                    listado_anio + " INTEGER," +
+                    listado_hora + " INTEGER," +
+                    listado_minuto + " INTEGER," +
+                    listado_subido + " INTEGER" + ");"
+            ;
+
     public static final String WHERE_CLAUSE_CLAVE = "clave=?";
     public static final String WHERE_CLAUSE_DNI = "ins_numdoc=?";
     public static final String WHERE_CLAUSE_NRO_LOCAL = "nro_local=?";
@@ -226,6 +259,7 @@ public class SQLConstantes {
     public static final String WHERE_CLAUSE_DNI_ASISTENCIA = "dni=?";
     public static final String WHERE_CLAUSE_CODIGO_FICHA = "codficha=?";
     public static final String WHERE_CLAUSE_CODIGO_CUADERNILLO = "codcartilla=?";
+    public static final String WHERE_CLAUSE_CODIGO_PAGINA = "codigo_pagina=?";
     public static final String WHERE_CLAUSE_NOMBRE_AULA = "nombre=?";
 
 
