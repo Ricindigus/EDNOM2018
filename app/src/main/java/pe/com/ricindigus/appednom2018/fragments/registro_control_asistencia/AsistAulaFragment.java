@@ -52,12 +52,12 @@ public class AsistAulaFragment extends Fragment {
 
     TextView correctoTxtDni;
     TextView correctoTxtNombre;
-    TextView correctoTxtAula;
 
     TextView errorLocalTxtSede;
     TextView errorLocalTxtLocal;
     TextView errorLocalTxtAula;
     TextView errorLocalTxtDireccion;
+    TextView errorLocalTxtDni;
 
     TextView yaRegistradoTxtDni;
     TextView yaRegistradoTxtNombre;
@@ -91,12 +91,12 @@ public class AsistAulaFragment extends Fragment {
 
         correctoTxtDni = (TextView) rootView.findViewById(R.id.dni_correcto_txtDni);
         correctoTxtNombre = (TextView) rootView.findViewById(R.id.dni_correcto_txtNombre);
-        correctoTxtAula = (TextView) rootView.findViewById(R.id.dni_correcto_txtAula);
 
         errorLocalTxtSede = (TextView) rootView.findViewById(R.id.error_local_txtSede);
         errorLocalTxtLocal = (TextView) rootView.findViewById(R.id.error_local_txtLocal);
         errorLocalTxtAula = (TextView) rootView.findViewById(R.id.error_local_txtAula);
         errorLocalTxtDireccion = (TextView) rootView.findViewById(R.id.error_local_txtDireccion);
+        errorLocalTxtDni = (TextView) rootView.findViewById(R.id.error_local_txtDni);
 
         yaRegistradoTxtDni = (TextView) rootView.findViewById(R.id.error_yaregistrado_txtDni);
         yaRegistradoTxtNombre = (TextView) rootView.findViewById(R.id.error_yaregistrado_txtNombre);
@@ -196,7 +196,7 @@ public class AsistAulaFragment extends Fragment {
                 asis.setSubido_aula(0);
                 data.insertarAsistenciaAula(asis);
                 data.close();
-                mostrarCorrecto(asis.getDni(),asis.getNombres() +" "+ asis.getApepat() +" "+ asis.getApemat(),asis.getAula());
+                mostrarCorrecto(asis.getDni(),asis.getNombres() +" "+ asis.getApepat() +" "+ asis.getApemat());
                 final String c = asis.getDni();
                 FirebaseFirestore.getInstance().collection("asistencia_aula").document(asis.getDni())
                         .set(asis.toMap())
@@ -241,7 +241,7 @@ public class AsistAulaFragment extends Fragment {
 //                });
             }
         }else{
-            mostrarErrorLocal(nacional.getSede(),nacional.getLocal_aplicacion(),nacional.getDireccion(),"Aula " + nacional.getAula());
+            mostrarErrorLocal(nacional.getIns_numdoc(),nacional.getSede(),nacional.getLocal_aplicacion(),nacional.getDireccion(),"Aula " + nacional.getAula());
         }
     }
 
@@ -259,14 +259,13 @@ public class AsistAulaFragment extends Fragment {
         return existe;
     }
 
-    public void mostrarCorrecto(String dni, String nombre, String aula){
+    public void mostrarCorrecto(String dni, String nombre){
         lytErrorDni.setVisibility(View.GONE);
         lytYaRegistrado.setVisibility(View.GONE);
         lytErrorLocal.setVisibility(View.GONE);
         lytCorrecto.setVisibility(View.VISIBLE);
         correctoTxtDni.setText(dni);
         correctoTxtNombre.setText(nombre);
-        correctoTxtAula.setText(aula);
     }
     public void mostrarErrorDni(){
         lytErrorDni.setVisibility(View.VISIBLE);
@@ -274,11 +273,12 @@ public class AsistAulaFragment extends Fragment {
         lytErrorLocal.setVisibility(View.GONE);
         lytCorrecto.setVisibility(View.GONE);
     }
-    public void mostrarErrorLocal(String sede, String local, String direccion, String aula){
+    public void mostrarErrorLocal(String dni, String sede, String local, String direccion, String aula){
         lytErrorDni.setVisibility(View.GONE);
         lytYaRegistrado.setVisibility(View.GONE);
         lytErrorLocal.setVisibility(View.VISIBLE);
         lytCorrecto.setVisibility(View.GONE);
+        errorLocalTxtDni.setText(dni);
         errorLocalTxtSede.setText(sede);
         errorLocalTxtLocal.setText(local);
         errorLocalTxtAula.setText(aula);

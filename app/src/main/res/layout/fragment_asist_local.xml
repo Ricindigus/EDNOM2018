@@ -59,99 +59,124 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="DNI CORRECTO"
-                android:textColor="@color/colorIcons"
+                android:layout_marginBottom="@dimen/margin8dp"
+                android:textColor="@color/greenPrimaryDark"
                 android:gravity="center"
                 android:textStyle="bold"
                 android:textSize="@dimen/texto_grande"/>
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/fondo_blanco"
                 android:padding="@dimen/margin8dp"
-                android:layout_marginBottom="@dimen/margin8dp"
-                android:background="@drawable/fondo_blanco">
-                <ImageView
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/margin8dp"
+                        android:background="@drawable/fondo_blanco">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:textColor="@color/bluePrimaryDark"
+                            android:textSize="@dimen/texto_mediano"
+                            android:text="DNI: "/>
+                        <TextView
+                            android:id="@+id/dni_correcto_txtDni"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:textColor="@color/greenPrimaryDark"
+                            android:textSize="@dimen/texto_mediano"
+                            android:text="43372489"/>
+                    </LinearLayout>
+                    <TextView
+                        android:id="@+id/dni_correcto_txtNombre"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/texto_mediano"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="@dimen/margin8dp"
+                        android:textColor="@color/greenPrimaryDark"
+                        android:text="DENIS RICARDO MORALES RETAMOZO"/>
+
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/margin8dp"
+                        android:background="@drawable/fondo_blanco">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:textColor="@color/bluePrimaryDark"
+                            android:textSize="@dimen/texto_mediano"
+                            android:text="SEDE"/>
+                        <TextView
+                            android:id="@+id/dni_correcto_txtSede"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:textColor="@color/greenPrimaryDark"
+                            android:textSize="@dimen/texto_mediano"
+                            android:text="SEDE"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/margin8dp"
+                        android:background="@drawable/fondo_blanco">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/texto_mediano"
+                            android:textStyle="bold"
+                            android:textColor="@color/bluePrimaryDark"
+                            android:text="LOCAL"/>
+                        <TextView
+                            android:id="@+id/dni_correcto_txtLocal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/texto_mediano"
+                            android:textStyle="bold"
+                            android:textColor="@color/greenPrimaryDark"
+                            android:text="EMBLEMATICA INSTITUCION EDUCATIVA"/>
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:orientation="vertical"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:id="@+id/dni_correcto_txtDni"
-                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/texto_mediano"
-                    android:text="43372489"/>
-            </LinearLayout>
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/margin8dp"
-                android:layout_marginBottom="@dimen/margin8dp"
-                android:background="@drawable/fondo_blanco">
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:id="@+id/dni_correcto_txtNombre"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/texto_mediano"
-                    android:textStyle="bold"
-                    android:text="DENIS RICARDO MORALES RETAMOZO"/>
-            </LinearLayout>
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/margin8dp"
-                android:layout_marginBottom="@dimen/margin8dp"
-                android:background="@drawable/fondo_blanco">
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:id="@+id/dni_correcto_txtSede"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/texto_mediano"
-                    android:text="SEDE"/>
-            </LinearLayout>
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/margin8dp"
-                android:layout_marginBottom="@dimen/margin8dp"
-                android:background="@drawable/fondo_blanco">
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:id="@+id/dni_correcto_txtLocal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/texto_mediano"
-                    android:textStyle="bold"
-                    android:text="EMBLEMATICA INSTITUCION EDUCATIVA"/>
-            </LinearLayout>
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/margin8dp"
-                android:layout_marginBottom="@dimen/margin8dp"
-                android:background="@drawable/fondo_blanco">
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:id="@+id/dni_correcto_txtAula"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/texto_mediano"
-                    android:text="AULA"/>
+                    android:padding="@dimen/margin16dp"
+                    android:gravity="center"
+                    android:layout_margin="@dimen/margin8dp"
+                    android:layout_marginBottom="@dimen/margin8dp"
+                    android:background="@drawable/marco_azul">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/texto_mediano"
+                        android:text="AULA"/>
+                    <TextView
+                        android:id="@+id/dni_correcto_txtAula"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textSize="30sp"
+                        android:gravity="center"
+                        android:text="13"/>
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
 
@@ -162,86 +187,113 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/margin16dp"
             android:visibility="gone"
-            android:background="@drawable/fondo_naranja">
+            android:background="@drawable/fondo_ambar">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="ERROR. SU LOCAL DE EVALUACIÓN ES"
-                android:textColor="@color/colorIcons"
+                android:textColor="@color/icons"
                 android:gravity="center"
                 android:textStyle="bold"
                 android:textSize="@dimen/texto_grande"/>
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/margin8dp"
-                android:layout_marginBottom="@dimen/margin8dp"
-                android:background="@drawable/fondo_blanco">
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:id="@+id/error_local_txtSede"
-                    android:layout_width="match_parent"
+                android:background="@drawable/fondo_blanco"
+                android:padding="@dimen/margin16dp"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/texto_mediano"
-                    android:text="SEDE"/>
-            </LinearLayout>
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/margin8dp"
-                android:layout_marginBottom="@dimen/margin8dp"
-                android:background="@drawable/fondo_blanco">
-                <ImageView
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/margin8dp"
+                        android:background="@drawable/fondo_blanco">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:textColor="@color/bluePrimaryDark"
+                            android:textSize="@dimen/texto_mediano"
+                            android:text="SEDE"/>
+                        <TextView
+                            android:id="@+id/error_local_txtSede"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:textSize="@dimen/texto_mediano"
+                            android:text="SEDE"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/margin8dp"
+                        android:background="@drawable/fondo_blanco">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/texto_mediano"
+                            android:textStyle="bold"
+                            android:textColor="@color/bluePrimaryDark"
+                            android:text="LOCAL"/>
+                        <TextView
+                            android:id="@+id/error_local_txtLocal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/texto_mediano"
+                            android:textStyle="bold"
+                            android:text="EMBLEMATICA INSTITUCION EDUCATIVA"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/margin8dp"
+                        android:background="@drawable/fondo_blanco">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:textColor="@color/bluePrimaryDark"
+                            android:textSize="@dimen/texto_mediano"
+                            android:text="DIRECCION"/>
+                        <TextView
+                            android:id="@+id/error_local_txtDireccion"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:textSize="@dimen/texto_mediano"
+                            android:text="DIRECCION"/>
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:orientation="vertical"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:id="@+id/error_local_txtLocal"
-                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/texto_mediano"
-                    android:textStyle="bold"
-                    android:text="EMBLEMATICA INSTITUCION EDUCATIVA"/>
-            </LinearLayout>
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/margin8dp"
-                android:layout_marginBottom="@dimen/margin8dp"
-                android:background="@drawable/fondo_blanco">
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:id="@+id/error_local_txtAula"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/texto_mediano"
-                    android:text="AULA"/>
-            </LinearLayout>
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/margin8dp"
-                android:layout_marginBottom="@dimen/margin8dp"
-                android:background="@drawable/fondo_blanco">
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:id="@+id/error_local_txtDireccion"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/texto_mediano"
-                    android:text="DIRECCION"/>
+                    android:padding="@dimen/margin16dp"
+                    android:gravity="center"
+                    android:layout_marginBottom="@dimen/margin8dp"
+                    android:background="@drawable/marco_azul">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/texto_mediano"
+                        android:text="AULA"/>
+                    <TextView
+                        android:id="@+id/error_local_txtAula"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        android:textSize="30sp"
+                        android:text="13"/>
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
 
@@ -257,82 +309,103 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="ERROR. DNI YA REGISTRADO"
-                android:textColor="@color/colorIcons"
+                android:textColor="@color/redPrimaryDark"
                 android:gravity="center"
                 android:textStyle="bold"
+                android:layout_marginBottom="@dimen/margin8dp"
                 android:textSize="@dimen/texto_grande"/>
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/margin8dp"
-                android:layout_marginBottom="@dimen/margin8dp"
+                android:padding="@dimen/margin16dp"
                 android:background="@drawable/fondo_blanco">
-                <ImageView
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/margin8dp"
+                        android:background="@drawable/fondo_blanco">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:textColor="@color/bluePrimaryDark"
+                            android:textSize="@dimen/texto_mediano"
+                            android:text="DNI: "/>
+                        <TextView
+                            android:id="@+id/error_yaregistrado_txtDni"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:textColor="@color/redPrimaryDark"
+                            android:textSize="@dimen/texto_mediano"
+                            android:text="43372489"/>
+                    </LinearLayout>
+                    <TextView
+                        android:id="@+id/error_yaregistrado_txtNombre"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/texto_mediano"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="@dimen/margin8dp"
+                        android:textColor="@color/redPrimaryDark"
+                        android:text="NOMBRE"/>
+
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/margin8dp"
+                        android:background="@drawable/fondo_blanco">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:textColor="@color/bluePrimaryDark"
+                            android:textSize="@dimen/texto_mediano"
+                            android:text="FECHA Y HORA DE REGISTRO"/>
+                        <TextView
+                            android:id="@+id/error_yaregistrado_txtFechaHora"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:textColor="@color/redPrimaryDark"
+                            android:textSize="@dimen/texto_mediano"
+                            android:text="10-09-2018 13:00"/>
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:orientation="vertical"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:id="@+id/error_yaregistrado_txtDni"
-                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/texto_mediano"
-                    android:text="DNI"/>
+                    android:padding="@dimen/margin16dp"
+                    android:layout_margin="@dimen/margin8dp"
+                    android:layout_marginBottom="@dimen/margin8dp"
+                    android:background="@drawable/marco_azul">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/texto_mediano"
+                        android:text="AULA"/>
+                    <TextView
+                        android:id="@+id/error_yaregistrado_txtAula"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:textSize="30sp"
+                        android:text="13"/>
+                </LinearLayout>
             </LinearLayout>
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/margin8dp"
-                android:layout_marginBottom="@dimen/margin8dp"
-                android:background="@drawable/fondo_blanco">
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:id="@+id/error_yaregistrado_txtNombre"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/texto_mediano"
-                    android:textStyle="bold"
-                    android:text="NOMBRE"/>
-            </LinearLayout>
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/margin8dp"
-                android:layout_marginBottom="@dimen/margin8dp"
-                android:background="@drawable/fondo_blanco">
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:id="@+id/error_yaregistrado_txtAula"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/texto_mediano"
-                    android:text="AULA"/>
-            </LinearLayout>
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/margin8dp"
-                android:layout_marginBottom="@dimen/margin8dp"
-                android:background="@drawable/fondo_blanco">
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:id="@+id/error_yaregistrado_txtFechaHora"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/texto_mediano"
-                    android:text="FECHA Y HORA DE REGISTRO"/>
-            </LinearLayout>
+
         </LinearLayout>
 
         <LinearLayout
@@ -341,13 +414,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/margin16dp"
-            android:visibility="gone"
+            android:visibility="visible"
             android:background="@drawable/fondo_rojo">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="POSTULANTE NO ENCONTRADO EN EL PADRÓN"
-                android:textColor="@color/colorIcons"
+                android:textColor="@color/redPrimaryDark"
                 android:gravity="center"
                 android:textStyle="bold"
                 android:textSize="@dimen/texto_grande"/>

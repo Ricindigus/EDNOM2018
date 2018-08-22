@@ -41,6 +41,7 @@ public class ConsultaPadronFragment extends Fragment {
     TextView correctoTxtSede;
     TextView correctoTxtLocal;
     TextView correctoTxtAula;
+    TextView correctoTxtDireccion;
     LinearLayout lytCorrecto;
     LinearLayout lytErrorDni;
 
@@ -65,6 +66,7 @@ public class ConsultaPadronFragment extends Fragment {
         correctoTxtSede = (TextView) rootView.findViewById(R.id.dni_correcto_txtSede);
         correctoTxtLocal = (TextView) rootView.findViewById(R.id.dni_correcto_txtLocal);
         correctoTxtAula = (TextView) rootView.findViewById(R.id.dni_correcto_txtAula);
+        correctoTxtDireccion = (TextView) rootView.findViewById(R.id.dni_correcto_txtDireccion);
         edtDni = (EditText) rootView.findViewById(R.id.asistencia_local_edtCodigo);
         btnBuscar = (ImageView) rootView.findViewById(R.id.asistencia_local_btnBuscar);
         lytCorrecto = (LinearLayout) rootView.findViewById(R.id.asistencia_local_lytCorrecto);
@@ -109,7 +111,7 @@ public class ConsultaPadronFragment extends Fragment {
         if(nacional == null){
             mostrarErrorDni();
         }else{
-            mostrarCorrecto(nacional.getIns_numdoc(),nacional.getNombres() +" "+ nacional.getApepat() +" "+ nacional.getApemat(),nacional.getSede(),nacional.getLocal_aplicacion(),nacional.getId_aula()+"");
+            mostrarCorrecto(nacional.getIns_numdoc(),nacional.getNombres() +" "+ nacional.getApepat() +" "+ nacional.getApemat(),nacional.getSede(),nacional.getLocal_aplicacion(),nacional.getId_aula()+"",nacional.getDireccion());
         }
         edtDni.setText("");
         edtDni.requestFocus();
@@ -120,7 +122,7 @@ public class ConsultaPadronFragment extends Fragment {
         mgr.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    public void mostrarCorrecto(String dni, String nombre, String sede, String local, String aula){
+    public void mostrarCorrecto(String dni, String nombre, String sede, String local, String aula,String direccion){
         lytCorrecto.setVisibility(View.VISIBLE);
         lytErrorDni.setVisibility(View.GONE);
         correctoTxtDni.setText(dni);
@@ -128,6 +130,7 @@ public class ConsultaPadronFragment extends Fragment {
         correctoTxtSede.setText(sede);
         correctoTxtLocal.setText(local);
         correctoTxtAula.setText(aula);
+        correctoTxtDireccion.setText(direccion);
     }
     public void mostrarErrorDni(){
         lytErrorDni.setVisibility(View.VISIBLE);
