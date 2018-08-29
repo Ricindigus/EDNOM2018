@@ -9,6 +9,7 @@ public class CajaOut {
     private String sede;
     private int idlocal;
     private String local;
+    private int tipo;
     private int acl;
     private int dia;
     private int mes;
@@ -18,13 +19,14 @@ public class CajaOut {
     private int seg;
     private int subido;
 
-    public CajaOut(String _id, String cod_barra_caja, int idsede, String sede, int idlocal, String local, int acl, int dia, int mes, int anio, int hora, int min, int seg, int subido) {
+    public CajaOut(String _id, String cod_barra_caja, int idsede, String sede, int idlocal, String local, int tipo, int acl, int dia, int mes, int anio, int hora, int min, int seg, int subido) {
         this._id = _id;
         this.cod_barra_caja = cod_barra_caja;
         this.idsede = idsede;
         this.sede = sede;
         this.idlocal = idlocal;
         this.local = local;
+        this.tipo = tipo;
         this.acl = acl;
         this.dia = dia;
         this.mes = mes;
@@ -36,6 +38,14 @@ public class CajaOut {
     }
 
     public CajaOut() {
+    }
+
+    public int getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(int tipo) {
+        this.tipo = tipo;
     }
 
     public String get_id() {
@@ -157,6 +167,7 @@ public class CajaOut {
         contentValues.put(SQLConstantes.cajas_salida_nomsede,sede);
         contentValues.put(SQLConstantes.cajas_salida_idlocal,idlocal);
         contentValues.put(SQLConstantes.cajas_salida_nomlocal,local);
+        contentValues.put(SQLConstantes.cajas_salida_tipo,tipo);
         contentValues.put(SQLConstantes.cajas_salida_acl,acl);
         contentValues.put(SQLConstantes.cajas_salida_fecha_reg_dia,dia);
         contentValues.put(SQLConstantes.cajas_salida_fecha_reg_mes,mes);

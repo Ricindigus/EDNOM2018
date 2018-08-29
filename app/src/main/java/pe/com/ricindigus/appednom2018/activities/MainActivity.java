@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
                 fragmentTransaction.replace(R.id.fragment_layout, cajasOutFragment);
                 break;
             case TipoFragment.REPORTES_LISTADO_INGRESO_CAJAS:
-                ListIngresoCajasFragment listIngresoCajasFragment = new ListIngresoCajasFragment();
+                ListIngresoCajasFragment listIngresoCajasFragment = new ListIngresoCajasFragment(MainActivity.this,nroLocal);
                 fragmentTransaction.replace(R.id.fragment_layout, listIngresoCajasFragment);
                 break;
             case TipoFragment.REPORTES_LISTADO_ASISTENCIA_LOCAL:
@@ -151,11 +151,11 @@ public class MainActivity extends AppCompatActivity {
                 fragmentTransaction.replace(R.id.fragment_layout, listInvListadoFragment);
                 break;
             case TipoFragment.REPORTES_LISTADO_SALIDA_CAJAS:
-                ListSalidaCajasFragment listSalidaCajasFragment = new ListSalidaCajasFragment();
+                ListSalidaCajasFragment listSalidaCajasFragment = new ListSalidaCajasFragment(MainActivity.this,nroLocal);
                 fragmentTransaction.replace(R.id.fragment_layout, listSalidaCajasFragment);
                 break;
             case TipoFragment.REPORTES_RESUMEN_INGRESO_CAJAS:
-                CuadroResumenCajasInFragment cuadroResumenCajasInFragment = new CuadroResumenCajasInFragment();
+                CuadroResumenCajasInFragment cuadroResumenCajasInFragment = new CuadroResumenCajasInFragment(MainActivity.this,nroLocal);
                 fragmentTransaction.replace(R.id.fragment_layout, cuadroResumenCajasInFragment);
                 break;
             case TipoFragment.REPORTES_RESUMEN_ASISTENCIA:
@@ -167,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
                 fragmentTransaction.replace(R.id.fragment_layout, cuadroResumenInventarioFragment);
                 break;
             case TipoFragment.REPORTES_RESUMEN_SALIDA_CAJAS:
-                CuadroResumenCajasOutFragment cuadroResumenCajasOutFragment = new CuadroResumenCajasOutFragment();
+                CuadroResumenCajasOutFragment cuadroResumenCajasOutFragment = new CuadroResumenCajasOutFragment(MainActivity.this,nroLocal);
                 fragmentTransaction.replace(R.id.fragment_layout, cuadroResumenCajasOutFragment);
                 break;
             case TipoFragment.CONSULTA_PADRON_NACIONAL:
@@ -268,11 +268,13 @@ public class MainActivity extends AppCompatActivity {
                                             public void onClick(DialogInterface dialog, int id) {
                                                 Data data = new Data(MainActivity.this);
                                                 data.open();
-                                                data.deleteAllElementosFromTabla(SQLConstantes.tablaasisaula);
-                                                data.deleteAllElementosFromTabla(SQLConstantes.tablaasislocal);
-                                                data.deleteAllElementosFromTabla(SQLConstantes.tablafichas);
-                                                data.deleteAllElementosFromTabla(SQLConstantes.tablacuadernillos);
-                                                data.deleteAllElementosFromTabla(SQLConstantes.tablalistados);
+                                                data.deleteAllElementosFromTabla(SQLConstantes.tablacajasentrada);
+                                                data.deleteAllElementosFromTabla(SQLConstantes.tablacajassalida);
+//                                                data.deleteAllElementosFromTabla(SQLConstantes.tablaasisaula);
+//                                                data.deleteAllElementosFromTabla(SQLConstantes.tablaasislocal);
+//                                                data.deleteAllElementosFromTabla(SQLConstantes.tablafichas);
+//                                                data.deleteAllElementosFromTabla(SQLConstantes.tablacuadernillos);
+//                                                data.deleteAllElementosFromTabla(SQLConstantes.tablalistados);
                                                 data.close();
 //                                        ListadoFragment listadoFragment = new ListadoFragment(sede,MainActivity.this);
 //                                        FragmentManager fragmentManage = getSupportFragmentManager();
@@ -350,109 +352,4 @@ public class MainActivity extends AppCompatActivity {
         listDataChild.put(listDataHeader.get(5), consultaPadron);
         listDataChild.put(listDataHeader.get(6), masOpciones);
     }
-
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.main, menu);
-//        return true;
-//    }
-
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-//
-//        //noinspection SimplifiableIfStatement
-//        if (id == R.id.showHome) {
-//            Toast.makeText(this, "showHome", Toast.LENGTH_SHORT).show();
-//            return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
-
-//    @SuppressWarnings("StatementWithEmptyBody")
-//    @Override
-//    public boolean onNavigationItemSelected(MenuItem item) {
-//        // Handle navigation view item clicks here.
-//        FragmentManager fragmentManager = getSupportFragmentManager();
-//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//        int id = item.getItemId();
-//
-//        if (id == R.id.menu_registro_entrada) {
-//            EntradaFragment entradaFragment = new EntradaFragment(sede,MainActivity.this);
-//            fragmentTransaction.replace(R.id.fragment_layout, entradaFragment);
-//            fragmentTransaction.commit();
-//        } else if (id == R.id.menu_registro_salida) {
-//            SalidaFragment salidaFragment = new SalidaFragment(sede,MainActivity.this);
-//            fragmentTransaction.replace(R.id.fragment_layout, salidaFragment);
-//            fragmentTransaction.commit();
-//        } else if (id == R.id.menu_listado) {
-//            ListadoFragment listadoFragment = new ListadoFragment(sede,MainActivity.this);
-//            fragmentTransaction.replace(R.id.fragment_layout, listadoFragment);
-//            fragmentTransaction.commit();
-//        } else if (id == R.id.menu_nube) {
-//            NubeFragment nubeFragment = new NubeFragment(sede,MainActivity.this);
-//            fragmentTransaction.replace(R.id.fragment_layout, nubeFragment);
-//            fragmentTransaction.commit();
-//
-//        } else if (id == R.id.menu_reset_bd) {
-//            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//            builder.setMessage("¿Está seguro que desea borrar los datos?")
-//                    .setTitle("Aviso")
-//                    .setCancelable(false)
-//                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
-//                        public void onClick(DialogInterface dialog, int id) {
-//                            dialog.cancel();
-//                        }
-//                    })
-//                    .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
-//                        public void onClick(DialogInterface dialog, int id) {
-//                            try {
-//                                Data data = new Data(MainActivity.this);
-//                                data.open();
-//                                data.deleteAllElementosFromTabla(SQLConstantes.tablaregistro);
-//                                data.close();
-//                                ListadoFragment listadoFragment = new ListadoFragment(sede,MainActivity.this);
-//                                FragmentManager fragmentManage = getSupportFragmentManager();
-//                                FragmentTransaction fragmentTransact = fragmentManage.beginTransaction();
-//                                fragmentTransact.replace(R.id.fragment_layout, listadoFragment);
-//                                fragmentTransact.commit();
-//                            } catch (IOException e) {
-//                                e.printStackTrace();
-//                            }
-//                        }
-//                    });
-//            AlertDialog alert = builder.create();
-//            alert.show();
-//
-//
-//        } else if (id == R.id.menu_cerrar_sesion) {
-//            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//            builder.setMessage("¿Está seguro que desea cerrar sesión en la aplicación?")
-//                    .setTitle("Aviso")
-//                    .setCancelable(false)
-//                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
-//                                public void onClick(DialogInterface dialog, int id) {
-//                                    dialog.cancel();
-//                                }
-//                            })
-//                    .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
-//                                public void onClick(DialogInterface dialog, int id) {
-//                                    Intent intent = new Intent(MainActivity.this,LoginActivity.class);
-//                                    startActivity(intent);
-//                                    finish();
-//                                }
-//                            });
-//            AlertDialog alert = builder.create();
-//            alert.show();
-//        }
-//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-//        drawer.closeDrawer(GravityCompat.START);
-//        return true;
-//    }
 }

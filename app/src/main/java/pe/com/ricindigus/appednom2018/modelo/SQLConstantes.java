@@ -33,7 +33,9 @@ public class SQLConstantes {
     public static String cajas_nomsede = "sede";
     public static String cajas_idlocal = "idlocal";
     public static String cajas_nomlocal = "local";
+    public static String cajas_tipo = "tipo";
     public static String cajas_acl = "acl";
+
 
 
     //TABLA CAJAS ENTRADA
@@ -43,6 +45,7 @@ public class SQLConstantes {
     public static String cajas_entrada_nomsede = "sede";
     public static String cajas_entrada_idlocal = "idlocal";
     public static String cajas_entrada_nomlocal = "local";
+    public static String cajas_entrada_tipo = "tipo";
     public static String cajas_entrada_acl = "acl";
     public static String cajas_entrada_fecha_reg_dia = "dia";
     public static String cajas_entrada_fecha_reg_mes = "mes";
@@ -60,6 +63,7 @@ public class SQLConstantes {
     public static String cajas_salida_nomsede = "sede";
     public static String cajas_salida_idlocal = "idlocal";
     public static String cajas_salida_nomlocal = "local";
+    public static String cajas_salida_tipo = "tipo";
     public static String cajas_salida_acl = "acl";
     public static String cajas_salida_fecha_reg_dia = "dia";
     public static String cajas_salida_fecha_reg_mes = "mes";
@@ -78,6 +82,7 @@ public class SQLConstantes {
                     cajas_entrada_nomsede + " TEXT," +
                     cajas_entrada_idlocal + " INTEGER," +
                     cajas_entrada_nomlocal + " TEXT," +
+                    cajas_entrada_tipo + " INTEGER," +
                     cajas_entrada_acl + " INTEGER," +
                     cajas_entrada_fecha_reg_dia + " INTEGER," +
                     cajas_entrada_fecha_reg_mes + " INTEGER," +
@@ -96,6 +101,7 @@ public class SQLConstantes {
                     cajas_salida_nomsede + " TEXT," +
                     cajas_salida_idlocal + " INTEGER," +
                     cajas_salida_nomlocal + " TEXT," +
+                    cajas_salida_tipo + " INTEGER," +
                     cajas_salida_acl + " INTEGER," +
                     cajas_salida_fecha_reg_dia + " INTEGER," +
                     cajas_salida_fecha_reg_mes + " INTEGER," +
@@ -109,10 +115,11 @@ public class SQLConstantes {
     public static final String WHERE_CLAUSE_ID = "_id=?";
     public static final String WHERE_CLAUSE_CLAVE = "clave=?";
     public static final String WHERE_CLAUSE_COD_BARRA = "cod_barra_caja=?";
+    public static final String WHERE_CLAUSE_TIPO_CAJA = "tipo=?";
     public static final String WHERE_CLAUSE_DNI = "ins_numdoc=?";
     public static final String WHERE_CLAUSE_NRO_LOCAL = "nro_local=?";
     public static final String WHERE_CLAUSE_LOCAL = "local=?";
-    public static final String WHERE_CLAUSE_ID_LOCAL = "id_local=?";
+    public static final String WHERE_CLAUSE_ID_LOCAL = "idlocal=?";
     public static final String WHERE_CLAUSE_ID_AULA = "id_aula=?";
     public static final String WHERE_CLAUSE_NRO_AULA = "aula=?";
     public static final String WHERE_CLAUSE_DNI_ASISTENCIA = "dni=?";

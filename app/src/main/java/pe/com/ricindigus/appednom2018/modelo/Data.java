@@ -184,6 +184,7 @@ public class Data {
                 caja.setSede(cursor.getString(cursor.getColumnIndex(SQLConstantes.cajas_nomsede)));
                 caja.setIdlocal(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_idlocal)));
                 caja.setLocal(cursor.getString(cursor.getColumnIndex(SQLConstantes.cajas_nomlocal)));
+                caja.setTipo(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_tipo)));
                 caja.setAcl(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_acl)));
             }
         }finally{
@@ -226,6 +227,7 @@ public class Data {
                 cajaIn.setIdlocal(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_entrada_idlocal)));
                 cajaIn.setLocal(cursor.getString(cursor.getColumnIndex(SQLConstantes.cajas_entrada_nomlocal)));
                 cajaIn.setAcl(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_entrada_acl)));
+                cajaIn.setTipo(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_entrada_tipo)));
                 cajaIn.setDia(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_entrada_fecha_reg_dia)));
                 cajaIn.setMes(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_entrada_fecha_reg_mes)));
                 cajaIn.setAnio(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_entrada_fecha_reg_anio)));
@@ -238,6 +240,85 @@ public class Data {
             if(cursor != null) cursor.close();
         }
         return cajaIn;
+    }
+
+    public ArrayList<CajaIn> getAllCajaIn(int nroLocal){
+        ArrayList<CajaIn> cajaIns = new ArrayList<>();
+        String[] whereArgs = new String[]{String.valueOf(nroLocal)};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablacajasentrada, null,
+                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL,whereArgs,null,null,null);
+            while (cursor.moveToNext()){
+                CajaIn cajaIn = new CajaIn();
+                cajaIn.set_id(cursor.getString(cursor.getColumnIndex(SQLConstantes.cajas_entrada_id)));
+                cajaIn.setCod_barra_caja(cursor.getString(cursor.getColumnIndex(SQLConstantes.cajas_entrada_cod_barra)));
+                cajaIn.setIdsede(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_entrada_idsede)));
+                cajaIn.setSede(cursor.getString(cursor.getColumnIndex(SQLConstantes.cajas_entrada_nomsede)));
+                cajaIn.setIdlocal(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_entrada_idlocal)));
+                cajaIn.setLocal(cursor.getString(cursor.getColumnIndex(SQLConstantes.cajas_entrada_nomlocal)));
+                cajaIn.setTipo(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_entrada_tipo)));
+                cajaIn.setAcl(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_entrada_acl)));
+                cajaIn.setDia(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_entrada_fecha_reg_dia)));
+                cajaIn.setMes(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_entrada_fecha_reg_mes)));
+                cajaIn.setAnio(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_entrada_fecha_reg_anio)));
+                cajaIn.setHora(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_entrada_fecha_reg_hora)));
+                cajaIn.setMin(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_entrada_fecha_reg_min)));
+                cajaIn.setSeg(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_entrada_fecha_reg_seg)));
+                cajaIn.setSubido(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_entrada_subido)));
+                cajaIns.add(cajaIn);
+            }
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return cajaIns;
+    }
+
+    public int getNroCajaInxTipo(int nroLocal, int tipo){
+        int cantidad = 0;
+        String[] whereArgs = new String[]{String.valueOf(nroLocal), String.valueOf(tipo)};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablacajasentrada, null,
+                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " + SQLConstantes.WHERE_CLAUSE_TIPO_CAJA,whereArgs,null,null,null);
+            if(cursor.getCount() > 0) cantidad = cursor.getCount();
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return cantidad;
+    }
+
+    public ArrayList<CajaIn> getAllCajasIngresadasSinEnviar(int nroLocal){
+        ArrayList<CajaIn> cajaIns = new ArrayList<>();
+        String[] whereArgs = new String[]{String.valueOf(nroLocal)};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablacajasentrada, null,
+                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL,whereArgs,null,null,null);while(cursor.moveToNext()){
+                if(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_entrada_subido)) == 0){
+                    CajaIn cajaIn = new CajaIn();
+                    cajaIn.set_id(cursor.getString(cursor.getColumnIndex(SQLConstantes.cajas_entrada_id)));
+                    cajaIn.setCod_barra_caja(cursor.getString(cursor.getColumnIndex(SQLConstantes.cajas_entrada_cod_barra)));
+                    cajaIn.setIdsede(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_entrada_idsede)));
+                    cajaIn.setSede(cursor.getString(cursor.getColumnIndex(SQLConstantes.cajas_entrada_nomsede)));
+                    cajaIn.setIdlocal(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_entrada_idlocal)));
+                    cajaIn.setLocal(cursor.getString(cursor.getColumnIndex(SQLConstantes.cajas_entrada_nomlocal)));
+                    cajaIn.setTipo(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_entrada_tipo)));
+                    cajaIn.setAcl(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_entrada_acl)));
+                    cajaIn.setDia(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_entrada_fecha_reg_dia)));
+                    cajaIn.setMes(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_entrada_fecha_reg_mes)));
+                    cajaIn.setAnio(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_entrada_fecha_reg_anio)));
+                    cajaIn.setHora(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_entrada_fecha_reg_hora)));
+                    cajaIn.setMin(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_entrada_fecha_reg_min)));
+                    cajaIn.setSeg(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_entrada_fecha_reg_seg)));
+                    cajaIn.setSubido(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_entrada_subido)));
+                    cajaIns.add(cajaIn);
+                }
+            }
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return cajaIns;
     }
 
     public void insertarCajaOut(CajaOut cajaOut){
@@ -273,6 +354,7 @@ public class Data {
                 cajaOut.setSede(cursor.getString(cursor.getColumnIndex(SQLConstantes.cajas_salida_nomsede)));
                 cajaOut.setIdlocal(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_salida_idlocal)));
                 cajaOut.setLocal(cursor.getString(cursor.getColumnIndex(SQLConstantes.cajas_salida_nomlocal)));
+                cajaOut.setTipo(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_salida_tipo)));
                 cajaOut.setAcl(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_salida_acl)));
                 cajaOut.setDia(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_salida_fecha_reg_dia)));
                 cajaOut.setMes(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_salida_fecha_reg_mes)));
@@ -288,6 +370,84 @@ public class Data {
         return cajaOut;
     }
 
+    public int getNroCajaOutxTipo(int nroLocal, int tipo){
+        int cantidad = 0;
+        String[] whereArgs = new String[]{String.valueOf(nroLocal), String.valueOf(tipo)};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablacajassalida, null,
+                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " + SQLConstantes.WHERE_CLAUSE_TIPO_CAJA,whereArgs,null,null,null);
+            if(cursor.getCount() > 0) cantidad = cursor.getCount();
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return cantidad;
+    }
+
+    public ArrayList<CajaOut> getAllCajaOut(int nroLocal){
+        ArrayList<CajaOut> cajaOuts = new ArrayList<CajaOut>();
+        String[] whereArgs = new String[]{String.valueOf(nroLocal)};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablacajassalida, null,
+                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL,whereArgs,null,null,null);
+            while (cursor.moveToNext()){
+                CajaOut cajaOut = new CajaOut();
+                cajaOut.set_id(cursor.getString(cursor.getColumnIndex(SQLConstantes.cajas_salida_id)));
+                cajaOut.setCod_barra_caja(cursor.getString(cursor.getColumnIndex(SQLConstantes.cajas_salida_cod_barra)));
+                cajaOut.setIdsede(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_salida_idsede)));
+                cajaOut.setSede(cursor.getString(cursor.getColumnIndex(SQLConstantes.cajas_salida_nomsede)));
+                cajaOut.setIdlocal(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_salida_idlocal)));
+                cajaOut.setLocal(cursor.getString(cursor.getColumnIndex(SQLConstantes.cajas_salida_nomlocal)));
+                cajaOut.setTipo(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_salida_tipo)));
+                cajaOut.setAcl(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_salida_acl)));
+                cajaOut.setDia(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_salida_fecha_reg_dia)));
+                cajaOut.setMes(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_salida_fecha_reg_mes)));
+                cajaOut.setAnio(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_salida_fecha_reg_anio)));
+                cajaOut.setHora(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_salida_fecha_reg_hora)));
+                cajaOut.setMin(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_salida_fecha_reg_min)));
+                cajaOut.setSeg(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_salida_fecha_reg_seg)));
+                cajaOut.setSubido(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_salida_subido)));
+                cajaOuts.add(cajaOut);
+            }
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return cajaOuts;
+    }
+
+    public ArrayList<CajaOut> getAllCajasSalidasSinEnviar(int nroLocal){
+        ArrayList<CajaOut> cajaOuts = new ArrayList<>();
+        String[] whereArgs = new String[]{String.valueOf(nroLocal)};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablacajassalida, null,
+                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL,whereArgs,null,null,null);while(cursor.moveToNext()){
+                if(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_salida_subido)) == 0){
+                    CajaOut cajaOut = new CajaOut();
+                    cajaOut.set_id(cursor.getString(cursor.getColumnIndex(SQLConstantes.cajas_salida_id)));
+                    cajaOut.setCod_barra_caja(cursor.getString(cursor.getColumnIndex(SQLConstantes.cajas_salida_cod_barra)));
+                    cajaOut.setIdsede(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_salida_idsede)));
+                    cajaOut.setSede(cursor.getString(cursor.getColumnIndex(SQLConstantes.cajas_salida_nomsede)));
+                    cajaOut.setIdlocal(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_salida_idlocal)));
+                    cajaOut.setLocal(cursor.getString(cursor.getColumnIndex(SQLConstantes.cajas_salida_nomlocal)));
+                    cajaOut.setTipo(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_salida_tipo)));
+                    cajaOut.setAcl(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_salida_acl)));
+                    cajaOut.setDia(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_salida_fecha_reg_dia)));
+                    cajaOut.setMes(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_salida_fecha_reg_mes)));
+                    cajaOut.setAnio(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_salida_fecha_reg_anio)));
+                    cajaOut.setHora(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_salida_fecha_reg_hora)));
+                    cajaOut.setMin(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_salida_fecha_reg_min)));
+                    cajaOut.setSeg(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_salida_fecha_reg_seg)));
+                    cajaOut.setSubido(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_salida_subido)));
+                    cajaOuts.add(cajaOut);
+                }
+            }
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return cajaOuts;
+    }
 
     //----------------------------------------------------------------------------
 

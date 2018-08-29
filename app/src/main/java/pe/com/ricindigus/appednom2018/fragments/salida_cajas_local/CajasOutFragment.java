@@ -32,7 +32,6 @@ import java.util.Date;
 
 import pe.com.ricindigus.appednom2018.R;
 import pe.com.ricindigus.appednom2018.modelo.Caja;
-import pe.com.ricindigus.appednom2018.modelo.CajaIn;
 import pe.com.ricindigus.appednom2018.modelo.CajaOut;
 import pe.com.ricindigus.appednom2018.modelo.Data;
 
@@ -140,74 +139,60 @@ public class CajasOutFragment extends Fragment {
     }
 
     public void registrarCaja(Caja caja){
-        if(!existeRegistro(caja.getCod_barra_caja())){
-            Data data = new Data(context);
-            data.open();
-            CajaOut cajaOut = new CajaOut();
-            cajaOut.set_id(caja.getCod_barra_caja());
-            cajaOut.setCod_barra_caja(caja.getCod_barra_caja());
-            cajaOut.setIdsede(caja.getIdsede());
-            cajaOut.setSede(caja.getSede());
-            cajaOut.setIdlocal(caja.getIdlocal());
-            cajaOut.setLocal(caja.getLocal());
-            cajaOut.setAcl(caja.getAcl());
-            Calendar calendario = Calendar.getInstance();
-            int yy = calendario.get(Calendar.YEAR);
-            int mm = calendario.get(Calendar.MONTH)+1;
-            int dd = calendario.get(Calendar.DAY_OF_MONTH);
-            int hora = calendario.get(Calendar.HOUR_OF_DAY);
-            int minuto = calendario.get(Calendar.MINUTE);
-            int segundos = calendario.get(Calendar.SECOND);
-            cajaOut.setDia(dd);
-            cajaOut.setMes(mm);
-            cajaOut.setAnio(yy);
-            cajaOut.setHora(hora);
-            cajaOut.setMin(minuto);
-            cajaOut.setSeg(segundos);
-            cajaOut.setSubido(0);
-            data.insertarCajaOut(cajaOut);
-            data.close();
-            mostrarCorrecto(cajaOut.getCod_barra_caja(),cajaOut.getAcl(),cajaOut.getSede(),cajaOut.getLocal());
-//                FirebaseFirestore.getInstance().collection("asistencia_local").document(asis.getDni())
-//                        .set(asis.toMap())
-//                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                            @Override
-//                            public void onSuccess(Void aVoid) {
-//                                Data data = new Data(context);
-//                                data.open();
-//                                data.actualizarAsistenciaLocalSubido(c);
-//                                data.close();
-//                            }
-//                        })
-//                        .addOnFailureListener(new OnFailureListener() {
-//                            @Override
-//                            public void onFailure(@NonNull Exception e) {
-//                                Log.w("FIRESTORE", "Error writing document", e);
-//                            }
-//                        });
+        if(numeroLocal == caja.getIdlocal()) {
+            if(!existeRegistro(caja.getCod_barra_caja())){
+                Data data = new Data(context);
+                data.open();
+                CajaOut cajaOut = new CajaOut();
+                cajaOut.set_id(caja.getCod_barra_caja());
+                cajaOut.setCod_barra_caja(caja.getCod_barra_caja());
+                cajaOut.setIdsede(caja.getIdsede());
+                cajaOut.setSede(caja.getSede());
+                cajaOut.setIdlocal(caja.getIdlocal());
+                cajaOut.setLocal(caja.getLocal());
+                cajaOut.setAcl(caja.getAcl());
+                cajaOut.setTipo(caja.getTipo());
+                Calendar calendario = Calendar.getInstance();
+                int yy = calendario.get(Calendar.YEAR);
+                int mm = calendario.get(Calendar.MONTH)+1;
+                int dd = calendario.get(Calendar.DAY_OF_MONTH);
+                int hora = calendario.get(Calendar.HOUR_OF_DAY);
+                int minuto = calendario.get(Calendar.MINUTE);
+                int segundos = calendario.get(Calendar.SECOND);
+                cajaOut.setDia(dd);
+                cajaOut.setMes(mm);
+                cajaOut.setAnio(yy);
+                cajaOut.setHora(hora);
+                cajaOut.setMin(minuto);
+                cajaOut.setSeg(segundos);
+                cajaOut.setSubido(0);
+                data.insertarCajaOut(cajaOut);
+                data.close();
+                mostrarCorrecto(cajaOut.getCod_barra_caja(),cajaOut.getAcl(),cajaOut.getSede(),cajaOut.getLocal());
+                WriteBatch batch = FirebaseFirestore.getInstance().batch();
+                DocumentReference documentReference = FirebaseFirestore.getInstance().collection("cajas").document(cajaOut.getCod_barra_caja());
+                batch.update(documentReference, "check_reg_salida", 1);
+                batch.update(documentReference, "fech_trans_salida", FieldValue.serverTimestamp());
+                batch.update(documentReference, "fech_reg_salida", new Timestamp(new Date(cajaOut.getAnio()-1900,cajaOut.getMes()-1,cajaOut.getDia(),cajaOut.getHora(),cajaOut.getMin(),cajaOut.getSeg())));
+                final String codigoBarra = cajaOut.getCod_barra_caja();
+                batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Data data = new Data(context);
+                        data.open();
+                        data.actualizarCajaOutSubido(codigoBarra);
+                        data.close();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(context, "NO GUARDO", Toast.LENGTH_SHORT).show();
+                    }
+                });
 
-
-            WriteBatch batch = FirebaseFirestore.getInstance().batch();
-            DocumentReference documentReference = FirebaseFirestore.getInstance().collection("cajas").document(cajaOut.getCod_barra_caja());
-            batch.update(documentReference, "check_reg_salida", 1);
-            batch.update(documentReference, "fech_trans_salida", FieldValue.serverTimestamp());
-            batch.update(documentReference, "fech_reg_ingreso", new Timestamp(new Date(cajaOut.getAnio()-1900,cajaOut.getMes()-1,cajaOut.getDia(),cajaOut.getHora(),cajaOut.getMin(),cajaOut.getSeg())));
-            final String codigoBarra = cajaOut.getCod_barra_caja();
-            batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    Data data = new Data(context);
-                    data.open();
-                    data.actualizarCajaInSubido(codigoBarra);
-                    data.close();
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(context, "NO GUARDO", Toast.LENGTH_SHORT).show();
-                }
-            });
-
+            }
+        }else{
+            mostrarCodigoNoExiste();
         }
     }
 

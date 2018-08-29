@@ -3,6 +3,7 @@
     <dimen name="margin8dp">8dp</dimen>
     <dimen name="texto_grande">25sp</dimen>
     <dimen name="texto_mediano">20sp</dimen>
+    <dimen name="texto_medio">18sp</dimen>
     <dimen name="texto_chico">15sp</dimen>
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>

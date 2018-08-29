@@ -145,7 +145,8 @@ public class CajasInFragment extends Fragment {
     }
 
     public void registrarCaja(Caja caja){
-            if(!existeRegistro(caja.getCod_barra_caja())){
+        if(numeroLocal == caja.getIdlocal()) {
+            if (!existeRegistro(caja.getCod_barra_caja())) {
                 Data data = new Data(context);
                 data.open();
                 CajaIn cajaIn = new CajaIn();
@@ -156,9 +157,10 @@ public class CajasInFragment extends Fragment {
                 cajaIn.setIdlocal(caja.getIdlocal());
                 cajaIn.setLocal(caja.getLocal());
                 cajaIn.setAcl(caja.getAcl());
+                cajaIn.setTipo(caja.getTipo());
                 Calendar calendario = Calendar.getInstance();
                 int yy = calendario.get(Calendar.YEAR);
-                int mm = calendario.get(Calendar.MONTH)+1;
+                int mm = calendario.get(Calendar.MONTH) + 1;
                 int dd = calendario.get(Calendar.DAY_OF_MONTH);
                 int hora = calendario.get(Calendar.HOUR_OF_DAY);
                 int minuto = calendario.get(Calendar.MINUTE);
@@ -172,12 +174,12 @@ public class CajasInFragment extends Fragment {
                 cajaIn.setSubido(0);
                 data.insertarCajaIn(cajaIn);
                 data.close();
-                mostrarCorrecto(cajaIn.getCod_barra_caja(),cajaIn.getAcl(),cajaIn.getSede(),cajaIn.getLocal());
+                mostrarCorrecto(cajaIn.getCod_barra_caja(), cajaIn.getAcl(), cajaIn.getSede(), cajaIn.getLocal());
                 WriteBatch batch = FirebaseFirestore.getInstance().batch();
                 DocumentReference documentReference = FirebaseFirestore.getInstance().collection("cajas").document(cajaIn.getCod_barra_caja());
                 batch.update(documentReference, "check_reg_ingreso", 1);
                 batch.update(documentReference, "fech_trans_ingreso", FieldValue.serverTimestamp());
-                batch.update(documentReference, "fech_reg_ingreso", new Timestamp(new Date(cajaIn.getAnio()-1900,cajaIn.getMes()-1,cajaIn.getDia(),cajaIn.getHora(),cajaIn.getMin(),cajaIn.getSeg())));
+                batch.update(documentReference, "fech_reg_ingreso", new Timestamp(new Date(cajaIn.getAnio() - 1900, cajaIn.getMes() - 1, cajaIn.getDia(), cajaIn.getHora(), cajaIn.getMin(), cajaIn.getSeg())));
                 final String codigoBarra = cajaIn.getCod_barra_caja();
                 batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -194,6 +196,9 @@ public class CajasInFragment extends Fragment {
                     }
                 });
             }
+        }else{
+            mostrarCodigoNoExiste();
+        }
     }
 
     public boolean existeRegistro(String codigoBarra){

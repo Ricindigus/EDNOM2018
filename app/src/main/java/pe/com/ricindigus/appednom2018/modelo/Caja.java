@@ -7,15 +7,18 @@ public class Caja {
     private String sede;
     private int idlocal;
     private String local;
+    private int tipo;
     private int acl;
 
-    public Caja(String _id, String cod_barra_caja, int idsede, String sede, int idlocal, String local, int acl) {
+
+    public Caja(String _id, String cod_barra_caja, int idsede, String sede, int idlocal, String local, int tipo, int acl) {
         this._id = _id;
         this.cod_barra_caja = cod_barra_caja;
         this.idsede = idsede;
         this.sede = sede;
         this.idlocal = idlocal;
         this.local = local;
+        this.tipo = tipo;
         this.acl = acl;
     }
 
@@ -76,5 +79,13 @@ public class Caja {
 
     public void setAcl(int acl) {
         this.acl = acl;
+    }
+
+    public int getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(int tipo) {
+        this.tipo = tipo;
     }
 }
