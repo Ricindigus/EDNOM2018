@@ -4,8 +4,148 @@ public class SQLConstantes {
     public static String DB_PATH = "/data/data/pe.com.ricindigus.appednom2018/databases/";
     public static String DB_NAME = "mydatabase.sqlite";
 
-    public static String tablanacional = "nacional";
     public static String tablausuariolocal = "usuario_local";
+    public static String tablacajas = "cajas";
+    public static String tablacajasentrada = "cajas_entrada";
+    public static String tablacajassalida = "cajas_salida";
+
+
+
+
+    //TABLA USUARIO LOCAL
+    public static String usuario_local_id = "_id";
+    public static String usuario_local_usuario = "usuario";
+    public static String usuario_local_clave = "clave";
+    public static String usuario_local_rol = "rol";
+    public static String usuario_local_nro_local = "nro_local";
+    public static String usuario_local_nombreLocal = "nombreLocal";
+    public static String usuario_local_naulas = "naulas";
+    public static String usuario_local_ncontingencia = "ncontingencia";
+    public static String usuario_local_codsede = "codsede";
+    public static String usuario_local_sede = "sede";
+    public static String usuario_local_nombre = "nombre";
+
+
+    //TABLA CAJAS
+    public static String cajas_id = "_id";
+    public static String cajas_cod_barra = "cod_barra_caja";
+    public static String cajas_idsede = "idsede";
+    public static String cajas_nomsede = "sede";
+    public static String cajas_idlocal = "idlocal";
+    public static String cajas_nomlocal = "local";
+    public static String cajas_acl = "acl";
+
+
+    //TABLA CAJAS ENTRADA
+    public static String cajas_entrada_id = "_id";
+    public static String cajas_entrada_cod_barra = "cod_barra_caja";
+    public static String cajas_entrada_idsede = "idsede";
+    public static String cajas_entrada_nomsede = "sede";
+    public static String cajas_entrada_idlocal = "idlocal";
+    public static String cajas_entrada_nomlocal = "local";
+    public static String cajas_entrada_acl = "acl";
+    public static String cajas_entrada_fecha_reg_dia = "dia";
+    public static String cajas_entrada_fecha_reg_mes = "mes";
+    public static String cajas_entrada_fecha_reg_anio = "anio";
+    public static String cajas_entrada_fecha_reg_hora = "hora";
+    public static String cajas_entrada_fecha_reg_min = "min";
+    public static String cajas_entrada_fecha_reg_seg = "seg";
+    public static String cajas_entrada_subido = "subido";
+
+
+    //TABLA CAJAS SALIDA
+    public static String cajas_salida_id = "_id";
+    public static String cajas_salida_cod_barra = "cod_barra_caja";
+    public static String cajas_salida_idsede = "idsede";
+    public static String cajas_salida_nomsede = "sede";
+    public static String cajas_salida_idlocal = "idlocal";
+    public static String cajas_salida_nomlocal = "local";
+    public static String cajas_salida_acl = "acl";
+    public static String cajas_salida_fecha_reg_dia = "dia";
+    public static String cajas_salida_fecha_reg_mes = "mes";
+    public static String cajas_salida_fecha_reg_anio = "anio";
+    public static String cajas_salida_fecha_reg_hora = "hora";
+    public static String cajas_salida_fecha_reg_min = "min";
+    public static String cajas_salida_fecha_reg_seg = "seg";
+    public static String cajas_salida_subido = "subido";
+
+
+    public static final String SQL_CREATE_TABLA_CAJAS_ENTRADA =
+            "CREATE TABLE " + tablacajasentrada + "(" +
+                    cajas_entrada_id + " TEXT PRIMARY KEY," +
+                    cajas_entrada_cod_barra + " TEXT," +
+                    cajas_entrada_idsede + " INTEGER," +
+                    cajas_entrada_nomsede + " TEXT," +
+                    cajas_entrada_idlocal + " INTEGER," +
+                    cajas_entrada_nomlocal + " TEXT," +
+                    cajas_entrada_acl + " INTEGER," +
+                    cajas_entrada_fecha_reg_dia + " INTEGER," +
+                    cajas_entrada_fecha_reg_mes + " INTEGER," +
+                    cajas_entrada_fecha_reg_anio + " INTEGER," +
+                    cajas_entrada_fecha_reg_hora + " INTEGER," +
+                    cajas_entrada_fecha_reg_min + " INTEGER," +
+                    cajas_entrada_fecha_reg_seg + " INTEGER," +
+                    cajas_entrada_subido + " INTEGER" + ");"
+            ;
+
+    public static final String SQL_CREATE_TABLA_CAJAS_SALIDA =
+            "CREATE TABLE " + tablacajassalida + "(" +
+                    cajas_salida_id + " TEXT PRIMARY KEY," +
+                    cajas_salida_cod_barra + " TEXT," +
+                    cajas_salida_idsede + " INTEGER," +
+                    cajas_salida_nomsede + " TEXT," +
+                    cajas_salida_idlocal + " INTEGER," +
+                    cajas_salida_nomlocal + " TEXT," +
+                    cajas_salida_acl + " INTEGER," +
+                    cajas_salida_fecha_reg_dia + " INTEGER," +
+                    cajas_salida_fecha_reg_mes + " INTEGER," +
+                    cajas_salida_fecha_reg_anio + " INTEGER," +
+                    cajas_salida_fecha_reg_hora + " INTEGER," +
+                    cajas_salida_fecha_reg_min + " INTEGER," +
+                    cajas_salida_fecha_reg_seg + " INTEGER," +
+                    cajas_salida_subido + " INTEGER" + ");"
+            ;
+
+    public static final String WHERE_CLAUSE_ID = "_id=?";
+    public static final String WHERE_CLAUSE_CLAVE = "clave=?";
+    public static final String WHERE_CLAUSE_COD_BARRA = "cod_barra_caja=?";
+    public static final String WHERE_CLAUSE_DNI = "ins_numdoc=?";
+    public static final String WHERE_CLAUSE_NRO_LOCAL = "nro_local=?";
+    public static final String WHERE_CLAUSE_LOCAL = "local=?";
+    public static final String WHERE_CLAUSE_ID_LOCAL = "id_local=?";
+    public static final String WHERE_CLAUSE_ID_AULA = "id_aula=?";
+    public static final String WHERE_CLAUSE_NRO_AULA = "aula=?";
+    public static final String WHERE_CLAUSE_DNI_ASISTENCIA = "dni=?";
+    public static final String WHERE_CLAUSE_CODIGO_FICHA = "codficha=?";
+    public static final String WHERE_CLAUSE_CODIGO_CUADERNILLO = "codcartilla=?";
+    public static final String WHERE_CLAUSE_CODIGO_PAGINA = "codigo_pagina=?";
+    public static final String WHERE_CLAUSE_NOMBRE_AULA = "nombre=?";
+    public static final String WHERE_CLAUSE_CODIGO = "codigo=?";
+    public static final String WHERE_CLAUSE_SEDE = "sede=?";
+    public static final String WHERE_CLAUSE_DIA = "dia=?";
+    public static final String WHERE_CLAUSE_MES = "mes=?";
+    public static final String WHERE_CLAUSE_ANIO = "anio=?";
+    public static final String WHERE_CLAUSE_SUBIDO_ENTRADA = "subido_entrada=?";
+    public static final String WHERE_CLAUSE_SUBIDO_SALIDA = "subido_salida=?";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public static String tablanacional = "nacional";
     public static String tablaaulalocal = "aulas_local";
     public static String tablaasislocal = "asis_local";
     public static String tablaasisaula = "asis_aula";
@@ -15,9 +155,6 @@ public class SQLConstantes {
     public static String tablaresumenasistencia = "resumen_asistencia";
     public static String tablaresumeninventario = "resumen_inventario";
     public static String tablaresumentotal = "resumen_total";
-
-
-
 
 
 
@@ -61,18 +198,7 @@ public class SQLConstantes {
     public static String nacional_new_aula_ficha = "new_aula_ficha";
     public static String nacional_new_aula_cartilla = "new_aula_cartilla";
 
-    //TABLA USUARIO LOCAL
-    public static String usuario_local_id = "_id";
-    public static String usuario_local_usuario = "usuario";
-    public static String usuario_local_clave = "clave";
-    public static String usuario_local_rol = "rol";
-    public static String usuario_local_nro_local = "nro_local";
-    public static String usuario_local_nombreLocal = "nombreLocal";
-    public static String usuario_local_naulas = "naulas";
-    public static String usuario_local_ncontingencia = "ncontingencia";
-    public static String usuario_local_codsede = "codsede";
-    public static String usuario_local_sede = "sede";
-    public static String usuario_local_nombre = "nombre";
+
 
 
     //TABLA ASISTENCIA LOCAL
@@ -302,26 +428,7 @@ public class SQLConstantes {
                     resumen_total_cantidad + " INTEGER" + ");"
             ;
 
-    public static final String WHERE_CLAUSE_ID = "_id=?";
-    public static final String WHERE_CLAUSE_CLAVE = "clave=?";
-    public static final String WHERE_CLAUSE_DNI = "ins_numdoc=?";
-    public static final String WHERE_CLAUSE_NRO_LOCAL = "nro_local=?";
-    public static final String WHERE_CLAUSE_LOCAL = "local=?";
-    public static final String WHERE_CLAUSE_ID_LOCAL = "id_local=?";
-    public static final String WHERE_CLAUSE_ID_AULA = "id_aula=?";
-    public static final String WHERE_CLAUSE_NRO_AULA = "aula=?";
-    public static final String WHERE_CLAUSE_DNI_ASISTENCIA = "dni=?";
-    public static final String WHERE_CLAUSE_CODIGO_FICHA = "codficha=?";
-    public static final String WHERE_CLAUSE_CODIGO_CUADERNILLO = "codcartilla=?";
-    public static final String WHERE_CLAUSE_CODIGO_PAGINA = "codigo_pagina=?";
-    public static final String WHERE_CLAUSE_NOMBRE_AULA = "nombre=?";
-    public static final String WHERE_CLAUSE_CODIGO = "codigo=?";
-    public static final String WHERE_CLAUSE_SEDE = "sede=?";
-    public static final String WHERE_CLAUSE_DIA = "dia=?";
-    public static final String WHERE_CLAUSE_MES = "mes=?";
-    public static final String WHERE_CLAUSE_ANIO = "anio=?";
-    public static final String WHERE_CLAUSE_SUBIDO_ENTRADA = "subido_entrada=?";
-    public static final String WHERE_CLAUSE_SUBIDO_SALIDA = "subido_salida=?";
+
 
 
 

@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         switch (tipoFragment){
             case TipoFragment.CAJAS_IN:
-                CajasInFragment cajasInFragment = new CajasInFragment();
+                CajasInFragment cajasInFragment = new CajasInFragment(nroLocal,MainActivity.this);
                 fragmentTransaction.replace(R.id.fragment_layout, cajasInFragment);
                 break;
             case TipoFragment.REGISTRO_ASISTENCIA_AULA:
@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
                 fragmentTransaction.replace(R.id.fragment_layout, invListAsisFragment);
                 break;
             case TipoFragment.CAJAS_OUT:
-                CajasOutFragment cajasOutFragment = new CajasOutFragment();
+                CajasOutFragment cajasOutFragment = new CajasOutFragment(nroLocal,MainActivity.this);
                 fragmentTransaction.replace(R.id.fragment_layout, cajasOutFragment);
                 break;
             case TipoFragment.REPORTES_LISTADO_INGRESO_CAJAS:

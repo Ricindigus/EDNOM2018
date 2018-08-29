@@ -13,13 +13,15 @@
         android:gravity="center"
         android:textColor="@color/colorPrimary"
         android:textSize="24sp"
-        android:text="SALIDA DE CAJAS AL LOCAL"/>
+        android:textStyle="bold"
+        android:text="SALIDA DE CAJAS DEL LOCAL"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:gravity="center"
         android:padding="16dp"
-        android:layout_margin="8dp"
+        android:layout_marginBottom="@dimen/margin8dp"
+        android:layout_marginTop="@dimen/margin8dp"
         android:layout_gravity="center"
         android:background="@drawable/borde_azul_buscador"
         android:orientation="horizontal">
@@ -30,7 +32,7 @@
             android:layout_height="40dp"
             android:layout_marginRight="5dp"
             android:inputType="number"
-            android:maxLength="8"
+            android:maxLength="12"
             android:hint="Pasar lector de codigo de barras"
             android:gravity="center"
             android:background="@drawable/borde_edit_text"
@@ -42,6 +44,212 @@
             android:src="@drawable/ic_search"
             android:tint="@android:color/white"
             />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:id="@+id/cajas_salida_lytCorrecto"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin16dp"
+            android:visibility="gone"
+            android:background="@drawable/fondo_verde">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="CAJA CORRECTA"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:layout_marginBottom="@dimen/margin8dp"
+                android:textSize="@dimen/texto_grande"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/margin16dp"
+                android:background="@drawable/fondo_blanco">
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin8dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textColor="@color/bluePrimaryDark"
+                        android:textSize="@dimen/texto_mediano"
+                        android:text="CÓDIGO DE BARRA: "/>
+                    <TextView
+                        android:id="@+id/caja_correcta_txtCodBarra"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/texto_mediano"
+                        android:text="700100200310"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin8dp">
+                    <TextView
+                        android:id="@+id/caja_correcta_txtAcl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/greenPrimaryDark"
+                        android:textSize="@dimen/texto_grande"
+                        android:textStyle="bold"
+                        android:text="ACL: 2"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin8dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textColor="@color/bluePrimaryDark"
+                        android:textSize="@dimen/texto_mediano"
+                        android:text="SEDE OPERATIVA:"/>
+                    <TextView
+                        android:id="@+id/caja_correcta_txtSede"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/texto_mediano"
+                        android:text="AREQUIPA"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin8dp"
+                    android:background="@drawable/fondo_blanco">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/texto_mediano"
+                        android:textColor="@color/bluePrimaryDark"
+                        android:textStyle="bold"
+                        android:text="LOCAL DE UBICACIÓN:"/>
+                    <TextView
+                        android:id="@+id/caja_correcta_txtLocal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/texto_mediano"
+                        android:textStyle="bold"
+                        android:text="EMBLEMATICA INSTITUCION EDUCATIVA"/>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/cajas_salida_lytYaRegistrado"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin16dp"
+            android:visibility="gone"
+            android:background="@drawable/fondo_rojo">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ERROR. CÓDIGO DE BARRA DUPLICADO"
+                android:textColor="@color/redPrimaryDark"
+                android:gravity="center"
+                android:layout_marginBottom="@dimen/margin8dp"
+                android:textStyle="bold"
+                android:textSize="@dimen/texto_grande"/>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/margin16dp"
+                android:background="@drawable/fondo_blanco">
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin8dp"
+                    android:background="@drawable/fondo_blanco">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textColor="@color/bluePrimaryDark"
+                        android:textSize="@dimen/texto_mediano"
+                        android:text="CÓDIGO DE BARRA: "/>
+                    <TextView
+                        android:id="@+id/caja_duplicada_txtCodBarra"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/texto_mediano"
+                        android:text="70000202510"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin8dp"
+                    android:background="@drawable/fondo_blanco">
+                    <TextView
+                        android:id="@+id/caja_duplicada_txtAcl"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/redPrimaryDark"
+                        android:textSize="@dimen/texto_grande"
+                        android:textStyle="bold"
+                        android:text="ACL: 2"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin8dp"
+                    android:background="@drawable/fondo_blanco">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/texto_mediano"
+                        android:textColor="@color/bluePrimaryDark"
+                        android:text="FECHA Y HORA DE REGISTRO: "/>
+                    <TextView
+                        android:id="@+id/caja_duplicada_txtFechaHora"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/texto_mediano"
+                        android:text="20-10-2018 15:00:52"/>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/cajas_salida_lytNoExiste"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin16dp"
+            android:visibility="gone"
+            android:background="@drawable/fondo_rojo">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="CAJA NO REGISTRADA EN EL PADRÓN"
+                android:textColor="@color/redPrimaryDark"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textSize="@dimen/texto_grande"/>
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>
