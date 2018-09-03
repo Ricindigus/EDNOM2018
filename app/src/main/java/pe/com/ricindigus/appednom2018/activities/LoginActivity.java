@@ -12,7 +12,11 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
+import pe.com.ricindigus.appednom2018.modelo.Caja;
+import pe.com.ricindigus.appednom2018.modelo.CajaIn;
+import pe.com.ricindigus.appednom2018.modelo.CajaOut;
 import pe.com.ricindigus.appednom2018.util.FileChooser;
 import pe.com.ricindigus.appednom2018.R;
 import pe.com.ricindigus.appednom2018.modelo.Data;
@@ -58,8 +62,20 @@ public class LoginActivity extends AppCompatActivity {
             Data data = new Data(LoginActivity.this);
             data.open();
             UsuarioLocal usuarioLocal = data.getUsuarioLocal(clave);
+            Caja ca = data.getCajaxCodigo("703521200120");
             data.close();
             if (usuarioLocal != null){
+                Data d = new Data(LoginActivity.this);
+                d.open();
+                ArrayList<CajaIn> cajaIns = d.getCopiaCajasInxLocal(usuarioLocal.getNro_local());
+                ArrayList<CajaOut> cajaOuts = d.getCopiaCajasOutxLocal(usuarioLocal.getNro_local());
+                for (CajaIn caja : cajaIns){
+                    d.insertarCajaIn(caja);
+                }
+                for (CajaOut caja : cajaOuts){
+                    d.insertarCajaOut(caja);
+                }
+                d.close();
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 intent.putExtra("nrolocal", usuarioLocal.getNro_local());
                 startActivity(intent);

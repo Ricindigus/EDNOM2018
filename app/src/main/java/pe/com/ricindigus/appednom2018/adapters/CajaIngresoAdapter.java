@@ -1,7 +1,6 @@
 package pe.com.ricindigus.appednom2018.adapters;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -13,7 +12,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import pe.com.ricindigus.appednom2018.R;
-import pe.com.ricindigus.appednom2018.modelo.Caja;
 import pe.com.ricindigus.appednom2018.modelo.CajaIn;
 
 public class CajaIngresoAdapter extends RecyclerView.Adapter<CajaIngresoAdapter.ViewHolder>{
@@ -41,8 +39,12 @@ public class CajaIngresoAdapter extends RecyclerView.Adapter<CajaIngresoAdapter.
                 + checkDigito(caja.getMes()) + "-" + checkDigito(caja.getAnio()) + " "
                 + checkDigito(caja.getHora()) + ":" + checkDigito(caja.getMin())+ ":" + checkDigito(caja.getSeg()));
 
-        if(caja.getSubido() == 1){
+        if(caja.getEstado() == 3){
             holder.cv.setCardBackgroundColor(ContextCompat.getColor(context, R.color.greenPrimaryLight));
+        }else if(caja.getEstado() == 2){
+            holder.cv.setCardBackgroundColor(ContextCompat.getColor(context, R.color.amberPrimaryLight));
+        }else if(caja.getEstado() == 1){
+            holder.cv.setCardBackgroundColor(ContextCompat.getColor(context, R.color.bluePrimaryLight));
         }else{
             holder.cv.setCardBackgroundColor(ContextCompat.getColor(context, R.color.redPrimaryLight));
         }

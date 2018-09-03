@@ -10,7 +10,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +20,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.dynamic.DeferredLifecycleHelper;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
@@ -34,11 +32,10 @@ import java.util.Calendar;
 import java.util.Date;
 
 import pe.com.ricindigus.appednom2018.R;
-import pe.com.ricindigus.appednom2018.modelo.AsistenciaLocal;
 import pe.com.ricindigus.appednom2018.modelo.Caja;
 import pe.com.ricindigus.appednom2018.modelo.CajaIn;
+import pe.com.ricindigus.appednom2018.modelo.CajaOut;
 import pe.com.ricindigus.appednom2018.modelo.Data;
-import pe.com.ricindigus.appednom2018.modelo.Nacional;
 import pe.com.ricindigus.appednom2018.modelo.SQLConstantes;
 
 /**
@@ -128,12 +125,12 @@ public class CajasInFragment extends Fragment {
         String codigoBarra = edtCodigo.getText().toString();
         Data data = new Data(context);
         data.open();
-        Caja caja = data.getCajaxCodigo(codigoBarra);
+        CajaIn cajaIn = data.getCajaIn(codigoBarra);
         data.close();
-        if(caja == null){
+        if(cajaIn == null){
             mostrarCodigoNoExiste();
         }else{
-            registrarCaja(caja);
+            registrarCaja(cajaIn);
         }
         edtCodigo.setText("");
         edtCodigo.requestFocus();
@@ -144,61 +141,46 @@ public class CajasInFragment extends Fragment {
         mgr.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    public void registrarCaja(Caja caja){
-        if(numeroLocal == caja.getIdlocal()) {
-            if (!existeRegistro(caja.getCod_barra_caja())) {
-                Data data = new Data(context);
-                data.open();
-                CajaIn cajaIn = new CajaIn();
-                cajaIn.set_id(caja.getCod_barra_caja());
-                cajaIn.setCod_barra_caja(caja.getCod_barra_caja());
-                cajaIn.setIdsede(caja.getIdsede());
-                cajaIn.setSede(caja.getSede());
-                cajaIn.setIdlocal(caja.getIdlocal());
-                cajaIn.setLocal(caja.getLocal());
-                cajaIn.setAcl(caja.getAcl());
-                cajaIn.setTipo(caja.getTipo());
-                Calendar calendario = Calendar.getInstance();
-                int yy = calendario.get(Calendar.YEAR);
-                int mm = calendario.get(Calendar.MONTH) + 1;
-                int dd = calendario.get(Calendar.DAY_OF_MONTH);
-                int hora = calendario.get(Calendar.HOUR_OF_DAY);
-                int minuto = calendario.get(Calendar.MINUTE);
-                int segundos = calendario.get(Calendar.SECOND);
-                cajaIn.setDia(dd);
-                cajaIn.setMes(mm);
-                cajaIn.setAnio(yy);
-                cajaIn.setHora(hora);
-                cajaIn.setMin(minuto);
-                cajaIn.setSeg(segundos);
-                cajaIn.setSubido(0);
-                data.insertarCajaIn(cajaIn);
-                data.close();
-                mostrarCorrecto(cajaIn.getCod_barra_caja(), cajaIn.getAcl(), cajaIn.getSede(), cajaIn.getLocal());
-                WriteBatch batch = FirebaseFirestore.getInstance().batch();
-                DocumentReference documentReference = FirebaseFirestore.getInstance().collection("cajas").document(cajaIn.getCod_barra_caja());
-                batch.update(documentReference, "check_reg_ingreso", 1);
-                batch.update(documentReference, "fech_trans_ingreso", FieldValue.serverTimestamp());
-                batch.update(documentReference, "fech_reg_ingreso", new Timestamp(new Date(cajaIn.getAnio() - 1900, cajaIn.getMes() - 1, cajaIn.getDia(), cajaIn.getHora(), cajaIn.getMin(), cajaIn.getSeg())));
-                final String codigoBarra = cajaIn.getCod_barra_caja();
-                batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Data data = new Data(context);
-                        data.open();
-                        data.actualizarCajaInSubido(codigoBarra);
-                        data.close();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(context, "NO GUARDO", Toast.LENGTH_SHORT).show();
-                    }
-                });
+    public void registrarCaja(CajaIn cajaIn){
+        String codigoBarra = cajaIn.getCod_barra_caja();
+        if (!existeRegistro(cajaIn.getCod_barra_caja())) {
+            Data data = new Data(context);
+            data.open();
+            Calendar calendario = Calendar.getInstance();
+            int yy = calendario.get(Calendar.YEAR);
+            int mm = calendario.get(Calendar.MONTH) + 1;
+            int dd = calendario.get(Calendar.DAY_OF_MONTH);
+            int hora = calendario.get(Calendar.HOUR_OF_DAY);
+            int minuto = calendario.get(Calendar.MINUTE);
+            int segundos = calendario.get(Calendar.SECOND);
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(SQLConstantes.cajas_entrada_fecha_reg_dia,dd);
+            contentValues.put(SQLConstantes.cajas_entrada_fecha_reg_mes,mm);
+            contentValues.put(SQLConstantes.cajas_entrada_fecha_reg_anio,yy);
+            contentValues.put(SQLConstantes.cajas_entrada_fecha_reg_hora,hora);
+            contentValues.put(SQLConstantes.cajas_entrada_fecha_reg_min,minuto);
+            contentValues.put(SQLConstantes.cajas_entrada_fecha_reg_seg,segundos);
+            contentValues.put(SQLConstantes.cajas_entrada_check_reg,1);
+            if (cajaIn.getNlado() == 1){
+                if (cajaIn.getTipo() == 3) contentValues.put(SQLConstantes.cajas_entrada_estado,2);
+                else contentValues.put(SQLConstantes.cajas_entrada_estado,cajaIn.getEstado() + 1);
             }
-        }else{
-            mostrarCodigoNoExiste();
+            data.actualizarCajaIn(codigoBarra,contentValues);
+            //Si es codigo "20" debe guardar en el otro codigo "10"
+            if(cajaIn.getNlado() == 2){
+                CajaIn cajaIn1 = data.getCajaIn(getCodigoAux(codigoBarra));
+                contentValues = new ContentValues();
+                contentValues.put(SQLConstantes.cajas_entrada_estado,cajaIn1.getEstado() + 1);
+                data.actualizarCajaIn(cajaIn1.getCod_barra_caja(),contentValues);
+            }
+            data.close();
+            mostrarCorrecto(cajaIn.getCod_barra_caja(), cajaIn.getAcl(), cajaIn.getSede(), cajaIn.getLocal());
         }
+    }
+
+    public String getCodigoAux(String cod2){
+        String cod1 = cod2.substring(0,cod2.length()-2) + "10";
+        return cod1;
     }
 
     public boolean existeRegistro(String codigoBarra){
@@ -206,7 +188,7 @@ public class CajasInFragment extends Fragment {
         Data d = new Data(context);
         d.open();
         CajaIn a = d.getCajaIn(codigoBarra);
-        if(a != null){
+        if(a.getCheck_reg() == 1){
             existe = true;
             mostrarDuplicado(a.getCod_barra_caja(),a.getAcl(),
                     checkDigito(a.getDia()) +"/"+ checkDigito(a.getMes()) +"/"+ a.getAnio() +

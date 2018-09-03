@@ -10,7 +10,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,9 +28,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import pe.com.ricindigus.appednom2018.R;
-import pe.com.ricindigus.appednom2018.adapters.AsistenciaLocalAdapter;
 import pe.com.ricindigus.appednom2018.adapters.CajaIngresoAdapter;
-import pe.com.ricindigus.appednom2018.modelo.AsistenciaLocal;
 import pe.com.ricindigus.appednom2018.modelo.CajaIn;
 import pe.com.ricindigus.appednom2018.modelo.Data;
 
@@ -44,11 +41,16 @@ public class ListIngresoCajasFragment extends Fragment {
     RecyclerView recyclerView;
     Context context;
     ArrayList<CajaIn> cajaIns;
-    ArrayList<CajaIn> datosNoEnviados;
+    ArrayList<CajaIn> completos;
+    ArrayList<CajaIn> transferidos;
+
     int nroLocal;
     Data data;
     FloatingActionButton fabUpLoad;
     TextView txtNumero;
+    TextView txtCompletos;
+    TextView txtTransferidos;
+
     boolean b = false;
     CajaIngresoAdapter cajaIngresoAdapter;
 
@@ -70,6 +72,9 @@ public class ListIngresoCajasFragment extends Fragment {
         recyclerView = (RecyclerView) rootView.findViewById(R.id.listado_recycler);
         fabUpLoad = (FloatingActionButton) rootView.findViewById(R.id.listado_btnUpload);
         txtNumero = (TextView) rootView.findViewById(R.id.listado_txtNumero);
+        txtCompletos = (TextView) rootView.findViewById(R.id.listado_txtCompletos);
+        txtTransferidos = (TextView) rootView.findViewById(R.id.listado_txtTransferidos);
+
         return rootView;
     }
 
@@ -88,30 +93,41 @@ public class ListIngresoCajasFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 b = false;
-                datosNoEnviados = new ArrayList<>();
+                completos = new ArrayList<>();
                 data = new Data(context);
                 data.open();
-                datosNoEnviados = data.getAllCajasIngresadasSinEnviar(nroLocal);
+                completos = data.getAllCajasInCompletas(nroLocal);
                 data.close();
-                if(datosNoEnviados.size() > 0){
-                    final int total = datosNoEnviados.size();
+                if(completos.size() > 0){
+                    final int total = completos.size();
                     int i = 0;
-                    for (final CajaIn cajaIn : datosNoEnviados){
+                    for (final CajaIn cajaIn : completos){
                         i++;
                         final int j = i;
-                        final String c = cajaIn.getCod_barra_caja();
+                        Data d = new Data(context);
+                        d.open();
+                        CajaIn cajaIn20 = d.getCajaIn(getCodigo20(cajaIn.getCod_barra_caja()));
+                        d.close();
                         WriteBatch batch = FirebaseFirestore.getInstance().batch();
-                        DocumentReference documentReference = FirebaseFirestore.getInstance().collection("cajas").document(cajaIn.getCod_barra_caja());
-                        batch.update(documentReference, "check_reg_ingreso", 1);
-                        batch.update(documentReference, "fech_trans_ingreso", FieldValue.serverTimestamp());
-                        batch.update(documentReference, "fech_reg_ingreso", new Timestamp(new Date(cajaIn.getAnio()-1900,cajaIn.getMes()-1,cajaIn.getDia(),cajaIn.getHora(),cajaIn.getMin(),cajaIn.getSeg())));
+                        DocumentReference documentReference20 = FirebaseFirestore.getInstance().collection("cajas").document(cajaIn20.getCod_barra_caja());
+                        DocumentReference documentReference1 = FirebaseFirestore.getInstance().collection("cajas").document(cajaIn.getCod_barra_caja());
+                        batch.update(documentReference1, "check_reg_ingreso", 1);
+                        batch.update(documentReference1, "fech_trans_ingreso", FieldValue.serverTimestamp());
+                        batch.update(documentReference1, "fech_reg_ingreso", new Timestamp(new Date(cajaIn.getAnio()-1900,cajaIn.getMes()-1,cajaIn.getDia(),cajaIn.getHora(),cajaIn.getMin(),cajaIn.getSeg())));
+                        batch.update(documentReference20, "check_reg_ingreso", 1);
+                        batch.update(documentReference20, "fech_trans_ingreso", FieldValue.serverTimestamp());
+                        batch.update(documentReference20, "fech_reg_ingreso", new Timestamp(new Date(cajaIn20.getAnio()-1900,cajaIn20.getMes()-1,cajaIn20.getDia(),cajaIn20.getHora(),cajaIn20.getMin(),cajaIn20.getSeg())));
+
                         final String codigoBarra = cajaIn.getCod_barra_caja();
+                        final String codigoBarra20 = cajaIn20.getCod_barra_caja();
+
                         batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 Data data = new Data(context);
                                 data.open();
                                 data.actualizarCajaInSubido(codigoBarra);
+                                data.actualizarCajaInSubido(codigoBarra20);
                                 data.close();
                                 if (j == total) {
                                     Toast.makeText(context, total + " registros subidos", Toast.LENGTH_SHORT).show();
@@ -135,12 +151,24 @@ public class ListIngresoCajasFragment extends Fragment {
         });
     }
 
+    public String getCodigo20(String cod2){
+        String cod1 = cod2.substring(0,cod2.length()-2) + "20";
+        return cod1;
+    }
+
     public void cargaData(){
         cajaIns = new ArrayList<CajaIn>();
+        completos = new ArrayList<CajaIn>();
+        transferidos = new ArrayList<CajaIn>();
+
         Data data = new Data(context);
         data.open();
-        cajaIns = data.getAllCajaIn(nroLocal);
-        txtNumero.setText("Total registros: " + cajaIns.size());
+        cajaIns = data.getAllCajaInListado(nroLocal);
+        completos = data.getAllCajasInCompletas(nroLocal);
+        transferidos = data.getAllCajasInTransferidos(nroLocal);
+        txtNumero.setText("Esperados: " + cajaIns.size());
+        txtCompletos.setText("Completos: " + completos.size());
+        txtTransferidos.setText("Tranferidos: " + transferidos.size());
         data.close();
     }
 

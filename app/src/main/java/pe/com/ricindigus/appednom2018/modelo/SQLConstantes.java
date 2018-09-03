@@ -35,7 +35,7 @@ public class SQLConstantes {
     public static String cajas_nomlocal = "local";
     public static String cajas_tipo = "tipo";
     public static String cajas_acl = "acl";
-
+    public static String cajas_nlado = "nlado";
 
 
     //TABLA CAJAS ENTRADA
@@ -53,7 +53,10 @@ public class SQLConstantes {
     public static String cajas_entrada_fecha_reg_hora = "hora";
     public static String cajas_entrada_fecha_reg_min = "min";
     public static String cajas_entrada_fecha_reg_seg = "seg";
-    public static String cajas_entrada_subido = "subido";
+    public static String cajas_entrada_check_reg = "check_reg";
+    public static String cajas_entrada_estado = "estado";
+    public static String cajas_entrada_nlado = "nlado";
+
 
 
     //TABLA CAJAS SALIDA
@@ -71,7 +74,9 @@ public class SQLConstantes {
     public static String cajas_salida_fecha_reg_hora = "hora";
     public static String cajas_salida_fecha_reg_min = "min";
     public static String cajas_salida_fecha_reg_seg = "seg";
-    public static String cajas_salida_subido = "subido";
+    public static String cajas_salida_check_reg = "check_reg";
+    public static String cajas_salida_estado = "estado";
+    public static String cajas_salida_nlado = "nlado";
 
 
     public static final String SQL_CREATE_TABLA_CAJAS_ENTRADA =
@@ -90,7 +95,9 @@ public class SQLConstantes {
                     cajas_entrada_fecha_reg_hora + " INTEGER," +
                     cajas_entrada_fecha_reg_min + " INTEGER," +
                     cajas_entrada_fecha_reg_seg + " INTEGER," +
-                    cajas_entrada_subido + " INTEGER" + ");"
+                    cajas_entrada_check_reg + " INTEGER," +
+                    cajas_entrada_nlado + " INTEGER," +
+                    cajas_entrada_estado + " INTEGER" + ");"
             ;
 
     public static final String SQL_CREATE_TABLA_CAJAS_SALIDA =
@@ -109,7 +116,9 @@ public class SQLConstantes {
                     cajas_salida_fecha_reg_hora + " INTEGER," +
                     cajas_salida_fecha_reg_min + " INTEGER," +
                     cajas_salida_fecha_reg_seg + " INTEGER," +
-                    cajas_salida_subido + " INTEGER" + ");"
+                    cajas_salida_check_reg + " INTEGER," +
+                    cajas_salida_nlado + " INTEGER," +
+                    cajas_salida_estado + " INTEGER" + ");"
             ;
 
     public static final String WHERE_CLAUSE_ID = "_id=?";
@@ -118,6 +127,9 @@ public class SQLConstantes {
     public static final String WHERE_CLAUSE_TIPO_CAJA = "tipo=?";
     public static final String WHERE_CLAUSE_DNI = "ins_numdoc=?";
     public static final String WHERE_CLAUSE_NRO_LOCAL = "nro_local=?";
+    public static final String WHERE_CLAUSE_NRO_LADO = "nlado=?";
+    public static final String WHERE_CLAUSE_ESTADO = "estado=?";
+
     public static final String WHERE_CLAUSE_LOCAL = "local=?";
     public static final String WHERE_CLAUSE_ID_LOCAL = "idlocal=?";
     public static final String WHERE_CLAUSE_ID_AULA = "id_aula=?";
@@ -132,10 +144,13 @@ public class SQLConstantes {
     public static final String WHERE_CLAUSE_DIA = "dia=?";
     public static final String WHERE_CLAUSE_MES = "mes=?";
     public static final String WHERE_CLAUSE_ANIO = "anio=?";
-    public static final String WHERE_CLAUSE_SUBIDO_ENTRADA = "subido_entrada=?";
-    public static final String WHERE_CLAUSE_SUBIDO_SALIDA = "subido_salida=?";
+    public static final String WHERE_CLAUSE_ESTADO_ENTRADA = "estado_entrada=?";
+    public static final String WHERE_CLAUSE_ESTADO_SALIDA = "estado_salida=?";
 
 
+    //DELETE
+    public static final String SQL_DELETE_CAJAS_ENTRADA = "DROP TABLE " + tablacajasentrada;
+    public static final String SQL_DELETE_CAJAS_SALIDA = "DROP TABLE " + tablacajassalida;
 
 
 

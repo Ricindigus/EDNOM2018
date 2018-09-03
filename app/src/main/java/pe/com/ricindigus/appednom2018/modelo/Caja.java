@@ -9,9 +9,10 @@ public class Caja {
     private String local;
     private int tipo;
     private int acl;
+    private int nlado;
 
 
-    public Caja(String _id, String cod_barra_caja, int idsede, String sede, int idlocal, String local, int tipo, int acl) {
+    public Caja(String _id, String cod_barra_caja, int idsede, String sede, int idlocal, String local, int tipo, int acl, int nlado) {
         this._id = _id;
         this.cod_barra_caja = cod_barra_caja;
         this.idsede = idsede;
@@ -20,6 +21,7 @@ public class Caja {
         this.local = local;
         this.tipo = tipo;
         this.acl = acl;
+        this.nlado = nlado;
     }
 
     public Caja() {
@@ -87,5 +89,13 @@ public class Caja {
 
     public void setTipo(int tipo) {
         this.tipo = tipo;
+    }
+
+    public int getNlado() {
+        return nlado;
+    }
+
+    public void setNlado(int nlado) {
+        this.nlado = nlado;
     }
 }

@@ -17,9 +17,11 @@ public class CajaOut {
     private int hora;
     private int min;
     private int seg;
-    private int subido;
+    private int check_reg;
+    private int estado;
+    private int nlado;
 
-    public CajaOut(String _id, String cod_barra_caja, int idsede, String sede, int idlocal, String local, int tipo, int acl, int dia, int mes, int anio, int hora, int min, int seg, int subido) {
+    public CajaOut(String _id, String cod_barra_caja, int idsede, String sede, int idlocal, String local, int tipo, int acl, int dia, int mes, int anio, int hora, int min, int seg, int check_reg, int estado, int nlado) {
         this._id = _id;
         this.cod_barra_caja = cod_barra_caja;
         this.idsede = idsede;
@@ -34,10 +36,20 @@ public class CajaOut {
         this.hora = hora;
         this.min = min;
         this.seg = seg;
-        this.subido = subido;
+        this.check_reg = check_reg;
+        this.estado = estado;
+        this.nlado = nlado;
     }
 
     public CajaOut() {
+    }
+
+    public int getCheck_reg() {
+        return check_reg;
+    }
+
+    public void setCheck_reg(int check_reg) {
+        this.check_reg = check_reg;
     }
 
     public int getTipo() {
@@ -152,13 +164,22 @@ public class CajaOut {
         this.seg = seg;
     }
 
-    public int getSubido() {
-        return subido;
+    public int getEstado() {
+        return estado;
     }
 
-    public void setSubido(int subido) {
-        this.subido = subido;
+    public void setEstado(int estado) {
+        this.estado = estado;
     }
+
+    public int getNlado() {
+        return nlado;
+    }
+
+    public void setNlado(int nlado) {
+        this.nlado = nlado;
+    }
+
     public ContentValues toValues(){
         ContentValues contentValues = new ContentValues();
         contentValues.put(SQLConstantes.cajas_salida_id,_id);
@@ -175,7 +196,9 @@ public class CajaOut {
         contentValues.put(SQLConstantes.cajas_salida_fecha_reg_hora,hora);
         contentValues.put(SQLConstantes.cajas_salida_fecha_reg_min,min);
         contentValues.put(SQLConstantes.cajas_salida_fecha_reg_seg,seg);
-        contentValues.put(SQLConstantes.cajas_salida_subido,subido);
+        contentValues.put(SQLConstantes.cajas_salida_check_reg,check_reg);
+        contentValues.put(SQLConstantes.cajas_salida_estado, estado);
+        contentValues.put(SQLConstantes.cajas_salida_nlado, nlado);
         return contentValues;
     }
 
