@@ -2,6 +2,7 @@ package pe.com.ricindigus.appednom2018.fragments.reportes.listados_de_registros;
 
 
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -50,6 +51,8 @@ public class ListIngresoCajasFragment extends Fragment {
     TextView txtNumero;
     TextView txtCompletos;
     TextView txtTransferidos;
+    String usuario;
+
 
     boolean b = false;
     CajaIngresoAdapter cajaIngresoAdapter;
@@ -59,9 +62,10 @@ public class ListIngresoCajasFragment extends Fragment {
     }
 
     @SuppressLint("ValidFragment")
-    public ListIngresoCajasFragment(Context context, int nroLocal) {
+    public ListIngresoCajasFragment(Context context, int nroLocal, String usuario) {
         this.context = context;
         this.nroLocal = nroLocal;
+        this.usuario = usuario;
     }
 
     @Override
@@ -74,7 +78,6 @@ public class ListIngresoCajasFragment extends Fragment {
         txtNumero = (TextView) rootView.findViewById(R.id.listado_txtNumero);
         txtCompletos = (TextView) rootView.findViewById(R.id.listado_txtCompletos);
         txtTransferidos = (TextView) rootView.findViewById(R.id.listado_txtTransferidos);
-
         return rootView;
     }
 
@@ -113,9 +116,11 @@ public class ListIngresoCajasFragment extends Fragment {
                         DocumentReference documentReference1 = FirebaseFirestore.getInstance().collection("cajas").document(cajaIn.getCod_barra_caja());
                         batch.update(documentReference1, "check_reg_ingreso", 1);
                         batch.update(documentReference1, "fech_trans_ingreso", FieldValue.serverTimestamp());
+                        batch.update(documentReference1, "usuario_reg", usuario);
                         batch.update(documentReference1, "fech_reg_ingreso", new Timestamp(new Date(cajaIn.getAnio()-1900,cajaIn.getMes()-1,cajaIn.getDia(),cajaIn.getHora(),cajaIn.getMin(),cajaIn.getSeg())));
                         batch.update(documentReference20, "check_reg_ingreso", 1);
                         batch.update(documentReference20, "fech_trans_ingreso", FieldValue.serverTimestamp());
+                        batch.update(documentReference20, "usuario_reg", usuario);
                         batch.update(documentReference20, "fech_reg_ingreso", new Timestamp(new Date(cajaIn20.getAnio()-1900,cajaIn20.getMes()-1,cajaIn20.getDia(),cajaIn20.getHora(),cajaIn20.getMin(),cajaIn20.getSeg())));
 
                         final String codigoBarra = cajaIn.getCod_barra_caja();

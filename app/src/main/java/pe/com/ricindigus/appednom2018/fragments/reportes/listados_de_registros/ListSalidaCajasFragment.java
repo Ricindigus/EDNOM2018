@@ -44,6 +44,7 @@ public class ListSalidaCajasFragment extends Fragment {
     ArrayList<CajaOut> cajaOuts;
     ArrayList<CajaOut> completos;
     ArrayList<CajaOut> transferidos;
+    String usuario;
 
     int nroLocal;
     Data data;
@@ -59,9 +60,10 @@ public class ListSalidaCajasFragment extends Fragment {
     }
 
     @SuppressLint("ValidFragment")
-    public ListSalidaCajasFragment(Context context, int nroLocal) {
+    public ListSalidaCajasFragment(Context context, int nroLocal,String usuario) {
         this.context = context;
         this.nroLocal = nroLocal;
+        this.usuario = usuario;
     }
 
     @Override
@@ -112,9 +114,11 @@ public class ListSalidaCajasFragment extends Fragment {
                         DocumentReference documentReference1 = FirebaseFirestore.getInstance().collection("cajas").document(cajaOut.getCod_barra_caja());
                         batch.update(documentReference1, "check_reg_ingreso", 1);
                         batch.update(documentReference1, "fech_trans_ingreso", FieldValue.serverTimestamp());
+                        batch.update(documentReference1, "usuario_reg", usuario);
                         batch.update(documentReference1, "fech_reg_ingreso", new Timestamp(new Date(cajaOut.getAnio()-1900,cajaOut.getMes()-1,cajaOut.getDia(),cajaOut.getHora(),cajaOut.getMin(),cajaOut.getSeg())));
                         batch.update(documentReference20, "check_reg_ingreso", 1);
                         batch.update(documentReference20, "fech_trans_ingreso", FieldValue.serverTimestamp());
+                        batch.update(documentReference20, "usuario_reg", usuario);
                         batch.update(documentReference20, "fech_reg_ingreso", new Timestamp(new Date(cajaOut20.getAnio()-1900,cajaOut20.getMes()-1,cajaOut20.getDia(),cajaOut20.getHora(),cajaOut20.getMin(),cajaOut20.getSeg())));
 
                         final String codigoBarra = cajaOut.getCod_barra_caja();

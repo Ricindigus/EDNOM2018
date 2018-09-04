@@ -8,6 +8,14 @@ public class SQLConstantes {
     public static String tablacajas = "cajas";
     public static String tablacajasentrada = "cajas_entrada";
     public static String tablacajassalida = "cajas_salida";
+    public static String tablaasislocal = "asis_local";
+    public static String tablaasisaula = "asis_aula";
+    public static String tablafichas = "fichas";
+    public static String tablacuadernillos = "cuadernillos";
+    public static String tablalistados = "listados";
+    public static String tablanacional = "nacional";
+
+
 
 
 
@@ -167,13 +175,10 @@ public class SQLConstantes {
 
 
 
-    public static String tablanacional = "nacional";
+
     public static String tablaaulalocal = "aulas_local";
-    public static String tablaasislocal = "asis_local";
-    public static String tablaasisaula = "asis_aula";
-    public static String tablafichas = "fichas";
-    public static String tablacuadernillos = "cuadernillos";
-    public static String tablalistados = "listados";
+
+
     public static String tablaresumenasistencia = "resumen_asistencia";
     public static String tablaresumeninventario = "resumen_inventario";
     public static String tablaresumentotal = "resumen_total";

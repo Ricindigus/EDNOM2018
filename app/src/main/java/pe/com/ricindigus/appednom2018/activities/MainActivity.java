@@ -49,6 +49,7 @@ import pe.com.ricindigus.appednom2018.util.TipoFragment;
 public class MainActivity extends AppCompatActivity {
 
     int nroLocal;
+    String usuario;
     private ArrayList<String> listDataHeader;
     private ExpandableListView expListView;
     private HashMap<String, List<String>> listDataChild;
@@ -60,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         nroLocal = getIntent().getExtras().getInt("nrolocal");
+        usuario = getIntent().getExtras().getString("usuario");
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -127,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
                 fragmentTransaction.replace(R.id.fragment_layout, cajasOutFragment);
                 break;
             case TipoFragment.REPORTES_LISTADO_INGRESO_CAJAS:
-                ListIngresoCajasFragment listIngresoCajasFragment = new ListIngresoCajasFragment(MainActivity.this,nroLocal);
+                ListIngresoCajasFragment listIngresoCajasFragment = new ListIngresoCajasFragment(MainActivity.this,nroLocal,usuario);
                 fragmentTransaction.replace(R.id.fragment_layout, listIngresoCajasFragment);
                 break;
             case TipoFragment.REPORTES_LISTADO_ASISTENCIA_LOCAL:
@@ -151,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
                 fragmentTransaction.replace(R.id.fragment_layout, listInvListadoFragment);
                 break;
             case TipoFragment.REPORTES_LISTADO_SALIDA_CAJAS:
-                ListSalidaCajasFragment listSalidaCajasFragment = new ListSalidaCajasFragment(MainActivity.this,nroLocal);
+                ListSalidaCajasFragment listSalidaCajasFragment = new ListSalidaCajasFragment(MainActivity.this,nroLocal,usuario);
                 fragmentTransaction.replace(R.id.fragment_layout, listSalidaCajasFragment);
                 break;
             case TipoFragment.REPORTES_RESUMEN_INGRESO_CAJAS:

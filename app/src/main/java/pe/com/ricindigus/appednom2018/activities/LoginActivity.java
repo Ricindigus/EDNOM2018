@@ -78,6 +78,7 @@ public class LoginActivity extends AppCompatActivity {
                 d.close();
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 intent.putExtra("nrolocal", usuarioLocal.getNro_local());
+                intent.putExtra("usuario", usuarioLocal.getClave());
                 startActivity(intent);
             }else{
                 Toast.makeText(this, "CLAVE INCORRECTA", Toast.LENGTH_SHORT).show();
