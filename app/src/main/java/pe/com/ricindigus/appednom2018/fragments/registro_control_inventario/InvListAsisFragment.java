@@ -135,19 +135,19 @@ public class InvListAsisFragment extends Fragment {
     }
 
     public void clickBoton(){
-        ocultarTeclado(edtLista);
-        String codListado = edtLista.getText().toString();
-        Data data = new Data(context);
-        data.open();
-        Nacional nacional = data.getNacionalxCodPagina(codListado);
-        data.close();
-        if(nacional == null){
-            mostrarErrorDni(codListado);
-        }else{
-            registrarListado(nacional);
-        }
-        edtLista.setText("");
-        edtLista.requestFocus();
+//        ocultarTeclado(edtLista);
+//        String codListado = edtLista.getText().toString();
+//        Data data = new Data(context);
+//        data.open();
+//        Nacional nacional = data.getNacionalxCodPagina(codListado);
+//        data.close();
+//        if(nacional == null){
+//            mostrarErrorDni(codListado);
+//        }else{
+//            registrarListado(nacional);
+//        }
+//        edtLista.setText("");
+//        edtLista.requestFocus();
     }
 
     public void ocultarTeclado(View view){

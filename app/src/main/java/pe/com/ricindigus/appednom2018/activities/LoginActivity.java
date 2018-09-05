@@ -14,7 +14,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import pe.com.ricindigus.appednom2018.modelo.Caja;
 import pe.com.ricindigus.appednom2018.modelo.CajaIn;
 import pe.com.ricindigus.appednom2018.modelo.CajaOut;
 import pe.com.ricindigus.appednom2018.util.FileChooser;
@@ -55,36 +54,18 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void ingresar(String clave){
-        if(clave.equals("RICARDO")){
-            Intent intent = new Intent(LoginActivity.this, SubirDataActivity.class);
+        Data data = new Data(LoginActivity.this);
+        data.open();
+        UsuarioLocal usuarioLocal = data.getUsuarioLocal(clave);
+        data.close();
+        if (usuarioLocal != null){
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            intent.putExtra("nrolocal", usuarioLocal.getNro_local());
+            intent.putExtra("usuario", usuarioLocal.getClave());
             startActivity(intent);
-        }else{
-            Data data = new Data(LoginActivity.this);
-            data.open();
-            UsuarioLocal usuarioLocal = data.getUsuarioLocal(clave);
-            Caja ca = data.getCajaxCodigo("703521200120");
-            data.close();
-            if (usuarioLocal != null){
-                Data d = new Data(LoginActivity.this);
-                d.open();
-                ArrayList<CajaIn> cajaIns = d.getCopiaCajasInxLocal(usuarioLocal.getNro_local());
-                ArrayList<CajaOut> cajaOuts = d.getCopiaCajasOutxLocal(usuarioLocal.getNro_local());
-                for (CajaIn caja : cajaIns){
-                    d.insertarCajaIn(caja);
-                }
-                for (CajaOut caja : cajaOuts){
-                    d.insertarCajaOut(caja);
-                }
-                d.close();
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                intent.putExtra("nrolocal", usuarioLocal.getNro_local());
-                intent.putExtra("usuario", usuarioLocal.getClave());
-                startActivity(intent);
-            }else{
-                Toast.makeText(this, "CLAVE INCORRECTA", Toast.LENGTH_SHORT).show();
-            }
+        }else {
+            Toast.makeText(this, "CLAVE INCORRECTA", Toast.LENGTH_SHORT).show();
         }
-
     }
 
     public void cargarMarco(){

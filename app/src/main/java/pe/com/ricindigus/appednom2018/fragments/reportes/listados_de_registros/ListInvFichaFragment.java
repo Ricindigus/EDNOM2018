@@ -27,9 +27,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 
 import pe.com.ricindigus.appednom2018.R;
-import pe.com.ricindigus.appednom2018.adapters.AsistenciaAulaAdapter;
 import pe.com.ricindigus.appednom2018.adapters.InventarioFichaAdapter;
-import pe.com.ricindigus.appednom2018.modelo.AsistenciaAula;
 import pe.com.ricindigus.appednom2018.modelo.Data;
 import pe.com.ricindigus.appednom2018.modelo.Ficha;
 

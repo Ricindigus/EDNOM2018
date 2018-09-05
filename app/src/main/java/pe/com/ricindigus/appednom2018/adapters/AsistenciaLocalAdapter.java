@@ -1,6 +1,7 @@
 package pe.com.ricindigus.appednom2018.adapters;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,10 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import pe.com.ricindigus.appednom2018.R;
 import pe.com.ricindigus.appednom2018.modelo.AsistenciaLocal;
-
-import java.util.ArrayList;
 
 public class AsistenciaLocalAdapter extends RecyclerView.Adapter<AsistenciaLocalAdapter.ViewHolder>{
     ArrayList<AsistenciaLocal> asistenciaLocals;
@@ -33,17 +34,13 @@ public class AsistenciaLocalAdapter extends RecyclerView.Adapter<AsistenciaLocal
     public void onBindViewHolder(ViewHolder holder, final int position) {
         AsistenciaLocal asistenciaLocal = asistenciaLocals.get(position);
         holder.txtDni.setText(asistenciaLocal.getDni());
-        holder.txtNombres.setText(asistenciaLocal.getNombres() + " " + asistenciaLocal.getApepat() + " " + asistenciaLocal.getApemat());
-        holder.txtAula.setText(asistenciaLocal.getAula());
-        holder.txtFecha.setText(checkDigito(asistenciaLocal.getLocal_dia()) + "-"
-                + checkDigito(asistenciaLocal.getLocal_mes()) + "-" + checkDigito(asistenciaLocal.getLocal_anio()) + " "
-                + checkDigito(asistenciaLocal.getLocal_hora()) + ":" + checkDigito(asistenciaLocal.getLocal_minuto()));
-
-//        if(asistenciaLocal.getSubidoEntrada() == 1){
-//            holder.cv.setCardBackgroundColor(Color.WHITE);
-//        }else{
-//            holder.cv.setCardBackgroundColor(Color.rgb(227,242,253));
-//        }
+        holder.txtNombres.setText(asistenciaLocal.getNombres() + " " + asistenciaLocal.getApe_paterno() + " " + asistenciaLocal.getApe_materno());
+        holder.txtAula.setText(asistenciaLocal.getNaula()+"");
+        holder.txtFecha.setText(checkDigito(asistenciaLocal.getDia()) + "-"
+                + checkDigito(asistenciaLocal.getMes()) + "-" + checkDigito(asistenciaLocal.getAnio()) + " "
+                + checkDigito(asistenciaLocal.getHora()) + ":" + checkDigito(asistenciaLocal.getMin())+ ":" + checkDigito(asistenciaLocal.getSeg()));
+        if(asistenciaLocal.getEstado() == 1) holder.cv.setCardBackgroundColor(ContextCompat.getColor(context, R.color.greenPrimaryLight));
+        else holder.cv.setCardBackgroundColor(ContextCompat.getColor(context, R.color.redPrimaryLight));
     }
 
     public String checkDigito (int number) {

@@ -1,8 +1,6 @@
 package pe.com.ricindigus.appednom2018.fragments.consulta_padron_nacional;
 
 
-import android.annotation.SuppressLint;
-import android.content.ContentValues;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,17 +17,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.Calendar;
-
 import pe.com.ricindigus.appednom2018.R;
-import pe.com.ricindigus.appednom2018.modelo.AsistenciaLocal;
 import pe.com.ricindigus.appednom2018.modelo.Data;
 import pe.com.ricindigus.appednom2018.modelo.Nacional;
-import pe.com.ricindigus.appednom2018.modelo.SQLConstantes;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -102,19 +91,19 @@ public class ConsultaPadronFragment extends Fragment {
     }
 
     public void clickBoton(){
-        ocultarTeclado(edtDni);
-        String dni = edtDni.getText().toString();
-        Data data = new Data(context);
-        data.open();
-        Nacional nacional = data.getNacionalxDNI(dni);
-        data.close();
-        if(nacional == null){
-            mostrarErrorDni();
-        }else{
-            mostrarCorrecto(nacional.getIns_numdoc(),nacional.getNombres() +" "+ nacional.getApepat() +" "+ nacional.getApemat(),nacional.getSede(),nacional.getLocal_aplicacion(),nacional.getId_aula()+"",nacional.getDireccion());
-        }
-        edtDni.setText("");
-        edtDni.requestFocus();
+//        ocultarTeclado(edtDni);
+//        String dni = edtDni.getText().toString();
+//        Data data = new Data(context);
+//        data.open();
+//        Nacional nacional = data.getNacionalxDNI(dni);
+//        data.close();
+//        if(nacional == null){
+//            mostrarErrorDni();
+//        }else{
+//            mostrarCorrecto(nacional.getIns_numdoc(),nacional.getNombres() +" "+ nacional.getApepat() +" "+ nacional.getApemat(),nacional.getSede(),nacional.getLocal_aplicacion(),nacional.getId_aula()+"",nacional.getDireccion());
+//        }
+//        edtDni.setText("");
+//        edtDni.requestFocus();
     }
 
     public void ocultarTeclado(View view){

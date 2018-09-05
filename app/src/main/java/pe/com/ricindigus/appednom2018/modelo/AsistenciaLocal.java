@@ -2,78 +2,56 @@ package pe.com.ricindigus.appednom2018.modelo;
 
 import android.content.ContentValues;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class AsistenciaLocal {
     private String _id;
     private String dni;
-    private String nombres;
-    private String apepat;
-    private String apemat;
+    private String idnacional;
+    private String ccdd;
+    private String idsede;
     private String sede;
-    private int id_local;
+    private int idlocal;
     private String local;
-    private String aula;
-    private int local_dia;
-    private int local_mes;
-    private int local_anio;
-    private int local_hora;
-    private int local_minuto;
-    private int subido_local;
-
-
-    public AsistenciaLocal(String _id, String dni, String nombres, String apepat, String apemat, String sede, int id_local, String local, String aula, int local_dia, int local_mes, int local_anio, int local_hora, int local_minuto, int subido_local) {
-        this._id = _id;
-        this.dni = dni;
-        this.nombres = nombres;
-        this.apepat = apepat;
-        this.apemat = apemat;
-        this.sede = sede;
-        this.id_local = id_local;
-        this.local = local;
-        this.aula = aula;
-        this.local_dia = local_dia;
-        this.local_mes = local_mes;
-        this.local_anio = local_anio;
-        this.local_hora = local_hora;
-        this.local_minuto = local_minuto;
-        this.subido_local = subido_local;
-    }
+    private String direccion;
+    private String nombres;
+    private String ape_paterno;
+    private String ape_materno;
+    private int naula;
+    private String discapacidad;
+    private String prioridad;
+    private int dia;
+    private int mes;
+    private int anio;
+    private int hora;
+    private int min;
+    private int seg;
+    private int estado;
 
     public AsistenciaLocal() {
-        this._id = "";
-        this.dni = "";
-        this.nombres = "";
-        this.apepat = "";
-        this.apemat = "";
-        this.sede = "";
-        this.id_local = 0;
-        this.local = "";
-        this.aula = "";
-        this.local_dia = 0;
-        this.local_mes = 0;
-        this.local_anio = 0;
-        this.local_hora = 0;
-        this.local_minuto = 0;
-        this.subido_local = -1;
     }
 
-
-    public String getApepat() {
-        return apepat;
-    }
-
-    public void setApepat(String apepat) {
-        this.apepat = apepat;
-    }
-
-    public String getApemat() {
-        return apemat;
-    }
-
-    public void setApemat(String apemat) {
-        this.apemat = apemat;
+    public AsistenciaLocal(String _id, String dni, String idnacional, String ccdd, String idsede, String sede, int idlocal, String local, String direccion, String nombres, String ape_paterno, String ape_materno, int naula, String discapacidad, String prioridad, int dia, int mes, int anio, int hora, int min, int seg, int estado) {
+        this._id = _id;
+        this.dni = dni;
+        this.idnacional = idnacional;
+        this.ccdd = ccdd;
+        this.idsede = idsede;
+        this.sede = sede;
+        this.idlocal = idlocal;
+        this.local = local;
+        this.direccion = direccion;
+        this.nombres = nombres;
+        this.ape_paterno = ape_paterno;
+        this.ape_materno = ape_materno;
+        this.naula = naula;
+        this.discapacidad = discapacidad;
+        this.prioridad = prioridad;
+        this.dia = dia;
+        this.mes = mes;
+        this.anio = anio;
+        this.hora = hora;
+        this.min = min;
+        this.seg = seg;
+        this.estado = estado;
     }
 
     public String get_id() {
@@ -92,12 +70,28 @@ public class AsistenciaLocal {
         this.dni = dni;
     }
 
-    public String getNombres() {
-        return nombres;
+    public String getIdnacional() {
+        return idnacional;
     }
 
-    public void setNombres(String nombres) {
-        this.nombres = nombres;
+    public void setIdnacional(String idnacional) {
+        this.idnacional = idnacional;
+    }
+
+    public String getCcdd() {
+        return ccdd;
+    }
+
+    public void setCcdd(String ccdd) {
+        this.ccdd = ccdd;
+    }
+
+    public String getIdsede() {
+        return idsede;
+    }
+
+    public void setIdsede(String idsede) {
+        this.idsede = idsede;
     }
 
     public String getSede() {
@@ -108,6 +102,14 @@ public class AsistenciaLocal {
         this.sede = sede;
     }
 
+    public int getIdlocal() {
+        return idlocal;
+    }
+
+    public void setIdlocal(int idlocal) {
+        this.idlocal = idlocal;
+    }
+
     public String getLocal() {
         return local;
     }
@@ -116,105 +118,142 @@ public class AsistenciaLocal {
         this.local = local;
     }
 
-    public String getAula() {
-        return aula;
+    public String getDireccion() {
+        return direccion;
     }
 
-    public void setAula(String aula) {
-        this.aula = aula;
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
     }
 
-    public int getLocal_dia() {
-        return local_dia;
+    public String getNombres() {
+        return nombres;
     }
 
-    public void setLocal_dia(int local_dia) {
-        this.local_dia = local_dia;
+    public void setNombres(String nombres) {
+        this.nombres = nombres;
     }
 
-    public int getLocal_mes() {
-        return local_mes;
+    public String getApe_paterno() {
+        return ape_paterno;
     }
 
-    public void setLocal_mes(int local_mes) {
-        this.local_mes = local_mes;
+    public void setApe_paterno(String ape_paterno) {
+        this.ape_paterno = ape_paterno;
     }
 
-    public int getLocal_anio() {
-        return local_anio;
+    public String getApe_materno() {
+        return ape_materno;
     }
 
-    public void setLocal_anio(int local_anio) {
-        this.local_anio = local_anio;
+    public void setApe_materno(String ape_materno) {
+        this.ape_materno = ape_materno;
     }
 
-    public int getLocal_hora() {
-        return local_hora;
+    public int getNaula() {
+        return naula;
     }
 
-    public void setLocal_hora(int local_hora) {
-        this.local_hora = local_hora;
+    public void setNaula(int naula) {
+        this.naula = naula;
     }
 
-    public int getLocal_minuto() {
-        return local_minuto;
+    public String getDiscapacidad() {
+        return discapacidad;
     }
 
-    public void setLocal_minuto(int local_minuto) {
-        this.local_minuto = local_minuto;
+    public void setDiscapacidad(String discapacidad) {
+        this.discapacidad = discapacidad;
     }
 
-    public int getId_local() {
-        return id_local;
+    public String getPrioridad() {
+        return prioridad;
     }
 
-    public void setId_local(int id_local) {
-        this.id_local = id_local;
+    public void setPrioridad(String prioridad) {
+        this.prioridad = prioridad;
     }
 
-    public int getSubido_local() {
-        return subido_local;
+    public int getDia() {
+        return dia;
     }
 
-    public void setSubido_local(int subido_local) {
-        this.subido_local = subido_local;
+    public void setDia(int dia) {
+        this.dia = dia;
+    }
+
+    public int getMes() {
+        return mes;
+    }
+
+    public void setMes(int mes) {
+        this.mes = mes;
+    }
+
+    public int getAnio() {
+        return anio;
+    }
+
+    public void setAnio(int anio) {
+        this.anio = anio;
+    }
+
+    public int getHora() {
+        return hora;
+    }
+
+    public void setHora(int hora) {
+        this.hora = hora;
+    }
+
+    public int getMin() {
+        return min;
+    }
+
+    public void setMin(int min) {
+        this.min = min;
+    }
+
+    public int getSeg() {
+        return seg;
+    }
+
+    public void setSeg(int seg) {
+        this.seg = seg;
+    }
+
+    public int getEstado() {
+        return estado;
+    }
+
+    public void setEstado(int estado) {
+        this.estado = estado;
     }
 
     public ContentValues toValues(){
         ContentValues contentValues = new ContentValues();
-        contentValues.put(SQLConstantes.asistencia_local_id,_id);
-        contentValues.put(SQLConstantes.asistencia_local_dni,dni);
-        contentValues.put(SQLConstantes.asistencia_local_nombres,nombres);
-        contentValues.put(SQLConstantes.asistencia_local_apepat,apepat);
-        contentValues.put(SQLConstantes.asistencia_local_apemat,apemat);
-        contentValues.put(SQLConstantes.asistencia_local_sede,sede);
-        contentValues.put(SQLConstantes.asistencia_local_id_local,id_local);
-        contentValues.put(SQLConstantes.asistencia_local_nombre_local,local);
-        contentValues.put(SQLConstantes.asistencia_local_aula,aula);
-        contentValues.put(SQLConstantes.asistencia_local_local_dia,local_dia);
-        contentValues.put(SQLConstantes.asistencia_local_local_mes,local_mes);
-        contentValues.put(SQLConstantes.asistencia_local_local_anio,local_anio);
-        contentValues.put(SQLConstantes.asistencia_local_local_hora,local_hora);
-        contentValues.put(SQLConstantes.asistencia_local_local_minuto,local_minuto);
-        contentValues.put(SQLConstantes.asistencia_local_subido_local,subido_local);
+        contentValues.put(SQLConstantes.asis_local_id,_id);
+        contentValues.put(SQLConstantes.asis_local_dni,dni);
+        contentValues.put(SQLConstantes.asis_local_idnacional,idnacional);
+        contentValues.put(SQLConstantes.asis_local_ccdd,ccdd);
+        contentValues.put(SQLConstantes.asis_local_idsede,idsede);
+        contentValues.put(SQLConstantes.asis_local_sede,sede);
+        contentValues.put(SQLConstantes.asis_local_idlocal,idlocal);
+        contentValues.put(SQLConstantes.asis_local_local,local);
+        contentValues.put(SQLConstantes.asis_local_direccion,direccion);
+        contentValues.put(SQLConstantes.asis_local_nombres,nombres);
+        contentValues.put(SQLConstantes.asis_local_ape_paterno,ape_paterno);
+        contentValues.put(SQLConstantes.asis_local_ape_materno,ape_materno);
+        contentValues.put(SQLConstantes.asis_local_naula,naula);
+        contentValues.put(SQLConstantes.asis_local_discapacidad,discapacidad);
+        contentValues.put(SQLConstantes.asis_local_prioridad,prioridad);
+        contentValues.put(SQLConstantes.asis_local_fecha_dia,dia);
+        contentValues.put(SQLConstantes.asis_local_fecha_mes,mes);
+        contentValues.put(SQLConstantes.asis_local_fecha_anio,anio);
+        contentValues.put(SQLConstantes.asis_local_fecha_hora,hora);
+        contentValues.put(SQLConstantes.asis_local_fecha_min,min);
+        contentValues.put(SQLConstantes.asis_local_fecha_seg,seg);
+        contentValues.put(SQLConstantes.asis_local_estado,estado);
         return contentValues;
-    }
-
-    public Map<String, Object> toMap(){
-        Map<String, Object> asistencia = new HashMap<>();
-        asistencia.put("dni", dni);
-        asistencia.put("nombres", nombres);
-        asistencia.put("apepat", apepat);
-        asistencia.put("apemat", apemat);
-        asistencia.put("sede", sede);
-        asistencia.put("id_local", id_local);
-        asistencia.put("local", local);
-        asistencia.put("aula", aula);
-        asistencia.put("local_dia", local_dia);
-        asistencia.put("local_mes", local_mes);
-        asistencia.put("local_anio", local_anio);
-        asistencia.put("local_hora", local_hora);
-        asistencia.put("local_minuto", local_minuto);
-        return asistencia;
     }
 }

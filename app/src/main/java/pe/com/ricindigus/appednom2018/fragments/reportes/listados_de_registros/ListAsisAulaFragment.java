@@ -2,7 +2,6 @@ package pe.com.ricindigus.appednom2018.fragments.reportes.listados_de_registros;
 
 
 import android.annotation.SuppressLint;
-import android.content.ContentValues;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,7 +10,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,12 +21,14 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.WriteBatch;
 
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Date;
 
 import pe.com.ricindigus.appednom2018.R;
 import pe.com.ricindigus.appednom2018.adapters.AsistenciaAulaAdapter;
@@ -36,7 +36,6 @@ import pe.com.ricindigus.appednom2018.adapters.AsistenciaLocalAdapter;
 import pe.com.ricindigus.appednom2018.modelo.AsistenciaAula;
 import pe.com.ricindigus.appednom2018.modelo.AsistenciaLocal;
 import pe.com.ricindigus.appednom2018.modelo.Data;
-import pe.com.ricindigus.appednom2018.modelo.SQLConstantes;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -46,8 +45,9 @@ public class ListAsisAulaFragment extends Fragment {
     int nroLocal;
     Spinner spAulas;
     RecyclerView recyclerView;
+    String usuario;
     ArrayList<AsistenciaAula> asistenciaAulas;
-    ArrayList<AsistenciaAula> datosNoEnviados;
+    ArrayList<AsistenciaAula> noEnviados;
     Data data;
     FloatingActionButton fabUpLoad;
     TextView txtNumero;
@@ -59,9 +59,10 @@ public class ListAsisAulaFragment extends Fragment {
     }
 
     @SuppressLint("ValidFragment")
-    public ListAsisAulaFragment(Context context, int nroLocal) {
+    public ListAsisAulaFragment(Context context, int nroLocal, String usuario) {
         this.context = context;
         this.nroLocal = nroLocal;
+        this.usuario = usuario;
     }
 
     @Override
@@ -111,63 +112,49 @@ public class ListAsisAulaFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 b = false;
-                datosNoEnviados = new ArrayList<>();
+                noEnviados = new ArrayList<>();
                 data = new Data(context);
                 data.open();
                 String aula = spAulas.getSelectedItem().toString();
                 int nroAula = 0;
                 nroAula = data.getNumeroAula(aula,nroLocal);
-                datosNoEnviados = data.getAllAsistenciaAulaSinEnviar(nroLocal,nroAula);
+                noEnviados = data.getAsistenciaAulaSinEnviar(nroLocal,nroAula);
                 data.close();
-                if(datosNoEnviados.size() > 0){
-                    final int total = datosNoEnviados.size();
+                if(noEnviados.size() > 0){
+                    final int total = noEnviados.size();
                     int i = 0;
-                    for (final AsistenciaAula asistenciaAula : datosNoEnviados){
-                        final int j = i++;
+                    for (final AsistenciaAula asistenciaAula : noEnviados){
+                        i++;
+                        final int j = i;
                         final String c = asistenciaAula.getDni();
-                        FirebaseFirestore.getInstance().collection("asistencia_aula").document(asistenciaAula.getDni())
-                                .set(asistenciaAula.toMap())
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        Data data = new Data(context);
-                                        data.open();
-                                        data.actualizarAsistenciaAulaSubido(c);
-                                        data.close();
-                                        if (j == total) Toast.makeText(context, total + " registros subidos", Toast.LENGTH_SHORT).show();
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Log.w("FIRESTORE", "Error writing document", e);
-                                    }
-                                });
-//                        WriteBatch batch = FirebaseFirestore.getInstance().batch();
-//                        DocumentReference documentReference = FirebaseFirestore.getInstance().
-//                                collection(getResources().getString(R.string.nombre_coleccion_asistencia))
-//                                .document(asistenciaAula.getDni());
-//                        batch.update(documentReference, "aula_dia", asistenciaAula.getAula_dia());
-//                        batch.update(documentReference, "aula_mes", asistenciaAula.getAula_mes());
-//                        batch.update(documentReference, "aula_anio", asistenciaAula.getAula_anio());
-//                        batch.update(documentReference, "aula_hora", asistenciaAula.getAula_hora());
-//                        batch.update(documentReference, "aula_minuto", asistenciaAula.getAula_minuto());
-//                        batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
-//                            @Override
-//                            public void onSuccess(Void aVoid) {
-//                                data = new Data(context);
-//                                data.open();
-//                                ContentValues contentValues = new ContentValues();
-//                                contentValues.put(SQLConstantes.asistencia_local_subido_local,1);
-//                                data.actualizarAsistenciaLocal(c,contentValues);
-//                                data.close();
-//                            }
-//                        }).addOnFailureListener(new OnFailureListener() {
-//                            @Override
-//                            public void onFailure(@NonNull Exception e) {
-//                                Toast.makeText(context, "NO GUARDO", Toast.LENGTH_SHORT).show();
-//                            }
-//                        });
+                        WriteBatch batch = FirebaseFirestore.getInstance().batch();
+                        DocumentReference documentReference = FirebaseFirestore.getInstance().collection("asistencia").document(asistenciaAula.getDni());
+                        batch.update(documentReference, "check_registro", 1);
+                        batch.update(documentReference, "fecha_transferencia", FieldValue.serverTimestamp());
+                        batch.update(documentReference, "usuario_reg", usuario);
+                        batch.update(documentReference, "fecha_registro",
+                                new Timestamp(new Date(asistenciaAula.getAnio()-1900,asistenciaAula.getMes()-1,asistenciaAula.getDia(),
+                                        asistenciaAula.getHora(),asistenciaAula.getMin(),asistenciaAula.getSeg())));
+                        batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Data data = new Data(context);
+                                data.open();
+                                data.actualizarAsistenciaAulaSubido(c);
+                                data.close();
+                                if (j == total) {
+                                    Toast.makeText(context, total + " registros subidos", Toast.LENGTH_SHORT).show();
+                                    cargaData();
+                                    asistenciaAulaAdapter = new AsistenciaAulaAdapter(asistenciaAulas,context);
+                                    recyclerView.setAdapter(asistenciaAulaAdapter);
+                                }
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(context, "NO GUARDO", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
                 }else{
                     Toast.makeText(context, "No hay registros nuevos para subir", Toast.LENGTH_SHORT).show();

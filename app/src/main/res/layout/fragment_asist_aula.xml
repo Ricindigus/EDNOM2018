@@ -18,6 +18,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:paddingLeft="8dp"
+        android:paddingRight="@dimen/margin8dp"
         android:background="@drawable/borde_spinner">
         <Spinner
             android:id="@+id/asistencia_aula_spAula"
@@ -66,7 +68,7 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/margin16dp"
+            android:padding="@dimen/margin8dp"
             android:visibility="gone"
             android:background="@drawable/fondo_verde">
             <TextView
@@ -129,7 +131,7 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/margin16dp"
+            android:padding="@dimen/margin8dp"
             android:visibility="gone"
             android:background="@drawable/fondo_rojo">
             <TextView
@@ -139,7 +141,7 @@
                 android:textColor="@color/redPrimaryDark"
                 android:gravity="center"
                 android:textStyle="bold"
-                android:textSize="@dimen/texto_grande"/>
+                android:textSize="@dimen/texto_mediano"/>
             <LinearLayout
                 android:background="@drawable/fondo_blanco"
                 android:orientation="horizontal"
@@ -154,8 +156,7 @@
                     <LinearLayout
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/margin8dp">
+                        android:layout_height="wrap_content">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -175,8 +176,7 @@
                     <LinearLayout
                         android:orientation="vertical"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/margin8dp">
+                        android:layout_height="wrap_content">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -196,8 +196,7 @@
                     <LinearLayout
                         android:orientation="vertical"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/margin8dp">
+                        android:layout_height="wrap_content">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -220,7 +219,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/margin8dp">
                         <TextView
-                            android:id="@+id/error_local_txtDireccion"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textStyle="bold"
@@ -228,6 +226,7 @@
                             android:textSize="@dimen/texto_mediano"
                             android:text="DIRECCION"/>
                         <TextView
+                            android:id="@+id/error_local_txtDireccion"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textStyle="bold"
@@ -269,7 +268,7 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/margin16dp"
+            android:padding="@dimen/margin8dp"
             android:visibility="gone"
             android:background="@drawable/fondo_rojo">
             <TextView
@@ -286,7 +285,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/margin8dp"
-                android:layout_marginBottom="@dimen/margin8dp"
                 android:background="@drawable/fondo_blanco">
                 <LinearLayout
                     android:layout_width="0dp"

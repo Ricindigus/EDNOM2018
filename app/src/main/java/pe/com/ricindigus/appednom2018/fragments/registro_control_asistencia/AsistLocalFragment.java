@@ -10,7 +10,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,20 +18,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.WriteBatch;
 
 import java.util.Calendar;
 
 import pe.com.ricindigus.appednom2018.R;
+import pe.com.ricindigus.appednom2018.modelo.Asistencia;
+import pe.com.ricindigus.appednom2018.modelo.AsistenciaAula;
 import pe.com.ricindigus.appednom2018.modelo.AsistenciaLocal;
 import pe.com.ricindigus.appednom2018.modelo.Data;
-import pe.com.ricindigus.appednom2018.modelo.Nacional;
 import pe.com.ricindigus.appednom2018.modelo.SQLConstantes;
 
 /**
@@ -61,21 +54,22 @@ public class AsistLocalFragment extends Fragment {
     LinearLayout lytYaRegistrado;
     LinearLayout lytErrorDni;
 
-
     EditText edtDni;
     ImageView btnBuscar;
 
-    int numeroLocal;
+    int nroLocal;
     Context context;
+    String usuario;
 
     public AsistLocalFragment() {
         // Required empty public constructor
     }
 
     @SuppressLint("ValidFragment")
-    public AsistLocalFragment(int numeroLocal, Context context) {
-        this.numeroLocal = numeroLocal;
+    public AsistLocalFragment(int nroLocal, Context context, String usuario) {
+        this.nroLocal = nroLocal;
         this.context = context;
+        this.usuario = usuario;
     }
 
     @Override
@@ -141,87 +135,77 @@ public class AsistLocalFragment extends Fragment {
         String dni = edtDni.getText().toString();
         Data data = new Data(context);
         data.open();
-        Nacional nacional = data.getNacionalxDNI(dni);
-        data.close();
-        if(nacional == null){
+        Asistencia asistencia = data.getAsistenciaxDni(dni);
+        if(asistencia == null){
             mostrarErrorDni();
         }else{
-            registrarAsistencia(nacional);
+            if(asistencia.getIdlocal() == nroLocal){
+                AsistenciaLocal asistenciaLocal = data.getAsistenciaLocal(asistencia.getDni());
+                if (asistenciaLocal == null) registrarAsistencia(asistencia);
+                else mostrarYaRegistrado(asistenciaLocal.getDni(),asistenciaLocal.getNombres() + " " + asistenciaLocal.getApe_paterno() + " " + asistenciaLocal.getApe_materno(),asistenciaLocal.getNaula(),
+                        checkDigito(asistenciaLocal.getDia()) +"/"+ checkDigito(asistenciaLocal.getMes()) +"/"+ asistenciaLocal.getAnio() +
+                                " " + checkDigito(asistenciaLocal.getHora()) + ":" + checkDigito(asistenciaLocal.getMin()) + ":" + checkDigito(asistenciaLocal.getSeg()));
+            }
+            else mostrarErrorLocal(asistencia.getSede(),asistencia.getLocal(),asistencia.getDireccion(),""+asistencia.getNaula());
         }
         edtDni.setText("");
         edtDni.requestFocus();
+        data.close();
     }
     public void ocultarTeclado(View view){
         InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         mgr.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
-    public void registrarAsistencia(Nacional nacional){
-        if(numeroLocal == nacional.getNro_local()){
-            if(!existeRegistro(nacional.getIns_numdoc())){
-                Data data = new Data(context);
-                data.open();
-                AsistenciaLocal asis = new AsistenciaLocal();
-                asis.set_id(nacional.getIns_numdoc());
-                asis.setDni(nacional.getIns_numdoc());
-                asis.setNombres(nacional.getNombres());
-                asis.setApepat(nacional.getApepat());
-                asis.setApemat(nacional.getApemat());
-                asis.setSede(nacional.getSede());
-                asis.setId_local(nacional.getNro_local());
-                asis.setLocal(nacional.getLocal_aplicacion());
-                asis.setAula(nacional.getAula());
-                Calendar calendario = Calendar.getInstance();
-                int yy = calendario.get(Calendar.YEAR);
-                int mm = calendario.get(Calendar.MONTH)+1;
-                int dd = calendario.get(Calendar.DAY_OF_MONTH);
-                int hora = calendario.get(Calendar.HOUR_OF_DAY);
-                int minuto = calendario.get(Calendar.MINUTE);
-                asis.setLocal_dia(dd);
-                asis.setLocal_mes(mm);
-                asis.setLocal_anio(yy);
-                asis.setLocal_hora(hora);
-                asis.setLocal_minuto(minuto);
-                asis.setSubido_local(0);
-                data.insertarAsistenciaLocal(asis);
-                data.close();
-                mostrarCorrecto(asis.getDni(),asis.getNombres() +" "+ asis.getApepat() +" "+ asis.getApemat(),asis.getSede(),asis.getLocal(),asis.getAula());
-                final String c = asis.getDni();
-                FirebaseFirestore.getInstance().collection("asistencia_local").document(asis.getDni())
-                        .set(asis.toMap())
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Data data = new Data(context);
-                                data.open();
-                                data.actualizarAsistenciaLocalSubido(c);
-                                data.close();
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.w("FIRESTORE", "Error writing document", e);
-                            }
-                        });
-
-
-//                    WriteBatch batch = FirebaseFirestore.getInstance().batch();
-//                    DocumentReference documentReference = FirebaseFirestore.getInstance().collection(getResources().
-//                            getString(R.string.nombre_coleccion_asistencia)).document(asis.getDni());
-//                    batch.update(documentReference, "local_dia", asis.getLocal_dia());
-//                    batch.update(documentReference, "local_mes", asis.getLocal_mes());
-//                    batch.update(documentReference, "local_anio", asis.getLocal_anio());
-//                    batch.update(documentReference, "local_hora", asis.getLocal_hora());
-//                    batch.update(documentReference, "local_minuto", asis.getLocal_minuto());
-//                    final String c = asis.getDni();
-//                    batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
+    public void registrarAsistencia(Asistencia asistencia){
+        Data data = new Data(context);
+        data.open();
+        Calendar calendario = Calendar.getInstance();
+        int yy = calendario.get(Calendar.YEAR);
+        int mm = calendario.get(Calendar.MONTH)+1;
+        int dd = calendario.get(Calendar.DAY_OF_MONTH);
+        int hora = calendario.get(Calendar.HOUR_OF_DAY);
+        int minuto = calendario.get(Calendar.MINUTE);
+        int seg = calendario.get(Calendar.SECOND);
+        AsistenciaLocal asistenciaLocal = new AsistenciaLocal();
+        asistenciaLocal.setDni(asistencia.getDni());
+        asistenciaLocal.setIdnacional(asistencia.getIdnacional());
+        asistenciaLocal.setCcdd(asistencia.getCcdd());
+        asistenciaLocal.setIdsede(asistencia.getIdsede());
+        asistenciaLocal.setSede(asistencia.getSede());
+        asistenciaLocal.setIdlocal(asistencia.getIdlocal());
+        asistenciaLocal.setLocal(asistencia.getLocal());
+        asistenciaLocal.setDireccion(asistencia.getDireccion());
+        asistenciaLocal.setNombres(asistencia.getNombres());
+        asistenciaLocal.setApe_materno(asistencia.getApe_materno());
+        asistenciaLocal.setApe_paterno(asistencia.getApe_paterno());
+        asistenciaLocal.setNaula(asistencia.getNaula());
+        asistenciaLocal.setDiscapacidad(asistencia.getDiscapacidad());
+        asistenciaLocal.setPrioridad(asistencia.getPrioridad());
+        asistenciaLocal.setDia(dd);
+        asistenciaLocal.setMes(mm);
+        asistenciaLocal.setAnio(yy);
+        asistenciaLocal.setHora(hora);
+        asistenciaLocal.setMin(minuto);
+        asistenciaLocal.setSeg(seg);
+        asistenciaLocal.setEstado(0);
+        data.insertarAsistenciaLocal(asistenciaLocal);
+        data.close();
+        mostrarCorrecto(asistenciaLocal.getDni(),asistenciaLocal.getNombres() +" "+ asistenciaLocal.getApe_paterno() +" "+ asistenciaLocal.getApe_materno(),asistenciaLocal.getSede(),asistenciaLocal.getLocal(),asistenciaLocal.getNaula());
+//                final String c = registroAsistencia.getDni();
+//                WriteBatch batch = FirebaseFirestore.getInstance().batch();
+//                DocumentReference documentReference = FirebaseFirestore.getInstance().collection("asistencia").document(registroAsistencia.getDni());
+//                batch.update(documentReference, "check_registro", 1);
+//                batch.update(documentReference, "fecha_transferencia", FieldValue.serverTimestamp());
+//                batch.update(documentReference, "usuario_reg", usuario);
+//                batch.update(documentReference, "fech_reg_ingreso",
+//                        new Timestamp(new Date(registroAsistencia.getLocal_anio()-1900,registroAsistencia.getLocal_mes()-1,registroAsistencia.getLocal_dia(),
+//                                registroAsistencia.getLocal_hora(),registroAsistencia.getLocal_min(),registroAsistencia.getLocal_seg())));
+//                batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
 //                    @Override
 //                    public void onSuccess(Void aVoid) {
 //                        Data data = new Data(context);
 //                        data.open();
-//                        ContentValues contentValues = new ContentValues();
-//                        contentValues.put(SQLConstantes.asistencia_local_subido_local,1);
-//                        data.actualizarAsistenciaLocal(c,contentValues);
+//                        data.actualizarRegAsistenciaLocalSubido(c);
 //                        data.close();
 //                    }
 //                }).addOnFailureListener(new OnFailureListener() {
@@ -230,31 +214,9 @@ public class AsistLocalFragment extends Fragment {
 //                        Toast.makeText(context, "NO GUARDO", Toast.LENGTH_SHORT).show();
 //                    }
 //                });
-
-            }
-        }else{
-            mostrarErrorLocal(nacional.getSede(),nacional.getLocal_aplicacion(),nacional.getDireccion(),"Aula" + nacional.getAula());
-        }
     }
 
-    public boolean existeRegistro(String dni){
-        boolean existe = false;
-
-            Data d = new Data(context);
-            d.open();
-            AsistenciaLocal a = d.getAsistenciaLocal(dni);
-            if(a != null){
-                existe = true;
-                mostrarYaRegistrado(a.getDni(),a.getNombres() + " " + a.getApepat() + " " + a.getApemat(),a.getAula(),
-                checkDigito(a.getLocal_dia()) +"/"+ checkDigito(a.getLocal_mes()) +"/"+ a.getLocal_anio() +
-                        " " + checkDigito(a.getLocal_hora()) + ":" + checkDigito(a.getLocal_minuto()));
-            }
-
-
-        return existe;
-    }
-
-    public void mostrarCorrecto(String dni, String nombre, String sede, String local, String aula){
+    public void mostrarCorrecto(String dni, String nombre, String sede, String local, int aula){
         lytErrorDni.setVisibility(View.GONE);
         lytYaRegistrado.setVisibility(View.GONE);
         lytErrorLocal.setVisibility(View.GONE);
@@ -263,7 +225,7 @@ public class AsistLocalFragment extends Fragment {
         correctoTxtNombre.setText(nombre);
         correctoTxtSede.setText(sede);
         correctoTxtLocal.setText(local);
-        correctoTxtAula.setText(aula);
+        correctoTxtAula.setText(aula+"");
     }
     public void mostrarErrorDni(){
         lytErrorDni.setVisibility(View.VISIBLE);
@@ -281,14 +243,14 @@ public class AsistLocalFragment extends Fragment {
         errorLocalTxtAula.setText(aula);
         errorLocalTxtDireccion.setText(direccion);
     }
-    public void mostrarYaRegistrado(String dni, String nombre, String aula, String fecha){
+    public void mostrarYaRegistrado(String dni, String nombre, int aula, String fecha){
         lytErrorDni.setVisibility(View.GONE);
         lytYaRegistrado.setVisibility(View.VISIBLE);
         lytErrorLocal.setVisibility(View.GONE);
         lytCorrecto.setVisibility(View.GONE);
         yaRegistradoTxtDni.setText(dni);
         yaRegistradoTxtNombre.setText(nombre);
-        yaRegistradoTxtAula.setText(aula);
+        yaRegistradoTxtAula.setText("" + aula);
         yaRegistradoTxtFecha.setText(fecha);
     }
 

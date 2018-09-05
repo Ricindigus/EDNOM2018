@@ -138,19 +138,19 @@ public class InvCuaderFragment extends Fragment {
     }
 
     public void clickBoton(){
-        ocultarTeclado(edtCuadernillo);
-        String cuadernillo = edtCuadernillo.getText().toString();
-        Data data = new Data(context);
-        data.open();
-        Nacional nacional = data.getNacionalxCuadernillo(cuadernillo);
-        data.close();
-        if(nacional == null){
-            mostrarErrorDni(cuadernillo);
-        }else{
-            registrarCuadernillo(nacional);
-        }
-        edtCuadernillo.setText("");
-        edtCuadernillo.requestFocus();
+//        ocultarTeclado(edtCuadernillo);
+//        String cuadernillo = edtCuadernillo.getText().toString();
+//        Data data = new Data(context);
+//        data.open();
+//        Nacional nacional = data.getNacionalxCuadernillo(cuadernillo);
+//        data.close();
+//        if(nacional == null){
+//            mostrarErrorDni(cuadernillo);
+//        }else{
+//            registrarCuadernillo(nacional);
+//        }
+//        edtCuadernillo.setText("");
+//        edtCuadernillo.requestFocus();
     }
     public void ocultarTeclado(View view){
         InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);

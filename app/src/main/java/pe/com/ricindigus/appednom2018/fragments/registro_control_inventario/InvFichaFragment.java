@@ -2,7 +2,6 @@ package pe.com.ricindigus.appednom2018.fragments.registro_control_inventario;
 
 
 import android.annotation.SuppressLint;
-import android.content.ContentValues;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -30,11 +29,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import pe.com.ricindigus.appednom2018.R;
-import pe.com.ricindigus.appednom2018.modelo.AsistenciaAula;
 import pe.com.ricindigus.appednom2018.modelo.Data;
 import pe.com.ricindigus.appednom2018.modelo.Ficha;
 import pe.com.ricindigus.appednom2018.modelo.Nacional;
-import pe.com.ricindigus.appednom2018.modelo.SQLConstantes;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -141,19 +138,19 @@ public class InvFichaFragment extends Fragment {
     }
 
     public void clickBoton(){
-        ocultarTeclado(edtFicha);
-        String ficha = edtFicha.getText().toString();
-        Data data = new Data(context);
-        data.open();
-        Nacional nacional = data.getNacionalxFicha(ficha);
-        data.close();
-        if(nacional == null){
-            mostrarErrorDni(ficha);
-        }else{
-            registrarFicha(nacional);
-        }
-        edtFicha.setText("");
-        edtFicha.requestFocus();
+//        ocultarTeclado(edtFicha);
+//        String ficha = edtFicha.getText().toString();
+//        Data data = new Data(context);
+//        data.open();
+//        Nacional nacional = data.getNacionalxFicha(ficha);
+//        data.close();
+//        if(nacional == null){
+//            mostrarErrorDni(ficha);
+//        }else{
+//            registrarFicha(nacional);
+//        }
+//        edtFicha.setText("");
+//        edtFicha.requestFocus();
     }
 
     public void ocultarTeclado(View view){

@@ -106,11 +106,11 @@ public class MainActivity extends AppCompatActivity {
                 fragmentTransaction.replace(R.id.fragment_layout, cajasInFragment);
                 break;
             case TipoFragment.REGISTRO_ASISTENCIA_AULA:
-                AsistAulaFragment asistAulaFragment = new AsistAulaFragment(nroLocal,MainActivity.this);
+                AsistAulaFragment asistAulaFragment = new AsistAulaFragment(nroLocal,MainActivity.this,usuario);
                 fragmentTransaction.replace(R.id.fragment_layout, asistAulaFragment);
                 break;
             case TipoFragment.REGISTRO_ASISTENCIA_LOCAL:
-                AsistLocalFragment asistLocalFragment = new AsistLocalFragment(nroLocal,MainActivity.this);
+                AsistLocalFragment asistLocalFragment = new AsistLocalFragment(nroLocal,MainActivity.this,usuario);
                 fragmentTransaction.replace(R.id.fragment_layout, asistLocalFragment);
                 break;
             case TipoFragment.REGISTRO_INVENTARIO_CUADERNILLO:
@@ -134,11 +134,11 @@ public class MainActivity extends AppCompatActivity {
                 fragmentTransaction.replace(R.id.fragment_layout, listIngresoCajasFragment);
                 break;
             case TipoFragment.REPORTES_LISTADO_ASISTENCIA_LOCAL:
-                ListAsisLocalFragment listAsisLocalFragment = new ListAsisLocalFragment(MainActivity.this,nroLocal);
+                ListAsisLocalFragment listAsisLocalFragment = new ListAsisLocalFragment(MainActivity.this,nroLocal,usuario);
                 fragmentTransaction.replace(R.id.fragment_layout, listAsisLocalFragment);
                 break;
             case TipoFragment.REPORTES_LISTADO_ASISTENCIA_AULA:
-                ListAsisAulaFragment listAsisAulaFragment = new ListAsisAulaFragment(MainActivity.this,nroLocal);
+                ListAsisAulaFragment listAsisAulaFragment = new ListAsisAulaFragment(MainActivity.this,nroLocal,usuario);
                 fragmentTransaction.replace(R.id.fragment_layout, listAsisAulaFragment);
                 break;
             case TipoFragment.REPORTES_LISTADO_INVENTARIO_FICHA:

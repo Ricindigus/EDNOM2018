@@ -27,7 +27,6 @@
             android:configChanges="screenSize|orientation|keyboardHidden"
             android:screenOrientation="landscape"
             android:windowSoftInputMode="adjustNothing|stateAlwaysHidden" />
-        <activity android:name=".activities.SubirDataActivity"></activity>
     </application>
 
 </manifest>

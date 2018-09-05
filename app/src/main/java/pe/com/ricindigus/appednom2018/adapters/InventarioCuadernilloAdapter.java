@@ -11,7 +11,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import pe.com.ricindigus.appednom2018.R;
-import pe.com.ricindigus.appednom2018.modelo.AsistenciaAula;
 import pe.com.ricindigus.appednom2018.modelo.Cuadernillo;
 
 public class InventarioCuadernilloAdapter extends RecyclerView.Adapter<InventarioCuadernilloAdapter.ViewHolder>{
