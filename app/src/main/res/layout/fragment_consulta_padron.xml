@@ -123,8 +123,8 @@
                     android:orientation="vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/margin8dp"
-                    android:layout_marginLeft="@dimen/margin8dp"
+                    android:padding="@dimen/margin16dp"
+                    android:layout_margin="@dimen/margin8dp"
                     android:background="@drawable/fondo_blanco">
                     <TextView
                         android:layout_width="match_parent"

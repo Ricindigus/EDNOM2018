@@ -340,10 +340,10 @@ public class MainActivity extends AppCompatActivity {
         reportes.add("Listado de Inventario - Cuadernillo");
         reportes.add("Listado de Inventario - Listado de Asistencia");
         reportes.add("Listado Salida de Cajas del Local");
-        reportes.add("Cuadro Resumen Ingreso Cajas");
-        reportes.add("Cuadro Resumen Asistencia");
-        reportes.add("Cuadro Resumen Inventario");
-        reportes.add("Cuadro Resumen Salida Cajas");
+//        reportes.add("Cuadro Resumen Ingreso Cajas");
+//        reportes.add("Cuadro Resumen Asistencia");
+//        reportes.add("Cuadro Resumen Inventario");
+//        reportes.add("Cuadro Resumen Salida Cajas");
 
         List<String> consultaPadron = new ArrayList<String>();
         consultaPadron.add("Consulta Padrón Nacional");

@@ -33,6 +33,7 @@
         android:gravity="center"
         android:padding="16dp"
         android:layout_marginTop="8dp"
+        android:layout_marginBottom="@dimen/margin8dp"
         android:layout_gravity="center"
         android:background="@drawable/borde_azul_buscador"
         android:orientation="horizontal">
@@ -60,7 +61,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-
         <LinearLayout
             android:id="@+id/inventario_lista_lytCorrecto"
             android:orientation="vertical"
@@ -73,45 +73,59 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="HOJA DE LISTADO CORRECTO"
-                android:textColor="@color/colorIcons"
                 android:gravity="center"
                 android:textStyle="bold"
                 android:textSize="@dimen/texto_grande"/>
             <LinearLayout
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/margin8dp"
-                android:layout_marginBottom="@dimen/margin8dp"
+                android:padding="@dimen/margin16dp"
                 android:background="@drawable/fondo_blanco">
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:id="@+id/lista_correcta_txtCodLista"
+                <LinearLayout
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/texto_mediano"
-                    android:text="CODIGO DE PAGINA"/>
-            </LinearLayout>
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/margin8dp"
-                android:layout_marginBottom="@dimen/margin8dp"
-                android:background="@drawable/fondo_blanco">
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:id="@+id/lista_correcta_txtNroPostulantes"
+                    android:layout_marginBottom="@dimen/margin8dp"
+                    android:background="@drawable/fondo_blanco">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textColor="@color/bluePrimaryDark"
+                        android:textSize="@dimen/texto_mediano"
+                        android:text="CÓDIGO DE PAGINA: "/>
+                    <TextView
+                        android:id="@+id/lista_correcta_txtCodLista"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textColor="@color/greenPrimaryDark"
+                        android:textSize="@dimen/texto_mediano"
+                        android:text="567894"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/texto_mediano"
-                    android:textStyle="bold"
-                    android:text="NRO POSTULANTES"/>
+                    android:layout_marginBottom="@dimen/margin8dp"
+                    android:background="@drawable/fondo_blanco">
+                    <TextView
+                        android:id="@+id/lista_correcta_txtNroPostulantes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/texto_mediano"
+                        android:textStyle="bold"
+                        android:textColor="@color/bluePrimaryDark"
+                        android:text="NRO POSTULANTES: "/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/texto_mediano"
+                        android:textStyle="bold"
+                        android:textColor="@color/greenPrimaryDark"
+                        android:text="13"/>
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
 
@@ -127,7 +141,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="ERROR. EL AULA DE LA HOJA DE LISTADO ES"
-                android:textColor="@color/colorIcons"
+                android:textColor="@color/redPrimaryDark"
                 android:gravity="center"
                 android:textStyle="bold"
                 android:textSize="@dimen/texto_grande"/>
@@ -135,55 +149,80 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/margin8dp"
-                android:layout_marginBottom="@dimen/margin8dp"
+                android:padding="@dimen/margin16dp"
+                android:gravity="center_vertical"
                 android:background="@drawable/fondo_blanco">
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:id="@+id/error_lista_txtCodLista"
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/texto_mediano"
-                    android:text="CODIGO DE PAGINA"/>
-            </LinearLayout>
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/margin8dp"
-                android:layout_marginBottom="@dimen/margin8dp"
-                android:background="@drawable/fondo_blanco">
-                <ImageView
+                    android:layout_weight="1">
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/margin8dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:textColor="@color/bluePrimaryDark"
+                            android:textSize="@dimen/texto_mediano"
+                            android:text="CODIGO DE PAGINA: "/>
+                        <TextView
+                            android:id="@+id/error_lista_txtCodLista"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:textColor="@color/redPrimaryDark"
+                            android:textSize="@dimen/texto_mediano"
+                            android:text="7001653552"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/margin8dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/texto_mediano"
+                            android:textStyle="bold"
+                            android:textColor="@color/bluePrimaryDark"
+                            android:text="NRO DE POSTULANTES: "/>
+                        <TextView
+                            android:id="@+id/error_lista_txtNroPostulantes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/redPrimaryDark"
+                            android:textSize="@dimen/texto_mediano"
+                            android:textStyle="bold"
+                            android:text="13"/>
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:orientation="vertical"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:id="@+id/error_lista_txtNroPostulantes"
-                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/texto_mediano"
-                    android:textStyle="bold"
-                    android:text="NRO DE POSTULANTES"/>
-            </LinearLayout>
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/margin8dp"
-                android:layout_marginBottom="@dimen/margin8dp"
-                android:background="@drawable/fondo_blanco">
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:id="@+id/error_lista_txtAula"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/texto_mediano"
-                    android:text="AULA"/>
+                    android:padding="@dimen/margin16dp"
+                    android:gravity="center"
+                    android:layout_margin="@dimen/margin8dp"
+                    android:layout_marginBottom="@dimen/margin8dp"
+                    android:background="@drawable/marco_azul">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/texto_mediano"
+                        android:text="AULA"/>
+                    <TextView
+                        android:id="@+id/error_lista_txtAula"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textSize="30sp"
+                        android:text="13"/>
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
 
@@ -193,13 +232,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/margin16dp"
-            android:visibility="gone"
+            android:visibility="visible"
             android:background="@drawable/fondo_rojo">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="ERROR. HOJA DE LISTADO YA SE REGISTRO"
-                android:textColor="@color/colorIcons"
+                android:textColor="@color/redPrimaryDark"
                 android:gravity="center"
                 android:textStyle="bold"
                 android:textSize="@dimen/texto_grande"/>
@@ -207,55 +246,81 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/margin8dp"
-                android:layout_marginBottom="@dimen/margin8dp"
+                android:padding="@dimen/margin16dp"
+                android:gravity="center_vertical"
                 android:background="@drawable/fondo_blanco">
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:id="@+id/error_lista_yaregistrada_txtCodLista"
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/texto_mediano"
-                    android:text="CODIGO DE PAGINA"/>
-            </LinearLayout>
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/margin8dp"
-                android:layout_marginBottom="@dimen/margin8dp"
-                android:background="@drawable/fondo_blanco">
-                <ImageView
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/margin8dp"
+                        android:background="@drawable/fondo_blanco">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:textColor="@color/bluePrimaryDark"
+                            android:textSize="@dimen/texto_mediano"
+                            android:text="CÓDIGO DE PAGINA: "/>
+                        <TextView
+                            android:id="@+id/error_lista_yaregistrada_txtCodLista"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:textColor="@color/redPrimaryDark"
+                            android:textSize="@dimen/texto_mediano"
+                            android:text="70023456738"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/margin8dp"
+                        android:background="@drawable/fondo_blanco">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/texto_mediano"
+                            android:textStyle="bold"
+                            android:textColor="@color/bluePrimaryDark"
+                            android:text="NRO DE POSTULANTES: "/>
+                        <TextView
+                            android:id="@+id/error_lista_yaregistrada_txtNroPostulantes"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/texto_mediano"
+                            android:textStyle="bold"
+                            android:textColor="@color/redPrimaryDark"
+                            android:text="12"/>
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:orientation="vertical"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:id="@+id/error_lista_yaregistrada_txtNroPostulantes"
-                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/texto_mediano"
-                    android:textStyle="bold"
-                    android:text="NRO DE POSTULANTES"/>
-            </LinearLayout>
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/margin8dp"
-                android:layout_marginBottom="@dimen/margin8dp"
-                android:background="@drawable/fondo_blanco">
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:id="@+id/error_lista_yaregistrada_txtAula"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/texto_mediano"
-                    android:text="AULA"/>
+                    android:padding="@dimen/margin8dp"
+                    android:gravity="center"
+                    android:layout_margin="@dimen/margin8dp"
+                    android:background="@drawable/marco_azul">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/texto_mediano"
+                        android:text="AULA"/>
+                    <TextView
+                        android:id="@+id/error_lista_yaregistrada_txtAula"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textSize="30sp"
+                        android:text="13"/>
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
 

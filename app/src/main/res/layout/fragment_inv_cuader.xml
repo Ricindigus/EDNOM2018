@@ -322,13 +322,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/margin16dp"
-            android:visibility="gone"
+            android:visibility="visible"
             android:background="@drawable/fondo_rojo">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="ERROR. CÓDIGO DE CUADERNILLO NO ENCONTRADA EN EL PADRÓN"
-                android:textColor="@color/colorIcons"
+                android:text="ERROR. CÓDIGO DE CUADERNILLO NO ENCONTRADo EN EL PADRÓN"
+                android:textColor="@color/redPrimaryDark"
                 android:gravity="center"
                 android:textStyle="bold"
                 android:textSize="@dimen/texto_grande"/>
@@ -336,19 +336,24 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/margin8dp"
+                android:padding="@dimen/margin16dp"
                 android:layout_marginBottom="@dimen/margin8dp"
                 android:background="@drawable/fondo_blanco">
-                <ImageView
+                <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textColor="@color/bluePrimaryDark"
+                    android:textSize="@dimen/texto_mediano"
+                    android:text="ÓDIGO CUADERNILLO: "/>
                 <TextView
                     android:id="@+id/error_codigo_cuadernillo_txtCuadernillo"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
                     android:textSize="@dimen/texto_mediano"
-                    android:text="CODIGO CUADERNILLO"/>
+                    android:textColor="@color/redPrimaryDark"
+                    android:text="234567"/>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

@@ -28,11 +28,11 @@ public class Data {
         sqLiteOpenHelper = new DataBaseHelper(contexto);
     }
 
-//    public Data(Context contexto,int flag) throws IOException {
-//        this.contexto = contexto;
-//        sqLiteOpenHelper = new DataBaseHelper(contexto);
-//        createDataBase();
-//    }
+    public Data(Context contexto,int flag) throws IOException {
+        this.contexto = contexto;
+        sqLiteOpenHelper = new DataBaseHelper(contexto);
+        createDataBase();
+    }
 
     public Data(Context contexto, String inputPath) throws IOException {
         this.contexto = contexto;
@@ -41,23 +41,28 @@ public class Data {
     }
 
 
-//    public void createDataBase() throws IOException {
-//        boolean dbExist = checkDataBase();
-//        if(!dbExist){
-//            sqLiteDatabase = sqLiteOpenHelper.getWritableDatabase();
-//            sqLiteDatabase.close();
-//            try{
-//                copyDataBase();
-//                sqLiteDatabase = sqLiteOpenHelper.getWritableDatabase();
-//                sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_CAJAS_ENTRADA);
-//                sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_CAJAS_SALIDA);
-//                sqLiteDatabase.close();
-//            }catch (IOException e){
-//                throw new Error("Error: copiando base de datos");
-//            }
-//        }
-//
-//    }
+    public void createDataBase() throws IOException {
+        boolean dbExist = checkDataBase();
+        if(!dbExist){
+            sqLiteDatabase = sqLiteOpenHelper.getWritableDatabase();
+            sqLiteDatabase.close();
+            try{
+                copyDataBase();
+                sqLiteDatabase = sqLiteOpenHelper.getWritableDatabase();
+                sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_CAJAS_ENTRADA);
+                sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_CAJAS_SALIDA);
+                sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_ASISTENCIA_AULA);
+                sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_ASISTENCIA_LOCAL);
+                sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_FICHAS);
+                sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_CUADERNILLOS);
+                sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_LISTADOS);
+                sqLiteDatabase.close();
+            }catch (IOException e){
+                throw new Error("Error: copiando base de datos");
+            }
+        }
+
+    }
 
     @SuppressLint("NewApi")
     public void createDataBase(String inputPath) throws IOException {
@@ -104,7 +109,6 @@ public class Data {
 
 
     public void copyDataBase(String inputPath) throws IOException{
-//        InputStream myInput = contexto.getAssets().open(SQLConstantes.DB_NAME);
         InputStream myInput = new FileInputStream(inputPath);
         String outFileName = SQLConstantes.DB_PATH + SQLConstantes.DB_NAME;
         OutputStream myOutput = new FileOutputStream(outFileName);

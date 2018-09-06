@@ -18,6 +18,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import pe.com.ricindigus.appednom2018.R;
+import pe.com.ricindigus.appednom2018.modelo.Asistencia;
+import pe.com.ricindigus.appednom2018.modelo.Data;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -89,19 +91,19 @@ public class ConsultaPadronFragment extends Fragment {
     }
 
     public void clickBoton(){
-//        ocultarTeclado(edtDni);
-//        String dni = edtDni.getText().toString();
-//        Data data = new Data(context);
-//        data.open();
-//        Nacional nacional = data.getNacionalxDNI(dni);
-//        data.close();
-//        if(nacional == null){
-//            mostrarErrorDni();
-//        }else{
-//            mostrarCorrecto(nacional.getIns_numdoc(),nacional.getNombres() +" "+ nacional.getApepat() +" "+ nacional.getApemat(),nacional.getSede(),nacional.getLocal_aplicacion(),nacional.getId_aula()+"",nacional.getDireccion());
-//        }
-//        edtDni.setText("");
-//        edtDni.requestFocus();
+        ocultarTeclado(edtDni);
+        String dni = edtDni.getText().toString();
+        Data data = new Data(context);
+        data.open();
+        Asistencia asistencia= data.getAsistenciaxDni(dni);
+        data.close();
+        if(asistencia == null){
+            mostrarErrorDni();
+        }else{
+            mostrarCorrecto(asistencia.getDni(),asistencia.getNombres() +" "+ asistencia.getApe_paterno() +" "+ asistencia.getApe_materno(),asistencia.getSede(),asistencia.getLocal(),asistencia.getNaula(),asistencia.getDireccion());
+        }
+        edtDni.setText("");
+        edtDni.requestFocus();
     }
 
     public void ocultarTeclado(View view){
@@ -109,14 +111,14 @@ public class ConsultaPadronFragment extends Fragment {
         mgr.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    public void mostrarCorrecto(String dni, String nombre, String sede, String local, String aula,String direccion){
+    public void mostrarCorrecto(String dni, String nombre, String sede, String local, int aula,String direccion){
         lytCorrecto.setVisibility(View.VISIBLE);
         lytErrorDni.setVisibility(View.GONE);
         correctoTxtDni.setText(dni);
         correctoTxtNombre.setText(nombre);
         correctoTxtSede.setText(sede);
         correctoTxtLocal.setText(local);
-        correctoTxtAula.setText(aula);
+        correctoTxtAula.setText(aula+"");
         correctoTxtDireccion.setText(direccion);
     }
     public void mostrarErrorDni(){
