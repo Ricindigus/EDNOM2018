@@ -237,7 +237,7 @@ public class InvListAsisFragment extends Fragment {
         lytErrorLista.setVisibility(View.GONE);
         lytCorrecto.setVisibility(View.VISIBLE);
         correctoTxtCodLista.setText(codLista);
-        correctoTxtNroPostulantes.setText("NRO DE POSTULANTES: "+nroPostulantes);
+        correctoTxtNroPostulantes.setText(""+nroPostulantes);
     }
     public void mostrarErrorCodigo(String codigoLista){
         lytErrorLista.setVisibility(View.VISIBLE);
@@ -253,7 +253,7 @@ public class InvListAsisFragment extends Fragment {
         lytErrorListaAula.setVisibility(View.VISIBLE);
         lytCorrecto.setVisibility(View.GONE);
         errorListaAulaTxtCodLista.setText(codLista);
-        errorListaAulaTxtNroPostulantes.setText("NRO POSTULANTES: "+nroPostulantes);
+        errorListaAulaTxtNroPostulantes.setText(""+nroPostulantes);
         errorListaAulaTxtAula.setText(aula +"");
     }
     public void mostrarYaRegistrado(String codLista, int nroPostulantes, int aula){
@@ -262,7 +262,7 @@ public class InvListAsisFragment extends Fragment {
         lytErrorListaAula.setVisibility(View.GONE);
         lytCorrecto.setVisibility(View.GONE);
         yaRegistradoTxtCodLista.setText(codLista);
-        yaRegistradoTxtNroPostulantes.setText("NRO POSTULANTES: "+nroPostulantes);
+        yaRegistradoTxtNroPostulantes.setText(""+nroPostulantes);
         yaRegistradoTxtAula.setText(""+aula);
     }
 

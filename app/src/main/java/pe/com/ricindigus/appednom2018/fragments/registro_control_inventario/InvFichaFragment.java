@@ -213,7 +213,7 @@ public class InvFichaFragment extends Fragment {
         mostrarCorrecto(ficha.getDni(),ficha.getNombres() +" "+ ficha.getApe_paterno() +" "+ ficha.getApe_materno(),ficha.getCodigo());
         final String c = ficha.getCodigo();
         WriteBatch batch = FirebaseFirestore.getInstance().batch();
-        DocumentReference documentReference = FirebaseFirestore.getInstance().collection("inventario").document(ficha.getCodigo());
+        DocumentReference documentReference = FirebaseFirestore.getInstance().collection("inventario").document(ficha.getTipo()+""+ficha.getCodigo());
         batch.update(documentReference, "check_registro", 1);
         batch.update(documentReference, "fecha_transferencia", FieldValue.serverTimestamp());
         batch.update(documentReference, "usuario_reg", usuario);

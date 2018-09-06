@@ -212,10 +212,10 @@ public class AsistAulaFragment extends Fragment {
         final String c = asistenciaAula.getDni();
         WriteBatch batch = FirebaseFirestore.getInstance().batch();
         DocumentReference documentReference = FirebaseFirestore.getInstance().collection("asistencia").document(asistenciaAula.getDni());
-        batch.update(documentReference, "check_registro", 1);
-        batch.update(documentReference, "fecha_transferencia", FieldValue.serverTimestamp());
+        batch.update(documentReference, "check_registro_aula", 1);
+        batch.update(documentReference, "fecha_transferencia_aula", FieldValue.serverTimestamp());
         batch.update(documentReference, "usuario_reg", usuario);
-        batch.update(documentReference, "fech_reg_ingreso",
+        batch.update(documentReference, "fecha_registro_aula",
                 new Timestamp(new Date(asistenciaAula.getAnio()-1900,asistenciaAula.getMes()-1,asistenciaAula.getDia(),
                         asistenciaAula.getHora(),asistenciaAula.getMin(),asistenciaAula.getSeg())));
         batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {

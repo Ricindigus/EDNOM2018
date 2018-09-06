@@ -1,35 +1,27 @@
 {
   "project_info": {
-    "project_number": "259549867550",
-    "firebase_url": "https://modelocajas.firebaseio.com",
-    "project_id": "modelocajas",
-    "storage_bucket": "modelocajas.appspot.com"
+    "project_number": "104185893316",
+    "firebase_url": "https://proyecto-ednom-cffff.firebaseio.com",
+    "project_id": "proyecto-ednom-cffff",
+    "storage_bucket": "proyecto-ednom-cffff.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:259549867550:android:ec36e0aaedce0dea",
+        "mobilesdk_app_id": "1:104185893316:android:ec36e0aaedce0dea",
         "android_client_info": {
           "package_name": "pe.com.ricindigus.appednom2018"
         }
       },
       "oauth_client": [
         {
-          "client_id": "259549867550-tv2dtpsqkcaqrlc44cdc851mc0bvsbjf.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "pe.com.ricindigus.appednom2018",
-            "certificate_hash": "66e63c7a88c92e832513c8932bc5a1cc75d5fd8e"
-          }
-        },
-        {
-          "client_id": "259549867550-3gqi1l4bl8qp0o3mk08jqmhba8bop055.apps.googleusercontent.com",
+          "client_id": "104185893316-io24g35ui9dao4916cflkif32qamchi9.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBbSckG9ge2Dskkes8PeIJH1p1NTAF1Gxs"
+          "current_key": "AIzaSyD1_Oh1LFvcnLmGEuQLirgov51GQalN9tQ"
         }
       ],
       "services": {
@@ -37,57 +29,8 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "259549867550-3gqi1l4bl8qp0o3mk08jqmhba8bop055.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        },
-        "ads_service": {
-          "status": 2
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:259549867550:android:abb11fc7446cbd37",
-        "android_client_info": {
-          "package_name": "pe.gob.inei.dmorales.firebasequerys"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "259549867550-ivkoga81sgu8lq3ghc51t7mr9u2hohou.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "pe.gob.inei.dmorales.firebasequerys",
-            "certificate_hash": "9df97ac86063d6ce6c2c2c8f8a94aa12656ec39e"
-          }
-        },
-        {
-          "client_id": "259549867550-3gqi1l4bl8qp0o3mk08jqmhba8bop055.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBbSckG9ge2Dskkes8PeIJH1p1NTAF1Gxs"
-        }
-      ],
-      "services": {
-        "analytics_service": {
-          "status": 1
-        },
-        "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "259549867550-3gqi1l4bl8qp0o3mk08jqmhba8bop055.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "status": 1,
+          "other_platform_oauth_client": []
         },
         "ads_service": {
           "status": 2
