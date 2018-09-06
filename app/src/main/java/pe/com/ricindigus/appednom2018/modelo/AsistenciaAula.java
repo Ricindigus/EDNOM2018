@@ -232,7 +232,6 @@ public class AsistenciaAula {
 
     public ContentValues toValues(){
         ContentValues contentValues = new ContentValues();
-        contentValues.put(SQLConstantes.asis_aula_id,_id);
         contentValues.put(SQLConstantes.asis_aula_dni,dni);
         contentValues.put(SQLConstantes.asis_aula_idnacional,idnacional);
         contentValues.put(SQLConstantes.asis_aula_ccdd,ccdd);

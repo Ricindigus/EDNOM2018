@@ -114,15 +114,15 @@ public class MainActivity extends AppCompatActivity {
                 fragmentTransaction.replace(R.id.fragment_layout, asistLocalFragment);
                 break;
             case TipoFragment.REGISTRO_INVENTARIO_CUADERNILLO:
-                InvCuaderFragment invCuaderFragment = new InvCuaderFragment(nroLocal,MainActivity.this);
+                InvCuaderFragment invCuaderFragment = new InvCuaderFragment(nroLocal,MainActivity.this,usuario);
                 fragmentTransaction.replace(R.id.fragment_layout, invCuaderFragment);
                 break;
             case TipoFragment.REGISTRO_INVENTARIO_FICHA:
-                InvFichaFragment invFichaFragment = new InvFichaFragment(nroLocal,MainActivity.this);
+                InvFichaFragment invFichaFragment = new InvFichaFragment(nroLocal,MainActivity.this,usuario);
                 fragmentTransaction.replace(R.id.fragment_layout, invFichaFragment);
                 break;
             case TipoFragment.REGISTRO_INVENTARIO_LISTA_ASISTENCIA:
-                InvListAsisFragment invListAsisFragment = new InvListAsisFragment(nroLocal,MainActivity.this);
+                InvListAsisFragment invListAsisFragment = new InvListAsisFragment(nroLocal,MainActivity.this,usuario);
                 fragmentTransaction.replace(R.id.fragment_layout, invListAsisFragment);
                 break;
             case TipoFragment.CAJAS_OUT:
@@ -142,15 +142,15 @@ public class MainActivity extends AppCompatActivity {
                 fragmentTransaction.replace(R.id.fragment_layout, listAsisAulaFragment);
                 break;
             case TipoFragment.REPORTES_LISTADO_INVENTARIO_FICHA:
-                ListInvFichaFragment listInvFichaFragment = new ListInvFichaFragment(MainActivity.this,nroLocal);
+                ListInvFichaFragment listInvFichaFragment = new ListInvFichaFragment(MainActivity.this,nroLocal,usuario);
                 fragmentTransaction.replace(R.id.fragment_layout, listInvFichaFragment);
                 break;
             case TipoFragment.REPORTES_LISTADO_INVENTARIO_CUADERNILLO:
-                ListInvCuadernilloFragment listInvCuadernilloFragment = new ListInvCuadernilloFragment(MainActivity.this,nroLocal);
+                ListInvCuadernilloFragment listInvCuadernilloFragment = new ListInvCuadernilloFragment(MainActivity.this,nroLocal,usuario);
                 fragmentTransaction.replace(R.id.fragment_layout, listInvCuadernilloFragment);
                 break;
             case TipoFragment.REPORTES_LISTADO_INVENTARIO_LISTADO_ASISTENCIA:
-                ListInvListadoFragment listInvListadoFragment = new ListInvListadoFragment(MainActivity.this,nroLocal);
+                ListInvListadoFragment listInvListadoFragment = new ListInvListadoFragment(MainActivity.this,nroLocal,usuario);
                 fragmentTransaction.replace(R.id.fragment_layout, listInvListadoFragment);
                 break;
             case TipoFragment.REPORTES_LISTADO_SALIDA_CAJAS:
@@ -273,17 +273,22 @@ public class MainActivity extends AppCompatActivity {
                                                 data.open();
                                                 data.deleteAllElementosFromTabla(SQLConstantes.tablacajasentrada);
                                                 data.deleteAllElementosFromTabla(SQLConstantes.tablacajassalida);
+                                                data.deleteAllElementosFromTabla(SQLConstantes.tablaasistenciaaula);
+                                                data.deleteAllElementosFromTabla(SQLConstantes.tablaasistencialocal);
+                                                data.deleteAllElementosFromTabla(SQLConstantes.tablafichas);
+                                                data.deleteAllElementosFromTabla(SQLConstantes.tablacuadernillos);
+                                                data.deleteAllElementosFromTabla(SQLConstantes.tablalistados);
 //                                                data.deleteAllElementosFromTabla(SQLConstantes.tablaasisaula);
 //                                                data.deleteAllElementosFromTabla(SQLConstantes.tablaasislocal);
 //                                                data.deleteAllElementosFromTabla(SQLConstantes.tablafichas);
 //                                                data.deleteAllElementosFromTabla(SQLConstantes.tablacuadernillos);
 //                                                data.deleteAllElementosFromTabla(SQLConstantes.tablalistados);
                                                 data.close();
-//                                        ListadoFragment listadoFragment = new ListadoFragment(sede,MainActivity.this);
-//                                        FragmentManager fragmentManage = getSupportFragmentManager();
-//                                        FragmentTransaction fragmentTransact = fragmentManage.beginTransaction();
-//                                        fragmentTransact.replace(R.id.fragment_layout, listadoFragment);
-//                                        fragmentTransact.commit();
+                                        CajasInFragment cajasInFragment = new CajasInFragment(nroLocal,MainActivity.this);
+                                        FragmentManager fragmentManage = getSupportFragmentManager();
+                                        FragmentTransaction fragmentTransact = fragmentManage.beginTransaction();
+                                        fragmentTransact.replace(R.id.fragment_layout, cajasInFragment);
+                                        fragmentTransact.commit();
                                             }
                                         });
                                 AlertDialog alert = builder.create();

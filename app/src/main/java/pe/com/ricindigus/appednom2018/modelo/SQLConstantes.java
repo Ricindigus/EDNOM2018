@@ -12,13 +12,10 @@ public class SQLConstantes {
     public static String tablacajassalida = "cajas_salida";
     public static String tablaasistenciaaula = "asistencia_aula";
     public static String tablaasistencialocal = "asistencia_local";
-
-
+    public static String tablamaterial = "inventario";
     public static String tablafichas = "fichas";
-    public static String tablacuadernillos = "cuadernillos";
+    public static String tablacuadernillos= "cuadernillos";
     public static String tablalistados = "listados";
-    public static String tablanacional = "nacional";
-
 
 
     //TABLA USUARIO LOCAL
@@ -162,6 +159,114 @@ public class SQLConstantes {
     public static String asis_aula_estado = "estado";
 
 
+    //TABLA MATERIAL
+    public static String material_id = "_id";
+    public static String material_codigo = "codigo";
+    public static String material_tipo = "tipo";
+    public static String material_idnacional = "idnacional";
+    public static String material_ccdd = "ccdd";
+    public static String material_idsede = "idsede";
+    public static String material_sede = "sede";
+    public static String material_idlocal = "idlocal";
+    public static String material_local = "local";
+    public static String material_dni = "dni";
+    public static String material_nombres = "nombres";
+    public static String material_ape_paterno = "ape_paterno";
+    public static String material_ape_materno = "ape_materno";
+    public static String material_naula = "naula";
+    public static String material_codpagina = "codpagina";
+
+
+    //TABLA FICHA
+    public static String ficha_id = "_id";
+    public static String ficha_codigo = "codigo";
+    public static String ficha_tipo = "tipo";
+    public static String ficha_idnacional = "idnacional";
+    public static String ficha_ccdd = "ccdd";
+    public static String ficha_idsede = "idsede";
+    public static String ficha_sede = "sede";
+    public static String ficha_idlocal = "idlocal";
+    public static String ficha_local = "local";
+    public static String ficha_dni = "dni";
+    public static String ficha_nombres = "nombres";
+    public static String ficha_ape_paterno = "ape_paterno";
+    public static String ficha_ape_materno = "ape_materno";
+    public static String ficha_naula = "naula";
+    public static String ficha_codpagina = "codpagina";
+    public static String ficha_dia = "dia";
+    public static String ficha_mes = "mes";
+    public static String ficha_anio = "anio";
+    public static String ficha_hora = "hora";
+    public static String ficha_min = "min";
+    public static String ficha_seg = "seg";
+    public static String ficha_estado = "estado";
+
+
+
+    //TABLA CUADERNILLO
+    public static String cuadernillo_id = "_id";
+    public static String cuadernillo_codigo = "codigo";
+    public static String cuadernillo_tipo = "tipo";
+    public static String cuadernillo_idnacional = "idnacional";
+    public static String cuadernillo_ccdd = "ccdd";
+    public static String cuadernillo_idsede = "idsede";
+    public static String cuadernillo_sede = "sede";
+    public static String cuadernillo_idlocal = "idlocal";
+    public static String cuadernillo_local = "local";
+    public static String cuadernillo_dni = "dni";
+    public static String cuadernillo_nombres = "nombres";
+    public static String cuadernillo_ape_paterno = "ape_paterno";
+    public static String cuadernillo_ape_materno = "ape_materno";
+    public static String cuadernillo_naula = "naula";
+    public static String cuadernillo_codpagina = "codpagina";
+    public static String cuadernillo_dia = "dia";
+    public static String cuadernillo_mes = "mes";
+    public static String cuadernillo_anio = "anio";
+    public static String cuadernillo_hora = "hora";
+    public static String cuadernillo_min = "min";
+    public static String cuadernillo_seg = "seg";
+    public static String cuadernillo_estado = "estado";
+
+    //TABLA LISTADO
+    public static String listado_id = "_id";
+    public static String listado_codigo = "codigo";
+    public static String listado_tipo = "tipo";
+    public static String listado_idnacional = "idnacional";
+    public static String listado_ccdd = "ccdd";
+    public static String listado_idsede = "idsede";
+    public static String listado_sede = "sede";
+    public static String listado_idlocal = "idlocal";
+    public static String listado_local = "local";
+    public static String listado_naula = "naula";
+    public static String listado_npostulantes = "npostulantes";
+    public static String listado_dia = "dia";
+    public static String listado_mes = "mes";
+    public static String listado_anio = "anio";
+    public static String listado_hora = "hora";
+    public static String listado_min = "min";
+    public static String listado_seg = "seg";
+    public static String listado_estado = "estado";
+
+
+
+    //TABLA RESUMEN ASISTENCIA
+    public static String resumen_asistencia_id = "_id";
+    public static String resumen_asistencia_id_local = "id_local";
+    public static String resumen_asistencia_id_aula = "id_aula";
+    public static String resumen_asistencia_nro_asislocal = "nro_asislocal";
+    public static String resumen_asistencia_nro_asisaula = "nro_asisaula";
+
+    //TABLA RESUMEN INVENTARIO
+    public static String resumen_inventario_id = "_id";
+    public static String resumen_inventario_id_local = "id_local";
+    public static String resumen_inventario_id_aula = "id_aula";
+    public static String resumen_inventario_nro_invfichas = "nro_invfichas";
+    public static String resumen_inventario_nro_invcartillas = "nro_invcartillas";
+    public static String resumen_inventario_nro_invlistados = "nro_invlistados";
+
+    //TABLA RESUMEN CAJAS TOTALES
+    public static String resumen_total_id = "_id";
+    public static String resumen_total_cantidad = "cantidad";
 
 
     public static final String SQL_CREATE_TABLA_CAJAS_ENTRADA =
@@ -258,17 +363,91 @@ public class SQLConstantes {
                     asis_local_estado + " INTEGER" + ");"
             ;
 
+    public static final String SQL_CREATE_TABLA_FICHAS=
+            "CREATE TABLE " + tablafichas + "(" +
+                    ficha_id + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    ficha_codigo + " TEXT," +
+                    ficha_tipo + " INTEGER," +
+                    ficha_idnacional + " INTEGER," +
+                    ficha_ccdd + " TEXT," +
+                    ficha_idsede + " TEXT," +
+                    ficha_sede + " TEXT," +
+                    ficha_idlocal + " INTEGER," +
+                    ficha_local + " TEXT," +
+                    ficha_dni + " TEXT," +
+                    ficha_nombres + " TEXT," +
+                    ficha_ape_paterno + " TEXT," +
+                    ficha_ape_materno + " TEXT," +
+                    ficha_naula + " INTEGER," +
+                    ficha_codpagina + " TEXT," +
+                    ficha_dia + " INTEGER," +
+                    ficha_mes + " INTEGER," +
+                    ficha_anio + " INTEGER," +
+                    ficha_hora + " INTEGER," +
+                    ficha_min + " INTEGER," +
+                    ficha_seg + " INTEGER," +
+                    ficha_estado + " INTEGER" + ");"
+            ;
+    public static final String SQL_CREATE_TABLA_CUADERNILLOS=
+            "CREATE TABLE " + tablacuadernillos + "(" +
+                    cuadernillo_id + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    cuadernillo_codigo + " TEXT," +
+                    cuadernillo_tipo + " INTEGER," +
+                    cuadernillo_idnacional + " INTEGER," +
+                    cuadernillo_ccdd + " TEXT," +
+                    cuadernillo_idsede + " TEXT," +
+                    cuadernillo_sede + " TEXT," +
+                    cuadernillo_idlocal + " INTEGER," +
+                    cuadernillo_local + " TEXT," +
+                    cuadernillo_dni + " TEXT," +
+                    cuadernillo_nombres + " TEXT," +
+                    cuadernillo_ape_paterno + " TEXT," +
+                    cuadernillo_ape_materno + " TEXT," +
+                    cuadernillo_naula + " INTEGER," +
+                    cuadernillo_codpagina + " TEXT," +
+                    cuadernillo_dia + " INTEGER," +
+                    cuadernillo_mes + " INTEGER," +
+                    cuadernillo_anio + " INTEGER," +
+                    cuadernillo_hora + " INTEGER," +
+                    cuadernillo_min + " INTEGER," +
+                    cuadernillo_seg + " INTEGER," +
+                    cuadernillo_estado + " INTEGER" + ");"
+            ;
+    public static final String SQL_CREATE_TABLA_LISTADOS=
+            "CREATE TABLE " + tablalistados + "(" +
+                    listado_id + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    listado_codigo + " TEXT," +
+                    listado_tipo + " INTEGER," +
+                    listado_idnacional + " INTEGER," +
+                    listado_ccdd + " TEXT," +
+                    listado_idsede + " TEXT," +
+                    listado_sede + " TEXT," +
+                    listado_idlocal + " INTEGER," +
+                    listado_local + " TEXT," +
+                    listado_naula + " INTEGER," +
+                    listado_npostulantes + " INTEGER," +
+                    listado_dia + " INTEGER," +
+                    listado_mes + " INTEGER," +
+                    listado_anio + " INTEGER," +
+                    listado_hora + " INTEGER," +
+                    listado_min + " INTEGER," +
+                    listado_seg + " INTEGER," +
+                    listado_estado + " INTEGER" + ");"
+            ;
+
     public static final String WHERE_CLAUSE_ID = "_id=?";
     public static final String WHERE_CLAUSE_CLAVE = "clave=?";
     public static final String WHERE_CLAUSE_NRO_LOCAL = "nro_local=?";
     public static final String WHERE_CLAUSE_COD_BARRA = "cod_barra_caja=?";
     public static final String WHERE_CLAUSE_ID_LOCAL = "idlocal=?";
     public static final String WHERE_CLAUSE_TIPO_CAJA = "tipo=?";
+    public static final String WHERE_CLAUSE_TIPO_MATERIAL = "tipo=?";
     public static final String WHERE_CLAUSE_NRO_LADO = "nlado=?";
     public static final String WHERE_CLAUSE_ESTADO = "estado=?";
     public static final String WHERE_CLAUSE_DNI = "dni=?";
     public static final String WHERE_CLAUSE_NRO_AULA = "naula=?";
-
+    public static final String WHERE_CLAUSE_CODIGO = "codigo=?";
+    public static final String WHERE_CLAUSE_COD_PAGINA = "codpagina=?";
 
 
 
@@ -280,9 +459,7 @@ public class SQLConstantes {
     public static final String WHERE_CLAUSE_ID_AULA = "id_aula=?";
     public static final String WHERE_CLAUSE_CODIGO_FICHA = "codficha=?";
     public static final String WHERE_CLAUSE_CODIGO_CUADERNILLO = "codcartilla=?";
-    public static final String WHERE_CLAUSE_CODIGO_PAGINA = "codigo_pagina=?";
     public static final String WHERE_CLAUSE_NOMBRE_AULA = "nombre=?";
-    public static final String WHERE_CLAUSE_CODIGO = "codigo=?";
     public static final String WHERE_CLAUSE_SEDE = "sede=?";
     public static final String WHERE_CLAUSE_DIA = "dia=?";
     public static final String WHERE_CLAUSE_MES = "mes=?";
@@ -308,184 +485,9 @@ public class SQLConstantes {
 //--------------------------------------------------------------------
 
 
-
-
-
-    public static String tablaaulalocal = "aulas_local";
-
-
     public static String tablaresumenasistencia = "resumen_asistencia";
     public static String tablaresumeninventario = "resumen_inventario";
     public static String tablaresumentotal = "resumen_total";
-
-
-
-
-
-    //TABLA NACIONAL
-    public static String nacional_id = "_id";
-    public static String nacional_sede = "sede";
-    public static String nacional_nro_local = "nro_local";
-    public static String nacional_local_aplicacion = "local_aplicacion";
-    public static String nacional_aula = "aula";
-    public static String nacional_codigo_pagina = "codigo_pagina";
-    public static String nacional_ins_numdoc = "ins_numdoc";
-    public static String nacional_apepat = "apepat";
-    public static String nacional_apemat = "apemat";
-    public static String nacional_nombres = "nombres";
-    public static String nacional_estatus = "estatus";
-    public static String nacional_s_aula = "s_aula";
-    public static String nacional_s_ficha = "s_ficha";
-    public static String nacional_s_cartilla = "s_cartilla";
-    public static String nacional_s_listaasistencia = "s_listaasistencia";
-    public static String nacional_id_local = "id_local";
-    public static String nacional_id_aula = "id_aula";
-    public static String nacional_direccion = "direccion";
-    public static String nacional_codficha = "codficha";
-    public static String nacional_codcartilla = "codcartilla";
-    public static String nacional_new_aula = "new_aula";
-    public static String nacional_new_local = "new_local";
-    public static String nacional_tipo = "tipo";
-    public static String nacional_discapacidad = "discapacidad";
-    public static String nacional_version = "version";
-    public static String nacional_tipo_concurso = "tipo_concurso";
-    public static String nacional_estatus2 = "estatus2";
-    public static String nacional_estatus3 = "estatus3";
-    public static String nacional_new_aula_ficha = "new_aula_ficha";
-    public static String nacional_new_aula_cartilla = "new_aula_cartilla";
-
-
-
-
-
-
-    //TABLA FICHAS
-    public static String ficha_id = "_id";
-    public static String ficha_codficha = "codficha";
-    public static String ficha_dni = "dni";
-    public static String ficha_nombres = "nombres";
-    public static String ficha_apepat = "apepat";
-    public static String ficha_apemat = "apemat";
-    public static String ficha_sede = "sede";
-    public static String ficha_id_local = "id_local";
-    public static String ficha_nombre_local = "local";
-    public static String ficha_aula = "aula";
-    public static String ficha_dia = "dia";
-    public static String ficha_mes = "mes";
-    public static String ficha_anio = "anio";
-    public static String ficha_hora = "hora";
-    public static String ficha_minuto = "minuto";
-    public static String ficha_subido = "subido";
-
-    //TABLA CUADERNILLOS
-    public static String cuadernillo_id = "_id";
-    public static String cuadernillo_codcartilla = "codcartilla";
-    public static String cuadernillo_dni = "dni";
-    public static String cuadernillo_nombres = "nombres";
-    public static String cuadernillo_apepat = "apepat";
-    public static String cuadernillo_apemat = "apemat";
-    public static String cuadernillo_sede = "sede";
-    public static String cuadernillo_id_local = "id_local";
-    public static String cuadernillo_nombre_local = "local";
-    public static String cuadernillo_aula = "aula";
-    public static String cuadernillo_dia = "dia";
-    public static String cuadernillo_mes = "mes";
-    public static String cuadernillo_anio = "anio";
-    public static String cuadernillo_hora = "hora";
-    public static String cuadernillo_minuto = "minuto";
-    public static String cuadernillo_subido = "subido";
-
-    //TABLA LISTAS
-    public static String listado_id = "_id";
-    public static String listado_codigo_pagina = "codigo_pagina";
-    public static String listado_sede = "sede";
-    public static String listado_id_local = "id_local";
-    public static String listado_nombre_local = "local";
-    public static String listado_aula = "aula";
-    public static String listado_nro_postulantes = "nro_postulantes";
-    public static String listado_dia = "dia";
-    public static String listado_mes = "mes";
-    public static String listado_anio = "anio";
-    public static String listado_hora = "hora";
-    public static String listado_minuto = "minuto";
-    public static String listado_subido = "subido";
-
-    //TABLA RESUMEN ASISTENCIA
-    public static String resumen_asistencia_id = "_id";
-    public static String resumen_asistencia_id_local = "id_local";
-    public static String resumen_asistencia_id_aula = "id_aula";
-    public static String resumen_asistencia_nro_asislocal = "nro_asislocal";
-    public static String resumen_asistencia_nro_asisaula = "nro_asisaula";
-
-    //TABLA RESUMEN INVENTARIO
-    public static String resumen_inventario_id = "_id";
-    public static String resumen_inventario_id_local = "id_local";
-    public static String resumen_inventario_id_aula = "id_aula";
-    public static String resumen_inventario_nro_invfichas = "nro_invfichas";
-    public static String resumen_inventario_nro_invcartillas = "nro_invcartillas";
-    public static String resumen_inventario_nro_invlistados = "nro_invlistados";
-
-    //TABLA RESUMEN TOTALES
-    public static String resumen_total_id = "_id";
-    public static String resumen_total_cantidad = "cantidad";
-
-
-    public static final String SQL_CREATE_TABLA_FICHAS =
-            "CREATE TABLE " + tablafichas + "(" +
-                    ficha_id + " TEXT PRIMARY KEY," +
-                    ficha_codficha + " TEXT," +
-                    ficha_dni + " TEXT," +
-                    ficha_nombres + " TEXT," +
-                    ficha_apepat + " TEXT," +
-                    ficha_apemat + " TEXT," +
-                    ficha_sede + " TEXT," +
-                    ficha_id_local + " TEXT," +
-                    ficha_nombre_local + " TEXT," +
-                    ficha_aula + " TEXT," +
-                    ficha_dia + " INTEGER," +
-                    ficha_mes + " INTEGER," +
-                    ficha_anio + " INTEGER," +
-                    ficha_hora + " INTEGER," +
-                    ficha_minuto + " INTEGER," +
-                    ficha_subido + " INTEGER" + ");"
-            ;
-
-    public static final String SQL_CREATE_TABLA_CUADERNILLOS =
-            "CREATE TABLE " + tablacuadernillos + "(" +
-                    cuadernillo_id + " TEXT PRIMARY KEY," +
-                    cuadernillo_codcartilla + " TEXT," +
-                    cuadernillo_dni + " TEXT," +
-                    cuadernillo_nombres + " TEXT," +
-                    cuadernillo_apepat + " TEXT," +
-                    cuadernillo_apemat + " TEXT," +
-                    cuadernillo_sede + " TEXT," +
-                    cuadernillo_id_local + " TEXT," +
-                    cuadernillo_nombre_local + " TEXT," +
-                    cuadernillo_aula + " TEXT," +
-                    cuadernillo_dia + " INTEGER," +
-                    cuadernillo_mes + " INTEGER," +
-                    cuadernillo_anio + " INTEGER," +
-                    cuadernillo_hora + " INTEGER," +
-                    cuadernillo_minuto + " INTEGER," +
-                    cuadernillo_subido + " INTEGER" + ");"
-            ;
-
-    public static final String SQL_CREATE_TABLA_LISTADOS =
-            "CREATE TABLE " + tablalistados + "(" +
-                    listado_id + " TEXT PRIMARY KEY," +
-                    listado_codigo_pagina + " TEXT," +
-                    listado_sede + " TEXT," +
-                    listado_id_local + " TEXT," +
-                    listado_nombre_local + " TEXT," +
-                    listado_aula + " TEXT," +
-                    listado_nro_postulantes + " INTEGER," +
-                    listado_dia + " INTEGER," +
-                    listado_mes + " INTEGER," +
-                    listado_anio + " INTEGER," +
-                    listado_hora + " INTEGER," +
-                    listado_minuto + " INTEGER," +
-                    listado_subido + " INTEGER" + ");"
-            ;
 
     public static final String SQL_CREATE_TABLA_RESUMEN_ASISTENCIA =
             "CREATE TABLE " + tablaresumenasistencia + "(" +

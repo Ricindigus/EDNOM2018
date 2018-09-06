@@ -1,6 +1,7 @@
 package pe.com.ricindigus.appednom2018.adapters;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -33,17 +34,14 @@ public class InventarioFichaAdapter extends RecyclerView.Adapter<InventarioFicha
     public void onBindViewHolder(ViewHolder holder, final int position) {
         Ficha ficha = fichas.get(position);
         holder.txtDni.setText(ficha.getDni());
-        holder.txtNombres.setText(ficha.getNombres() + " " + ficha.getApepat() + " " + ficha.getApemat());
-        holder.txtCodigo.setText(ficha.getCodficha());
+        holder.txtNombres.setText(ficha.getNombres() + " " + ficha.getApe_paterno() + " " + ficha.getApe_materno());
+        holder.txtCodigo.setText(ficha.getCodigo());
         holder.txtFecha.setText(checkDigito(ficha.getDia()) + "-"
                 + checkDigito(ficha.getMes()) + "-" + checkDigito(ficha.getAnio()) + " "
-                + checkDigito(ficha.getHora()) + ":" + checkDigito(ficha.getMinuto()));
+                + checkDigito(ficha.getHora()) + ":" + checkDigito(ficha.getMin())+ ":" + checkDigito(ficha.getSeg()));
 
-//        if(asistenciaLocal.getSubidoEntrada() == 1){
-//            holder.cv.setCardBackgroundColor(Color.WHITE);
-//        }else{
-//            holder.cv.setCardBackgroundColor(Color.rgb(227,242,253));
-//        }
+        if(ficha.getEstado() == 1) holder.cv.setCardBackgroundColor(ContextCompat.getColor(context, R.color.greenPrimaryLight));
+        else holder.cv.setCardBackgroundColor(ContextCompat.getColor(context, R.color.redPrimaryLight));
     }
 
     public String checkDigito (int number) {

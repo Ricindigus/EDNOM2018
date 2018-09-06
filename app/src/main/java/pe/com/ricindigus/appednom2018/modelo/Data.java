@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -67,7 +68,6 @@ public class Data {
         }
         sqLiteDatabase = sqLiteOpenHelper.getWritableDatabase();
         sqLiteDatabase.close();
-
         try{
             copyDataBase(inputPath);
             sqLiteDatabase = sqLiteOpenHelper.getWritableDatabase();
@@ -75,11 +75,13 @@ public class Data {
             sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_CAJAS_SALIDA);
             sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_ASISTENCIA_AULA);
             sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_ASISTENCIA_LOCAL);
+            sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_FICHAS);
+            sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_CUADERNILLOS);
+            sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_LISTADOS);
             sqLiteDatabase.close();
         }catch (IOException e){
             throw new Error("Error: copiando base de datos");
         }
-
     }
 
 
@@ -195,6 +197,10 @@ public class Data {
             if(cursor != null) cursor.close();
         }
         return caja;
+    }
+
+    public long getNumeroItemsCajasIn(){
+        return DatabaseUtils.queryNumEntries(sqLiteDatabase, SQLConstantes.tablacajasentrada);
     }
 
     public ArrayList<CajaIn> getCopiaCajasInxLocal(int nroLocal){
@@ -958,7 +964,6 @@ public class Data {
     }
 
 
-
     public void actualizarAsistenciaLocal(String dni, ContentValues valores){
         String[] whereArgs = new String[]{dni};
         sqLiteDatabase.update(SQLConstantes.tablaasistencialocal,valores,SQLConstantes.WHERE_CLAUSE_DNI,whereArgs);
@@ -1018,8 +1023,41 @@ public class Data {
         return numeroAula;
     }
 
-    //----------------------------------------------------------------------------
+    public Material getMaterial(String codMaterial, int tipo){
+        Material material = null;
+        String[] whereArgs = new String[]{codMaterial, String.valueOf(tipo)};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablamaterial, null,
+                    SQLConstantes.WHERE_CLAUSE_CODIGO + " AND " + SQLConstantes.WHERE_CLAUSE_TIPO_MATERIAL,whereArgs,null,null,null);
+            if(cursor.getCount() == 1){
+                cursor.moveToFirst();
+                material = new Material();
+                material.setId(cursor.getString(cursor.getColumnIndex(SQLConstantes.material_id)));
+                material.setCodigo(cursor.getString(cursor.getColumnIndex(SQLConstantes.material_codigo)));
+                material.setTipo(cursor.getInt(cursor.getColumnIndex(SQLConstantes.material_tipo)));
+                material.setIdnacional(cursor.getInt(cursor.getColumnIndex(SQLConstantes.material_idnacional)));
+                material.setCcdd(cursor.getString(cursor.getColumnIndex(SQLConstantes.material_ccdd)));
+                material.setIdsede(cursor.getString(cursor.getColumnIndex(SQLConstantes.material_idsede)));
+                material.setSede(cursor.getString(cursor.getColumnIndex(SQLConstantes.material_sede)));
+                material.setIdlocal(cursor.getInt(cursor.getColumnIndex(SQLConstantes.material_idlocal)));
+                material.setLocal(cursor.getString(cursor.getColumnIndex(SQLConstantes.material_local)));
+                material.setDni(cursor.getString(cursor.getColumnIndex(SQLConstantes.material_dni)));
+                material.setNombres(cursor.getString(cursor.getColumnIndex(SQLConstantes.material_nombres)));
+                material.setApe_paterno(cursor.getString(cursor.getColumnIndex(SQLConstantes.material_ape_paterno)));
+                material.setApe_materno(cursor.getString(cursor.getColumnIndex(SQLConstantes.material_ape_materno)));
+                material.setNaula(cursor.getInt(cursor.getColumnIndex(SQLConstantes.material_naula)));
+                material.setCodpagina(cursor.getString(cursor.getColumnIndex(SQLConstantes.material_codpagina)));
+            }
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return material;
+    }
 
+    public long getNumeroItemsFicha(){
+        return DatabaseUtils.queryNumEntries(sqLiteDatabase, SQLConstantes.tablafichas);
+    }
 
     public void insertarFicha(Ficha ficha){
         ContentValues contentValues = ficha.toValues();
@@ -1028,14 +1066,14 @@ public class Data {
 
     public void actualizarFicha(String codigo, ContentValues valores){
         String[] whereArgs = new String[]{codigo};
-        sqLiteDatabase.update(SQLConstantes.tablafichas,valores,SQLConstantes.WHERE_CLAUSE_CODIGO_FICHA,whereArgs);
+        sqLiteDatabase.update(SQLConstantes.tablafichas,valores,SQLConstantes.WHERE_CLAUSE_CODIGO,whereArgs);
     }
 
     public void actualizarFichaSubido(String codigo){
         String[] whereArgs = new String[]{codigo};
         ContentValues contentValues = new ContentValues();
-        contentValues.put(SQLConstantes.ficha_subido,1);
-        sqLiteDatabase.update(SQLConstantes.tablafichas,contentValues,SQLConstantes.WHERE_CLAUSE_CODIGO_FICHA,whereArgs);
+        contentValues.put(SQLConstantes.ficha_estado,1);
+        sqLiteDatabase.update(SQLConstantes.tablafichas,contentValues,SQLConstantes.WHERE_CLAUSE_CODIGO,whereArgs);
     }
 
     public Ficha getFicha(String codigoFicha){
@@ -1043,28 +1081,31 @@ public class Data {
         String[] whereArgs = new String[]{codigoFicha};
         Cursor cursor = null;
         try{
-            cursor = sqLiteDatabase.query(SQLConstantes.tablafichas, null,
-                    SQLConstantes.WHERE_CLAUSE_CODIGO_FICHA
-                    ,whereArgs,null,null,null);
+            cursor = sqLiteDatabase.query(SQLConstantes.tablafichas, null, SQLConstantes.WHERE_CLAUSE_CODIGO,whereArgs,null,null,null);
             if(cursor.getCount() == 1){
                 cursor.moveToFirst();
                 ficha = new Ficha();
-                ficha.set_id(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_id)));
-                ficha.setDni(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_dni)));
-                ficha.setCodficha(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_codficha)));
-                ficha.setId_local(cursor.getInt(cursor.getColumnIndex(SQLConstantes.ficha_id_local)));
-                ficha.setLocal(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_nombre_local)));
+                ficha.setCodigo(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_codigo)));
+                ficha.setTipo(cursor.getInt(cursor.getColumnIndex(SQLConstantes.ficha_tipo)));
+                ficha.setIdnacional(cursor.getInt(cursor.getColumnIndex(SQLConstantes.ficha_idnacional)));
+                ficha.setCcdd(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_ccdd)));
+                ficha.setIdsede(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_idsede)));
                 ficha.setSede(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_sede)));
-                ficha.setAula(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_aula)));
+                ficha.setIdlocal(cursor.getInt(cursor.getColumnIndex(SQLConstantes.ficha_idlocal)));
+                ficha.setLocal(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_local)));
+                ficha.setDni(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_dni)));
                 ficha.setNombres(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_nombres)));
-                ficha.setApepat(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_apepat)));
-                ficha.setApemat(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_apemat)));
+                ficha.setApe_paterno(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_ape_paterno)));
+                ficha.setApe_materno(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_ape_materno)));
+                ficha.setNaula(cursor.getInt(cursor.getColumnIndex(SQLConstantes.ficha_naula)));
+                ficha.setCodpagina(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_codpagina)));
                 ficha.setDia(cursor.getInt(cursor.getColumnIndex(SQLConstantes.ficha_dia)));
                 ficha.setMes(cursor.getInt(cursor.getColumnIndex(SQLConstantes.ficha_mes)));
                 ficha.setAnio(cursor.getInt(cursor.getColumnIndex(SQLConstantes.ficha_anio)));
                 ficha.setHora(cursor.getInt(cursor.getColumnIndex(SQLConstantes.ficha_hora)));
-                ficha.setMinuto(cursor.getInt(cursor.getColumnIndex(SQLConstantes.ficha_minuto)));
-                ficha.setSubido(cursor.getInt(cursor.getColumnIndex(SQLConstantes.ficha_subido)));
+                ficha.setMin(cursor.getInt(cursor.getColumnIndex(SQLConstantes.ficha_min)));
+                ficha.setSeg(cursor.getInt(cursor.getColumnIndex(SQLConstantes.ficha_seg)));
+                ficha.setEstado(cursor.getInt(cursor.getColumnIndex(SQLConstantes.ficha_estado)));
             }
         }finally{
             if(cursor != null) cursor.close();
@@ -1072,9 +1113,9 @@ public class Data {
         return ficha;
     }
 
-    public ArrayList<Ficha> getAllFichas(int nroLocal, int nroAula){
+    public ArrayList<Ficha> getAllFichas(int idLocal, int nroAula){
         ArrayList<Ficha> fichas = new ArrayList<Ficha>();
-        String[] whereArgs = new String[]{String.valueOf(nroLocal), String.valueOf(nroAula)};
+        String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula)};
         Cursor cursor = null;
         try{
             cursor = sqLiteDatabase.query(SQLConstantes.tablafichas, null,
@@ -1083,24 +1124,29 @@ public class Data {
                     ,whereArgs,null,null,null);
             while(cursor.moveToNext()){
                 Ficha ficha = new Ficha();
-                ficha.set_id(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_id)));
-                ficha.setDni(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_dni)));
-                ficha.setCodficha(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_codficha)));
-                ficha.setId_local(cursor.getInt(cursor.getColumnIndex(SQLConstantes.ficha_id_local)));
-                ficha.setLocal(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_nombre_local)));
+                ficha.setId(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_dni)));
+                ficha.setCodigo(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_codigo)));
+                ficha.setTipo(cursor.getInt(cursor.getColumnIndex(SQLConstantes.ficha_tipo)));
+                ficha.setIdnacional(cursor.getInt(cursor.getColumnIndex(SQLConstantes.ficha_idnacional)));
+                ficha.setCcdd(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_ccdd)));
+                ficha.setIdsede(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_idsede)));
                 ficha.setSede(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_sede)));
-                ficha.setAula(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_aula)));
+                ficha.setIdlocal(cursor.getInt(cursor.getColumnIndex(SQLConstantes.ficha_idlocal)));
+                ficha.setLocal(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_local)));
+                ficha.setDni(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_dni)));
                 ficha.setNombres(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_nombres)));
-                ficha.setApepat(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_apepat)));
-                ficha.setApemat(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_apemat)));
+                ficha.setApe_paterno(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_ape_paterno)));
+                ficha.setApe_materno(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_ape_materno)));
+                ficha.setNaula(cursor.getInt(cursor.getColumnIndex(SQLConstantes.ficha_naula)));
+                ficha.setCodpagina(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_codpagina)));
                 ficha.setDia(cursor.getInt(cursor.getColumnIndex(SQLConstantes.ficha_dia)));
                 ficha.setMes(cursor.getInt(cursor.getColumnIndex(SQLConstantes.ficha_mes)));
                 ficha.setAnio(cursor.getInt(cursor.getColumnIndex(SQLConstantes.ficha_anio)));
                 ficha.setHora(cursor.getInt(cursor.getColumnIndex(SQLConstantes.ficha_hora)));
-                ficha.setMinuto(cursor.getInt(cursor.getColumnIndex(SQLConstantes.ficha_minuto)));
-                ficha.setSubido(cursor.getInt(cursor.getColumnIndex(SQLConstantes.ficha_subido)));
+                ficha.setMin(cursor.getInt(cursor.getColumnIndex(SQLConstantes.ficha_min)));
+                ficha.setSeg(cursor.getInt(cursor.getColumnIndex(SQLConstantes.ficha_seg)));
+                ficha.setEstado(cursor.getInt(cursor.getColumnIndex(SQLConstantes.ficha_estado)));
                 fichas.add(ficha);
-
             }
         }finally{
             if(cursor != null) cursor.close();
@@ -1109,40 +1155,49 @@ public class Data {
     }
     public ArrayList<Ficha> getAllFichasSinEnviar(int nroLocal, int nroAula){
         ArrayList<Ficha> fichas = new ArrayList<Ficha>();
-        String[] whereArgs = new String[]{String.valueOf(nroLocal), String.valueOf(nroAula)};
+        String[] whereArgs = new String[]{String.valueOf(nroLocal), String.valueOf(nroAula),"0"};
         Cursor cursor = null;
         try{
             cursor = sqLiteDatabase.query(SQLConstantes.tablafichas, null,
                     SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
-                            SQLConstantes.WHERE_CLAUSE_NRO_AULA
+                            SQLConstantes.WHERE_CLAUSE_NRO_AULA + " AND " +
+                            SQLConstantes.WHERE_CLAUSE_ESTADO
                     ,whereArgs,null,null,null);
             while(cursor.moveToNext()){
-                if(cursor.getInt(cursor.getColumnIndex(SQLConstantes.ficha_subido)) == 0){
-                    Ficha ficha = new Ficha();
-                    ficha.set_id(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_id)));
-                    ficha.setDni(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_dni)));
-                    ficha.setCodficha(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_codficha)));
-                    ficha.setId_local(cursor.getInt(cursor.getColumnIndex(SQLConstantes.ficha_id_local)));
-                    ficha.setLocal(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_nombre_local)));
-                    ficha.setSede(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_sede)));
-                    ficha.setAula(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_aula)));
-                    ficha.setNombres(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_nombres)));
-                    ficha.setApepat(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_apepat)));
-                    ficha.setApemat(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_apemat)));
-                    ficha.setDia(cursor.getInt(cursor.getColumnIndex(SQLConstantes.ficha_dia)));
-                    ficha.setMes(cursor.getInt(cursor.getColumnIndex(SQLConstantes.ficha_mes)));
-                    ficha.setAnio(cursor.getInt(cursor.getColumnIndex(SQLConstantes.ficha_anio)));
-                    ficha.setHora(cursor.getInt(cursor.getColumnIndex(SQLConstantes.ficha_hora)));
-                    ficha.setMinuto(cursor.getInt(cursor.getColumnIndex(SQLConstantes.ficha_minuto)));
-                    ficha.setSubido(cursor.getInt(cursor.getColumnIndex(SQLConstantes.ficha_subido)));
-                    fichas.add(ficha);
-                }
+                Ficha ficha = new Ficha();
+                ficha.setId(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_dni)));
+                ficha.setCodigo(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_codigo)));
+                ficha.setTipo(cursor.getInt(cursor.getColumnIndex(SQLConstantes.ficha_tipo)));
+                ficha.setIdnacional(cursor.getInt(cursor.getColumnIndex(SQLConstantes.ficha_idnacional)));
+                ficha.setCcdd(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_ccdd)));
+                ficha.setIdsede(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_idsede)));
+                ficha.setSede(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_sede)));
+                ficha.setIdlocal(cursor.getInt(cursor.getColumnIndex(SQLConstantes.ficha_idlocal)));
+                ficha.setLocal(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_local)));
+                ficha.setDni(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_dni)));
+                ficha.setNombres(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_nombres)));
+                ficha.setApe_paterno(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_ape_paterno)));
+                ficha.setApe_materno(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_ape_materno)));
+                ficha.setNaula(cursor.getInt(cursor.getColumnIndex(SQLConstantes.ficha_naula)));
+                ficha.setCodpagina(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_codpagina)));
+                ficha.setDia(cursor.getInt(cursor.getColumnIndex(SQLConstantes.ficha_dia)));
+                ficha.setMes(cursor.getInt(cursor.getColumnIndex(SQLConstantes.ficha_mes)));
+                ficha.setAnio(cursor.getInt(cursor.getColumnIndex(SQLConstantes.ficha_anio)));
+                ficha.setHora(cursor.getInt(cursor.getColumnIndex(SQLConstantes.ficha_hora)));
+                ficha.setMin(cursor.getInt(cursor.getColumnIndex(SQLConstantes.ficha_min)));
+                ficha.setSeg(cursor.getInt(cursor.getColumnIndex(SQLConstantes.ficha_seg)));
+                ficha.setEstado(cursor.getInt(cursor.getColumnIndex(SQLConstantes.ficha_estado)));
+                fichas.add(ficha);
             }
         }finally{
             if(cursor != null) cursor.close();
         }
         return fichas;
     }
+
+
+
+
 
     public void insertarCuadernillo(Cuadernillo cuadernillo){
         ContentValues contentValues = cuadernillo.toValues();
@@ -1151,14 +1206,14 @@ public class Data {
 
     public void actualizarCuadernillo(String codigo, ContentValues valores){
         String[] whereArgs = new String[]{codigo};
-        sqLiteDatabase.update(SQLConstantes.tablacuadernillos,valores,SQLConstantes.WHERE_CLAUSE_CODIGO_CUADERNILLO,whereArgs);
+        sqLiteDatabase.update(SQLConstantes.tablacuadernillos,valores,SQLConstantes.WHERE_CLAUSE_CODIGO,whereArgs);
     }
 
     public void actualizarCuadernilloSubido(String codigo){
         String[] whereArgs = new String[]{codigo};
         ContentValues contentValues = new ContentValues();
-        contentValues.put(SQLConstantes.cuadernillo_subido,1);
-        sqLiteDatabase.update(SQLConstantes.tablacuadernillos,contentValues,SQLConstantes.WHERE_CLAUSE_CODIGO_CUADERNILLO,whereArgs);
+        contentValues.put(SQLConstantes.cuadernillo_estado,1);
+        sqLiteDatabase.update(SQLConstantes.tablacuadernillos,contentValues,SQLConstantes.WHERE_CLAUSE_CODIGO,whereArgs);
     }
 
     public Cuadernillo getCuadernillo(String codigoCuadernillo){
@@ -1166,28 +1221,32 @@ public class Data {
         String[] whereArgs = new String[]{codigoCuadernillo};
         Cursor cursor = null;
         try{
-            cursor = sqLiteDatabase.query(SQLConstantes.tablacuadernillos, null,
-                    SQLConstantes.WHERE_CLAUSE_CODIGO_CUADERNILLO
-                    ,whereArgs,null,null,null);
+            cursor = sqLiteDatabase.query(SQLConstantes.tablacuadernillos, null, SQLConstantes.WHERE_CLAUSE_CODIGO,whereArgs,null,null,null);
             if(cursor.getCount() == 1){
                 cursor.moveToFirst();
                 cuadernillo = new Cuadernillo();
-                cuadernillo.set_id(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_id)));
-                cuadernillo.setDni(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_dni)));
-                cuadernillo.setCodcartilla(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_codcartilla)));
-                cuadernillo.setId_local(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cuadernillo_id_local)));
-                cuadernillo.setLocal(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_nombre_local)));
+                cuadernillo.setId(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_dni)));
+                cuadernillo.setCodigo(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_codigo)));
+                cuadernillo.setTipo(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cuadernillo_tipo)));
+                cuadernillo.setIdnacional(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cuadernillo_idnacional)));
+                cuadernillo.setCcdd(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_ccdd)));
+                cuadernillo.setIdsede(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_idsede)));
                 cuadernillo.setSede(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_sede)));
-                cuadernillo.setAula(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_aula)));
+                cuadernillo.setIdlocal(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cuadernillo_idlocal)));
+                cuadernillo.setLocal(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_local)));
+                cuadernillo.setDni(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_dni)));
                 cuadernillo.setNombres(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_nombres)));
-                cuadernillo.setApepat(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_apepat)));
-                cuadernillo.setApemat(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_apemat)));
+                cuadernillo.setApe_paterno(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_ape_paterno)));
+                cuadernillo.setApe_materno(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_ape_materno)));
+                cuadernillo.setNaula(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cuadernillo_naula)));
+                cuadernillo.setCodpagina(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_codpagina)));
                 cuadernillo.setDia(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cuadernillo_dia)));
                 cuadernillo.setMes(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cuadernillo_mes)));
                 cuadernillo.setAnio(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cuadernillo_anio)));
                 cuadernillo.setHora(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cuadernillo_hora)));
-                cuadernillo.setMinuto(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cuadernillo_minuto)));
-                cuadernillo.setSubido(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cuadernillo_subido)));
+                cuadernillo.setMin(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cuadernillo_min)));
+                cuadernillo.setSeg(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cuadernillo_seg)));
+                cuadernillo.setEstado(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cuadernillo_estado)));
             }
         }finally{
             if(cursor != null) cursor.close();
@@ -1195,9 +1254,9 @@ public class Data {
         return cuadernillo;
     }
 
-    public ArrayList<Cuadernillo> getAllCuadernillos(int nroLocal, int nroAula){
+    public ArrayList<Cuadernillo> getAllCuadernillos(int idLocal, int nroAula){
         ArrayList<Cuadernillo> cuadernillos = new ArrayList<Cuadernillo>();
-        String[] whereArgs = new String[]{String.valueOf(nroLocal), String.valueOf(nroAula)};
+        String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula)};
         Cursor cursor = null;
         try{
             cursor = sqLiteDatabase.query(SQLConstantes.tablacuadernillos, null,
@@ -1206,61 +1265,70 @@ public class Data {
                     ,whereArgs,null,null,null);
             while(cursor.moveToNext()){
                 Cuadernillo cuadernillo = new Cuadernillo();
-                cuadernillo.set_id(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_id)));
-                cuadernillo.setDni(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_dni)));
-                cuadernillo.setCodcartilla(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_codcartilla)));
-                cuadernillo.setId_local(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cuadernillo_id_local)));
-                cuadernillo.setLocal(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_nombre_local)));
+                cuadernillo.setId(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_dni)));
+                cuadernillo.setCodigo(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_codigo)));
+                cuadernillo.setTipo(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cuadernillo_tipo)));
+                cuadernillo.setIdnacional(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cuadernillo_idnacional)));
+                cuadernillo.setCcdd(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_ccdd)));
+                cuadernillo.setIdsede(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_idsede)));
                 cuadernillo.setSede(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_sede)));
-                cuadernillo.setAula(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_aula)));
+                cuadernillo.setIdlocal(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cuadernillo_idlocal)));
+                cuadernillo.setLocal(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_local)));
+                cuadernillo.setDni(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_dni)));
                 cuadernillo.setNombres(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_nombres)));
-                cuadernillo.setApepat(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_apepat)));
-                cuadernillo.setApemat(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_apemat)));
+                cuadernillo.setApe_paterno(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_ape_paterno)));
+                cuadernillo.setApe_materno(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_ape_materno)));
+                cuadernillo.setNaula(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cuadernillo_naula)));
+                cuadernillo.setCodpagina(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_codpagina)));
                 cuadernillo.setDia(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cuadernillo_dia)));
                 cuadernillo.setMes(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cuadernillo_mes)));
                 cuadernillo.setAnio(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cuadernillo_anio)));
                 cuadernillo.setHora(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cuadernillo_hora)));
-                cuadernillo.setMinuto(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cuadernillo_minuto)));
-                cuadernillo.setSubido(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cuadernillo_subido)));
+                cuadernillo.setMin(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cuadernillo_min)));
+                cuadernillo.setSeg(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cuadernillo_seg)));
+                cuadernillo.setEstado(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cuadernillo_estado)));
                 cuadernillos.add(cuadernillo);
-
             }
         }finally{
             if(cursor != null) cursor.close();
         }
         return cuadernillos;
     }
-
     public ArrayList<Cuadernillo> getAllCuadernillosSinEnviar(int nroLocal, int nroAula){
         ArrayList<Cuadernillo> cuadernillos = new ArrayList<Cuadernillo>();
-        String[] whereArgs = new String[]{String.valueOf(nroLocal), String.valueOf(nroAula)};
+        String[] whereArgs = new String[]{String.valueOf(nroLocal), String.valueOf(nroAula),"0"};
         Cursor cursor = null;
         try{
             cursor = sqLiteDatabase.query(SQLConstantes.tablacuadernillos, null,
                     SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
-                            SQLConstantes.WHERE_CLAUSE_NRO_AULA
+                            SQLConstantes.WHERE_CLAUSE_NRO_AULA + " AND " +
+                            SQLConstantes.WHERE_CLAUSE_ESTADO
                     ,whereArgs,null,null,null);
             while(cursor.moveToNext()){
-                if (cursor.getInt(cursor.getColumnIndex(SQLConstantes.cuadernillo_subido)) == 0){
-                    Cuadernillo cuadernillo = new Cuadernillo();
-                    cuadernillo.set_id(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_id)));
-                    cuadernillo.setDni(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_dni)));
-                    cuadernillo.setCodcartilla(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_codcartilla)));
-                    cuadernillo.setId_local(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cuadernillo_id_local)));
-                    cuadernillo.setLocal(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_nombre_local)));
-                    cuadernillo.setSede(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_sede)));
-                    cuadernillo.setAula(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_aula)));
-                    cuadernillo.setNombres(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_nombres)));
-                    cuadernillo.setApepat(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_apepat)));
-                    cuadernillo.setApemat(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_apemat)));
-                    cuadernillo.setDia(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cuadernillo_dia)));
-                    cuadernillo.setMes(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cuadernillo_mes)));
-                    cuadernillo.setAnio(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cuadernillo_anio)));
-                    cuadernillo.setHora(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cuadernillo_hora)));
-                    cuadernillo.setMinuto(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cuadernillo_minuto)));
-                    cuadernillo.setSubido(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cuadernillo_subido)));
-                    cuadernillos.add(cuadernillo);
-                }
+                Cuadernillo cuadernillo = new Cuadernillo();
+                cuadernillo.setId(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_dni)));
+                cuadernillo.setCodigo(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_codigo)));
+                cuadernillo.setTipo(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cuadernillo_tipo)));
+                cuadernillo.setIdnacional(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cuadernillo_idnacional)));
+                cuadernillo.setCcdd(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_ccdd)));
+                cuadernillo.setIdsede(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_idsede)));
+                cuadernillo.setSede(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_sede)));
+                cuadernillo.setIdlocal(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cuadernillo_idlocal)));
+                cuadernillo.setLocal(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_local)));
+                cuadernillo.setDni(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_dni)));
+                cuadernillo.setNombres(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_nombres)));
+                cuadernillo.setApe_paterno(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_ape_paterno)));
+                cuadernillo.setApe_materno(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_ape_materno)));
+                cuadernillo.setNaula(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cuadernillo_naula)));
+                cuadernillo.setCodpagina(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_codpagina)));
+                cuadernillo.setDia(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cuadernillo_dia)));
+                cuadernillo.setMes(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cuadernillo_mes)));
+                cuadernillo.setAnio(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cuadernillo_anio)));
+                cuadernillo.setHora(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cuadernillo_hora)));
+                cuadernillo.setMin(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cuadernillo_min)));
+                cuadernillo.setSeg(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cuadernillo_seg)));
+                cuadernillo.setEstado(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cuadernillo_estado)));
+                cuadernillos.add(cuadernillo);
             }
         }finally{
             if(cursor != null) cursor.close();
@@ -1268,48 +1336,49 @@ public class Data {
         return cuadernillos;
     }
 
-    public void insertarListado(Listado listado){
-        ContentValues contentValues = listado.toValues();
+    public void insertarListado(Listado cuadernillo){
+        ContentValues contentValues = cuadernillo.toValues();
         sqLiteDatabase.insert(SQLConstantes.tablalistados,null,contentValues);
     }
 
     public void actualizarListado(String codigo, ContentValues valores){
         String[] whereArgs = new String[]{codigo};
-        sqLiteDatabase.update(SQLConstantes.tablalistados,valores,SQLConstantes.WHERE_CLAUSE_CODIGO_PAGINA,whereArgs);
+        sqLiteDatabase.update(SQLConstantes.tablalistados,valores,SQLConstantes.WHERE_CLAUSE_CODIGO,whereArgs);
     }
 
     public void actualizarListadoSubido(String codigo){
         String[] whereArgs = new String[]{codigo};
         ContentValues contentValues = new ContentValues();
-        contentValues.put(SQLConstantes.listado_subido,1);
-        sqLiteDatabase.update(SQLConstantes.tablalistados,contentValues,SQLConstantes.WHERE_CLAUSE_CODIGO_PAGINA,whereArgs);
+        contentValues.put(SQLConstantes.listado_estado,1);
+        sqLiteDatabase.update(SQLConstantes.tablalistados,contentValues,SQLConstantes.WHERE_CLAUSE_CODIGO,whereArgs);
     }
 
-    public Listado getListado(String codPagina){
+    public Listado getListado(String codigoListado){
         Listado listado = null;
-        String[] whereArgs = new String[]{codPagina};
+        String[] whereArgs = new String[]{codigoListado};
         Cursor cursor = null;
         try{
-            cursor = sqLiteDatabase.query(SQLConstantes.tablalistados, null,
-                    SQLConstantes.WHERE_CLAUSE_CODIGO_PAGINA
-                    ,whereArgs,null,null,null);
-
+            cursor = sqLiteDatabase.query(SQLConstantes.tablalistados, null, SQLConstantes.WHERE_CLAUSE_CODIGO,whereArgs,null,null,null);
             if(cursor.getCount() == 1){
                 cursor.moveToFirst();
                 listado = new Listado();
-                listado.set_id(cursor.getString(cursor.getColumnIndex(SQLConstantes.listado_id)));
-                listado.setCodigo_pagina(cursor.getString(cursor.getColumnIndex(SQLConstantes.listado_codigo_pagina)));
-                listado.setNro_postulantes(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_nro_postulantes)));
-                listado.setId_local(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_id_local)));
-                listado.setLocal(cursor.getString(cursor.getColumnIndex(SQLConstantes.listado_nombre_local)));
+                listado.setCodigo(cursor.getString(cursor.getColumnIndex(SQLConstantes.listado_codigo)));
+                listado.setTipo(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_tipo)));
+                listado.setIdnacional(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_idnacional)));
+                listado.setCcdd(cursor.getString(cursor.getColumnIndex(SQLConstantes.listado_ccdd)));
+                listado.setIdsede(cursor.getString(cursor.getColumnIndex(SQLConstantes.listado_idsede)));
                 listado.setSede(cursor.getString(cursor.getColumnIndex(SQLConstantes.listado_sede)));
-                listado.setAula(cursor.getString(cursor.getColumnIndex(SQLConstantes.listado_aula)));
+                listado.setIdlocal(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_idlocal)));
+                listado.setLocal(cursor.getString(cursor.getColumnIndex(SQLConstantes.listado_local)));
+                listado.setNaula(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_naula)));
+                listado.setNpostulantes(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_npostulantes)));
                 listado.setDia(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_dia)));
                 listado.setMes(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_mes)));
                 listado.setAnio(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_anio)));
                 listado.setHora(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_hora)));
-                listado.setMinuto(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_minuto)));
-                listado.setSubido(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_subido)));
+                listado.setMin(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_min)));
+                listado.setSeg(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_seg)));
+                listado.setEstado(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_estado)));
             }
         }finally{
             if(cursor != null) cursor.close();
@@ -1317,24 +1386,9 @@ public class Data {
         return listado;
     }
 
-    public int getNroPostulantesListado(String codPagina){
-        int nroPostulantes = 0;
-        String[] whereArgs = new String[]{codPagina};
-        Cursor cursor = null;
-        try{
-            cursor = sqLiteDatabase.query(SQLConstantes.tablanacional, null,
-                    SQLConstantes.WHERE_CLAUSE_CODIGO_PAGINA
-                    ,whereArgs,null,null,null);
-            if(cursor!= null) nroPostulantes = cursor.getCount();
-        }finally{
-            if(cursor != null) cursor.close();
-        }
-        return nroPostulantes;
-    }
-
-    public ArrayList<Listado> getAllListados(int nroLocal, int nroAula){
+    public ArrayList<Listado> getAllListados(int idLocal, int nroAula){
         ArrayList<Listado> listados = new ArrayList<Listado>();
-        String[] whereArgs = new String[]{String.valueOf(nroLocal), String.valueOf(nroAula)};
+        String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula)};
         Cursor cursor = null;
         try{
             cursor = sqLiteDatabase.query(SQLConstantes.tablalistados, null,
@@ -1343,19 +1397,59 @@ public class Data {
                     ,whereArgs,null,null,null);
             while(cursor.moveToNext()){
                 Listado listado = new Listado();
-                listado.set_id(cursor.getString(cursor.getColumnIndex(SQLConstantes.listado_id)));
-                listado.setCodigo_pagina(cursor.getString(cursor.getColumnIndex(SQLConstantes.listado_codigo_pagina)));
-                listado.setId_local(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_id_local)));
-                listado.setLocal(cursor.getString(cursor.getColumnIndex(SQLConstantes.listado_nombre_local)));
+                listado.setCodigo(cursor.getString(cursor.getColumnIndex(SQLConstantes.listado_codigo)));
+                listado.setTipo(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_tipo)));
+                listado.setIdnacional(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_idnacional)));
+                listado.setCcdd(cursor.getString(cursor.getColumnIndex(SQLConstantes.listado_ccdd)));
+                listado.setIdsede(cursor.getString(cursor.getColumnIndex(SQLConstantes.listado_idsede)));
                 listado.setSede(cursor.getString(cursor.getColumnIndex(SQLConstantes.listado_sede)));
-                listado.setAula(cursor.getString(cursor.getColumnIndex(SQLConstantes.listado_aula)));
+                listado.setIdlocal(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_idlocal)));
+                listado.setLocal(cursor.getString(cursor.getColumnIndex(SQLConstantes.listado_local)));
+                listado.setNaula(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_naula)));
+                listado.setNpostulantes(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_npostulantes)));
                 listado.setDia(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_dia)));
                 listado.setMes(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_mes)));
                 listado.setAnio(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_anio)));
                 listado.setHora(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_hora)));
-                listado.setMinuto(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_minuto)));
-                listado.setNro_postulantes(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_nro_postulantes)));
-                listado.setSubido(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_subido)));
+                listado.setMin(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_min)));
+                listado.setSeg(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_seg)));
+                listado.setEstado(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_estado)));
+                listados.add(listado);
+            }
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return listados;
+    }
+    public ArrayList<Listado> getAllListadosSinEnviar(int nroLocal, int nroAula){
+        ArrayList<Listado> listados = new ArrayList<Listado>();
+        String[] whereArgs = new String[]{String.valueOf(nroLocal), String.valueOf(nroAula),"0"};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablalistados, null,
+                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
+                            SQLConstantes.WHERE_CLAUSE_NRO_AULA + " AND " +
+                            SQLConstantes.WHERE_CLAUSE_ESTADO
+                    ,whereArgs,null,null,null);
+            while(cursor.moveToNext()){
+                Listado listado = new Listado();
+                listado.setCodigo(cursor.getString(cursor.getColumnIndex(SQLConstantes.listado_codigo)));
+                listado.setTipo(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_tipo)));
+                listado.setIdnacional(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_idnacional)));
+                listado.setCcdd(cursor.getString(cursor.getColumnIndex(SQLConstantes.listado_ccdd)));
+                listado.setIdsede(cursor.getString(cursor.getColumnIndex(SQLConstantes.listado_idsede)));
+                listado.setSede(cursor.getString(cursor.getColumnIndex(SQLConstantes.listado_sede)));
+                listado.setIdlocal(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_idlocal)));
+                listado.setLocal(cursor.getString(cursor.getColumnIndex(SQLConstantes.listado_local)));
+                listado.setNaula(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_naula)));
+                listado.setNpostulantes(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_npostulantes)));
+                listado.setDia(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_dia)));
+                listado.setMes(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_mes)));
+                listado.setAnio(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_anio)));
+                listado.setHora(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_hora)));
+                listado.setMin(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_min)));
+                listado.setSeg(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_seg)));
+                listado.setEstado(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_estado)));
                 listados.add(listado);
             }
         }finally{
@@ -1364,39 +1458,22 @@ public class Data {
         return listados;
     }
 
-    public ArrayList<Listado> getAllListadosSinEnviar(int nroLocal, int nroAula){
-        ArrayList<Listado> listados = new ArrayList<Listado>();
-        String[] whereArgs = new String[]{String.valueOf(nroLocal), String.valueOf(nroAula)};
+
+
+    public int getNroPostulantesListado(String codPagina){
+        int nroPostulantes = 0;
+        String[] whereArgs = new String[]{codPagina};
         Cursor cursor = null;
         try{
-            cursor = sqLiteDatabase.query(SQLConstantes.tablalistados, null,
-                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
-                            SQLConstantes.WHERE_CLAUSE_NRO_AULA
-                    ,whereArgs,null,null,null);
-            while(cursor.moveToNext()){
-                if (cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_subido)) == 0){
-                    Listado listado = new Listado();
-                    listado.set_id(cursor.getString(cursor.getColumnIndex(SQLConstantes.listado_id)));
-                    listado.setCodigo_pagina(cursor.getString(cursor.getColumnIndex(SQLConstantes.listado_codigo_pagina)));
-                    listado.setId_local(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_id_local)));
-                    listado.setLocal(cursor.getString(cursor.getColumnIndex(SQLConstantes.listado_nombre_local)));
-                    listado.setNro_postulantes(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_nro_postulantes)));
-                    listado.setSede(cursor.getString(cursor.getColumnIndex(SQLConstantes.listado_sede)));
-                    listado.setAula(cursor.getString(cursor.getColumnIndex(SQLConstantes.listado_aula)));
-                    listado.setDia(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_dia)));
-                    listado.setMes(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_mes)));
-                    listado.setAnio(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_anio)));
-                    listado.setHora(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_hora)));
-                    listado.setMinuto(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_minuto)));
-                    listado.setSubido(cursor.getInt(cursor.getColumnIndex(SQLConstantes.listado_subido)));
-                    listados.add(listado);
-                }
-            }
+            cursor = sqLiteDatabase.query(SQLConstantes.tablaasistencia, null, SQLConstantes.WHERE_CLAUSE_COD_PAGINA,whereArgs,null,null,null);
+            if(cursor!= null) nroPostulantes = cursor.getCount();
         }finally{
             if(cursor != null) cursor.close();
         }
-        return listados;
+        return nroPostulantes;
     }
+
+
 
     public void insertarResumenAsistencia(ResumenAsistencia resumenAsistencia){
         ContentValues contentValues = resumenAsistencia.toValues();

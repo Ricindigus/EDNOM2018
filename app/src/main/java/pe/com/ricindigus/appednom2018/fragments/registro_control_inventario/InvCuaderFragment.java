@@ -32,7 +32,7 @@ import pe.com.ricindigus.appednom2018.R;
 import pe.com.ricindigus.appednom2018.modelo.Cuadernillo;
 import pe.com.ricindigus.appednom2018.modelo.Data;
 import pe.com.ricindigus.appednom2018.modelo.Ficha;
-import pe.com.ricindigus.appednom2018.modelo.Nacional;
+import pe.com.ricindigus.appednom2018.modelo.Material;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,6 +43,7 @@ public class InvCuaderFragment extends Fragment {
     ImageView btnBuscar;
     Context context;
     int nroLocal;
+    String usuario;
 
     TextView correctoTxtDni;
     TextView correctoTxtNombre;
@@ -55,7 +56,6 @@ public class InvCuaderFragment extends Fragment {
     TextView yaRegistradoTxtDni;
     TextView yaRegistradoTxtNombre;
     TextView yaRegistradoTxtAula;
-    TextView yaRegistradoTxtCuadernillo;
 
     TextView errorCodigoCuadernilloTxtCuadernillo;
 
@@ -69,9 +69,10 @@ public class InvCuaderFragment extends Fragment {
     }
 
     @SuppressLint("ValidFragment")
-    public InvCuaderFragment(int nroLocal, Context context) {
+    public InvCuaderFragment(int nroLocal, Context context, String usuario) {
         this.context = context;
         this.nroLocal = nroLocal;
+        this.usuario = usuario;
     }
 
     @Override
@@ -94,7 +95,7 @@ public class InvCuaderFragment extends Fragment {
         yaRegistradoTxtDni = (TextView) rootView.findViewById(R.id.error_cuadernillo_yaregistrada_txtDni);
         yaRegistradoTxtNombre = (TextView) rootView.findViewById(R.id.error_cuadernillo_yaregistrada_txtNombre);
         yaRegistradoTxtAula = (TextView) rootView.findViewById(R.id.error_cuadernillo_yaregistrada_txtAula);
-        yaRegistradoTxtCuadernillo = (TextView) rootView.findViewById(R.id.error_cuadernillo_yaregistrada_txtCuadernillo);
+
 
         errorCodigoCuadernilloTxtCuadernillo = (TextView) rootView.findViewById(R.id.error_codigo_cuadernillo_txtCuadernillo);
 
@@ -138,138 +139,114 @@ public class InvCuaderFragment extends Fragment {
     }
 
     public void clickBoton(){
-//        ocultarTeclado(edtCuadernillo);
-//        String cuadernillo = edtCuadernillo.getText().toString();
-//        Data data = new Data(context);
-//        data.open();
-//        Nacional nacional = data.getNacionalxCuadernillo(cuadernillo);
-//        data.close();
-//        if(nacional == null){
-//            mostrarErrorDni(cuadernillo);
-//        }else{
-//            registrarCuadernillo(nacional);
-//        }
-//        edtCuadernillo.setText("");
-//        edtCuadernillo.requestFocus();
+        ocultarTeclado(edtCuadernillo);
+        String codigoCuadernillo = edtCuadernillo.getText().toString();
+        Data data = new Data(context);
+        data.open();
+        Material material = data.getMaterial(codigoCuadernillo,2);
+        String aula = spAulas.getSelectedItem().toString();
+        int nroAula = 0;
+        nroAula = data.getNumeroAula(aula,nroLocal);
+        if(material == null){
+            mostrarErrorCodigo(codigoCuadernillo);
+        }else{
+            if(material.getIdlocal() == nroLocal && material.getNaula() == nroAula){
+                Cuadernillo cuadernillo = data.getCuadernillo(codigoCuadernillo);
+                if(cuadernillo == null) registrarCuadernillo(material);
+                else mostrarYaRegistrado(material.getDni(),material.getNombres() + " " + material.getApe_paterno() + " " + material.getApe_materno(),material.getNaula());
+            }else{
+                mostrarErrorAula(material.getDni(),material.getNombres() +" "+ material.getApe_paterno() +" "+ material.getApe_materno(), "" + material.getNaula());
+            }
+        }
+        edtCuadernillo.setText("");
+        edtCuadernillo.requestFocus();
+        data.close();
     }
+
     public void ocultarTeclado(View view){
         InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         mgr.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
-    public void registrarCuadernillo(Nacional nacional){
-        String aula = spAulas.getSelectedItem().toString();
-        int nroAula = 0;
-        Data da = new Data(context);
-        da.open();
-        nroAula = da.getNumeroAula(aula,nroLocal);
-        da.close();
+    public void registrarCuadernillo(Material material){
+        Data data = new Data(context);
+        data.open();
+        Calendar calendario = Calendar.getInstance();
+        int yy = calendario.get(Calendar.YEAR);
+        int mm = calendario.get(Calendar.MONTH)+1;
+        int dd = calendario.get(Calendar.DAY_OF_MONTH);
+        int hora = calendario.get(Calendar.HOUR_OF_DAY);
+        int minuto = calendario.get(Calendar.MINUTE);
+        int seg = calendario.get(Calendar.SECOND);
+        Cuadernillo cuadernillo = new Cuadernillo();
+        cuadernillo.setCodigo(material.getCodigo());
+        cuadernillo.setTipo(material.getTipo());
+        cuadernillo.setIdnacional(material.getIdnacional());
+        cuadernillo.setCcdd(material.getCcdd());
+        cuadernillo.setIdsede(material.getIdsede());
+        cuadernillo.setSede(material.getSede());
+        cuadernillo.setIdlocal(material.getIdlocal());
+        cuadernillo.setLocal(material.getLocal());
+        cuadernillo.setDni(material.getDni());
+        cuadernillo.setNombres(material.getNombres());
+        cuadernillo.setApe_paterno(material.getApe_paterno());
+        cuadernillo.setApe_materno(material.getApe_materno());
+        cuadernillo.setNaula(material.getNaula());
+        cuadernillo.setCodpagina(material.getCodpagina());
+        cuadernillo.setDia(dd);
+        cuadernillo.setMes(mm);
+        cuadernillo.setAnio(yy);
+        cuadernillo.setHora(hora);
+        cuadernillo.setMin(minuto);
+        cuadernillo.setSeg(seg);
+        cuadernillo.setEstado(0);
+        data.insertarCuadernillo(cuadernillo);
+        data.close();
+        mostrarCorrecto(cuadernillo.getDni(),cuadernillo.getNombres() +" "+ cuadernillo.getApe_paterno() +" "+ cuadernillo.getApe_materno(),cuadernillo.getCodigo());
 
-        if(nroLocal == nacional.getNro_local() && nroAula == nacional.getId_aula()){
-            if(!existeCuadernillo(nacional.getCodcartilla())){
-                Data data = new Data(context);
-                data.open();
-                Cuadernillo cuadernillo = new Cuadernillo();
-                cuadernillo.set_id(nacional.getCodficha());
-                cuadernillo.setCodcartilla(nacional.getCodcartilla());
-                cuadernillo.setDni(nacional.getIns_numdoc());
-                cuadernillo.setNombres(nacional.getNombres());
-                cuadernillo.setApepat(nacional.getApepat());
-                cuadernillo.setApemat(nacional.getApemat());
-                cuadernillo.setSede(nacional.getSede());
-                cuadernillo.setId_local(nacional.getId_local());
-                cuadernillo.setLocal(nacional.getLocal_aplicacion());
-                cuadernillo.setAula(nacional.getAula());
-                Calendar calendario = Calendar.getInstance();
-                int yy = calendario.get(Calendar.YEAR);
-                int mm = calendario.get(Calendar.MONTH)+1;
-                int dd = calendario.get(Calendar.DAY_OF_MONTH);
-                int hora = calendario.get(Calendar.HOUR_OF_DAY);
-                int minuto = calendario.get(Calendar.MINUTE);
-                cuadernillo.setDia(dd);
-                cuadernillo.setMes(mm);
-                cuadernillo.setAnio(yy);
-                cuadernillo.setHora(hora);
-                cuadernillo.setMinuto(minuto);
-                cuadernillo.setSubido(0);
-                data.insertarCuadernillo(cuadernillo);
-                data.close();
-                mostrarCorrecto(cuadernillo.getDni(),cuadernillo.getNombres() +" "+ cuadernillo.getApepat() +" "+ cuadernillo.getApemat(),cuadernillo.getCodcartilla());
-                final String c = cuadernillo.getCodcartilla();
-                FirebaseFirestore.getInstance().collection("inventario_cuadernillo").document(cuadernillo.getCodcartilla())
-                        .set(cuadernillo.toMap())
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Data data = new Data(context);
-                                data.open();
-                                data.actualizarCuadernilloSubido(c);
-                                data.close();
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.w("FIRESTORE", "Error writing document", e);
-                            }
-                        });
-//                WriteBatch batch = FirebaseFirestore.getInstance().batch();
-//                DocumentReference documentReference = FirebaseFirestore.getInstance().collection(getResources().getString(R.string.nombre_coleccion_asistencia))
-//                        .document(asis.getDni());
-//                batch.update(documentReference, "aula_dia", dd);
-//                batch.update(documentReference, "aula_mes", mm);
-//                batch.update(documentReference, "aula_anio", yy);
-//                batch.update(documentReference, "aula_hora", hora);
-//                batch.update(documentReference, "aula_minuto", minuto);
-//                batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
-//                    @Override
-//                    public void onSuccess(Void aVoid) {
-//                        Data data = new Data(context);
-//                        data.open();
-//                        ContentValues contentValues = new ContentValues();
-//                        contentValues.put(SQLConstantes.asistencia_aula_subido_aula,1);
-//                        data.actualizarAsistenciaLocal(c,contentValues);
-//                        data.close();
-//                    }
-//                }).addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Toast.makeText(context, "NO GUARDO", Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-            }
-        }else{
-            mostrarErrorAula(nacional.getIns_numdoc(),nacional.getNombres() +" "+ nacional.getApepat() +" "+ nacional.getApemat(),"Aula " + nacional.getAula());
-        }
+        //        final String c = ficha.getCodficha();
+//
+//        WriteBatch batch = FirebaseFirestore.getInstance().batch();
+//        DocumentReference documentReference = FirebaseFirestore.getInstance().collection(getResources().getString(R.string.nombre_coleccion_asistencia))
+//                .document(asis.getDni());
+//        batch.update(documentReference, "aula_dia", dd);
+//        batch.update(documentReference, "aula_mes", mm);
+//        batch.update(documentReference, "aula_anio", yy);
+//        batch.update(documentReference, "aula_hora", hora);
+//        batch.update(documentReference, "aula_minuto", minuto);
+//        batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
+//            @Override
+//            public void onSuccess(Void aVoid) {
+//                Data data = new Data(context);
+//                data.open();
+//                ContentValues contentValues = new ContentValues();
+//                contentValues.put(SQLConstantes.asistencia_aula_subido_aula,1);
+//                data.actualizarAsistenciaLocal(c,contentValues);
+//                data.close();
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception e) {
+//                Toast.makeText(context, "NO GUARDO", Toast.LENGTH_SHORT).show();
+//            }
+//        });
     }
 
-    public boolean existeCuadernillo(String codigoCuadernillo){
-        boolean existe = false;
-        Data d = new Data(context);
-        d.open();
-        Cuadernillo a = d.getCuadernillo(codigoCuadernillo);
-        if(a != null){
-            existe = true;
-            mostrarYaRegistrado(a.getDni(),a.getNombres() + " " + a.getApepat() + " " + a.getApemat(),a.getAula(), a.getCodcartilla());
-        }
-        return existe;
-    }
-
-    public void mostrarCorrecto(String dni, String nombre, String codigoFicha){
+    public void mostrarCorrecto(String dni, String nombre, String codigoCuadernillo){
         lytErrorCuadernilloAula.setVisibility(View.GONE);
         lytYaRegistrado.setVisibility(View.GONE);
         lytErrorCuadernillo.setVisibility(View.GONE);
         lytCorrecto.setVisibility(View.VISIBLE);
         correctoTxtDni.setText(dni);
         correctoTxtNombre.setText(nombre);
-        correctoTxtCuadernillo.setText(codigoFicha);
+        correctoTxtCuadernillo.setText(codigoCuadernillo);
     }
 
-    public void mostrarErrorDni(String codigoFicha){
+    public void mostrarErrorCodigo(String codigo){
         lytErrorCuadernillo.setVisibility(View.VISIBLE);
         lytYaRegistrado.setVisibility(View.GONE);
         lytErrorCuadernilloAula.setVisibility(View.GONE);
         lytCorrecto.setVisibility(View.GONE);
-        errorCodigoCuadernilloTxtCuadernillo.setText(codigoFicha);
+        errorCodigoCuadernilloTxtCuadernillo.setText(codigo);
     }
 
     public void mostrarErrorAula(String dni, String nombre,String aula){
@@ -281,15 +258,14 @@ public class InvCuaderFragment extends Fragment {
         errorCuadernilloAulaTxtDni.setText(nombre);
         errorCuadernilloAulaTxtAula.setText(aula);
     }
-    public void mostrarYaRegistrado(String dni, String nombre, String aula, String codigoFicha){
+    public void mostrarYaRegistrado(String dni, String nombre, int aula){
         lytErrorCuadernillo.setVisibility(View.GONE);
         lytYaRegistrado.setVisibility(View.VISIBLE);
         lytErrorCuadernilloAula.setVisibility(View.GONE);
         lytCorrecto.setVisibility(View.GONE);
         yaRegistradoTxtDni.setText(dni);
         yaRegistradoTxtNombre.setText(nombre);
-        yaRegistradoTxtAula.setText(aula);
-        yaRegistradoTxtCuadernillo.setText(codigoFicha);
+        yaRegistradoTxtAula.setText(aula + "");
     }
 
     public String checkDigito (int number) {

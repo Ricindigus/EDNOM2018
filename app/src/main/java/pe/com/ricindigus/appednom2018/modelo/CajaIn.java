@@ -183,7 +183,6 @@ public class CajaIn {
 
     public ContentValues toValues(){
         ContentValues contentValues = new ContentValues();
-        contentValues.put(SQLConstantes.cajas_entrada_id,_id);
         contentValues.put(SQLConstantes.cajas_entrada_cod_barra,cod_barra_caja);
         contentValues.put(SQLConstantes.cajas_entrada_idsede,idsede);
         contentValues.put(SQLConstantes.cajas_entrada_nomsede,sede);

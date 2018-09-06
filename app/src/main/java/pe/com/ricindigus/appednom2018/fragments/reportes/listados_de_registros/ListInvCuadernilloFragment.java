@@ -22,9 +22,14 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.WriteBatch;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import pe.com.ricindigus.appednom2018.R;
 import pe.com.ricindigus.appednom2018.adapters.InventarioCuadernilloAdapter;
@@ -40,6 +45,7 @@ public class ListInvCuadernilloFragment extends Fragment {
     Context context;
     int nroLocal;
     Spinner spAulas;
+    String usuario;
     RecyclerView recyclerView;
     ArrayList<Cuadernillo> cuadernillos;
     ArrayList<Cuadernillo> datosNoEnviados;
@@ -54,9 +60,10 @@ public class ListInvCuadernilloFragment extends Fragment {
     }
 
     @SuppressLint("ValidFragment")
-    public ListInvCuadernilloFragment(Context context, int nroLocal) {
+    public ListInvCuadernilloFragment(Context context, int nroLocal, String usuario) {
         this.context = context;
         this.nroLocal = nroLocal;
+        this.usuario = usuario;
     }
 
     @Override
@@ -120,51 +127,35 @@ public class ListInvCuadernilloFragment extends Fragment {
                     for (final Cuadernillo cuadernillo : datosNoEnviados){
                         i++;
                         final int j = i;
-                        final String c = cuadernillo.getCodcartilla();
-                        FirebaseFirestore.getInstance().collection("inventario_cuadernillo").document(cuadernillo.getCodcartilla())
-                                .set(cuadernillo.toMap())
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        if(j==1) Toast.makeText(context, "Subiendo...", Toast.LENGTH_SHORT).show();
-                                        Data data = new Data(context);
-                                        data.open();
-                                        data.actualizarCuadernilloSubido(c);
-                                        data.close();
-                                        if (j == total) Toast.makeText(context, total + " registros subidos", Toast.LENGTH_SHORT).show();
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Log.w("FIRESTORE", "Error writing document", e);
-                                    }
-                                });
-//                        WriteBatch batch = FirebaseFirestore.getInstance().batch();
-//                        DocumentReference documentReference = FirebaseFirestore.getInstance().
-//                                collection(getResources().getString(R.string.nombre_coleccion_asistencia))
-//                                .document(asistenciaAula.getDni());
-//                        batch.update(documentReference, "aula_dia", asistenciaAula.getAula_dia());
-//                        batch.update(documentReference, "aula_mes", asistenciaAula.getAula_mes());
-//                        batch.update(documentReference, "aula_anio", asistenciaAula.getAula_anio());
-//                        batch.update(documentReference, "aula_hora", asistenciaAula.getAula_hora());
-//                        batch.update(documentReference, "aula_minuto", asistenciaAula.getAula_minuto());
-//                        batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
-//                            @Override
-//                            public void onSuccess(Void aVoid) {
-//                                data = new Data(context);
-//                                data.open();
-//                                ContentValues contentValues = new ContentValues();
-//                                contentValues.put(SQLConstantes.asistencia_local_subido_local,1);
-//                                data.actualizarAsistenciaLocal(c,contentValues);
-//                                data.close();
-//                            }
-//                        }).addOnFailureListener(new OnFailureListener() {
-//                            @Override
-//                            public void onFailure(@NonNull Exception e) {
-//                                Toast.makeText(context, "NO GUARDO", Toast.LENGTH_SHORT).show();
-//                            }
-//                        });
+                        final String c = cuadernillo.getCodigo();
+                        WriteBatch batch = FirebaseFirestore.getInstance().batch();
+                        DocumentReference documentReference = FirebaseFirestore.getInstance().collection("inventario").document(cuadernillo.getCodigo());
+                        batch.update(documentReference, "check_registro", 1);
+                        batch.update(documentReference, "fecha_transferencia", FieldValue.serverTimestamp());
+                        batch.update(documentReference, "usuario_reg", usuario);
+                        batch.update(documentReference, "fecha_registro",
+                                new Timestamp(new Date(cuadernillo.getAnio()-1900,cuadernillo.getMes()-1,cuadernillo.getDia(),
+                                        cuadernillo.getHora(),cuadernillo.getMin(),cuadernillo.getSeg())));
+                        batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Data data = new Data(context);
+                                data.open();
+                                data.actualizarCuadernilloSubido(c);
+                                data.close();
+                                if (j == total) {
+                                    Toast.makeText(context, total + " registros subidos", Toast.LENGTH_SHORT).show();
+                                    cargaData();
+                                    inventarioCuadernilloAdapter = new InventarioCuadernilloAdapter(cuadernillos,context);
+                                    recyclerView.setAdapter(inventarioCuadernilloAdapter);
+                                }
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(context, "NO GUARDO", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
                 }else{
                     Toast.makeText(context, "No hay registros nuevos para subir", Toast.LENGTH_SHORT).show();

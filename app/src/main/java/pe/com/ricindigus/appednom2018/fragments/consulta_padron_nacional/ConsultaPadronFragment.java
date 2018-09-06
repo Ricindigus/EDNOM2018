@@ -18,8 +18,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import pe.com.ricindigus.appednom2018.R;
-import pe.com.ricindigus.appednom2018.modelo.Data;
-import pe.com.ricindigus.appednom2018.modelo.Nacional;
 
 /**
  * A simple {@link Fragment} subclass.

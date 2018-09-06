@@ -59,6 +59,20 @@ public class LoginActivity extends AppCompatActivity {
         UsuarioLocal usuarioLocal = data.getUsuarioLocal(clave);
         data.close();
         if (usuarioLocal != null){
+            Data d = new Data(LoginActivity.this);
+            d.open();
+            if (d.getNumeroItemsCajasIn() == 0){
+                ArrayList<CajaIn> cajaIns = d.getCopiaCajasInxLocal(usuarioLocal.getNro_local());
+                ArrayList<CajaOut> cajaOuts = d.getCopiaCajasOutxLocal(usuarioLocal.getNro_local());
+
+                for (CajaIn caja : cajaIns){
+                    d.insertarCajaIn(caja);
+                }
+                for (CajaOut caja : cajaOuts){
+                    d.insertarCajaOut(caja);
+                }
+            }
+            d.close();
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             intent.putExtra("nrolocal", usuarioLocal.getNro_local());
             intent.putExtra("usuario", usuarioLocal.getClave());

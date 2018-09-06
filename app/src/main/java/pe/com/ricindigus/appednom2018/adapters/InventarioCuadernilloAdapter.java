@@ -1,6 +1,7 @@
 package pe.com.ricindigus.appednom2018.adapters;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -33,17 +34,14 @@ public class InventarioCuadernilloAdapter extends RecyclerView.Adapter<Inventari
     public void onBindViewHolder(ViewHolder holder, final int position) {
         Cuadernillo cuadernillo = cuadernillos.get(position);
         holder.txtDni.setText(cuadernillo.getDni());
-        holder.txtNombres.setText(cuadernillo.getNombres() + " " + cuadernillo.getApepat() + " " + cuadernillo.getApemat());
-        holder.txtCodigo.setText(cuadernillo.getCodcartilla());
+        holder.txtNombres.setText(cuadernillo.getNombres() + " " + cuadernillo.getApe_paterno() + " " + cuadernillo.getApe_materno());
+        holder.txtCodigo.setText(cuadernillo.getCodigo());
         holder.txtFecha.setText(checkDigito(cuadernillo.getDia()) + "-"
                 + checkDigito(cuadernillo.getMes()) + "-" + checkDigito(cuadernillo.getAnio()) + " "
-                + checkDigito(cuadernillo.getHora()) + ":" + checkDigito(cuadernillo.getMinuto()));
+                + checkDigito(cuadernillo.getHora()) + ":" + checkDigito(cuadernillo.getMin())+ ":" + checkDigito(cuadernillo.getSeg()));
 
-//        if(asistenciaLocal.getSubidoEntrada() == 1){
-//            holder.cv.setCardBackgroundColor(Color.WHITE);
-//        }else{
-//            holder.cv.setCardBackgroundColor(Color.rgb(227,242,253));
-//        }
+        if(cuadernillo.getEstado() == 1) holder.cv.setCardBackgroundColor(ContextCompat.getColor(context, R.color.greenPrimaryLight));
+        else holder.cv.setCardBackgroundColor(ContextCompat.getColor(context, R.color.redPrimaryLight));
     }
 
     public String checkDigito (int number) {

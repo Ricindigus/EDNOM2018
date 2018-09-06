@@ -232,7 +232,6 @@ public class AsistenciaLocal {
 
     public ContentValues toValues(){
         ContentValues contentValues = new ContentValues();
-        contentValues.put(SQLConstantes.asis_local_id,_id);
         contentValues.put(SQLConstantes.asis_local_dni,dni);
         contentValues.put(SQLConstantes.asis_local_idnacional,idnacional);
         contentValues.put(SQLConstantes.asis_local_ccdd,ccdd);

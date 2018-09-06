@@ -2,70 +2,104 @@ package pe.com.ricindigus.appednom2018.modelo;
 
 import android.content.ContentValues;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class Listado {
-    private String _id;
-    private String codigo_pagina;
+    private String id;
+    private String codigo;
+    private int tipo;
+    private int idnacional;
+    private String ccdd;
+    private String idsede;
     private String sede;
-    private int id_local;
+    private int idlocal;
     private String local;
-    private String aula;
-    private int nro_postulantes;
+    private int naula;
+    private int npostulantes;
     private int dia;
     private int mes;
     private int anio;
     private int hora;
-    private int minuto;
-    private int subido;
+    private int min;
+    private int seg;;
+    private int estado;
 
-    public Listado(String _id, String codigo_pagina, String sede, int id_local, String local, String aula, int nro_postulantes, int dia, int mes, int anio, int hora, int minuto, int subido) {
-        this._id = _id;
-        this.codigo_pagina = codigo_pagina;
+    public Listado(String id, String codigo, int tipo, int idnacional, String ccdd, String idsede, String sede, int idlocal, String local, int naula, int npostulantes, int dia, int mes, int anio, int hora, int min, int seg, int estado) {
+        this.id = id;
+        this.codigo = codigo;
+        this.tipo = tipo;
+        this.idnacional = idnacional;
+        this.ccdd = ccdd;
+        this.idsede = idsede;
         this.sede = sede;
-        this.id_local = id_local;
+        this.idlocal = idlocal;
         this.local = local;
-        this.aula = aula;
-        this.nro_postulantes = nro_postulantes;
+        this.naula = naula;
+        this.npostulantes = npostulantes;
         this.dia = dia;
         this.mes = mes;
         this.anio = anio;
         this.hora = hora;
-        this.minuto = minuto;
-        this.subido = subido;
+        this.min = min;
+        this.seg = seg;
+        this.estado = estado;
     }
 
     public Listado() {
-        this._id = "";
-        this.codigo_pagina = "";
-        this.sede = "";
-        this.id_local = 0;
-        this.local = "";
-        this.aula = "";
-        this.nro_postulantes = 0;
-        this.dia = 0;
-        this.mes = 0;
-        this.anio = 0;
-        this.hora = 0;
-        this.minuto = 0;
-        this.subido = 0;
     }
 
-    public String get_id() {
-        return _id;
+    public int getNpostulantes() {
+        return npostulantes;
     }
 
-    public void set_id(String _id) {
-        this._id = _id;
+    public void setNpostulantes(int npostulantes) {
+        this.npostulantes = npostulantes;
     }
 
-    public String getCodigo_pagina() {
-        return codigo_pagina;
+    public String getId() {
+        return id;
     }
 
-    public void setCodigo_pagina(String codigo_pagina) {
-        this.codigo_pagina = codigo_pagina;
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+
+    public int getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(int tipo) {
+        this.tipo = tipo;
+    }
+
+    public int getIdnacional() {
+        return idnacional;
+    }
+
+    public void setIdnacional(int idnacional) {
+        this.idnacional = idnacional;
+    }
+
+    public String getCcdd() {
+        return ccdd;
+    }
+
+    public void setCcdd(String ccdd) {
+        this.ccdd = ccdd;
+    }
+
+    public String getIdsede() {
+        return idsede;
+    }
+
+    public void setIdsede(String idsede) {
+        this.idsede = idsede;
     }
 
     public String getSede() {
@@ -76,12 +110,12 @@ public class Listado {
         this.sede = sede;
     }
 
-    public int getId_local() {
-        return id_local;
+    public int getIdlocal() {
+        return idlocal;
     }
 
-    public void setId_local(int id_local) {
-        this.id_local = id_local;
+    public void setIdlocal(int idlocal) {
+        this.idlocal = idlocal;
     }
 
     public String getLocal() {
@@ -92,12 +126,12 @@ public class Listado {
         this.local = local;
     }
 
-    public String getAula() {
-        return aula;
+    public int getNaula() {
+        return naula;
     }
 
-    public void setAula(String aula) {
-        this.aula = aula;
+    public void setNaula(int naula) {
+        this.naula = naula;
     }
 
     public int getDia() {
@@ -132,61 +166,49 @@ public class Listado {
         this.hora = hora;
     }
 
-    public int getMinuto() {
-        return minuto;
+    public int getMin() {
+        return min;
     }
 
-    public void setMinuto(int minuto) {
-        this.minuto = minuto;
+    public void setMin(int min) {
+        this.min = min;
     }
 
-    public int getSubido() {
-        return subido;
+    public int getSeg() {
+        return seg;
     }
 
-    public void setSubido(int subido) {
-        this.subido = subido;
+    public void setSeg(int seg) {
+        this.seg = seg;
     }
 
-    public int getNro_postulantes() {
-        return nro_postulantes;
+    public int getEstado() {
+        return estado;
     }
 
-    public void setNro_postulantes(int nro_postulantes) {
-        this.nro_postulantes = nro_postulantes;
+    public void setEstado(int estado) {
+        this.estado = estado;
     }
 
     public ContentValues toValues(){
         ContentValues contentValues = new ContentValues();
-        contentValues.put(SQLConstantes.listado_id,_id);
-        contentValues.put(SQLConstantes.listado_codigo_pagina,codigo_pagina);
+        contentValues.put(SQLConstantes.listado_codigo,codigo);
+        contentValues.put(SQLConstantes.listado_tipo,tipo);
+        contentValues.put(SQLConstantes.listado_idnacional,idnacional);
+        contentValues.put(SQLConstantes.listado_ccdd,ccdd);
+        contentValues.put(SQLConstantes.listado_idsede,idsede);
         contentValues.put(SQLConstantes.listado_sede,sede);
-        contentValues.put(SQLConstantes.listado_id_local,id_local);
-        contentValues.put(SQLConstantes.listado_nombre_local,local);
-        contentValues.put(SQLConstantes.listado_aula,aula);
-        contentValues.put(SQLConstantes.listado_nro_postulantes,nro_postulantes);
+        contentValues.put(SQLConstantes.listado_idlocal,idlocal);
+        contentValues.put(SQLConstantes.listado_local,local);
+        contentValues.put(SQLConstantes.listado_naula,naula);
+        contentValues.put(SQLConstantes.listado_npostulantes,npostulantes);
         contentValues.put(SQLConstantes.listado_dia,dia);
         contentValues.put(SQLConstantes.listado_mes,mes);
         contentValues.put(SQLConstantes.listado_anio,anio);
         contentValues.put(SQLConstantes.listado_hora,hora);
-        contentValues.put(SQLConstantes.listado_minuto,minuto);
-        contentValues.put(SQLConstantes.listado_subido,subido);
+        contentValues.put(SQLConstantes.listado_min,min);
+        contentValues.put(SQLConstantes.listado_seg,seg);
+        contentValues.put(SQLConstantes.listado_estado,estado);
         return contentValues;
-    }
-
-    public Map<String, Object> toMap(){
-        Map<String, Object> asistencia = new HashMap<>();
-        asistencia.put("codigo_pagina", codigo_pagina);
-        asistencia.put("sede", sede);
-        asistencia.put("id_local", id_local);
-        asistencia.put("local", local);
-        asistencia.put("aula", aula);
-        asistencia.put("nro_postulantes", nro_postulantes);
-        asistencia.put("dia", dia);
-        asistencia.put("mes", mes);
-        asistencia.put("anio", anio);
-        asistencia.put("hora", hora);
-        asistencia.put("minuto", minuto);
-        return asistencia;
     }
 }

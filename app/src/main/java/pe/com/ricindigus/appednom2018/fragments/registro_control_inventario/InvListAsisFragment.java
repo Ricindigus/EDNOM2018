@@ -32,7 +32,7 @@ import pe.com.ricindigus.appednom2018.R;
 import pe.com.ricindigus.appednom2018.modelo.Data;
 import pe.com.ricindigus.appednom2018.modelo.Ficha;
 import pe.com.ricindigus.appednom2018.modelo.Listado;
-import pe.com.ricindigus.appednom2018.modelo.Nacional;
+import pe.com.ricindigus.appednom2018.modelo.Material;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,6 +43,7 @@ public class InvListAsisFragment extends Fragment {
     ImageView btnBuscar;
     Context context;
     int nroLocal;
+    String usuario;
 
     TextView correctoTxtCodLista;
     TextView correctoTxtNroPostulantes;
@@ -67,9 +68,10 @@ public class InvListAsisFragment extends Fragment {
     }
 
     @SuppressLint("ValidFragment")
-    public InvListAsisFragment(int nroLocal, Context context) {
+    public InvListAsisFragment(int nroLocal, Context context, String usuario) {
         this.context = context;
         this.nroLocal = nroLocal;
+        this.usuario = usuario;
     }
 
     @Override
@@ -135,122 +137,95 @@ public class InvListAsisFragment extends Fragment {
     }
 
     public void clickBoton(){
-//        ocultarTeclado(edtLista);
-//        String codListado = edtLista.getText().toString();
-//        Data data = new Data(context);
-//        data.open();
-//        Nacional nacional = data.getNacionalxCodPagina(codListado);
-//        data.close();
-//        if(nacional == null){
-//            mostrarErrorDni(codListado);
-//        }else{
-//            registrarListado(nacional);
-//        }
-//        edtLista.setText("");
-//        edtLista.requestFocus();
+        ocultarTeclado(edtLista);
+        String codigoListado = edtLista.getText().toString();
+        Data data = new Data(context);
+        data.open();
+        Material material = data.getMaterial(codigoListado,3);
+        String aula = spAulas.getSelectedItem().toString();
+        int nroAula = 0;
+        int nroPostulantes = 0;
+        nroAula = data.getNumeroAula(aula,nroLocal);
+        if(material == null){
+            mostrarErrorCodigo(codigoListado);
+        }else{
+            nroPostulantes = data.getNroPostulantesListado(material.getCodigo());
+            if(material.getIdlocal() == nroLocal && material.getNaula() == nroAula){
+                Listado listado = data.getListado(codigoListado);
+                if(listado == null) registrarListado(material);
+                else mostrarYaRegistrado(material.getCodigo(),nroPostulantes,material.getNaula());
+            }else{
+                mostrarErrorAula(material.getDni(),nroPostulantes, material.getNaula());
+            }
+        }
+        edtLista.setText("");
+        edtLista.requestFocus();
+        data.close();
     }
 
     public void ocultarTeclado(View view){
         InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         mgr.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
-    public void registrarListado(Nacional nacional){
-        String aula = spAulas.getSelectedItem().toString();
-        int nroAula = 0;
-        Data da = new Data(context);
-        da.open();
-        nroAula = da.getNumeroAula(aula,nroLocal);
-        da.close();
-
-        if(nroLocal == nacional.getNro_local() && nroAula == nacional.getId_aula()){
-            if(!existeListado(nacional.getCodigo_pagina())){
-                Data data = new Data(context);
-                data.open();
-                Listado listado = new Listado();
-                listado.set_id(nacional.getCodigo_pagina());
-                listado.setCodigo_pagina(nacional.getCodigo_pagina());
-                listado.setSede(nacional.getSede());
-                listado.setId_local(nacional.getId_local());
-                listado.setLocal(nacional.getLocal_aplicacion());
-                listado.setAula(nacional.getAula());
-                Calendar calendario = Calendar.getInstance();
-                int yy = calendario.get(Calendar.YEAR);
-                int mm = calendario.get(Calendar.MONTH)+1;
-                int dd = calendario.get(Calendar.DAY_OF_MONTH);
-                int hora = calendario.get(Calendar.HOUR_OF_DAY);
-                int minuto = calendario.get(Calendar.MINUTE);
-                listado.setNro_postulantes(data.getNroPostulantesListado(nacional.getCodigo_pagina()));
-                listado.setDia(dd);
-                listado.setMes(mm);
-                listado.setAnio(yy);
-                listado.setHora(hora);
-                listado.setMinuto(minuto);
-                listado.setSubido(0);
-                data.insertarListado(listado);
-                data.close();
-                mostrarCorrecto(listado.getCodigo_pagina(),listado.getNro_postulantes());
-                final String c = listado.getCodigo_pagina();
-                FirebaseFirestore.getInstance().collection("inventario_listado").document(listado.getCodigo_pagina())
-                        .set(listado.toMap())
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Data data = new Data(context);
-                                data.open();
-                                data.actualizarListadoSubido(c);
-                                data.close();
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.w("FIRESTORE", "Error writing document", e);
-                            }
-                        });
-//                WriteBatch batch = FirebaseFirestore.getInstance().batch();
-//                DocumentReference documentReference = FirebaseFirestore.getInstance().collection(getResources().getString(R.string.nombre_coleccion_asistencia))
-//                        .document(asis.getDni());
-//                batch.update(documentReference, "aula_dia", dd);
-//                batch.update(documentReference, "aula_mes", mm);
-//                batch.update(documentReference, "aula_anio", yy);
-//                batch.update(documentReference, "aula_hora", hora);
-//                batch.update(documentReference, "aula_minuto", minuto);
-//                batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
-//                    @Override
-//                    public void onSuccess(Void aVoid) {
-//                        Data data = new Data(context);
-//                        data.open();
-//                        ContentValues contentValues = new ContentValues();
-//                        contentValues.put(SQLConstantes.asistencia_aula_subido_aula,1);
-//                        data.actualizarAsistenciaLocal(c,contentValues);
-//                        data.close();
-//                    }
-//                }).addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Toast.makeText(context, "NO GUARDO", Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-            }
-        }else{
-            Data dat = new Data(context);
-            dat.open();
-            mostrarErrorAula(nacional.getCodigo_pagina(),dat.getNroPostulantesListado(nacional.getCodigo_pagina()),"Aula " + nacional.getAula());
-            dat.close();
-        }
-    }
-
-    public boolean existeListado(String codigoLista){
-        boolean existe = false;
-        Data d = new Data(context);
-        d.open();
-        Listado listado = d.getListado(codigoLista);
-        if(listado != null){
-            existe = true;
-            mostrarYaRegistrado(listado.getCodigo_pagina(),listado.getNro_postulantes(),listado.getAula());
-        }
-        d.close();
-        return existe;
+    public void registrarListado(Material material){
+        Data data = new Data(context);
+        data.open();
+        int nroPostulantes = 0;
+        nroPostulantes = data.getNroPostulantesListado(material.getCodigo());
+        Calendar calendario = Calendar.getInstance();
+        int yy = calendario.get(Calendar.YEAR);
+        int mm = calendario.get(Calendar.MONTH)+1;
+        int dd = calendario.get(Calendar.DAY_OF_MONTH);
+        int hora = calendario.get(Calendar.HOUR_OF_DAY);
+        int minuto = calendario.get(Calendar.MINUTE);
+        int seg = calendario.get(Calendar.SECOND);
+        Listado listado = new Listado();
+        listado.setCodigo(material.getCodigo());
+        listado.setTipo(material.getTipo());
+        listado.setIdnacional(material.getIdnacional());
+        listado.setCcdd(material.getCcdd());
+        listado.setIdsede(material.getIdsede());
+        listado.setSede(material.getSede());
+        listado.setIdlocal(material.getIdlocal());
+        listado.setLocal(material.getLocal());
+        listado.setNaula(material.getNaula());
+        listado.setNpostulantes(nroPostulantes);
+        listado.setDia(dd);
+        listado.setMes(mm);
+        listado.setAnio(yy);
+        listado.setHora(hora);
+        listado.setMin(minuto);
+        listado.setSeg(seg);
+        listado.setEstado(0);
+        data.insertarListado(listado);
+        data.close();
+        mostrarCorrecto(listado.getCodigo(),nroPostulantes);
+//        final String c = ficha.getCodficha();
+//
+//        WriteBatch batch = FirebaseFirestore.getInstance().batch();
+//        DocumentReference documentReference = FirebaseFirestore.getInstance().collection(getResources().getString(R.string.nombre_coleccion_asistencia))
+//                .document(asis.getDni());
+//        batch.update(documentReference, "aula_dia", dd);
+//        batch.update(documentReference, "aula_mes", mm);
+//        batch.update(documentReference, "aula_anio", yy);
+//        batch.update(documentReference, "aula_hora", hora);
+//        batch.update(documentReference, "aula_minuto", minuto);
+//        batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
+//            @Override
+//            public void onSuccess(Void aVoid) {
+//                Data data = new Data(context);
+//                data.open();
+//                ContentValues contentValues = new ContentValues();
+//                contentValues.put(SQLConstantes.asistencia_aula_subido_aula,1);
+//                data.actualizarAsistenciaLocal(c,contentValues);
+//                data.close();
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception e) {
+//                Toast.makeText(context, "NO GUARDO", Toast.LENGTH_SHORT).show();
+//            }
+//        });
     }
 
     public void mostrarCorrecto(String codLista, int nroPostulantes){
@@ -261,7 +236,7 @@ public class InvListAsisFragment extends Fragment {
         correctoTxtCodLista.setText(codLista);
         correctoTxtNroPostulantes.setText("NRO DE POSTULANTES: "+nroPostulantes);
     }
-    public void mostrarErrorDni(String codigoLista){
+    public void mostrarErrorCodigo(String codigoLista){
         lytErrorLista.setVisibility(View.VISIBLE);
         lytYaRegistrado.setVisibility(View.GONE);
         lytErrorListaAula.setVisibility(View.GONE);
@@ -269,23 +244,23 @@ public class InvListAsisFragment extends Fragment {
         errorCodigoListaTxtCodLista.setText(codigoLista);
 
     }
-    public void mostrarErrorAula(String codLista, int nroPostulantes,String aula){
+    public void mostrarErrorAula(String codLista, int nroPostulantes,int aula){
         lytErrorLista.setVisibility(View.GONE);
         lytYaRegistrado.setVisibility(View.GONE);
         lytErrorListaAula.setVisibility(View.VISIBLE);
         lytCorrecto.setVisibility(View.GONE);
         errorListaAulaTxtCodLista.setText(codLista);
         errorListaAulaTxtNroPostulantes.setText("NRO POSTULANTES: "+nroPostulantes);
-        errorListaAulaTxtAula.setText(aula);
+        errorListaAulaTxtAula.setText(aula +"");
     }
-    public void mostrarYaRegistrado(String codLista, int nroPostulantes, String aula){
+    public void mostrarYaRegistrado(String codLista, int nroPostulantes, int aula){
         lytErrorLista.setVisibility(View.GONE);
         lytYaRegistrado.setVisibility(View.VISIBLE);
         lytErrorListaAula.setVisibility(View.GONE);
         lytCorrecto.setVisibility(View.GONE);
         yaRegistradoTxtCodLista.setText(codLista);
         yaRegistradoTxtNroPostulantes.setText("NRO POSTULANTES: "+nroPostulantes);
-        yaRegistradoTxtAula.setText(aula);
+        yaRegistradoTxtAula.setText(""+aula);
     }
 
     public String checkDigito (int number) {

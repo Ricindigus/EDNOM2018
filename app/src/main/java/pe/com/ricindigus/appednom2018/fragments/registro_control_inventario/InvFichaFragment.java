@@ -23,7 +23,9 @@ import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.WriteBatch;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -31,7 +33,8 @@ import java.util.Calendar;
 import pe.com.ricindigus.appednom2018.R;
 import pe.com.ricindigus.appednom2018.modelo.Data;
 import pe.com.ricindigus.appednom2018.modelo.Ficha;
-import pe.com.ricindigus.appednom2018.modelo.Nacional;
+import pe.com.ricindigus.appednom2018.modelo.Material;
+import pe.com.ricindigus.appednom2018.modelo.SQLConstantes;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -42,6 +45,7 @@ public class InvFichaFragment extends Fragment {
     ImageView btnBuscar;
     Context context;
     int nroLocal;
+    String usuario;
 
     TextView correctoTxtDni;
     TextView correctoTxtNombre;
@@ -68,9 +72,10 @@ public class InvFichaFragment extends Fragment {
     }
 
     @SuppressLint("ValidFragment")
-    public InvFichaFragment(int nroLocal, Context context) {
+    public InvFichaFragment(int nroLocal, Context context, String usuario) {
         this.context = context;
         this.nroLocal = nroLocal;
+        this.usuario = usuario;
     }
 
 
@@ -138,121 +143,96 @@ public class InvFichaFragment extends Fragment {
     }
 
     public void clickBoton(){
-//        ocultarTeclado(edtFicha);
-//        String ficha = edtFicha.getText().toString();
-//        Data data = new Data(context);
-//        data.open();
-//        Nacional nacional = data.getNacionalxFicha(ficha);
-//        data.close();
-//        if(nacional == null){
-//            mostrarErrorDni(ficha);
-//        }else{
-//            registrarFicha(nacional);
-//        }
-//        edtFicha.setText("");
-//        edtFicha.requestFocus();
+        ocultarTeclado(edtFicha);
+        String codigoFicha = edtFicha.getText().toString();
+        Data data = new Data(context);
+        data.open();
+        Material material = data.getMaterial(codigoFicha,1);
+        String aula = spAulas.getSelectedItem().toString();
+        int nroAula = 0;
+        nroAula = data.getNumeroAula(aula,nroLocal);
+        if(material == null){
+            mostrarErrorCodigo(codigoFicha);
+        }else{
+            if(material.getIdlocal() == nroLocal && material.getNaula() == nroAula){
+                Ficha ficha = data.getFicha(codigoFicha);
+                if(ficha == null) registrarFicha(material);
+                else mostrarYaRegistrado(material.getDni(),material.getNombres() + " " + material.getApe_paterno() + " " + material.getApe_materno(),material.getNaula(), material.getCodigo());
+            }else{
+                mostrarErrorAula(material.getDni(),material.getNombres() +" "+ material.getApe_paterno() +" "+ material.getApe_materno(), "" + material.getNaula());
+            }
+        }
+        edtFicha.setText("");
+        edtFicha.requestFocus();
+        data.close();
     }
 
     public void ocultarTeclado(View view){
         InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         mgr.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
-    public void registrarFicha(Nacional nacional){
-        String aula = spAulas.getSelectedItem().toString();
-        int nroAula = 0;
-        Data da = new Data(context);
-        da.open();
-        nroAula = da.getNumeroAula(aula,nroLocal);
-        da.close();
-
-        if(nroLocal == nacional.getNro_local() && nroAula == nacional.getId_aula()){
-            if(!existeFicha(nacional.getCodficha())){
-                Data data = new Data(context);
-                data.open();
-                Ficha ficha = new Ficha();
-                ficha.set_id(nacional.getCodficha());
-                ficha.setCodficha(nacional.getCodficha());
-                ficha.setDni(nacional.getIns_numdoc());
-                ficha.setNombres(nacional.getNombres());
-                ficha.setApepat(nacional.getApepat());
-                ficha.setApemat(nacional.getApemat());
-                ficha.setSede(nacional.getSede());
-                ficha.setId_local(nacional.getId_local());
-                ficha.setLocal(nacional.getLocal_aplicacion());
-                ficha.setAula(nacional.getAula());
-                Calendar calendario = Calendar.getInstance();
-                int yy = calendario.get(Calendar.YEAR);
-                int mm = calendario.get(Calendar.MONTH)+1;
-                int dd = calendario.get(Calendar.DAY_OF_MONTH);
-                int hora = calendario.get(Calendar.HOUR_OF_DAY);
-                int minuto = calendario.get(Calendar.MINUTE);
-                ficha.setDia(dd);
-                ficha.setMes(mm);
-                ficha.setAnio(yy);
-                ficha.setHora(hora);
-                ficha.setMinuto(minuto);
-                ficha.setSubido(0);
-                data.insertarFicha(ficha);
-                data.close();
-                mostrarCorrecto(ficha.getDni(),ficha.getNombres() +" "+ ficha.getApepat() +" "+ ficha.getApemat(),ficha.getCodficha());
-                final String c = ficha.getCodficha();
-                FirebaseFirestore.getInstance().collection("inventario_ficha").document(ficha.getCodficha())
-                        .set(ficha.toMap())
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Data data = new Data(context);
-                                data.open();
-                                data.actualizarFichaSubido(c);
-                                data.close();
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.w("FIRESTORE", "Error writing document", e);
-                            }
-                        });
-//                WriteBatch batch = FirebaseFirestore.getInstance().batch();
-//                DocumentReference documentReference = FirebaseFirestore.getInstance().collection(getResources().getString(R.string.nombre_coleccion_asistencia))
-//                        .document(asis.getDni());
-//                batch.update(documentReference, "aula_dia", dd);
-//                batch.update(documentReference, "aula_mes", mm);
-//                batch.update(documentReference, "aula_anio", yy);
-//                batch.update(documentReference, "aula_hora", hora);
-//                batch.update(documentReference, "aula_minuto", minuto);
-//                batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
-//                    @Override
-//                    public void onSuccess(Void aVoid) {
-//                        Data data = new Data(context);
-//                        data.open();
-//                        ContentValues contentValues = new ContentValues();
-//                        contentValues.put(SQLConstantes.asistencia_aula_subido_aula,1);
-//                        data.actualizarAsistenciaLocal(c,contentValues);
-//                        data.close();
-//                    }
-//                }).addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Toast.makeText(context, "NO GUARDO", Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-            }
-        }else{
-            mostrarErrorAula(nacional.getIns_numdoc(),nacional.getNombres() +" "+ nacional.getApepat() +" "+ nacional.getApemat(),"Aula " + nacional.getAula());
-        }
-    }
-
-    public boolean existeFicha(String codigoFicha){
-        boolean existe = false;
-        Data d = new Data(context);
-        d.open();
-        Ficha a = d.getFicha(codigoFicha);
-        if(a != null){
-            existe = true;
-            mostrarYaRegistrado(a.getDni(),a.getNombres() + " " + a.getApepat() + " " + a.getApemat(),a.getAula(), a.getCodficha());
-        }
-        return existe;
+    public void registrarFicha(Material material){
+        Data data = new Data(context);
+        data.open();
+        Calendar calendario = Calendar.getInstance();
+        int yy = calendario.get(Calendar.YEAR);
+        int mm = calendario.get(Calendar.MONTH)+1;
+        int dd = calendario.get(Calendar.DAY_OF_MONTH);
+        int hora = calendario.get(Calendar.HOUR_OF_DAY);
+        int minuto = calendario.get(Calendar.MINUTE);
+        int seg = calendario.get(Calendar.SECOND);
+        Ficha ficha = new Ficha();
+        ficha.setCodigo(material.getCodigo());
+        ficha.setTipo(material.getTipo());
+        ficha.setIdnacional(material.getIdnacional());
+        ficha.setCcdd(material.getCcdd());
+        ficha.setIdsede(material.getIdsede());
+        ficha.setSede(material.getSede());
+        ficha.setIdlocal(material.getIdlocal());
+        ficha.setLocal(material.getLocal());
+        ficha.setDni(material.getDni());
+        ficha.setNombres(material.getNombres());
+        ficha.setApe_paterno(material.getApe_paterno());
+        ficha.setApe_materno(material.getApe_materno());
+        ficha.setNaula(material.getNaula());
+        ficha.setCodpagina(material.getCodpagina());
+        ficha.setDia(dd);
+        ficha.setMes(mm);
+        ficha.setAnio(yy);
+        ficha.setHora(hora);
+        ficha.setMin(minuto);
+        ficha.setSeg(seg);
+        ficha.setEstado(0);
+        data.insertarFicha(ficha);
+        long numfichas = data.getNumeroItemsFicha();
+        data.close();
+        mostrarCorrecto(ficha.getDni(),ficha.getNombres() +" "+ ficha.getApe_paterno() +" "+ ficha.getApe_materno(),ficha.getCodigo());
+//        final String c = ficha.getCodficha();
+//
+//        WriteBatch batch = FirebaseFirestore.getInstance().batch();
+//        DocumentReference documentReference = FirebaseFirestore.getInstance().collection(getResources().getString(R.string.nombre_coleccion_asistencia))
+//                .document(asis.getDni());
+//        batch.update(documentReference, "aula_dia", dd);
+//        batch.update(documentReference, "aula_mes", mm);
+//        batch.update(documentReference, "aula_anio", yy);
+//        batch.update(documentReference, "aula_hora", hora);
+//        batch.update(documentReference, "aula_minuto", minuto);
+//        batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
+//            @Override
+//            public void onSuccess(Void aVoid) {
+//                Data data = new Data(context);
+//                data.open();
+//                ContentValues contentValues = new ContentValues();
+//                contentValues.put(SQLConstantes.asistencia_aula_subido_aula,1);
+//                data.actualizarAsistenciaLocal(c,contentValues);
+//                data.close();
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception e) {
+//                Toast.makeText(context, "NO GUARDO", Toast.LENGTH_SHORT).show();
+//            }
+//        });
     }
 
     public void mostrarCorrecto(String dni, String nombre, String codigoFicha){
@@ -264,7 +244,7 @@ public class InvFichaFragment extends Fragment {
         correctoTxtNombre.setText(nombre);
         correctoTxtFicha.setText(codigoFicha);
     }
-    public void mostrarErrorDni(String codigoFicha){
+    public void mostrarErrorCodigo(String codigoFicha){
         lytErrorFicha.setVisibility(View.VISIBLE);
         lytYaRegistrado.setVisibility(View.GONE);
         lytErrorFichaAula.setVisibility(View.GONE);
@@ -281,14 +261,14 @@ public class InvFichaFragment extends Fragment {
         errorFichaAulaTxtDni.setText(nombre);
         errorFichaAulaTxtAula.setText(aula);
     }
-    public void mostrarYaRegistrado(String dni, String nombre, String aula, String codigoFicha){
+    public void mostrarYaRegistrado(String dni, String nombre, int nAula, String codigoFicha){
         lytErrorFicha.setVisibility(View.GONE);
         lytYaRegistrado.setVisibility(View.VISIBLE);
         lytErrorFichaAula.setVisibility(View.GONE);
         lytCorrecto.setVisibility(View.GONE);
         yaRegistradoTxtDni.setText(dni);
         yaRegistradoTxtNombre.setText(nombre);
-        yaRegistradoTxtAula.setText(aula);
+        yaRegistradoTxtAula.setText(nAula+"");
         yaRegistradoTxtFicha.setText(codigoFicha);
     }
 
