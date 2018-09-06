@@ -18,8 +18,18 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.WriteBatch;
 
 import java.util.Calendar;
+import java.util.Date;
 
 import pe.com.ricindigus.appednom2018.R;
 import pe.com.ricindigus.appednom2018.modelo.Asistencia;
@@ -191,29 +201,29 @@ public class AsistLocalFragment extends Fragment {
         data.insertarAsistenciaLocal(asistenciaLocal);
         data.close();
         mostrarCorrecto(asistenciaLocal.getDni(),asistenciaLocal.getNombres() +" "+ asistenciaLocal.getApe_paterno() +" "+ asistenciaLocal.getApe_materno(),asistenciaLocal.getSede(),asistenciaLocal.getLocal(),asistenciaLocal.getNaula());
-//                final String c = registroAsistencia.getDni();
-//                WriteBatch batch = FirebaseFirestore.getInstance().batch();
-//                DocumentReference documentReference = FirebaseFirestore.getInstance().collection("asistencia").document(registroAsistencia.getDni());
-//                batch.update(documentReference, "check_registro", 1);
-//                batch.update(documentReference, "fecha_transferencia", FieldValue.serverTimestamp());
-//                batch.update(documentReference, "usuario_reg", usuario);
-//                batch.update(documentReference, "fech_reg_ingreso",
-//                        new Timestamp(new Date(registroAsistencia.getLocal_anio()-1900,registroAsistencia.getLocal_mes()-1,registroAsistencia.getLocal_dia(),
-//                                registroAsistencia.getLocal_hora(),registroAsistencia.getLocal_min(),registroAsistencia.getLocal_seg())));
-//                batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
-//                    @Override
-//                    public void onSuccess(Void aVoid) {
-//                        Data data = new Data(context);
-//                        data.open();
-//                        data.actualizarRegAsistenciaLocalSubido(c);
-//                        data.close();
-//                    }
-//                }).addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Toast.makeText(context, "NO GUARDO", Toast.LENGTH_SHORT).show();
-//                    }
-//                });
+        final String c = asistenciaLocal.getDni();
+        WriteBatch batch = FirebaseFirestore.getInstance().batch();
+        DocumentReference documentReference = FirebaseFirestore.getInstance().collection("asistencia").document(asistenciaLocal.getDni());
+        batch.update(documentReference, "check_registro", 1);
+        batch.update(documentReference, "fecha_transferencia", FieldValue.serverTimestamp());
+        batch.update(documentReference, "usuario_reg", usuario);
+        batch.update(documentReference, "fech_reg_ingreso",
+                new Timestamp(new Date(asistenciaLocal.getAnio()-1900,asistenciaLocal.getMes()-1,asistenciaLocal.getDia(),
+                        asistenciaLocal.getHora(),asistenciaLocal.getMin(),asistenciaLocal.getSeg())));
+        batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Data data = new Data(context);
+                data.open();
+                data.actualizarAsistenciaLocalSubido(c);
+                data.close();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(context, "NO GUARDO", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public void mostrarCorrecto(String dni, String nombre, String sede, String local, int aula){

@@ -20,13 +20,19 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.WriteBatch;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import pe.com.ricindigus.appednom2018.R;
 import pe.com.ricindigus.appednom2018.modelo.Data;
@@ -200,32 +206,29 @@ public class InvListAsisFragment extends Fragment {
         data.insertarListado(listado);
         data.close();
         mostrarCorrecto(listado.getCodigo(),nroPostulantes);
-//        final String c = ficha.getCodficha();
-//
-//        WriteBatch batch = FirebaseFirestore.getInstance().batch();
-//        DocumentReference documentReference = FirebaseFirestore.getInstance().collection(getResources().getString(R.string.nombre_coleccion_asistencia))
-//                .document(asis.getDni());
-//        batch.update(documentReference, "aula_dia", dd);
-//        batch.update(documentReference, "aula_mes", mm);
-//        batch.update(documentReference, "aula_anio", yy);
-//        batch.update(documentReference, "aula_hora", hora);
-//        batch.update(documentReference, "aula_minuto", minuto);
-//        batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
-//            @Override
-//            public void onSuccess(Void aVoid) {
-//                Data data = new Data(context);
-//                data.open();
-//                ContentValues contentValues = new ContentValues();
-//                contentValues.put(SQLConstantes.asistencia_aula_subido_aula,1);
-//                data.actualizarAsistenciaLocal(c,contentValues);
-//                data.close();
-//            }
-//        }).addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(@NonNull Exception e) {
-//                Toast.makeText(context, "NO GUARDO", Toast.LENGTH_SHORT).show();
-//            }
-//        });
+        final String c = listado.getCodigo();
+        WriteBatch batch = FirebaseFirestore.getInstance().batch();
+        DocumentReference documentReference = FirebaseFirestore.getInstance().collection("inventario").document(listado.getCodigo());
+        batch.update(documentReference, "check_registro", 1);
+        batch.update(documentReference, "fecha_transferencia", FieldValue.serverTimestamp());
+        batch.update(documentReference, "usuario_reg", usuario);
+        batch.update(documentReference, "fech_reg_ingreso",
+                new Timestamp(new Date(listado.getAnio()-1900,listado.getMes()-1,listado.getDia(),
+                        listado.getHora(),listado.getMin(),listado.getSeg())));
+        batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Data data = new Data(context);
+                data.open();
+                data.actualizarAsistenciaAulaSubido(c);
+                data.close();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(context, "NO GUARDO", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public void mostrarCorrecto(String codLista, int nroPostulantes){

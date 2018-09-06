@@ -20,9 +20,19 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.WriteBatch;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import pe.com.ricindigus.appednom2018.R;
 import pe.com.ricindigus.appednom2018.modelo.Asistencia;
@@ -164,63 +174,64 @@ public class AsistAulaFragment extends Fragment {
         mgr.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
     public void registrarAsistencia(Asistencia asistencia){
-            Data data = new Data(context);
-            data.open();
-            Calendar calendario = Calendar.getInstance();
-            int yy = calendario.get(Calendar.YEAR);
-            int mm = calendario.get(Calendar.MONTH)+1;
-            int dd = calendario.get(Calendar.DAY_OF_MONTH);
-            int hora = calendario.get(Calendar.HOUR_OF_DAY);
-            int minuto = calendario.get(Calendar.MINUTE);
-            int seg = calendario.get(Calendar.SECOND);
-            AsistenciaAula asistenciaAula = new AsistenciaAula();
-            asistenciaAula.setDni(asistencia.getDni());
-            asistenciaAula.setIdnacional(asistencia.getIdnacional());
-            asistenciaAula.setCcdd(asistencia.getCcdd());
-            asistenciaAula.setIdsede(asistencia.getIdsede());
-            asistenciaAula.setSede(asistencia.getSede());
-            asistenciaAula.setIdlocal(asistencia.getIdlocal());
-            asistenciaAula.setLocal(asistencia.getLocal());
-            asistenciaAula.setDireccion(asistencia.getDireccion());
-            asistenciaAula.setNombres(asistencia.getNombres());
-            asistenciaAula.setApe_materno(asistencia.getApe_materno());
-            asistenciaAula.setApe_paterno(asistencia.getApe_paterno());
-            asistenciaAula.setNaula(asistencia.getNaula());
-            asistenciaAula.setDiscapacidad(asistencia.getDiscapacidad());
-            asistenciaAula.setPrioridad(asistencia.getPrioridad());
-            asistenciaAula.setDia(dd);
-            asistenciaAula.setMes(mm);
-            asistenciaAula.setAnio(yy);
-            asistenciaAula.setHora(hora);
-            asistenciaAula.setMin(minuto);
-            asistenciaAula.setSeg(seg);
-            asistenciaAula.setEstado(0);
-            data.insertarAsistenciaAula(asistenciaAula);
-            data.close();
-            mostrarCorrecto(asistenciaAula.getDni(),asistenciaAula.getNombres() +" "+ asistenciaAula.getApe_paterno() +" "+ asistenciaAula.getApe_materno());
-//                final String c = registroAsistencia.getDni();
-//                WriteBatch batch = FirebaseFirestore.getInstance().batch();
-//                DocumentReference documentReference = FirebaseFirestore.getInstance().collection("asistencia").document(registroAsistencia.getDni());
-//                batch.update(documentReference, "check_registro", 1);
-//                batch.update(documentReference, "fecha_transferencia", FieldValue.serverTimestamp());
-//                batch.update(documentReference, "usuario_reg", usuario);
-//                batch.update(documentReference, "fech_reg_ingreso",
-//                        new Timestamp(new Date(registroAsistencia.getLocal_anio()-1900,registroAsistencia.getLocal_mes()-1,registroAsistencia.getLocal_dia(),
-//                                registroAsistencia.getLocal_hora(),registroAsistencia.getLocal_min(),registroAsistencia.getLocal_seg())));
-//                batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
-//                    @Override
-//                    public void onSuccess(Void aVoid) {
-//                        Data data = new Data(context);
-//                        data.open();
-//                        data.actualizarRegAsistenciaAulaSubido(c);
-//                        data.close();
-//                    }
-//                }).addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Toast.makeText(context, "NO GUARDO", Toast.LENGTH_SHORT).show();
-//                    }
-//                });
+        Data data = new Data(context);
+        data.open();
+        Calendar calendario = Calendar.getInstance();
+        int yy = calendario.get(Calendar.YEAR);
+        int mm = calendario.get(Calendar.MONTH)+1;
+        int dd = calendario.get(Calendar.DAY_OF_MONTH);
+        int hora = calendario.get(Calendar.HOUR_OF_DAY);
+        int minuto = calendario.get(Calendar.MINUTE);
+        int seg = calendario.get(Calendar.SECOND);
+        AsistenciaAula asistenciaAula = new AsistenciaAula();
+        asistenciaAula.setDni(asistencia.getDni());
+        asistenciaAula.setIdnacional(asistencia.getIdnacional());
+        asistenciaAula.setCcdd(asistencia.getCcdd());
+        asistenciaAula.setIdsede(asistencia.getIdsede());
+        asistenciaAula.setSede(asistencia.getSede());
+        asistenciaAula.setIdlocal(asistencia.getIdlocal());
+        asistenciaAula.setLocal(asistencia.getLocal());
+        asistenciaAula.setDireccion(asistencia.getDireccion());
+        asistenciaAula.setNombres(asistencia.getNombres());
+        asistenciaAula.setApe_materno(asistencia.getApe_materno());
+        asistenciaAula.setApe_paterno(asistencia.getApe_paterno());
+        asistenciaAula.setNaula(asistencia.getNaula());
+        asistenciaAula.setDiscapacidad(asistencia.getDiscapacidad());
+        asistenciaAula.setPrioridad(asistencia.getPrioridad());
+        asistenciaAula.setDia(dd);
+        asistenciaAula.setMes(mm);
+        asistenciaAula.setAnio(yy);
+        asistenciaAula.setHora(hora);
+        asistenciaAula.setMin(minuto);
+        asistenciaAula.setSeg(seg);
+        asistenciaAula.setEstado(0);
+        data.insertarAsistenciaAula(asistenciaAula);
+        data.close();
+        mostrarCorrecto(asistenciaAula.getDni(),asistenciaAula.getNombres() +" "+ asistenciaAula.getApe_paterno() +" "+ asistenciaAula.getApe_materno());
+
+        final String c = asistenciaAula.getDni();
+        WriteBatch batch = FirebaseFirestore.getInstance().batch();
+        DocumentReference documentReference = FirebaseFirestore.getInstance().collection("asistencia").document(asistenciaAula.getDni());
+        batch.update(documentReference, "check_registro", 1);
+        batch.update(documentReference, "fecha_transferencia", FieldValue.serverTimestamp());
+        batch.update(documentReference, "usuario_reg", usuario);
+        batch.update(documentReference, "fech_reg_ingreso",
+                new Timestamp(new Date(asistenciaAula.getAnio()-1900,asistenciaAula.getMes()-1,asistenciaAula.getDia(),
+                        asistenciaAula.getHora(),asistenciaAula.getMin(),asistenciaAula.getSeg())));
+        batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Data data = new Data(context);
+                data.open();
+                data.actualizarAsistenciaAulaSubido(c);
+                data.close();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(context, "NO GUARDO", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public void mostrarCorrecto(String dni, String nombre){
