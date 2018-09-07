@@ -398,11 +398,14 @@ public class Data {
 
     public int getNroCajaInxTipo(int nroLocal, int tipo){
         int cantidad = 0;
-        String[] whereArgs = new String[]{String.valueOf(nroLocal), String.valueOf(tipo)};
+        String[] whereArgs = new String[]{String.valueOf(nroLocal), String.valueOf(tipo),"1","1"};
         Cursor cursor = null;
         try{
             cursor = sqLiteDatabase.query(SQLConstantes.tablacajasentrada, null,
-                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " + SQLConstantes.WHERE_CLAUSE_TIPO_CAJA,whereArgs,null,null,null);
+                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL +
+                            " AND " + SQLConstantes.WHERE_CLAUSE_TIPO_CAJA +
+                            " AND " + SQLConstantes.WHERE_CLAUSE_NRO_LADO +
+                            " AND " + "estado>?",whereArgs,null,null,null);
             if(cursor.getCount() > 0) cantidad = cursor.getCount();
         }finally{
             if(cursor != null) cursor.close();
@@ -539,11 +542,14 @@ public class Data {
 
     public int getNroCajaOutxTipo(int nroLocal, int tipo){
         int cantidad = 0;
-        String[] whereArgs = new String[]{String.valueOf(nroLocal), String.valueOf(tipo)};
+        String[] whereArgs = new String[]{String.valueOf(nroLocal), String.valueOf(tipo),"1","1"};
         Cursor cursor = null;
         try{
             cursor = sqLiteDatabase.query(SQLConstantes.tablacajassalida, null,
-                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " + SQLConstantes.WHERE_CLAUSE_TIPO_CAJA,whereArgs,null,null,null);
+                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL +
+                            " AND " + SQLConstantes.WHERE_CLAUSE_TIPO_CAJA +
+                            " AND " + SQLConstantes.WHERE_CLAUSE_NRO_LADO +
+                            " AND " + "estado>?",whereArgs,null,null,null);
             if(cursor.getCount() > 0) cantidad = cursor.getCount();
         }finally{
             if(cursor != null) cursor.close();
