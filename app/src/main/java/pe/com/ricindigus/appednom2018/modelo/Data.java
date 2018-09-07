@@ -499,7 +499,7 @@ public class Data {
     public void actualizarCajaOutSubido(String codigo){
         String[] whereArgs = new String[]{codigo};
         ContentValues contentValues = new ContentValues();
-        contentValues.put(SQLConstantes.cajas_salida_estado,1);
+        contentValues.put(SQLConstantes.cajas_salida_estado,3);
         sqLiteDatabase.update(SQLConstantes.tablacajassalida,contentValues,SQLConstantes.WHERE_CLAUSE_COD_BARRA,whereArgs);
     }
 
