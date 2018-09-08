@@ -11,22 +11,25 @@
         android:label="EDNOM2018"
         android:roundIcon="@drawable/professor"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme1">
         <activity
             android:name=".activities.LoginActivity"
             android:configChanges="screenSize|orientation|keyboardHidden"
             android:screenOrientation="landscape">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".activities.MainActivity"
             android:configChanges="screenSize|orientation|keyboardHidden"
             android:screenOrientation="landscape"
             android:windowSoftInputMode="adjustNothing|stateAlwaysHidden" />
+        <activity android:name=".activities.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

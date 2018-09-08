@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
     int nroLocal;
     String usuario;
+    int tema;
     private ArrayList<String> listDataHeader;
     private ExpandableListView expListView;
     private HashMap<String, List<String>> listDataChild;
@@ -58,6 +59,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        tema = getIntent().getExtras().getInt("tema");
+        switch (tema){
+            case 1: setTheme(R.style.AppTheme1);break;
+            case 2: setTheme(R.style.AppTheme2);break;
+            case 3: setTheme(R.style.AppTheme3);break;
+            case 4: setTheme(R.style.AppTheme4);break;
+            case 5: setTheme(R.style.AppTheme5);break;
+        }
+
         setContentView(R.layout.activity_main);
 
         nroLocal = getIntent().getExtras().getInt("nrolocal");

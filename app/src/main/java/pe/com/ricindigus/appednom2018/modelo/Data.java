@@ -177,6 +177,23 @@ public class Data {
     }
 
 
+    public int getTemaApp(){
+        int tema = 0;
+        String[] whereArgs = new String[]{"1"};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query("version", null,"_id=?",whereArgs,null,null,null);
+            if(cursor.getCount() == 1){
+                cursor.moveToFirst();
+                tema = cursor.getInt(cursor.getColumnIndex("numero"));
+            }
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return tema;
+    }
+
+
     public Caja getCajaxCodigo(String codBarra){
         Caja caja = null;
         String[] whereArgs = new String[]{codBarra};
