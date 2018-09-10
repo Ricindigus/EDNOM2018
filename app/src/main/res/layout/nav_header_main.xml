@@ -22,10 +22,19 @@
         app:srcCompat="@drawable/logo_inei_blanco" />
 
     <TextView
+        android:id="@+id/txtTituloHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:text="EDNOM 2018 - DÍA D"
+        android:textStyle="bold"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+    <TextView
+        android:id="@+id/txtTituloUsuario"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="16sp"
-        android:text="@string/nombre_aplicacion_asistencia"
+        android:text="USUARIO"
         android:textStyle="bold"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 </LinearLayout>

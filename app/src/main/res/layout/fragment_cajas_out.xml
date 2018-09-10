@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="@dimen/margen_pantalla"
-    tools:context=".fragments.salida_cajas_local.CajasOutFragment">
+    tools:context=".fragments.registro_control_cajas.CajasOutFragment">
 
     <TextView
         android:layout_width="match_parent"
@@ -89,6 +89,7 @@
                         android:layout_height="wrap_content"
                         android:textStyle="bold"
                         android:textSize="@dimen/texto_mediano"
+                        android:textColor="@color/greenPrimaryDark"
                         android:text="700100200310"/>
                 </LinearLayout>
                 <LinearLayout
@@ -123,6 +124,7 @@
                         android:layout_height="wrap_content"
                         android:textStyle="bold"
                         android:textSize="@dimen/texto_mediano"
+                        android:textColor="@color/greenPrimaryDark"
                         android:text="AREQUIPA"/>
                 </LinearLayout>
                 <LinearLayout
@@ -144,6 +146,7 @@
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/texto_mediano"
                         android:textStyle="bold"
+                        android:textColor="@color/greenPrimaryDark"
                         android:text="EMBLEMATICA INSTITUCION EDUCATIVA"/>
                 </LinearLayout>
             </LinearLayout>
@@ -191,6 +194,7 @@
                         android:layout_height="wrap_content"
                         android:textStyle="bold"
                         android:textSize="@dimen/texto_mediano"
+                        android:textColor="@color/redPrimaryDark"
                         android:text="70000202510"/>
                 </LinearLayout>
                 <LinearLayout
@@ -228,6 +232,7 @@
                         android:layout_height="wrap_content"
                         android:textStyle="bold"
                         android:textSize="@dimen/texto_mediano"
+                        android:textColor="@color/redPrimaryDark"
                         android:text="20-10-2018 15:00:52"/>
                 </LinearLayout>
             </LinearLayout>

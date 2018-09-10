@@ -5,6 +5,7 @@ public class SQLConstantes {
     public static String DB_NAME = "mydatabase.sqlite";
 
     public static String tablausuariolocal = "usuario_local";
+    public static String tablausuarioactual = "usuario_actual";
     public static String tablacajas = "cajas";
     public static String tablaasistencia = "asistencia";
     public static String tablaaulas = "aulas";
@@ -30,6 +31,19 @@ public class SQLConstantes {
     public static String usuario_local_codsede = "codsede";
     public static String usuario_local_sede = "sede";
     public static String usuario_local_nombre = "nombre";
+
+    //TABLA USUARIO ACTUAL
+    public static String usuario_actual_id = "_id";
+    public static String usuario_actual_usuario = "usuario";
+    public static String usuario_actual_clave = "clave";
+    public static String usuario_actual_rol = "rol";
+    public static String usuario_actual_nro_local = "nro_local";
+    public static String usuario_actual_nombreLocal = "nombreLocal";
+    public static String usuario_actual_naulas = "naulas";
+    public static String usuario_actual_ncontingencia = "ncontingencia";
+    public static String usuario_actual_codsede = "codsede";
+    public static String usuario_actual_sede = "sede";
+    public static String usuario_actual_nombre = "nombre";
 
 
     //TABLA CAJAS
@@ -268,6 +282,20 @@ public class SQLConstantes {
     public static String resumen_total_id = "_id";
     public static String resumen_total_cantidad = "cantidad";
 
+    public static final String SQL_CREATE_TABLA_USUARIO_ACTUAL =
+            "CREATE TABLE " + tablausuarioactual + "(" +
+                    usuario_actual_id + " INTEGER PRIMARY KEY," +
+                    usuario_actual_usuario + " TEXT," +
+                    usuario_actual_clave + " TEXT," +
+                    usuario_actual_rol + " INTEGER," +
+                    usuario_actual_nro_local + " INTEGER," +
+                    usuario_actual_nombreLocal + " TEXT," +
+                    usuario_actual_naulas + " INTEGER," +
+                    usuario_actual_ncontingencia + " INTEGER," +
+                    usuario_actual_codsede + " INTEGER," +
+                    usuario_actual_sede + " TEXT," +
+                    usuario_actual_nombre + " TEXT" + ");"
+            ;
 
     public static final String SQL_CREATE_TABLA_CAJAS_ENTRADA =
             "CREATE TABLE " + tablacajasentrada + "(" +

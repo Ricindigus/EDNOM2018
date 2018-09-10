@@ -114,26 +114,28 @@ public class InvCuaderFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Data data =  new Data(context);
-        data.open();
-        ArrayList<String> aulas =  data.getArrayAulas(nroLocal);
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, aulas);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spAulas.setAdapter(dataAdapter);
-        data.close();
+        if (context != null){
+            Data data =  new Data(context);
+            data.open();
+            ArrayList<String> aulas =  data.getArrayAulas(nroLocal);
+            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, aulas);
+            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spAulas.setAdapter(dataAdapter);
+            data.close();
 
-        edtCuadernillo.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.length() == 6) clickBoton();
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-
-            @Override
-            public void afterTextChanged(Editable s) { }
-        });
+        }
+//        edtCuadernillo.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                if(s.length() == 6) clickBoton();
+//            }
+//
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) { }
+//        });
 
         btnBuscar.setOnClickListener(new View.OnClickListener() {
             @Override

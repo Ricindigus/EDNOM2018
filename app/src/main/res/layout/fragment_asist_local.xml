@@ -12,6 +12,7 @@
         android:gravity="center"
         android:textColor="@color/colorPrimary"
         android:textSize="24sp"
+        android:textStyle="bold"
         android:text="REGISTRO DE ASISTENCIA AL LOCAL"/>
     <LinearLayout
         android:layout_width="match_parent"

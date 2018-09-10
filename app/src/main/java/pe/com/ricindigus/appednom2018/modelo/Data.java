@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.SQLException;
+import android.database.sqlite.SQLiteCantOpenDatabaseException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -49,6 +50,7 @@ public class Data {
             try{
                 copyDataBase();
                 sqLiteDatabase = sqLiteOpenHelper.getWritableDatabase();
+                sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_USUARIO_ACTUAL);
                 sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_CAJAS_ENTRADA);
                 sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_CAJAS_SALIDA);
                 sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_ASISTENCIA_AULA);
@@ -76,6 +78,7 @@ public class Data {
         try{
             copyDataBase(inputPath);
             sqLiteDatabase = sqLiteOpenHelper.getWritableDatabase();
+            sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_USUARIO_ACTUAL);
             sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_CAJAS_ENTRADA);
             sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_CAJAS_SALIDA);
             sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_ASISTENCIA_AULA);
@@ -177,22 +180,71 @@ public class Data {
     }
 
 
-    public int getTemaApp(){
-        int tema = 0;
+    public void guardarClave(String clave){
+        long numero = DatabaseUtils.queryNumEntries(sqLiteDatabase, SQLConstantes.tablausuarioactual);
+        if(numero == 0){
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(SQLConstantes.usuario_actual_id,1);
+            contentValues.put(SQLConstantes.usuario_actual_clave,clave);
+            sqLiteDatabase.insert(SQLConstantes.tablausuarioactual,null,contentValues);
+        }else{
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(SQLConstantes.usuario_actual_clave,clave);
+            String[] whereArgs = new String[]{"1"};
+            sqLiteDatabase.update(SQLConstantes.tablausuarioactual,contentValues,SQLConstantes.WHERE_CLAUSE_ID,whereArgs);
+        }
+    }
+
+
+    public UsuarioActual getUsuarioActual(){
+        UsuarioActual usuario = null;
+        String[] whereArgs = new String[]{"1"};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablausuarioactual,
+                    null,SQLConstantes.WHERE_CLAUSE_ID,whereArgs,null,null,null);
+            if(cursor.getCount() == 1){
+                cursor.moveToFirst();
+                usuario = new UsuarioActual();
+                usuario.setClave(cursor.getString(cursor.getColumnIndex(SQLConstantes.usuario_actual_clave)));
+            }
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return usuario;
+    }
+
+    public String getNombreApp(){
+        String nombre = "";
         String[] whereArgs = new String[]{"1"};
         Cursor cursor = null;
         try{
             cursor = sqLiteDatabase.query("version", null,"_id=?",whereArgs,null,null,null);
             if(cursor.getCount() == 1){
                 cursor.moveToFirst();
-                tema = cursor.getInt(cursor.getColumnIndex("numero"));
+                nombre = cursor.getString(cursor.getColumnIndex("nombre"));
             }
         }finally{
             if(cursor != null) cursor.close();
         }
-        return tema;
+        return nombre;
     }
 
+    public int getNumeroApp(){
+        int numero = 0;
+        String[] whereArgs = new String[]{"1"};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query("version", null,"_id=?",whereArgs,null,null,null);
+            if(cursor.getCount() == 1){
+                cursor.moveToFirst();
+                numero = cursor.getInt(cursor.getColumnIndex("numero"));
+            }
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return numero;
+    }
 
     public Caja getCajaxCodigo(String codBarra){
         Caja caja = null;
