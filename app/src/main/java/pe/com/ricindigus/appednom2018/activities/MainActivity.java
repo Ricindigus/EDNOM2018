@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
         TextView txtHeaderTitulo = (TextView) headerView.findViewById(R.id.txtTituloHeader);
         TextView txtHeaderUsuario = (TextView) headerView.findViewById(R.id.txtTituloUsuario);
         txtHeaderTitulo.setText(temaApp);
-        txtHeaderUsuario.setText(nomUsuario);
+        txtHeaderUsuario.setText(usuario);
 
         enableExpandableList();
         if (rol == 3) tFragment = TipoFragment.CAJAS_IN;
