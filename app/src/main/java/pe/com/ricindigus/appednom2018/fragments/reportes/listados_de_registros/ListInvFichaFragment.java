@@ -130,10 +130,10 @@ public class ListInvFichaFragment extends Fragment {
                         final int j = i;
                         final String c = ficha.getCodigo();
                         WriteBatch batch = FirebaseFirestore.getInstance().batch();
-                        DocumentReference documentReference = FirebaseFirestore.getInstance().collection("inventario").document(ficha.getTipo()+ficha.getCodigo());
+                        DocumentReference documentReference = FirebaseFirestore.getInstance().collection("inventario").document(ficha.getTipo()+""+ficha.getCodigo());
                         batch.update(documentReference, "check_registro", 1);
                         batch.update(documentReference, "fecha_transferencia", FieldValue.serverTimestamp());
-                        batch.update(documentReference, "usuario_reg", usuario);
+                        batch.update(documentReference, "usuario_registro", usuario);
                         batch.update(documentReference, "fecha_registro",
                                 new Timestamp(new Date(ficha.getAnio()-1900,ficha.getMes()-1,ficha.getDia(),
                                         ficha.getHora(),ficha.getMin(),ficha.getSeg())));

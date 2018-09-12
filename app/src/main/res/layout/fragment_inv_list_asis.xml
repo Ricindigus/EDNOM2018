@@ -111,7 +111,7 @@
                     android:layout_marginBottom="@dimen/margin8dp"
                     android:background="@drawable/fondo_blanco">
                     <TextView
-                        android:id="@+id/lista_correcta_txtNroPostulantes"
+
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/texto_mediano"
@@ -119,6 +119,7 @@
                         android:textColor="@color/bluePrimaryDark"
                         android:text="NRO POSTULANTES: "/>
                     <TextView
+                        android:id="@+id/lista_correcta_txtNroPostulantes"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/texto_mediano"
@@ -336,7 +337,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="ERROR. HOJA DE LISTADO NO ENCONTRADO EN EL PADRÓN"
-                android:textColor="@color/colorIcons"
+                android:textColor="@color/redPrimaryDark"
                 android:gravity="center"
                 android:textStyle="bold"
                 android:textSize="@dimen/texto_grande"/>
@@ -347,15 +348,20 @@
                 android:padding="@dimen/margin8dp"
                 android:layout_marginBottom="@dimen/margin8dp"
                 android:background="@drawable/fondo_blanco">
-                <ImageView
+                <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/texto_mediano"
+                    android:text="CODIGO FICHA: "
+                    android:textColor="@color/bluePrimaryDark"/>
                 <TextView
                     android:id="@+id/error_codigo_lista_txtLista"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
                     android:textSize="@dimen/texto_mediano"
+                    android:textColor="@color/redPrimaryDark"
                     android:text="CODIGO FICHA"/>
             </LinearLayout>
         </LinearLayout>

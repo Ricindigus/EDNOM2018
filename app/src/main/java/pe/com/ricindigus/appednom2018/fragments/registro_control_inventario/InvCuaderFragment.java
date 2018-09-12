@@ -202,10 +202,11 @@ public class InvCuaderFragment extends Fragment {
         DocumentReference documentReference = FirebaseFirestore.getInstance().collection("inventario").document(cuadernillo.getTipo()+""+cuadernillo.getCodigo());
         batch.update(documentReference, "check_registro", 1);
         batch.update(documentReference, "fecha_transferencia", FieldValue.serverTimestamp());
-        batch.update(documentReference, "usuario_reg", usuario);
-        batch.update(documentReference, "fech_reg_ingreso",
+        batch.update(documentReference, "usuario_registro", usuario);
+        batch.update(documentReference, "fecha_registro",
                 new Timestamp(new Date(cuadernillo.getAnio()-1900,cuadernillo.getMes()-1,cuadernillo.getDia(),
                         cuadernillo.getHora(),cuadernillo.getMin(),cuadernillo.getSeg())));
+
         batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {

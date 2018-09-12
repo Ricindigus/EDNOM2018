@@ -132,7 +132,7 @@ public class ListInvListadoFragment extends Fragment {
                         DocumentReference documentReference = FirebaseFirestore.getInstance().collection("inventario").document(listado.getCodigo());
                         batch.update(documentReference, "check_registro", 1);
                         batch.update(documentReference, "fecha_transferencia", FieldValue.serverTimestamp());
-                        batch.update(documentReference, "usuario_reg", usuario);
+                        batch.update(documentReference, "usuario_registro", usuario);
                         batch.update(documentReference, "fecha_registro",
                                 new Timestamp(new Date(listado.getAnio()-1900,listado.getMes()-1,listado.getDia(),
                                         listado.getHora(),listado.getMin(),listado.getSeg())));

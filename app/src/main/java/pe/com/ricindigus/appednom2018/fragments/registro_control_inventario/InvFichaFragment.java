@@ -205,8 +205,8 @@ public class InvFichaFragment extends Fragment {
         DocumentReference documentReference = FirebaseFirestore.getInstance().collection("inventario").document(ficha.getTipo()+""+ficha.getCodigo());
         batch.update(documentReference, "check_registro", 1);
         batch.update(documentReference, "fecha_transferencia", FieldValue.serverTimestamp());
-        batch.update(documentReference, "usuario_reg", usuario);
-        batch.update(documentReference, "fech_reg_ingreso",
+        batch.update(documentReference, "usuario_registro", usuario);
+        batch.update(documentReference, "fecha_registro",
                 new Timestamp(new Date(ficha.getAnio()-1900,ficha.getMes()-1,ficha.getDia(),
                         ficha.getHora(),ficha.getMin(),ficha.getSeg())));
         batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {

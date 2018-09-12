@@ -131,7 +131,7 @@ public class ListAsisAulaFragment extends Fragment {
                         DocumentReference documentReference = FirebaseFirestore.getInstance().collection("asistencia").document(asistenciaAula.getDni());
                         batch.update(documentReference, "check_registro", 1);
                         batch.update(documentReference, "fecha_transferencia", FieldValue.serverTimestamp());
-                        batch.update(documentReference, "usuario_reg", usuario);
+                        batch.update(documentReference, "usuario_registro", usuario);
                         batch.update(documentReference, "fecha_registro",
                                 new Timestamp(new Date(asistenciaAula.getAnio()-1900,asistenciaAula.getMes()-1,asistenciaAula.getDia(),
                                         asistenciaAula.getHora(),asistenciaAula.getMin(),asistenciaAula.getSeg())));

@@ -102,7 +102,7 @@ public class ListAsisLocalFragment extends Fragment {
                         DocumentReference documentReference = FirebaseFirestore.getInstance().collection("asistencia").document(asistenciaLocal.getDni());
                         batch.update(documentReference, "check_registro", 1);
                         batch.update(documentReference, "fecha_transferencia", FieldValue.serverTimestamp());
-                        batch.update(documentReference, "usuario_reg", usuario);
+                        batch.update(documentReference, "usuario_registro", usuario);
                         batch.update(documentReference, "fecha_registro",
                                 new Timestamp(new Date(asistenciaLocal.getAnio()-1900,asistenciaLocal.getMes()-1,asistenciaLocal.getDia(),
                                         asistenciaLocal.getHora(),asistenciaLocal.getMin(),asistenciaLocal.getSeg())));

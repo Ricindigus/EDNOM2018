@@ -112,14 +112,14 @@ public class ListSalidaCajasFragment extends Fragment {
                         WriteBatch batch = FirebaseFirestore.getInstance().batch();
                         DocumentReference documentReference20 = FirebaseFirestore.getInstance().collection("cajas").document(cajaOut20.getCod_barra_caja());
                         DocumentReference documentReference1 = FirebaseFirestore.getInstance().collection("cajas").document(cajaOut.getCod_barra_caja());
-                        batch.update(documentReference1, "check_reg_salida", 1);
-                        batch.update(documentReference1, "fech_trans_salida", FieldValue.serverTimestamp());
-                        batch.update(documentReference1, "usuario_reg", usuario);
-                        batch.update(documentReference1, "fech_reg_salida", new Timestamp(new Date(cajaOut.getAnio()-1900,cajaOut.getMes()-1,cajaOut.getDia(),cajaOut.getHora(),cajaOut.getMin(),cajaOut.getSeg())));
-                        batch.update(documentReference20, "check_reg_salida", 1);
-                        batch.update(documentReference20, "fech_trans_salida", FieldValue.serverTimestamp());
-                        batch.update(documentReference20, "usuario_reg", usuario);
-                        batch.update(documentReference20, "fech_reg_salida", new Timestamp(new Date(cajaOut20.getAnio()-1900,cajaOut20.getMes()-1,cajaOut20.getDia(),cajaOut20.getHora(),cajaOut20.getMin(),cajaOut20.getSeg())));
+                        batch.update(documentReference1, "check_registro_salida", 1);
+                        batch.update(documentReference1, "fecha_transferencia_salida", FieldValue.serverTimestamp());
+                        batch.update(documentReference1, "usuario_registro_salida", usuario);
+                        batch.update(documentReference1, "fecha_registro_salida", new Timestamp(new Date(cajaOut.getAnio()-1900,cajaOut.getMes()-1,cajaOut.getDia(),cajaOut.getHora(),cajaOut.getMin(),cajaOut.getSeg())));
+                        batch.update(documentReference20, "check_registro_salida", 1);
+                        batch.update(documentReference20, "fecha_transferencia_salida", FieldValue.serverTimestamp());
+                        batch.update(documentReference20, "usuario_registro_salida", usuario);
+                        batch.update(documentReference20, "fecha_registro_salida", new Timestamp(new Date(cajaOut20.getAnio()-1900,cajaOut20.getMes()-1,cajaOut20.getDia(),cajaOut20.getHora(),cajaOut20.getMin(),cajaOut20.getSeg())));
 
                         final String codigoBarra = cajaOut.getCod_barra_caja();
                         final String codigoBarra20 = cajaOut20.getCod_barra_caja();
