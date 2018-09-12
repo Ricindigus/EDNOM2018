@@ -47,7 +47,6 @@ public class LoginActivity extends AppCompatActivity {
         temaApp = data.getNombreApp();
         data.close();
         txtTitulo.setText(temaApp);
-        edtClave.setText("VOE5XM");
 
         btnIngresar.setOnClickListener(new View.OnClickListener() {
             @Override

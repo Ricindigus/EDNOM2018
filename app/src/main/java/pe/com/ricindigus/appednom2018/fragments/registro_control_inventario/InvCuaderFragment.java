@@ -124,19 +124,6 @@ public class InvCuaderFragment extends Fragment {
             data.close();
 
         }
-//        edtCuadernillo.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                if(s.length() == 6) clickBoton();
-//            }
-//
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) { }
-//        });
-
         btnBuscar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -224,7 +211,7 @@ public class InvCuaderFragment extends Fragment {
             public void onSuccess(Void aVoid) {
                 Data data = new Data(context);
                 data.open();
-                data.actualizarAsistenciaAulaSubido(c);
+                data.actualizarCuadernilloSubido(c);
                 data.close();
             }
         }).addOnFailureListener(new OnFailureListener() {

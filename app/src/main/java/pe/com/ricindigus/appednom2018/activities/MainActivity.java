@@ -57,7 +57,8 @@ public class MainActivity extends AppCompatActivity {
     int nroLocal;
     String usuario;
     String temaApp;
-    String nomUsuario;
+    String usuarioLogueado;
+
     int numeroVersion;
     int rol;
     int tFragment;
@@ -79,8 +80,9 @@ public class MainActivity extends AppCompatActivity {
         String clave = data.getUsuarioActual().getClave();
         UsuarioLocal usuarioLocal = data.getUsuarioLocal(clave);
         nroLocal = usuarioLocal.getNro_local();
-        usuario = usuarioLocal.getUsuario();
-        nomUsuario = usuarioLocal.getNombre();
+
+        usuario = usuarioLocal.getClave();
+        usuarioLogueado = usuarioLocal.getUsuario();
         rol = usuarioLocal.getRol();
 
         data.close();
@@ -107,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
         TextView txtHeaderTitulo = (TextView) headerView.findViewById(R.id.txtTituloHeader);
         TextView txtHeaderUsuario = (TextView) headerView.findViewById(R.id.txtTituloUsuario);
         txtHeaderTitulo.setText(temaApp);
-        txtHeaderUsuario.setText(usuario);
+        txtHeaderUsuario.setText(usuarioLogueado);
 
         enableExpandableList();
         if (rol == 3) tFragment = TipoFragment.CAJAS_IN;

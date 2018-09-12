@@ -129,7 +129,7 @@ public class ListInvCuadernilloFragment extends Fragment {
                         final int j = i;
                         final String c = cuadernillo.getCodigo();
                         WriteBatch batch = FirebaseFirestore.getInstance().batch();
-                        DocumentReference documentReference = FirebaseFirestore.getInstance().collection("inventario").document(cuadernillo.getCodigo());
+                        DocumentReference documentReference = FirebaseFirestore.getInstance().collection("inventario").document(cuadernillo.getTipo()+cuadernillo.getCodigo());
                         batch.update(documentReference, "check_registro", 1);
                         batch.update(documentReference, "fecha_transferencia", FieldValue.serverTimestamp());
                         batch.update(documentReference, "usuario_reg", usuario);
