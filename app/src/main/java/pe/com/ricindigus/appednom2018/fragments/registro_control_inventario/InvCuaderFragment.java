@@ -246,8 +246,8 @@ public class InvCuaderFragment extends Fragment {
         lytYaRegistrado.setVisibility(View.GONE);
         lytErrorCuadernilloAula.setVisibility(View.VISIBLE);
         lytCorrecto.setVisibility(View.GONE);
-        errorCuadernilloAulaTxtNombre.setText(dni);
-        errorCuadernilloAulaTxtDni.setText(nombre);
+        errorCuadernilloAulaTxtNombre.setText(nombre);
+        errorCuadernilloAulaTxtDni.setText(dni);
         errorCuadernilloAulaTxtAula.setText(aula);
     }
     public void mostrarYaRegistrado(String dni, String nombre, int aula){

@@ -104,26 +104,26 @@ public class ListIngresoCajasFragment extends Fragment {
                 if(completos.size() > 0){
                     final int total = completos.size();
                     int i = 0;
-                    for (final CajaIn cajaIn : completos){
+                    for (final CajaIn cajaIn10 : completos){
                         i++;
                         final int j = i;
                         Data d = new Data(context);
                         d.open();
-                        CajaIn cajaIn20 = d.getCajaIn(getCodigo20(cajaIn.getCod_barra_caja()));
+                        CajaIn cajaIn20 = d.getCajaIn(getCodigo20(cajaIn10.getCod_barra_caja()));
                         d.close();
                         WriteBatch batch = FirebaseFirestore.getInstance().batch();
                         DocumentReference documentReference20 = FirebaseFirestore.getInstance().collection("cajas").document(cajaIn20.getCod_barra_caja());
-                        DocumentReference documentReference1 = FirebaseFirestore.getInstance().collection("cajas").document(cajaIn.getCod_barra_caja());
-                        batch.update(documentReference1, "check_registro", 1);
-                        batch.update(documentReference1, "fecha_transferencia_ingreso", FieldValue.serverTimestamp());
-                        batch.update(documentReference1, "usuario_registro_ingreso", usuario);
-                        batch.update(documentReference1, "fecha_registro_ingreso", new Timestamp(new Date(cajaIn.getAnio()-1900,cajaIn.getMes()-1,cajaIn.getDia(),cajaIn.getHora(),cajaIn.getMin(),cajaIn.getSeg())));
+                        DocumentReference documentReference10 = FirebaseFirestore.getInstance().collection("cajas").document(cajaIn10.getCod_barra_caja());
+                        batch.update(documentReference10, "check_registro", 1);
+                        batch.update(documentReference10, "fecha_transferencia_ingreso", FieldValue.serverTimestamp());
+                        batch.update(documentReference10, "usuario_registro_ingreso", usuario);
+                        batch.update(documentReference10, "fecha_registro_ingreso", new Timestamp(new Date(cajaIn10.getAnio()-1900,cajaIn10.getMes()-1,cajaIn10.getDia(),cajaIn10.getHora(),cajaIn10.getMin(),cajaIn10.getSeg())));
                         batch.update(documentReference20, "check_registro", 1);
                         batch.update(documentReference20, "fecha_transferencia_ingreso", FieldValue.serverTimestamp());
                         batch.update(documentReference20, "usuario_registro_ingreso", usuario);
                         batch.update(documentReference20, "fecha_registro_ingreso", new Timestamp(new Date(cajaIn20.getAnio()-1900,cajaIn20.getMes()-1,cajaIn20.getDia(),cajaIn20.getHora(),cajaIn20.getMin(),cajaIn20.getSeg())));
 
-                        final String codigoBarra = cajaIn.getCod_barra_caja();
+                        final String codigoBarra10 = cajaIn10.getCod_barra_caja();
                         final String codigoBarra20 = cajaIn20.getCod_barra_caja();
 
                         batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -131,7 +131,7 @@ public class ListIngresoCajasFragment extends Fragment {
                             public void onSuccess(Void aVoid) {
                                 Data data = new Data(context);
                                 data.open();
-                                data.actualizarCajaInSubido(codigoBarra);
+                                data.actualizarCajaInSubido(codigoBarra10);
                                 data.actualizarCajaInSubido(codigoBarra20);
                                 data.close();
                                 if (j == total) {

@@ -247,8 +247,8 @@ public class InvFichaFragment extends Fragment {
         lytYaRegistrado.setVisibility(View.GONE);
         lytErrorFichaAula.setVisibility(View.VISIBLE);
         lytCorrecto.setVisibility(View.GONE);
-        errorFichaAulaTxtNombre.setText(dni);
-        errorFichaAulaTxtDni.setText(nombre);
+        errorFichaAulaTxtNombre.setText(nombre);
+        errorFichaAulaTxtDni.setText(dni);
         errorFichaAulaTxtAula.setText(aula);
     }
     public void mostrarYaRegistrado(String dni, String nombre, int nAula, String codigoFicha){

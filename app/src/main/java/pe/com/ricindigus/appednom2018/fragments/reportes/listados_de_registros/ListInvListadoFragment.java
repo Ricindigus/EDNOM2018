@@ -112,6 +112,7 @@ public class ListInvListadoFragment extends Fragment {
         fabUpLoad.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(context, "Subiendo...", Toast.LENGTH_SHORT).show();
                 b = false;
                 datosNoEnviados = new ArrayList<>();
                 data = new Data(context);

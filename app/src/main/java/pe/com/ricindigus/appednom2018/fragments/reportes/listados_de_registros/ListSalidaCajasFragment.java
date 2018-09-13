@@ -102,26 +102,26 @@ public class ListSalidaCajasFragment extends Fragment {
                 if(completos.size() > 0){
                     final int total = completos.size();
                     int i = 0;
-                    for (final CajaOut cajaOut : completos){
+                    for (final CajaOut cajaOut10 : completos){
                         i++;
                         final int j = i;
                         Data d = new Data(context);
                         d.open();
-                        CajaOut cajaOut20 = d.getCajaOut(getCodigo20(cajaOut.getCod_barra_caja()));
+                        CajaOut cajaOut20 = d.getCajaOut(getCodigo20(cajaOut10.getCod_barra_caja()));
                         d.close();
                         WriteBatch batch = FirebaseFirestore.getInstance().batch();
                         DocumentReference documentReference20 = FirebaseFirestore.getInstance().collection("cajas").document(cajaOut20.getCod_barra_caja());
-                        DocumentReference documentReference1 = FirebaseFirestore.getInstance().collection("cajas").document(cajaOut.getCod_barra_caja());
-                        batch.update(documentReference1, "check_registro", 2);
-                        batch.update(documentReference1, "fecha_transferencia_salida", FieldValue.serverTimestamp());
-                        batch.update(documentReference1, "usuario_registro_salida", usuario);
-                        batch.update(documentReference1, "fecha_registro_salida", new Timestamp(new Date(cajaOut.getAnio()-1900,cajaOut.getMes()-1,cajaOut.getDia(),cajaOut.getHora(),cajaOut.getMin(),cajaOut.getSeg())));
+                        DocumentReference documentReference10 = FirebaseFirestore.getInstance().collection("cajas").document(cajaOut10.getCod_barra_caja());
+                        batch.update(documentReference10, "check_registro", 2);
+                        batch.update(documentReference10, "fecha_transferencia_salida", FieldValue.serverTimestamp());
+                        batch.update(documentReference10, "usuario_registro_salida", usuario);
+                        batch.update(documentReference10, "fecha_registro_salida", new Timestamp(new Date(cajaOut10.getAnio()-1900,cajaOut10.getMes()-1,cajaOut10.getDia(),cajaOut10.getHora(),cajaOut10.getMin(),cajaOut10.getSeg())));
                         batch.update(documentReference20, "check_registro", 2);
                         batch.update(documentReference20, "fecha_transferencia_salida", FieldValue.serverTimestamp());
                         batch.update(documentReference20, "usuario_registro_salida", usuario);
                         batch.update(documentReference20, "fecha_registro_salida", new Timestamp(new Date(cajaOut20.getAnio()-1900,cajaOut20.getMes()-1,cajaOut20.getDia(),cajaOut20.getHora(),cajaOut20.getMin(),cajaOut20.getSeg())));
 
-                        final String codigoBarra = cajaOut.getCod_barra_caja();
+                        final String codigoBarra = cajaOut10.getCod_barra_caja();
                         final String codigoBarra20 = cajaOut20.getCod_barra_caja();
 
                         batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {

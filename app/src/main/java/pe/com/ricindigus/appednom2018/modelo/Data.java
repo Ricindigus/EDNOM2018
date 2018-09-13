@@ -662,12 +662,12 @@ public class Data {
 
     public ArrayList<CajaOut> getAllCajasOutCompletos(int nroLocal){
         ArrayList<CajaOut> cajaOuts = new ArrayList<>();
-        String[] whereArgs = new String[]{String.valueOf(nroLocal)};
+        String[] whereArgs = new String[]{String.valueOf(nroLocal),"1","2"};
         Cursor cursor = null;
         try{
             cursor = sqLiteDatabase.query(SQLConstantes.tablacajassalida, null,
-                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL,whereArgs,null,null,null);while(cursor.moveToNext()){
-                if(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_salida_estado)) == 2){
+                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " + SQLConstantes.WHERE_CLAUSE_NRO_LADO + " AND " + SQLConstantes.WHERE_CLAUSE_ESTADO,whereArgs,null,null,null);while(cursor.moveToNext()){
+                while (cursor.moveToNext()){
                     CajaOut cajaOut = new CajaOut();
                     cajaOut.set_id(cursor.getString(cursor.getColumnIndex(SQLConstantes.cajas_salida_id)));
                     cajaOut.setCod_barra_caja(cursor.getString(cursor.getColumnIndex(SQLConstantes.cajas_salida_cod_barra)));
@@ -697,12 +697,12 @@ public class Data {
 
     public ArrayList<CajaOut> getAllCajasOutTransferidos(int nroLocal){
         ArrayList<CajaOut> cajaOuts = new ArrayList<>();
-        String[] whereArgs = new String[]{String.valueOf(nroLocal)};
+        String[] whereArgs = new String[]{String.valueOf(nroLocal),"1","3"};
         Cursor cursor = null;
         try{
             cursor = sqLiteDatabase.query(SQLConstantes.tablacajassalida, null,
-                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL,whereArgs,null,null,null);while(cursor.moveToNext()){
-                if(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_salida_estado)) == 3){
+                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " + SQLConstantes.WHERE_CLAUSE_NRO_LADO + " AND " + SQLConstantes.WHERE_CLAUSE_ESTADO,whereArgs,null,null,null);while(cursor.moveToNext()){
+                while(cursor.moveToNext()){
                     CajaOut cajaOut = new CajaOut();
                     cajaOut.set_id(cursor.getString(cursor.getColumnIndex(SQLConstantes.cajas_salida_id)));
                     cajaOut.setCod_barra_caja(cursor.getString(cursor.getColumnIndex(SQLConstantes.cajas_salida_cod_barra)));

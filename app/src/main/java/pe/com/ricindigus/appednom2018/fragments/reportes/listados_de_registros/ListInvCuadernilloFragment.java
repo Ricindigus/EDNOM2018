@@ -111,6 +111,7 @@ public class ListInvCuadernilloFragment extends Fragment {
         fabUpLoad.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(context, "Subiendo...", Toast.LENGTH_SHORT).show();
                 b = false;
                 datosNoEnviados = new ArrayList<Cuadernillo>();
                 data = new Data(context);
