@@ -32,9 +32,7 @@ import java.util.Date;
 
 import pe.com.ricindigus.appednom2018.R;
 import pe.com.ricindigus.appednom2018.adapters.AsistenciaAulaAdapter;
-import pe.com.ricindigus.appednom2018.adapters.AsistenciaLocalAdapter;
 import pe.com.ricindigus.appednom2018.modelo.AsistenciaAula;
-import pe.com.ricindigus.appednom2018.modelo.AsistenciaLocal;
 import pe.com.ricindigus.appednom2018.modelo.Data;
 
 /**
@@ -82,7 +80,7 @@ public class ListAsisAulaFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Data d =  new Data(context);
         d.open();
-        ArrayList<String> aulas =  d.getArrayAulas(nroLocal);
+        ArrayList<String> aulas =  d.getArrayAulasListado(nroLocal);
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, aulas);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spAulas.setAdapter(dataAdapter);
@@ -115,9 +113,10 @@ public class ListAsisAulaFragment extends Fragment {
                 noEnviados = new ArrayList<>();
                 data = new Data(context);
                 data.open();
+                int seleccion = spAulas.getSelectedItemPosition();
                 String aula = spAulas.getSelectedItem().toString();
                 int nroAula = 0;
-                nroAula = data.getNumeroAula(aula,nroLocal);
+                if(seleccion > 0) nroAula = data.getNumeroAula(aula,nroLocal);
                 noEnviados = data.getAsistenciaAulaSinEnviar(nroLocal,nroAula);
                 data.close();
                 if(noEnviados.size() > 0){
@@ -167,11 +166,12 @@ public class ListAsisAulaFragment extends Fragment {
         asistenciaAulas = new ArrayList<AsistenciaAula>();
         Data d = new Data(context);
         d.open();
+        int seleccion = spAulas.getSelectedItemPosition();
         String aula = spAulas.getSelectedItem().toString();
         int nroAula = 0;
-        nroAula = d.getNumeroAula(aula,nroLocal);
+        if(seleccion > 0) nroAula = d.getNumeroAula(aula,nroLocal);
         asistenciaAulas = d.getAllAsistenciaAula(nroLocal,nroAula);
-        txtNumero.setText("Total registros: " + asistenciaAulas.size());
+        txtNumero.setText("TOTAL REGISTROS: " + asistenciaAulas.size());
         d.close();
     }
     public String checkDigito (int number) {

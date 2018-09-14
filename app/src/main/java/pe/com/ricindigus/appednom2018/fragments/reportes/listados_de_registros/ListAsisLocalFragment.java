@@ -140,7 +140,7 @@ public class ListAsisLocalFragment extends Fragment {
         Data data = new Data(context);
         data.open();
         asistenciaLocals = data.getAllAsistenciaLocal(nroLocal);
-        txtNumero.setText("Total registros: " + asistenciaLocals.size());
+        txtNumero.setText("TOTAL REGISTROS: " + asistenciaLocals.size());
         data.close();
     }
 

@@ -10,7 +10,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,10 +31,8 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import pe.com.ricindigus.appednom2018.R;
-import pe.com.ricindigus.appednom2018.adapters.InventarioFichaAdapter;
 import pe.com.ricindigus.appednom2018.adapters.InventarioListadoAdapter;
 import pe.com.ricindigus.appednom2018.modelo.Data;
-import pe.com.ricindigus.appednom2018.modelo.Ficha;
 import pe.com.ricindigus.appednom2018.modelo.Listado;
 
 /**
@@ -83,7 +80,7 @@ public class ListInvListadoFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Data d =  new Data(context);
         d.open();
-        ArrayList<String> aulas =  d.getArrayAulas(nroLocal);
+        ArrayList<String> aulas =  d.getArrayAulasListado(nroLocal);
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, aulas);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spAulas.setAdapter(dataAdapter);
@@ -117,11 +114,13 @@ public class ListInvListadoFragment extends Fragment {
                 datosNoEnviados = new ArrayList<>();
                 data = new Data(context);
                 data.open();
+                int seleccion = spAulas.getSelectedItemPosition();
                 String aula = spAulas.getSelectedItem().toString();
                 int nroAula = 0;
-                nroAula = data.getNumeroAula(aula,nroLocal);
+                if(seleccion > 0) nroAula = data.getNumeroAula(aula,nroLocal);
                 datosNoEnviados = data.getAllListadosSinEnviar(nroLocal,nroAula);
                 data.close();
+
                 if(datosNoEnviados.size() > 0){
                     final int total = datosNoEnviados.size();
                     int i = 0;
@@ -170,11 +169,12 @@ public class ListInvListadoFragment extends Fragment {
         listados = new ArrayList<Listado>();
         Data d = new Data(context);
         d.open();
+        int seleccion = spAulas.getSelectedItemPosition();
         String aula = spAulas.getSelectedItem().toString();
         int nroAula = 0;
-        nroAula = d.getNumeroAula(aula,nroLocal);
+        if(seleccion > 0) nroAula = d.getNumeroAula(aula,nroLocal);
         listados = d.getAllListados(nroLocal,nroAula);
-        txtNumero.setText("Total registros: " + listados.size());
+        txtNumero.setText("REGISTROS: " + listados.size());
         d.close();
     }
     public String checkDigito (int number) {

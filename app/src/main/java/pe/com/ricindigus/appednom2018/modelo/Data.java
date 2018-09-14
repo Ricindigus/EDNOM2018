@@ -436,7 +436,7 @@ public class Data {
         Cursor cursor = null;
         try{
             cursor = sqLiteDatabase.query(SQLConstantes.tablacajasentrada, null,
-                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " + SQLConstantes.WHERE_CLAUSE_NRO_LADO,whereArgs,null,null,null);
+                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " + SQLConstantes.WHERE_CLAUSE_NRO_LADO,whereArgs,null,null,"estado DESC");
             while (cursor.moveToNext()){
                 CajaIn cajaIn = new CajaIn();
                 cajaIn.set_id(cursor.getString(cursor.getColumnIndex(SQLConstantes.cajas_entrada_id)));
@@ -482,7 +482,7 @@ public class Data {
         return cantidad;
     }
 
-    public ArrayList<CajaIn> getAllCajasInCompletas(int nroLocal){
+    public ArrayList<CajaIn> getAllCajasInNoEnviados(int nroLocal){
         ArrayList<CajaIn> cajaIns = new ArrayList<>();
         String[] whereArgs = new String[]{String.valueOf(nroLocal),"1","2"};
         Cursor cursor = null;
@@ -500,7 +500,7 @@ public class Data {
 //                    cajaIn.setSede(cursor.getString(cursor.getColumnIndex(SQLConstantes.cajas_entrada_nomsede)));
 //                    cajaIn.setIdlocal(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_entrada_idlocal)));
 //                    cajaIn.setLocal(cursor.getString(cursor.getColumnIndex(SQLConstantes.cajas_entrada_nomlocal)));
-//                    cajaIn.setTipo(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_entrada_tipo)));
+                    cajaIn.setTipo(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_entrada_tipo)));
 //                    cajaIn.setAcl(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_entrada_acl)));
                     cajaIn.setDia(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_entrada_fecha_reg_dia)));
                     cajaIn.setMes(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_entrada_fecha_reg_mes)));
@@ -520,8 +520,58 @@ public class Data {
         return cajaIns;
     }
 
-    public ArrayList<CajaIn> getAllCajasInTransferidos(int nroLocal){
-        ArrayList<CajaIn> cajaIns = new ArrayList<>();
+    public int getNroCajasInSinRegistrar(int nroLocal){
+        int numero = 0;
+        String[] whereArgs = new String[]{String.valueOf(nroLocal),"1","0"};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablacajasentrada, null,
+                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL +" AND " +
+                            SQLConstantes.WHERE_CLAUSE_NRO_LADO+" AND " +
+                            SQLConstantes.WHERE_CLAUSE_ESTADO,whereArgs,null,null,null);
+
+            if (cursor != null) numero = cursor.getCount();
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return numero;
+    }
+
+    public int getNroCajasInNoCompletas(int nroLocal){
+        int numero = 0;
+        String[] whereArgs = new String[]{String.valueOf(nroLocal),"1","1"};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablacajasentrada, null,
+                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL +" AND " +
+                            SQLConstantes.WHERE_CLAUSE_NRO_LADO+" AND " +
+                            SQLConstantes.WHERE_CLAUSE_ESTADO,whereArgs,null,null,null);
+
+            if (cursor != null) numero = cursor.getCount();
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return numero;
+    }
+
+    public int getNroCajasInCompletas(int nroLocal){
+        int numero = 0;
+        String[] whereArgs = new String[]{String.valueOf(nroLocal),"1","2"};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablacajasentrada, null,
+                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL +" AND " +
+                            SQLConstantes.WHERE_CLAUSE_NRO_LADO+" AND " +
+                            SQLConstantes.WHERE_CLAUSE_ESTADO,whereArgs,null,null,null);
+
+            if (cursor != null) numero = cursor.getCount();
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return numero;
+    }
+    public int getNroCajasInTransferidos(int nroLocal){
+        int numero = 0;
         String[] whereArgs = new String[]{String.valueOf(nroLocal),"1","3"};
         Cursor cursor = null;
         try{
@@ -529,33 +579,12 @@ public class Data {
                     SQLConstantes.WHERE_CLAUSE_ID_LOCAL +" AND " +
                             SQLConstantes.WHERE_CLAUSE_NRO_LADO+" AND " +
                             SQLConstantes.WHERE_CLAUSE_ESTADO,whereArgs,null,null,null);
-            while(cursor.moveToNext()){
 
-                    CajaIn cajaIn = new CajaIn();
-//                    cajaIn.set_id(cursor.getString(cursor.getColumnIndex(SQLConstantes.cajas_entrada_id)));
-                    cajaIn.setCod_barra_caja(cursor.getString(cursor.getColumnIndex(SQLConstantes.cajas_entrada_cod_barra)));
-//                    cajaIn.setIdsede(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_entrada_idsede)));
-//                    cajaIn.setSede(cursor.getString(cursor.getColumnIndex(SQLConstantes.cajas_entrada_nomsede)));
-//                    cajaIn.setIdlocal(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_entrada_idlocal)));
-//                    cajaIn.setLocal(cursor.getString(cursor.getColumnIndex(SQLConstantes.cajas_entrada_nomlocal)));
-//                    cajaIn.setTipo(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_entrada_tipo)));
-//                    cajaIn.setAcl(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_entrada_acl)));
-                    cajaIn.setDia(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_entrada_fecha_reg_dia)));
-                    cajaIn.setMes(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_entrada_fecha_reg_mes)));
-                    cajaIn.setAnio(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_entrada_fecha_reg_anio)));
-                    cajaIn.setHora(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_entrada_fecha_reg_hora)));
-                    cajaIn.setMin(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_entrada_fecha_reg_min)));
-                    cajaIn.setSeg(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_entrada_fecha_reg_seg)));
-//                    cajaIn.setCheck(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_entrada_check_reg)));
-//                    cajaIn.setNlado(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_entrada_nlado)));
-//                    cajaIn.setEstado(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_entrada_estado)));
-                    cajaIns.add(cajaIn);
-
-            }
+            if (cursor != null) numero = cursor.getCount();
         }finally{
             if(cursor != null) cursor.close();
         }
-        return cajaIns;
+        return numero;
     }
 
     public void insertarCajaOut(CajaOut cajaOut){
@@ -632,7 +661,7 @@ public class Data {
         Cursor cursor = null;
         try{
             cursor = sqLiteDatabase.query(SQLConstantes.tablacajassalida, null,
-                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " + SQLConstantes.WHERE_CLAUSE_NRO_LADO,whereArgs,null,null,null);
+                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " + SQLConstantes.WHERE_CLAUSE_NRO_LADO,whereArgs,null,null,"estado DESC");
             while (cursor.moveToNext()){
                 CajaOut cajaOut = new CajaOut();
                 cajaOut.set_id(cursor.getString(cursor.getColumnIndex(SQLConstantes.cajas_salida_id)));
@@ -660,14 +689,14 @@ public class Data {
         return cajaOuts;
     }
 
-    public ArrayList<CajaOut> getAllCajasOutCompletos(int nroLocal){
+    public ArrayList<CajaOut> getAllCajasOutNoEnviados(int nroLocal){
         ArrayList<CajaOut> cajaOuts = new ArrayList<>();
         String[] whereArgs = new String[]{String.valueOf(nroLocal),"1","2"};
         Cursor cursor = null;
         try{
             cursor = sqLiteDatabase.query(SQLConstantes.tablacajassalida, null,
-                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " + SQLConstantes.WHERE_CLAUSE_NRO_LADO + " AND " + SQLConstantes.WHERE_CLAUSE_ESTADO,whereArgs,null,null,null);while(cursor.moveToNext()){
-                while (cursor.moveToNext()){
+                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " + SQLConstantes.WHERE_CLAUSE_NRO_LADO + " AND " + SQLConstantes.WHERE_CLAUSE_ESTADO,whereArgs,null,null,null);
+            while(cursor.moveToNext()){
                     CajaOut cajaOut = new CajaOut();
                     cajaOut.set_id(cursor.getString(cursor.getColumnIndex(SQLConstantes.cajas_salida_id)));
                     cajaOut.setCod_barra_caja(cursor.getString(cursor.getColumnIndex(SQLConstantes.cajas_salida_cod_barra)));
@@ -687,7 +716,7 @@ public class Data {
                     cajaOut.setNlado(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_salida_nlado)));
                     cajaOut.setEstado(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_salida_estado)));
                     cajaOuts.add(cajaOut);
-                }
+
             }
         }finally{
             if(cursor != null) cursor.close();
@@ -695,39 +724,68 @@ public class Data {
         return cajaOuts;
     }
 
-    public ArrayList<CajaOut> getAllCajasOutTransferidos(int nroLocal){
-        ArrayList<CajaOut> cajaOuts = new ArrayList<>();
+    public int getNroCajasOutNoRegistrados(int nroLocal){
+        int numero = 0;
+        String[] whereArgs = new String[]{String.valueOf(nroLocal),"1","0"};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablacajassalida, null,
+                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
+                            SQLConstantes.WHERE_CLAUSE_NRO_LADO + " AND " +
+                            SQLConstantes.WHERE_CLAUSE_ESTADO,whereArgs,null,null,null);
+            if (cursor != null) numero = cursor.getCount();
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return numero;
+    }
+
+    public int getNroCajasOutNoCompletos(int nroLocal){
+        int numero = 0;
+        String[] whereArgs = new String[]{String.valueOf(nroLocal),"1","1"};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablacajassalida, null,
+                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
+                            SQLConstantes.WHERE_CLAUSE_NRO_LADO + " AND " +
+                            SQLConstantes.WHERE_CLAUSE_ESTADO,whereArgs,null,null,null);
+            if (cursor != null) numero = cursor.getCount();
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return numero;
+    }
+
+    public int getNroCajasOutCompletos(int nroLocal){
+        int numero = 0;
+        String[] whereArgs = new String[]{String.valueOf(nroLocal),"1","2"};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablacajassalida, null,
+                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
+                            SQLConstantes.WHERE_CLAUSE_NRO_LADO + " AND " +
+                            SQLConstantes.WHERE_CLAUSE_ESTADO,whereArgs,null,null,null);
+            if (cursor != null) numero = cursor.getCount();
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return numero;
+    }
+
+    public int getNroCajasOutTransferidos(int nroLocal){
+        int numero = 0;
         String[] whereArgs = new String[]{String.valueOf(nroLocal),"1","3"};
         Cursor cursor = null;
         try{
             cursor = sqLiteDatabase.query(SQLConstantes.tablacajassalida, null,
-                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " + SQLConstantes.WHERE_CLAUSE_NRO_LADO + " AND " + SQLConstantes.WHERE_CLAUSE_ESTADO,whereArgs,null,null,null);while(cursor.moveToNext()){
-                while(cursor.moveToNext()){
-                    CajaOut cajaOut = new CajaOut();
-                    cajaOut.set_id(cursor.getString(cursor.getColumnIndex(SQLConstantes.cajas_salida_id)));
-                    cajaOut.setCod_barra_caja(cursor.getString(cursor.getColumnIndex(SQLConstantes.cajas_salida_cod_barra)));
-                    cajaOut.setIdsede(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_salida_idsede)));
-                    cajaOut.setSede(cursor.getString(cursor.getColumnIndex(SQLConstantes.cajas_salida_nomsede)));
-                    cajaOut.setIdlocal(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_salida_idlocal)));
-                    cajaOut.setLocal(cursor.getString(cursor.getColumnIndex(SQLConstantes.cajas_salida_nomlocal)));
-                    cajaOut.setTipo(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_salida_tipo)));
-                    cajaOut.setAcl(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_salida_acl)));
-                    cajaOut.setDia(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_salida_fecha_reg_dia)));
-                    cajaOut.setMes(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_salida_fecha_reg_mes)));
-                    cajaOut.setAnio(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_salida_fecha_reg_anio)));
-                    cajaOut.setHora(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_salida_fecha_reg_hora)));
-                    cajaOut.setMin(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_salida_fecha_reg_min)));
-                    cajaOut.setSeg(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_salida_fecha_reg_seg)));
-                    cajaOut.setCheck_reg(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_salida_check_reg)));
-                    cajaOut.setNlado(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_salida_nlado)));
-                    cajaOut.setEstado(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_salida_estado)));
-                    cajaOuts.add(cajaOut);
-                }
-            }
+                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
+                            SQLConstantes.WHERE_CLAUSE_NRO_LADO + " AND " +
+                            SQLConstantes.WHERE_CLAUSE_ESTADO,whereArgs,null,null,null);
+            if (cursor != null) numero = cursor.getCount();
         }finally{
             if(cursor != null) cursor.close();
         }
-        return cajaOuts;
+        return numero;
     }
 
     public Asistencia getAsistenciaxDni(String dni){
@@ -963,12 +1021,18 @@ public class Data {
 
     public ArrayList<AsistenciaAula> getAllAsistenciaAula(int idLocal, int nroAula){
         ArrayList<AsistenciaAula> asistenciaAulas = new ArrayList<>();
-        String[] whereArgs = new String[]{String.valueOf(idLocal),String.valueOf(nroAula)};
         Cursor cursor = null;
         try{
-            cursor = sqLiteDatabase.query(SQLConstantes.tablaasistenciaaula,
-                    null,SQLConstantes.WHERE_CLAUSE_ID_LOCAL +" AND "
-                            + SQLConstantes.WHERE_CLAUSE_NRO_AULA,whereArgs,null,null,null);
+            if(nroAula > 0) {
+                String[] whereArgs = new String[]{String.valueOf(idLocal),String.valueOf(nroAula)};
+                cursor = sqLiteDatabase.query(SQLConstantes.tablaasistenciaaula,
+                        null,SQLConstantes.WHERE_CLAUSE_ID_LOCAL +" AND "
+                                + SQLConstantes.WHERE_CLAUSE_NRO_AULA,whereArgs,null,null,null);
+            } else{
+                String[] whereArgs = new String[]{String.valueOf(idLocal)};
+                cursor = sqLiteDatabase.query(SQLConstantes.tablaasistenciaaula,
+                        null,SQLConstantes.WHERE_CLAUSE_ID_LOCAL ,whereArgs,null,null,null);
+            }
             while(cursor.moveToNext()){
                 AsistenciaAula asistenciaAula = new AsistenciaAula();
                 asistenciaAula.set_id(cursor.getString(cursor.getColumnIndex(SQLConstantes.asis_aula_id)));
@@ -1003,13 +1067,21 @@ public class Data {
 
     public ArrayList<AsistenciaAula> getAsistenciaAulaSinEnviar(int idLocal, int nroAula){
         ArrayList<AsistenciaAula> asistenciaAulas = new ArrayList<>();
-        String[] whereArgs = new String[]{String.valueOf(idLocal),String.valueOf(nroAula),"0"};
         Cursor cursor = null;
         try{
-            cursor = sqLiteDatabase.query(SQLConstantes.tablaasistencialocal,
-                    null,SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND "
-                            + SQLConstantes.WHERE_CLAUSE_NRO_AULA + " AND "
-                            + SQLConstantes.WHERE_CLAUSE_ESTADO,whereArgs,null,null,null);
+            if (nroAula > 0){
+                String[] whereArgs = new String[]{String.valueOf(idLocal),String.valueOf(nroAula),"0"};
+                cursor = sqLiteDatabase.query(SQLConstantes.tablaasistenciaaula,
+                        null,SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND "
+                                + SQLConstantes.WHERE_CLAUSE_NRO_AULA + " AND "
+                                + SQLConstantes.WHERE_CLAUSE_ESTADO,whereArgs,null,null,null);
+            }else{
+                String[] whereArgs = new String[]{String.valueOf(idLocal),"0"};
+                cursor = sqLiteDatabase.query(SQLConstantes.tablaasistenciaaula,
+                        null,SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND "
+                                + SQLConstantes.WHERE_CLAUSE_ESTADO,whereArgs,null,null,null);
+            }
+
             while(cursor.moveToNext()){
                 AsistenciaAula asistenciaAula = new AsistenciaAula();
                 asistenciaAula.set_id(cursor.getString(cursor.getColumnIndex(SQLConstantes.asis_aula_id)));
@@ -1066,8 +1138,26 @@ public class Data {
         sqLiteDatabase.update(SQLConstantes.tablaasistenciaaula,contentValues,SQLConstantes.WHERE_CLAUSE_DNI,whereArgs);
     }
 
-    public ArrayList<String> getArrayAulas(int nroLocal){
+    public ArrayList<String> getArrayAulasRegistro(int nroLocal){
         ArrayList<String> aulas = new ArrayList<>();
+        String[] whereArgs = new String[]{Integer.toString(nroLocal)};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablaaulas,
+                    null,SQLConstantes.WHERE_CLAUSE_ID_LOCAL, whereArgs,null,null,"naula ASC");
+            while(cursor.moveToNext()){
+                String a = cursor.getString(cursor.getColumnIndex(SQLConstantes.aulas_nombre));
+                aulas.add(a);
+            }
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return aulas;
+    }
+
+    public ArrayList<String> getArrayAulasListado(int nroLocal){
+        ArrayList<String> aulas = new ArrayList<>();
+        aulas.add("TODAS LAS AULAS");
         String[] whereArgs = new String[]{Integer.toString(nroLocal)};
         Cursor cursor = null;
         try{
@@ -1194,13 +1284,19 @@ public class Data {
 
     public ArrayList<Ficha> getAllFichas(int idLocal, int nroAula){
         ArrayList<Ficha> fichas = new ArrayList<Ficha>();
-        String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula)};
         Cursor cursor = null;
         try{
-            cursor = sqLiteDatabase.query(SQLConstantes.tablafichas, null,
-                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
-                            SQLConstantes.WHERE_CLAUSE_NRO_AULA
-                    ,whereArgs,null,null,null);
+            if (nroAula > 0){
+                String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula)};
+                cursor = sqLiteDatabase.query(SQLConstantes.tablafichas, null,
+                        SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
+                                SQLConstantes.WHERE_CLAUSE_NRO_AULA,whereArgs,null,null,null);
+            }else{
+                String[] whereArgs = new String[]{String.valueOf(idLocal)};
+                cursor = sqLiteDatabase.query(SQLConstantes.tablafichas, null,
+                        SQLConstantes.WHERE_CLAUSE_ID_LOCAL,whereArgs,null,null,null);
+            }
+
             while(cursor.moveToNext()){
                 Ficha ficha = new Ficha();
                 ficha.setId(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_dni)));
@@ -1234,14 +1330,20 @@ public class Data {
     }
     public ArrayList<Ficha> getAllFichasSinEnviar(int nroLocal, int nroAula){
         ArrayList<Ficha> fichas = new ArrayList<Ficha>();
-        String[] whereArgs = new String[]{String.valueOf(nroLocal), String.valueOf(nroAula),"0"};
         Cursor cursor = null;
         try{
-            cursor = sqLiteDatabase.query(SQLConstantes.tablafichas, null,
-                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
-                            SQLConstantes.WHERE_CLAUSE_NRO_AULA + " AND " +
-                            SQLConstantes.WHERE_CLAUSE_ESTADO
-                    ,whereArgs,null,null,null);
+            if (nroAula > 0){
+                String[] whereArgs = new String[]{String.valueOf(nroLocal), String.valueOf(nroAula),"0"};
+                cursor = sqLiteDatabase.query(SQLConstantes.tablafichas, null,
+                        SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
+                                SQLConstantes.WHERE_CLAUSE_NRO_AULA + " AND " +
+                                SQLConstantes.WHERE_CLAUSE_ESTADO,whereArgs,null,null,null);
+            }else{
+                String[] whereArgs = new String[]{String.valueOf(nroLocal),"0"};
+                cursor = sqLiteDatabase.query(SQLConstantes.tablafichas, null,
+                        SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " + SQLConstantes.WHERE_CLAUSE_ESTADO
+                        ,whereArgs,null,null,null);
+            }
             while(cursor.moveToNext()){
                 Ficha ficha = new Ficha();
                 ficha.setId(cursor.getString(cursor.getColumnIndex(SQLConstantes.ficha_dni)));
@@ -1335,13 +1437,19 @@ public class Data {
 
     public ArrayList<Cuadernillo> getAllCuadernillos(int idLocal, int nroAula){
         ArrayList<Cuadernillo> cuadernillos = new ArrayList<Cuadernillo>();
-        String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula)};
         Cursor cursor = null;
         try{
-            cursor = sqLiteDatabase.query(SQLConstantes.tablacuadernillos, null,
-                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
-                            SQLConstantes.WHERE_CLAUSE_NRO_AULA
-                    ,whereArgs,null,null,null);
+            if (nroAula > 0){
+                String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula)};
+                cursor = sqLiteDatabase.query(SQLConstantes.tablacuadernillos, null,
+                        SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
+                                SQLConstantes.WHERE_CLAUSE_NRO_AULA,whereArgs,null,null,null);
+            }else{
+                String[] whereArgs = new String[]{String.valueOf(idLocal)};
+                cursor = sqLiteDatabase.query(SQLConstantes.tablacuadernillos, null,
+                        SQLConstantes.WHERE_CLAUSE_ID_LOCAL,whereArgs,null,null,null);
+            }
+
             while(cursor.moveToNext()){
                 Cuadernillo cuadernillo = new Cuadernillo();
                 cuadernillo.setId(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_dni)));
@@ -1375,14 +1483,21 @@ public class Data {
     }
     public ArrayList<Cuadernillo> getAllCuadernillosSinEnviar(int nroLocal, int nroAula){
         ArrayList<Cuadernillo> cuadernillos = new ArrayList<Cuadernillo>();
-        String[] whereArgs = new String[]{String.valueOf(nroLocal), String.valueOf(nroAula),"0"};
         Cursor cursor = null;
         try{
-            cursor = sqLiteDatabase.query(SQLConstantes.tablacuadernillos, null,
-                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
-                            SQLConstantes.WHERE_CLAUSE_NRO_AULA + " AND " +
-                            SQLConstantes.WHERE_CLAUSE_ESTADO
-                    ,whereArgs,null,null,null);
+            if (nroAula > 0){
+                String[] whereArgs = new String[]{String.valueOf(nroLocal), String.valueOf(nroAula),"0"};
+                cursor = sqLiteDatabase.query(SQLConstantes.tablacuadernillos, null,
+                        SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
+                                SQLConstantes.WHERE_CLAUSE_NRO_AULA + " AND " +
+                                SQLConstantes.WHERE_CLAUSE_ESTADO,whereArgs,null,null,null);
+            }else{
+                String[] whereArgs = new String[]{String.valueOf(nroLocal), "0"};
+                cursor = sqLiteDatabase.query(SQLConstantes.tablacuadernillos, null,
+                        SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
+                                SQLConstantes.WHERE_CLAUSE_ESTADO,whereArgs,null,null,null);
+            }
+
             while(cursor.moveToNext()){
                 Cuadernillo cuadernillo = new Cuadernillo();
                 cuadernillo.setId(cursor.getString(cursor.getColumnIndex(SQLConstantes.cuadernillo_dni)));
@@ -1467,13 +1582,20 @@ public class Data {
 
     public ArrayList<Listado> getAllListados(int idLocal, int nroAula){
         ArrayList<Listado> listados = new ArrayList<Listado>();
-        String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula)};
+
         Cursor cursor = null;
         try{
-            cursor = sqLiteDatabase.query(SQLConstantes.tablalistados, null,
-                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
-                            SQLConstantes.WHERE_CLAUSE_NRO_AULA
-                    ,whereArgs,null,null,null);
+            if (nroAula > 0){
+                String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula)};
+                cursor = sqLiteDatabase.query(SQLConstantes.tablalistados, null,
+                        SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
+                                SQLConstantes.WHERE_CLAUSE_NRO_AULA,whereArgs,null,null,null);
+            }else{
+                String[] whereArgs = new String[]{String.valueOf(idLocal)};
+                cursor = sqLiteDatabase.query(SQLConstantes.tablalistados, null,
+                        SQLConstantes.WHERE_CLAUSE_ID_LOCAL,whereArgs,null,null,null);
+            }
+
             while(cursor.moveToNext()){
                 Listado listado = new Listado();
                 listado.setCodigo(cursor.getString(cursor.getColumnIndex(SQLConstantes.listado_codigo)));
@@ -1502,14 +1624,22 @@ public class Data {
     }
     public ArrayList<Listado> getAllListadosSinEnviar(int nroLocal, int nroAula){
         ArrayList<Listado> listados = new ArrayList<Listado>();
-        String[] whereArgs = new String[]{String.valueOf(nroLocal), String.valueOf(nroAula),"0"};
+
         Cursor cursor = null;
         try{
-            cursor = sqLiteDatabase.query(SQLConstantes.tablalistados, null,
-                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
-                            SQLConstantes.WHERE_CLAUSE_NRO_AULA + " AND " +
-                            SQLConstantes.WHERE_CLAUSE_ESTADO
-                    ,whereArgs,null,null,null);
+            if (nroAula > 0){
+                String[] whereArgs = new String[]{String.valueOf(nroLocal), String.valueOf(nroAula),"0"};
+                cursor = sqLiteDatabase.query(SQLConstantes.tablalistados, null,
+                        SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
+                                SQLConstantes.WHERE_CLAUSE_NRO_AULA + " AND " +
+                                SQLConstantes.WHERE_CLAUSE_ESTADO,whereArgs,null,null,null);
+            }else{
+                String[] whereArgs = new String[]{String.valueOf(nroLocal),"0"};
+                cursor = sqLiteDatabase.query(SQLConstantes.tablalistados, null,
+                        SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
+                                SQLConstantes.WHERE_CLAUSE_ESTADO,whereArgs,null,null,null);
+            }
+
             while(cursor.moveToNext()){
                 Listado listado = new Listado();
                 listado.setCodigo(cursor.getString(cursor.getColumnIndex(SQLConstantes.listado_codigo)));

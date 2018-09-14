@@ -2,7 +2,6 @@ package pe.com.ricindigus.appednom2018.fragments.reportes.listados_de_registros;
 
 
 import android.annotation.SuppressLint;
-import android.content.ContentValues;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -42,15 +41,17 @@ public class ListIngresoCajasFragment extends Fragment {
     RecyclerView recyclerView;
     Context context;
     ArrayList<CajaIn> cajaIns;
-    ArrayList<CajaIn> completos;
-    ArrayList<CajaIn> transferidos;
+    ArrayList<CajaIn> noEnviados;
 
     int nroLocal;
     Data data;
     FloatingActionButton fabUpLoad;
     TextView txtNumero;
+    TextView txtNoRegistrados;
+    TextView txtIncompletos;
     TextView txtCompletos;
     TextView txtTransferidos;
+
     String usuario;
 
 
@@ -76,6 +77,8 @@ public class ListIngresoCajasFragment extends Fragment {
         recyclerView = (RecyclerView) rootView.findViewById(R.id.listado_recycler);
         fabUpLoad = (FloatingActionButton) rootView.findViewById(R.id.listado_btnUpload);
         txtNumero = (TextView) rootView.findViewById(R.id.listado_txtNumero);
+        txtNoRegistrados = (TextView) rootView.findViewById(R.id.listado_txtNoRegistrados);
+        txtIncompletos = (TextView) rootView.findViewById(R.id.listado_txtIncompletos);
         txtCompletos = (TextView) rootView.findViewById(R.id.listado_txtCompletos);
         txtTransferidos = (TextView) rootView.findViewById(R.id.listado_txtTransferidos);
         return rootView;
@@ -96,57 +99,88 @@ public class ListIngresoCajasFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 b = false;
-                completos = new ArrayList<>();
+                noEnviados = new ArrayList<>();
                 data = new Data(context);
                 data.open();
-                completos = data.getAllCajasInCompletas(nroLocal);
+                noEnviados = data.getAllCajasInNoEnviados(nroLocal);
                 data.close();
-                if(completos.size() > 0){
-                    final int total = completos.size();
+                if(noEnviados.size() > 0){
+                    final int total = noEnviados.size();
                     int i = 0;
-                    for (final CajaIn cajaIn10 : completos){
+                    for (final CajaIn cajaIn10 : noEnviados){
                         i++;
                         final int j = i;
-                        Data d = new Data(context);
-                        d.open();
-                        CajaIn cajaIn20 = d.getCajaIn(getCodigo20(cajaIn10.getCod_barra_caja()));
-                        d.close();
-                        WriteBatch batch = FirebaseFirestore.getInstance().batch();
-                        DocumentReference documentReference20 = FirebaseFirestore.getInstance().collection("cajas").document(cajaIn20.getCod_barra_caja());
-                        DocumentReference documentReference10 = FirebaseFirestore.getInstance().collection("cajas").document(cajaIn10.getCod_barra_caja());
-                        batch.update(documentReference10, "check_registro", 1);
-                        batch.update(documentReference10, "fecha_transferencia_ingreso", FieldValue.serverTimestamp());
-                        batch.update(documentReference10, "usuario_registro_ingreso", usuario);
-                        batch.update(documentReference10, "fecha_registro_ingreso", new Timestamp(new Date(cajaIn10.getAnio()-1900,cajaIn10.getMes()-1,cajaIn10.getDia(),cajaIn10.getHora(),cajaIn10.getMin(),cajaIn10.getSeg())));
-                        batch.update(documentReference20, "check_registro", 1);
-                        batch.update(documentReference20, "fecha_transferencia_ingreso", FieldValue.serverTimestamp());
-                        batch.update(documentReference20, "usuario_registro_ingreso", usuario);
-                        batch.update(documentReference20, "fecha_registro_ingreso", new Timestamp(new Date(cajaIn20.getAnio()-1900,cajaIn20.getMes()-1,cajaIn20.getDia(),cajaIn20.getHora(),cajaIn20.getMin(),cajaIn20.getSeg())));
+                        if (cajaIn10.getTipo() != 3){
+                            WriteBatch batch = FirebaseFirestore.getInstance().batch();
+                            DocumentReference documentReference10 = FirebaseFirestore.getInstance().collection("cajas").document(cajaIn10.getCod_barra_caja());
+                            batch.update(documentReference10, "check_registro", 1);
+                            batch.update(documentReference10, "fecha_transferencia_ingreso", FieldValue.serverTimestamp());
+                            batch.update(documentReference10, "usuario_registro_ingreso", usuario);
+                            batch.update(documentReference10, "fecha_registro_ingreso", new Timestamp(new Date(cajaIn10.getAnio()-1900,cajaIn10.getMes()-1,cajaIn10.getDia(),cajaIn10.getHora(),cajaIn10.getMin(),cajaIn10.getSeg())));
+                            Data d = new Data(context);
+                            d.open();
+                            CajaIn cajaIn20 = d.getCajaIn(getCodigo20(cajaIn10.getCod_barra_caja()));
+                            d.close();
+                            DocumentReference documentReference20 = FirebaseFirestore.getInstance().collection("cajas").document(cajaIn20.getCod_barra_caja());
+                            batch.update(documentReference20, "check_registro", 1);
+                            batch.update(documentReference20, "fecha_transferencia_ingreso", FieldValue.serverTimestamp());
+                            batch.update(documentReference20, "usuario_registro_ingreso", usuario);
+                            batch.update(documentReference20, "fecha_registro_ingreso", new Timestamp(new Date(cajaIn20.getAnio()-1900,cajaIn20.getMes()-1,cajaIn20.getDia(),cajaIn20.getHora(),cajaIn20.getMin(),cajaIn20.getSeg())));
 
-                        final String codigoBarra10 = cajaIn10.getCod_barra_caja();
-                        final String codigoBarra20 = cajaIn20.getCod_barra_caja();
+                            final String codigoBarra10 = cajaIn10.getCod_barra_caja();
+                            final String codigoBarra20 = cajaIn20.getCod_barra_caja();
 
-                        batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Data data = new Data(context);
-                                data.open();
-                                data.actualizarCajaInSubido(codigoBarra10);
-                                data.actualizarCajaInSubido(codigoBarra20);
-                                data.close();
-                                if (j == total) {
-                                    Toast.makeText(context, total + " registros subidos", Toast.LENGTH_SHORT).show();
-                                    cargaData();
-                                    cajaIngresoAdapter = new CajaIngresoAdapter(cajaIns,context);
-                                    recyclerView.setAdapter(cajaIngresoAdapter);
+                            batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Data data = new Data(context);
+                                    data.open();
+                                    data.actualizarCajaInSubido(codigoBarra10);
+                                    data.actualizarCajaInSubido(codigoBarra20);
+                                    data.close();
+                                    if (j == total) {
+                                        Toast.makeText(context, total + " registros subidos", Toast.LENGTH_SHORT).show();
+                                        cargaData();
+                                        cajaIngresoAdapter = new CajaIngresoAdapter(cajaIns,context);
+                                        recyclerView.setAdapter(cajaIngresoAdapter);
+                                    }
                                 }
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(context, "NO GUARDO", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(context, "NO GUARDO", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }else{
+                            WriteBatch batch = FirebaseFirestore.getInstance().batch();
+                            DocumentReference documentReference10 = FirebaseFirestore.getInstance().collection("cajas").document(cajaIn10.getCod_barra_caja());
+                            batch.update(documentReference10, "check_registro", 1);
+                            batch.update(documentReference10, "fecha_transferencia_ingreso", FieldValue.serverTimestamp());
+                            batch.update(documentReference10, "usuario_registro_ingreso", usuario);
+                            batch.update(documentReference10, "fecha_registro_ingreso", new Timestamp(new Date(cajaIn10.getAnio()-1900,cajaIn10.getMes()-1,cajaIn10.getDia(),cajaIn10.getHora(),cajaIn10.getMin(),cajaIn10.getSeg())));
+                            final String codigoBarra10 = cajaIn10.getCod_barra_caja();
+
+                            batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Data data = new Data(context);
+                                    data.open();
+                                    data.actualizarCajaInSubido(codigoBarra10);
+                                    data.close();
+                                    if (j == total) {
+                                        Toast.makeText(context, total + " registros subidos", Toast.LENGTH_SHORT).show();
+                                        cargaData();
+                                        cajaIngresoAdapter = new CajaIngresoAdapter(cajaIns,context);
+                                        recyclerView.setAdapter(cajaIngresoAdapter);
+                                    }
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(context, "NO GUARDO", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
                     }
                 }else{
                     Toast.makeText(context, "No hay registros nuevos para subir", Toast.LENGTH_SHORT).show();
@@ -163,17 +197,18 @@ public class ListIngresoCajasFragment extends Fragment {
 
     public void cargaData(){
         cajaIns = new ArrayList<CajaIn>();
-        completos = new ArrayList<CajaIn>();
-        transferidos = new ArrayList<CajaIn>();
+        noEnviados = new ArrayList<CajaIn>();
+
 
         Data data = new Data(context);
         data.open();
         cajaIns = data.getAllCajaInListado(nroLocal);
-        completos = data.getAllCajasInCompletas(nroLocal);
-        transferidos = data.getAllCajasInTransferidos(nroLocal);
+        noEnviados = data.getAllCajasInNoEnviados(nroLocal);
         txtNumero.setText("Esperados: " + cajaIns.size());
-        txtCompletos.setText("Completos: " + completos.size());
-        txtTransferidos.setText("Tranferidos: " + transferidos.size());
+        txtNoRegistrados.setText("No registrados: " + data.getNroCajasInSinRegistrar(nroLocal));
+        txtIncompletos.setText("Incompletos: " + data.getNroCajasInNoCompletas(nroLocal));
+        txtCompletos.setText("Completos: " + data.getNroCajasInCompletas(nroLocal));
+        txtTransferidos.setText("Tranferidos: " + data.getNroCajasInTransferidos(nroLocal));
         data.close();
     }
 
