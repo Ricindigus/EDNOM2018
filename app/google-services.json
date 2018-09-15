@@ -1,27 +1,58 @@
 {
   "project_info": {
-    "project_number": "104185893316",
-    "firebase_url": "https://proyecto-ednom-cffff.firebaseio.com",
-    "project_id": "proyecto-ednom-cffff",
-    "storage_bucket": "proyecto-ednom-cffff.appspot.com"
+    "project_number": "243981488695",
+    "firebase_url": "https://inei-ednom-2018.firebaseio.com",
+    "project_id": "inei-ednom-2018",
+    "storage_bucket": "inei-ednom-2018.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:104185893316:android:ec36e0aaedce0dea",
+        "mobilesdk_app_id": "1:243981488695:android:ec36e0aaedce0dea",
         "android_client_info": {
           "package_name": "pe.com.ricindigus.appednom2018"
         }
       },
       "oauth_client": [
         {
-          "client_id": "104185893316-io24g35ui9dao4916cflkif32qamchi9.apps.googleusercontent.com",
+          "client_id": "243981488695-n1c5e7uqu07dkfvdqdgasll40p91ioq4.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyD1_Oh1LFvcnLmGEuQLirgov51GQalN9tQ"
+          "current_key": "AIzaSyAeLh2AiuimHLUD8n5Y0zdISPBzldJNznY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:243981488695:android:abb11fc7446cbd37",
+        "android_client_info": {
+          "package_name": "pe.gob.inei.dmorales.firebasequerys"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "243981488695-n1c5e7uqu07dkfvdqdgasll40p91ioq4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAeLh2AiuimHLUD8n5Y0zdISPBzldJNznY"
         }
       ],
       "services": {
