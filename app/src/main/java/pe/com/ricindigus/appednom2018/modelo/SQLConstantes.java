@@ -6,6 +6,7 @@ public class SQLConstantes {
 
     public static String tablausuariolocal = "usuario_local";
     public static String tablausuarioactual = "usuario_actual";
+    public static String tablahistorialusuarios = "historial_usuario";
     public static String tablacajas = "cajas";
     public static String tablaasistencia = "asistencia";
     public static String tablaaulas = "aulas";
@@ -45,14 +46,20 @@ public class SQLConstantes {
     public static String usuario_actual_sede = "sede";
     public static String usuario_actual_nombre = "nombre";
 
+    //TABLA HISTORIAL DE USUARIOS
+
+    public static String historial_usuario_id = "_id";
+    public static String historial_usuario_clave = "clave";
+
+
 
     //TABLA CAJAS
     public static String cajas_id = "_id";
     public static String cajas_cod_barra = "cod_barra_caja";
     public static String cajas_idsede = "idsede";
-    public static String cajas_nomsede = "sede";
+    public static String cajas_nomsede = "nom_sede";
     public static String cajas_idlocal = "idlocal";
-    public static String cajas_nomlocal = "local";
+    public static String cajas_nomlocal = "nom_local";
     public static String cajas_tipo = "tipo";
     public static String cajas_acl = "acl";
     public static String cajas_nlado = "nlado";
@@ -64,9 +71,9 @@ public class SQLConstantes {
     public static String asistencia_idnacional = "idnacional";
     public static String asistencia_ccdd = "ccdd";
     public static String asistencia_idsede = "idsede";
-    public static String asistencia_sede = "sede";
+    public static String asistencia_sede = "nom_sede";
     public static String asistencia_idlocal = "idlocal";
-    public static String asistencia_local = "local";
+    public static String asistencia_local = "nom_local";
     public static String asistencia_direccion = "direccion";
     public static String asistencia_nombres = "nombres";
     public static String asistencia_ape_paterno = "ape_paterno";
@@ -75,6 +82,23 @@ public class SQLConstantes {
     public static String asistencia_discapacidad = "discapacidad";
     public static String asistencia_prioridad = "prioridad";
 
+    //TABLA MATERIAL
+    public static String material_id = "_id";
+    public static String material_codigo = "codigo";
+    public static String material_tipo = "tipo";
+    public static String material_idnacional = "idnacional";
+    public static String material_ccdd = "ccdd";
+    public static String material_idsede = "idsede";
+    public static String material_sede = "nom_sede";
+    public static String material_idlocal = "idlocal";
+    public static String material_local = "nom_local";
+    public static String material_dni = "dni";
+    public static String material_nombres = "nombres";
+    public static String material_ape_paterno = "ape_paterno";
+    public static String material_ape_materno = "ape_materno";
+    public static String material_naula = "naula";
+    public static String material_codpagina = "codpagina";
+
     //TABLA AULA
     public static String aulas_id = "_id";
     public static String aulas_nro_local = "idlocal";
@@ -82,14 +106,13 @@ public class SQLConstantes {
     public static String aulas_nombre = "nombre";
 
 
-
     //TABLA CAJAS ENTRADA
     public static String cajas_entrada_id = "_id";
     public static String cajas_entrada_cod_barra = "cod_barra_caja";
     public static String cajas_entrada_idsede = "idsede";
-    public static String cajas_entrada_nomsede = "sede";
+    public static String cajas_entrada_nomsede = "nom_sede";
     public static String cajas_entrada_idlocal = "idlocal";
-    public static String cajas_entrada_nomlocal = "local";
+    public static String cajas_entrada_nomlocal = "nom_local";
     public static String cajas_entrada_tipo = "tipo";
     public static String cajas_entrada_acl = "acl";
     public static String cajas_entrada_fecha_reg_dia = "dia";
@@ -102,15 +125,13 @@ public class SQLConstantes {
     public static String cajas_entrada_estado = "estado";
     public static String cajas_entrada_nlado = "nlado";
 
-
-
     //TABLA CAJAS SALIDA
     public static String cajas_salida_id = "_id";
     public static String cajas_salida_cod_barra = "cod_barra_caja";
     public static String cajas_salida_idsede = "idsede";
-    public static String cajas_salida_nomsede = "sede";
+    public static String cajas_salida_nomsede = "nom_sede";
     public static String cajas_salida_idlocal = "idlocal";
-    public static String cajas_salida_nomlocal = "local";
+    public static String cajas_salida_nomlocal = "nom_local";
     public static String cajas_salida_tipo = "tipo";
     public static String cajas_salida_acl = "acl";
     public static String cajas_salida_fecha_reg_dia = "dia";
@@ -129,9 +150,9 @@ public class SQLConstantes {
     public static String asis_local_idnacional = "idnacional";
     public static String asis_local_ccdd = "ccdd";
     public static String asis_local_idsede = "idsede";
-    public static String asis_local_sede = "sede";
+    public static String asis_local_sede = "nom_sede";
     public static String asis_local_idlocal = "idlocal";
-    public static String asis_local_local = "local";
+    public static String asis_local_local = "nom_local";
     public static String asis_local_direccion = "direccion";
     public static String asis_local_nombres = "nombres";
     public static String asis_local_ape_paterno = "ape_paterno";
@@ -154,9 +175,9 @@ public class SQLConstantes {
     public static String asis_aula_idnacional = "idnacional";
     public static String asis_aula_ccdd = "ccdd";
     public static String asis_aula_idsede = "idsede";
-    public static String asis_aula_sede = "sede";
+    public static String asis_aula_sede = "nom_sede";
     public static String asis_aula_idlocal = "idlocal";
-    public static String asis_aula_local = "local";
+    public static String asis_aula_local = "nom_local";
     public static String asis_aula_direccion = "direccion";
     public static String asis_aula_nombres = "nombres";
     public static String asis_aula_ape_paterno = "ape_paterno";
@@ -173,23 +194,6 @@ public class SQLConstantes {
     public static String asis_aula_estado = "estado";
 
 
-    //TABLA MATERIAL
-    public static String material_id = "_id";
-    public static String material_codigo = "codigo";
-    public static String material_tipo = "tipo";
-    public static String material_idnacional = "idnacional";
-    public static String material_ccdd = "ccdd";
-    public static String material_idsede = "idsede";
-    public static String material_sede = "sede";
-    public static String material_idlocal = "idlocal";
-    public static String material_local = "local";
-    public static String material_dni = "dni";
-    public static String material_nombres = "nombres";
-    public static String material_ape_paterno = "ape_paterno";
-    public static String material_ape_materno = "ape_materno";
-    public static String material_naula = "naula";
-    public static String material_codpagina = "codpagina";
-
 
     //TABLA FICHA
     public static String ficha_id = "_id";
@@ -198,9 +202,9 @@ public class SQLConstantes {
     public static String ficha_idnacional = "idnacional";
     public static String ficha_ccdd = "ccdd";
     public static String ficha_idsede = "idsede";
-    public static String ficha_sede = "sede";
+    public static String ficha_sede = "nom_sede";
     public static String ficha_idlocal = "idlocal";
-    public static String ficha_local = "local";
+    public static String ficha_local = "nom_local";
     public static String ficha_dni = "dni";
     public static String ficha_nombres = "nombres";
     public static String ficha_ape_paterno = "ape_paterno";
@@ -224,9 +228,9 @@ public class SQLConstantes {
     public static String cuadernillo_idnacional = "idnacional";
     public static String cuadernillo_ccdd = "ccdd";
     public static String cuadernillo_idsede = "idsede";
-    public static String cuadernillo_sede = "sede";
+    public static String cuadernillo_sede = "nom_sede";
     public static String cuadernillo_idlocal = "idlocal";
-    public static String cuadernillo_local = "local";
+    public static String cuadernillo_local = "nom_local";
     public static String cuadernillo_dni = "dni";
     public static String cuadernillo_nombres = "nombres";
     public static String cuadernillo_ape_paterno = "ape_paterno";
@@ -248,9 +252,9 @@ public class SQLConstantes {
     public static String listado_idnacional = "idnacional";
     public static String listado_ccdd = "ccdd";
     public static String listado_idsede = "idsede";
-    public static String listado_sede = "sede";
+    public static String listado_sede = "nom_sede";
     public static String listado_idlocal = "idlocal";
-    public static String listado_local = "local";
+    public static String listado_local = "nom_local";
     public static String listado_naula = "naula";
     public static String listado_npostulantes = "npostulantes";
     public static String listado_dia = "dia";
@@ -261,7 +265,9 @@ public class SQLConstantes {
     public static String listado_seg = "seg";
     public static String listado_estado = "estado";
 
-
+    //TABLA RESUMEN CAJAS TOTALES
+    public static String resumen_total_id = "_id";
+    public static String resumen_total_cantidad = "cantidad";
 
     //TABLA RESUMEN ASISTENCIA
     public static String resumen_asistencia_id = "_id";
@@ -278,9 +284,7 @@ public class SQLConstantes {
     public static String resumen_inventario_nro_invcartillas = "nro_invcartillas";
     public static String resumen_inventario_nro_invlistados = "nro_invlistados";
 
-    //TABLA RESUMEN CAJAS TOTALES
-    public static String resumen_total_id = "_id";
-    public static String resumen_total_cantidad = "cantidad";
+
 
     public static final String SQL_CREATE_TABLA_USUARIO_ACTUAL =
             "CREATE TABLE " + tablausuarioactual + "(" +
@@ -295,6 +299,12 @@ public class SQLConstantes {
                     usuario_actual_codsede + " INTEGER," +
                     usuario_actual_sede + " TEXT," +
                     usuario_actual_nombre + " TEXT" + ");"
+            ;
+
+    public static final String SQL_CREATE_TABLA_HISTORIAL_USUARIOS =
+            "CREATE TABLE " + tablahistorialusuarios + "(" +
+                    historial_usuario_id + " INTEGER PRIMARY KEY," +
+                    historial_usuario_clave + " TEXT" + ");"
             ;
 
     public static final String SQL_CREATE_TABLA_CAJAS_ENTRADA =

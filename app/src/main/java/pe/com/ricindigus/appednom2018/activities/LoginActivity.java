@@ -1,6 +1,8 @@
 package pe.com.ricindigus.appednom2018.activities;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteException;
+import android.os.AsyncTask;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,6 +10,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +20,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import pe.com.ricindigus.appednom2018.modelo.Asistencia;
+import pe.com.ricindigus.appednom2018.modelo.AsistenciaAula;
+import pe.com.ricindigus.appednom2018.modelo.AsistenciaLocal;
 import pe.com.ricindigus.appednom2018.modelo.CajaIn;
 import pe.com.ricindigus.appednom2018.modelo.CajaOut;
 import pe.com.ricindigus.appednom2018.modelo.UsuarioActual;
@@ -31,6 +37,13 @@ public class LoginActivity extends AppCompatActivity {
     TextView txtAquiMarco;
     Button btnIngresar;
     String temaApp;
+    UsuarioLocal usuarioLocal;
+    int maximo = 0;
+
+    TextView txtCarga;
+    ProgressBar progressBar;
+    String clave;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +54,8 @@ public class LoginActivity extends AppCompatActivity {
         edtClave = (TextInputEditText) findViewById(R.id.login_edtClave);
         btnIngresar = (Button) findViewById(R.id.login_btnIngresar);
         txtAquiMarco = (TextView) findViewById(R.id.login_txtAquiMarco);
+        txtCarga = (TextView) findViewById(R.id.login_mensaje_carga);
+        progressBar = (ProgressBar) findViewById(R.id.login_progreso);
         TextView txtTitulo = (TextView) findViewById(R.id.login_titulo_encuesta);
         Data data = new Data(LoginActivity.this);
         data.open();
@@ -51,7 +66,8 @@ public class LoginActivity extends AppCompatActivity {
         btnIngresar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ingresar(edtClave.getText().toString());
+                clave = edtClave.getText().toString();
+                ingresar(clave);
             }
         });
 
@@ -67,39 +83,55 @@ public class LoginActivity extends AppCompatActivity {
         Data data = null;
         data = new Data(LoginActivity.this);
         data.open();
-        UsuarioLocal usuarioLocal = data.getUsuarioLocal(clave);
-
-        data.close();
+        usuarioLocal = data.getUsuarioLocal(clave);
         if (usuarioLocal != null){
-            Data d = new Data(LoginActivity.this);
-            d.open();
-            String c = usuarioLocal.getClave();
-            d.guardarClave(c);
-            if (usuarioLocal.getRol() == 3){
-                if (d.getNumeroItemsCajasIn() == 0){
-                    ArrayList<CajaIn> cajaIns = d.getCopiaCajasInxLocal(usuarioLocal.getNro_local());
-                    ArrayList<CajaOut> cajaOuts = d.getCopiaCajasOutxLocal(usuarioLocal.getNro_local());
-
-                    for (CajaIn caja : cajaIns){
-                        d.insertarCajaIn(caja);
-                    }
-                    for (CajaOut caja : cajaOuts){
-                        d.insertarCajaOut(caja);
-                    }
+            if(data.existeUsuario(clave)) {
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }else{
+                switch (usuarioLocal.getRol()){
+                    case 2:
+                        maximo = data.getNroAsistenciasIdLocal(usuarioLocal.getNro_local());
+                        progressBar.setMax(maximo*2);
+                        new MyAsyncTask().execute(0);
+                        break;
+                    case 3:
+                        filtrarMarcoCajas(usuarioLocal.getNro_local(),clave);
+                        break;
                 }
+                data.guardarClave(clave);
+                data.close();
             }
-
-
-            d.close();
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish();
         }else {
             Toast.makeText(this, "CLAVE INCORRECTA", Toast.LENGTH_SHORT).show();
         }
+
+
+
     }
 
+    public void filtrarMarcoCajas(int nroLocal, String clave){
 
+        Data data = new Data(LoginActivity.this);
+        data.open();
+        if (data.getNumeroItemsCajasIn() == 0){
+            ArrayList<CajaIn> cajaIns = data.getCopiaCajasInxLocal(nroLocal);
+            ArrayList<CajaOut> cajaOuts = data.getCopiaCajasOutxLocal(nroLocal);
+
+            for (CajaIn caja : cajaIns){
+                data.insertarCajaIn(caja);
+            }
+            for (CajaOut caja : cajaOuts){
+                data.insertarCajaOut(caja);
+            }
+            data.insertarHistorialUsuario(clave);
+        }
+        data.close();
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
 
     public void cargarMarco(){
         FileChooser fileChooser = new FileChooser(LoginActivity.this);
@@ -122,5 +154,70 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
         fileChooser.showDialog();
+    }
+
+    public class MyAsyncTask extends AsyncTask<Integer,Integer,String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressBar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected String doInBackground(Integer... integers) {
+            String mensaje = "";
+            int i = 1;
+            Data data = new Data(LoginActivity.this);
+            data.open();
+            ArrayList<AsistenciaLocal> asistenciaLocals = data.filtrarMarcoAsistenciaLocal(usuarioLocal.getNro_local());
+            ArrayList<AsistenciaAula> asistenciaAulas = data.filtrarMarcoAsistenciaAula(usuarioLocal.getNro_local());
+
+            for (AsistenciaLocal asistenciaLocal : asistenciaLocals) {
+                try {
+                    data.insertarAsistenciaLocal(asistenciaLocal);
+                }catch (SQLiteException e){
+                    e.printStackTrace();
+                }
+                publishProgress(i,(int)Math.floor((i*100)/(maximo*2)));
+                i++;
+            }
+
+            for (AsistenciaAula asistenciaAula : asistenciaAulas) {
+                try {
+                    data.insertarAsistenciaAula(asistenciaAula);
+                }catch (SQLiteException e){
+                    e.printStackTrace();
+                }
+                publishProgress(i,(int)Math.floor((i*100)/(maximo*2)));
+                i++;
+            }
+            mensaje = "LISTO, BIENVENIDO";
+            data.close();
+            return mensaje;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+            int contador = values[1];
+            String texto = "CARGANDO MARCO " + contador +"%";
+            txtCarga.setText(texto);
+            progressBar.setProgress(values[0]);
+        }
+
+        @Override
+        protected void onPostExecute(String mensaje) {
+            super.onPostExecute(mensaje);
+            txtCarga.setText(mensaje);
+            progressBar.setVisibility(View.GONE);
+            Data data = new Data(LoginActivity.this);
+            data.open();
+            data.insertarHistorialUsuario(clave);
+            data.close();
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 }
