@@ -2,6 +2,7 @@ package pe.com.ricindigus.appednom2018.fragments.registro_control_asistencia;
 
 
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -33,8 +34,9 @@ import java.util.Date;
 
 import pe.com.ricindigus.appednom2018.R;
 import pe.com.ricindigus.appednom2018.modelo.Asistencia;
-import pe.com.ricindigus.appednom2018.modelo.AsistenciaAula;
+import pe.com.ricindigus.appednom2018.modelo.AsistenciaReg;
 import pe.com.ricindigus.appednom2018.modelo.Data;
+import pe.com.ricindigus.appednom2018.modelo.SQLConstantes;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -133,22 +135,24 @@ public class AsistAulaFragment extends Fragment {
     public void clickBoton(){
         ocultarTeclado(edtDni);
         String dni = edtDni.getText().toString();
-        Data data = new Data(context);
-        data.open();
-        Asistencia asistencia = data.getAsistenciaxDni(dni);
         String aula = spAulas.getSelectedItem().toString();
         int nroAula = 0;
+        Data data = new Data(context);
+        data.open();
         nroAula = data.getNumeroAula(aula,nroLocal);
-        if(asistencia == null) mostrarErrorDni();
-        else{
-            if(asistencia.getNaula() == nroAula && asistencia.getIdlocal() == nroLocal){
-                AsistenciaAula asistenciaAula = data.getAsistenciaAula(asistencia.getDni(),asistencia.getNaula());
-                if(asistenciaAula == null) registrarAsistencia(asistencia);
-                else mostrarYaRegistrado(asistenciaAula.getDni(),asistenciaAula.getNombres() + " " + asistenciaAula.getApe_paterno() + " " + asistenciaAula.getApe_materno(),asistenciaAula.getNaula(),
-                        checkDigito(asistenciaAula.getDia()) +"/"+ checkDigito(asistenciaAula.getMes()) +"/"+ asistenciaAula.getAnio() +
-                                " " + checkDigito(asistenciaAula.getHora()) + ":" + checkDigito(asistenciaAula.getMin()) + ":" + checkDigito(asistenciaAula.getSeg()));
+        AsistenciaReg asistenciaReg = data.getAsistenciaReg(dni);
+        if(asistenciaReg == null) {
+            Asistencia asistenciaPadron = data.getAsistenciaxDni(dni);
+            if (asistenciaPadron == null) mostrarErrorDni();
+            else mostrarErrorAula(asistenciaPadron.getDni(),asistenciaPadron.getNom_sede(),asistenciaPadron.getNom_local(),asistenciaPadron.getDireccion(),asistenciaPadron.getNaula());
+        }else{
+            if(asistenciaReg.getNaula() == nroAula){
+                if(asistenciaReg.getEstado_aula() == 0) registrarAsistencia(asistenciaReg);
+                else mostrarYaRegistrado(asistenciaReg.getDni(),asistenciaReg.getNombres() + " " + asistenciaReg.getApe_paterno() + " " + asistenciaReg.getApe_materno(),asistenciaReg.getNaula(),
+                        checkDigito(asistenciaReg.getDia_aula()) +"/"+ checkDigito(asistenciaReg.getMes_aula()) +"/"+ asistenciaReg.getAnio_aula() +
+                                " " + checkDigito(asistenciaReg.getHora_aula()) + ":" + checkDigito(asistenciaReg.getMin_aula()) + ":" + checkDigito(asistenciaReg.getSeg_aula()));
             }
-            else mostrarErrorAula(asistencia.getDni(),asistencia.getSede(),asistencia.getLocal(),asistencia.getDireccion(),asistencia.getNaula());
+            else mostrarErrorAula(asistenciaReg.getDni(),asistenciaReg.getNom_sede(),asistenciaReg.getNom_local(),asistenciaReg.getDireccion(),asistenciaReg.getNaula());
         }
         edtDni.setText("");
         edtDni.requestFocus();
@@ -158,7 +162,7 @@ public class AsistAulaFragment extends Fragment {
         InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         mgr.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
-    public void registrarAsistencia(Asistencia asistencia){
+    public void registrarAsistencia(AsistenciaReg asistenciaReg){
         Data data = new Data(context);
         data.open();
         Calendar calendario = Calendar.getInstance();
@@ -168,47 +172,32 @@ public class AsistAulaFragment extends Fragment {
         int hora = calendario.get(Calendar.HOUR_OF_DAY);
         int minuto = calendario.get(Calendar.MINUTE);
         int seg = calendario.get(Calendar.SECOND);
-        AsistenciaAula asistenciaAula = new AsistenciaAula();
-        asistenciaAula.setDni(asistencia.getDni());
-        asistenciaAula.setIdnacional(asistencia.getIdnacional());
-        asistenciaAula.setCcdd(asistencia.getCcdd());
-        asistenciaAula.setIdsede(asistencia.getIdsede());
-        asistenciaAula.setSede(asistencia.getSede());
-        asistenciaAula.setIdlocal(asistencia.getIdlocal());
-        asistenciaAula.setLocal(asistencia.getLocal());
-        asistenciaAula.setDireccion(asistencia.getDireccion());
-        asistenciaAula.setNombres(asistencia.getNombres());
-        asistenciaAula.setApe_materno(asistencia.getApe_materno());
-        asistenciaAula.setApe_paterno(asistencia.getApe_paterno());
-        asistenciaAula.setNaula(asistencia.getNaula());
-        asistenciaAula.setDiscapacidad(asistencia.getDiscapacidad());
-        asistenciaAula.setPrioridad(asistencia.getPrioridad());
-        asistenciaAula.setDia(dd);
-        asistenciaAula.setMes(mm);
-        asistenciaAula.setAnio(yy);
-        asistenciaAula.setHora(hora);
-        asistenciaAula.setMin(minuto);
-        asistenciaAula.setSeg(seg);
-        asistenciaAula.setEstado(0);
-        data.insertarAsistenciaAula(asistenciaAula);
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SQLConstantes.asistenciareg_dia_aula,dd);
+        contentValues.put(SQLConstantes.asistenciareg_mes_aula,mm);
+        contentValues.put(SQLConstantes.asistenciareg_anio_aula,yy);
+        contentValues.put(SQLConstantes.asistenciareg_hora_aula,hora);
+        contentValues.put(SQLConstantes.asistenciareg_min_aula,minuto);
+        contentValues.put(SQLConstantes.asistenciareg_seg_aula,seg);
+        contentValues.put(SQLConstantes.asistenciareg_estado_aula,1);
+        data.actualizarAsistenciaReg(asistenciaReg.getDni(),contentValues);
         data.close();
-        mostrarCorrecto(asistenciaAula.getDni(),asistenciaAula.getNombres() +" "+ asistenciaAula.getApe_paterno() +" "+ asistenciaAula.getApe_materno());
-
-        final String c = asistenciaAula.getDni();
+        mostrarCorrecto(asistenciaReg.getDni(),asistenciaReg.getNombres() +" "+ asistenciaReg.getApe_paterno() +" "+ asistenciaReg.getApe_materno());
+        final String c = asistenciaReg.getDni();
         WriteBatch batch = FirebaseFirestore.getInstance().batch();
-        DocumentReference documentReference = FirebaseFirestore.getInstance().collection("asistencia").document(asistenciaAula.getDni());
+        DocumentReference documentReference = FirebaseFirestore.getInstance().collection("asistencia").document(asistenciaReg.getDni());
         batch.update(documentReference, "check_registro_aula", 1);
         batch.update(documentReference, "fecha_transferencia_aula", FieldValue.serverTimestamp());
         batch.update(documentReference, "usuario_registro_aula", usuario);
         batch.update(documentReference, "fecha_registro_aula",
-                new Timestamp(new Date(asistenciaAula.getAnio()-1900,asistenciaAula.getMes()-1,asistenciaAula.getDia(),
-                        asistenciaAula.getHora(),asistenciaAula.getMin(),asistenciaAula.getSeg())));
+                new Timestamp(new Date(asistenciaReg.getAnio_aula()-1900,asistenciaReg.getMes_aula()-1,asistenciaReg.getDia_aula(),
+                        asistenciaReg.getHora_aula(),asistenciaReg.getMin_aula(),asistenciaReg.getSeg_aula())));
         batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 Data data = new Data(context);
                 data.open();
-                data.actualizarAsistenciaAulaSubido(c);
+                data.actualizarAsistenciaRegAulaSubido(c);
                 data.close();
             }
         }).addOnFailureListener(new OnFailureListener() {

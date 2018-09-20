@@ -32,8 +32,9 @@ import java.util.Date;
 
 import pe.com.ricindigus.appednom2018.R;
 import pe.com.ricindigus.appednom2018.adapters.InventarioCuadernilloAdapter;
-import pe.com.ricindigus.appednom2018.modelo.Cuadernillo;
+import pe.com.ricindigus.appednom2018.modelo.AsistenciaReg;
 import pe.com.ricindigus.appednom2018.modelo.Data;
+import pe.com.ricindigus.appednom2018.modelo.InventarioReg;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -44,8 +45,8 @@ public class ListInvCuadernilloFragment extends Fragment {
     Spinner spAulas;
     String usuario;
     RecyclerView recyclerView;
-    ArrayList<Cuadernillo> cuadernillos;
-    ArrayList<Cuadernillo> datosNoEnviados;
+    ArrayList<InventarioReg> cuadernillos;
+    ArrayList<InventarioReg> datosNoEnviados;
     Data data;
     FloatingActionButton fabUpLoad;
     TextView txtNumero;
@@ -110,19 +111,19 @@ public class ListInvCuadernilloFragment extends Fragment {
             public void onClick(View v) {
                 Toast.makeText(context, "Subiendo...", Toast.LENGTH_SHORT).show();
                 b = false;
-                datosNoEnviados = new ArrayList<Cuadernillo>();
+                datosNoEnviados = new ArrayList<InventarioReg>();
                 data = new Data(context);
                 data.open();
                 int seleccion = spAulas.getSelectedItemPosition();
                 String aula = spAulas.getSelectedItem().toString();
                 int nroAula = 0;
                 if(seleccion > 0) nroAula = data.getNumeroAula(aula,nroLocal);
-                datosNoEnviados = data.getAllCuadernillosSinEnviar(nroLocal,nroAula);
+                datosNoEnviados = data.getInventarioCuadernillosSinEnviar(nroLocal,nroAula);
                 data.close();
                 if(datosNoEnviados.size() > 0){
                     final int total = datosNoEnviados.size();
                     int i = 0;
-                    for (final Cuadernillo cuadernillo : datosNoEnviados){
+                    for (final InventarioReg cuadernillo : datosNoEnviados){
                         i++;
                         final int j = i;
                         final String c = cuadernillo.getCodigo();
@@ -140,7 +141,7 @@ public class ListInvCuadernilloFragment extends Fragment {
                             public void onSuccess(Void aVoid) {
                                 Data data = new Data(context);
                                 data.open();
-                                data.actualizarCuadernilloSubido(c);
+                                data.actualizarInventarioRegSubido(c,2);
                                 data.close();
                                 if (j == total) {
                                     Toast.makeText(context, total + " registros subidos", Toast.LENGTH_SHORT).show();
@@ -164,14 +165,14 @@ public class ListInvCuadernilloFragment extends Fragment {
         });
     }
     public void cargaData(){
-        cuadernillos = new ArrayList<Cuadernillo>();
+        cuadernillos = new ArrayList<InventarioReg>();
         Data d = new Data(context);
         d.open();
         int seleccion = spAulas.getSelectedItemPosition();
         String aula = spAulas.getSelectedItem().toString();
         int nroAula = 0;
         if(seleccion > 0) nroAula = d.getNumeroAula(aula,nroLocal);
-        cuadernillos = d.getAllCuadernillos(nroLocal,nroAula);
+        cuadernillos = d.getListadoInventarioCuadernillo(nroLocal,nroAula);
         txtNumero.setText("TOTAL REGISTROS: " + cuadernillos.size());
         d.close();
     }

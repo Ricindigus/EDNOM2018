@@ -3,25 +3,30 @@ package pe.com.ricindigus.appednom2018.modelo;
 public class Caja {
     private String _id;
     private String cod_barra_caja;
-    private int idsede;
-    private String sede;
+    private String ccdd;
+    private String departamento;
+    private int idnacional;
+    private String idsede;
+    private String nom_sede;
     private int idlocal;
-    private String local;
+    private String nom_local;
     private int tipo;
-    private int acl;
     private int nlado;
+    private int acl;
 
-
-    public Caja(String _id, String cod_barra_caja, int idsede, String sede, int idlocal, String local, int tipo, int acl, int nlado) {
+    public Caja(String _id, String cod_barra_caja, String ccdd, String departamento, int idnacional, String idsede, String nom_sede, int idlocal, String nom_local, int tipo, int nlado, int acl) {
         this._id = _id;
         this.cod_barra_caja = cod_barra_caja;
+        this.ccdd = ccdd;
+        this.departamento = departamento;
+        this.idnacional = idnacional;
         this.idsede = idsede;
-        this.sede = sede;
+        this.nom_sede = nom_sede;
         this.idlocal = idlocal;
-        this.local = local;
+        this.nom_local = nom_local;
         this.tipo = tipo;
-        this.acl = acl;
         this.nlado = nlado;
+        this.acl = acl;
     }
 
     public Caja() {
@@ -43,20 +48,44 @@ public class Caja {
         this.cod_barra_caja = cod_barra_caja;
     }
 
-    public int getIdsede() {
+    public String getCcdd() {
+        return ccdd;
+    }
+
+    public void setCcdd(String ccdd) {
+        this.ccdd = ccdd;
+    }
+
+    public String getDepartamento() {
+        return departamento;
+    }
+
+    public void setDepartamento(String departamento) {
+        this.departamento = departamento;
+    }
+
+    public int getIdnacional() {
+        return idnacional;
+    }
+
+    public void setIdnacional(int idnacional) {
+        this.idnacional = idnacional;
+    }
+
+    public String getIdsede() {
         return idsede;
     }
 
-    public void setIdsede(int idsede) {
+    public void setIdsede(String idsede) {
         this.idsede = idsede;
     }
 
-    public String getSede() {
-        return sede;
+    public String getNom_sede() {
+        return nom_sede;
     }
 
-    public void setSede(String sede) {
-        this.sede = sede;
+    public void setNom_sede(String nom_sede) {
+        this.nom_sede = nom_sede;
     }
 
     public int getIdlocal() {
@@ -67,20 +96,12 @@ public class Caja {
         this.idlocal = idlocal;
     }
 
-    public String getLocal() {
-        return local;
+    public String getNom_local() {
+        return nom_local;
     }
 
-    public void setLocal(String local) {
-        this.local = local;
-    }
-
-    public int getAcl() {
-        return acl;
-    }
-
-    public void setAcl(int acl) {
-        this.acl = acl;
+    public void setNom_local(String nom_local) {
+        this.nom_local = nom_local;
     }
 
     public int getTipo() {
@@ -97,5 +118,13 @@ public class Caja {
 
     public void setNlado(int nlado) {
         this.nlado = nlado;
+    }
+
+    public int getAcl() {
+        return acl;
+    }
+
+    public void setAcl(int acl) {
+        this.acl = acl;
     }
 }

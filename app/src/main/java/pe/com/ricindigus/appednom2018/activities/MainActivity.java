@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         numeroVersion = data.getNumeroApp();
         String clave = data.getUsuarioActual().getClave();
         UsuarioLocal usuarioLocal = data.getUsuarioLocal(clave);
-        nroLocal = usuarioLocal.getNro_local();
+        nroLocal = usuarioLocal.getIdlocal();
 
         usuario = usuarioLocal.getClave();
         usuarioLogueado = usuarioLocal.getUsuario();
@@ -276,10 +276,17 @@ public class MainActivity extends AppCompatActivity {
                                 case 3: setFragment(TipoFragment.REPORTES_RESUMEN_SALIDA_CAJAS);tFragment = TipoFragment.REPORTES_RESUMEN_SALIDA_CAJAS;break;
                             }break;
                         case 3:
-                            switch (childPosition){
-                                case 0: borrarData();setFragment(TipoFragment.CAJAS_IN);tFragment = TipoFragment.CAJAS_IN;tFragment = TipoFragment.CAJAS_IN;break;
-                                case 1: cerrarSesion();break;
-                            }break;
+                            if (numeroVersion < 5){
+                                switch (childPosition){
+                                    case 0: borrarData();setFragment(TipoFragment.CAJAS_IN);tFragment = TipoFragment.CAJAS_IN;tFragment = TipoFragment.CAJAS_IN;break;
+                                    case 1: cerrarSesion();break;
+                                }break;
+                            }else{
+                                switch (childPosition){
+                                    case 0: cerrarSesion();break;
+                                }break;
+                            }
+
                     }
                 }else{
                     switch (groupPosition){
@@ -311,10 +318,17 @@ public class MainActivity extends AppCompatActivity {
                                 case 0: setFragment(TipoFragment.CONSULTA_PADRON_NACIONAL);tFragment = TipoFragment.CONSULTA_PADRON_NACIONAL;break;
                             }break;
                         case 4:
-                            switch (childPosition) {
-                                case 0: borrarData();setFragment(TipoFragment.REGISTRO_ASISTENCIA_LOCAL);tFragment = TipoFragment.REGISTRO_ASISTENCIA_LOCAL;break;
-                                case 1: cerrarSesion();break;
-                            }break;
+                            if (numeroVersion<5){
+                                switch (childPosition) {
+                                    case 0: borrarData();setFragment(TipoFragment.REGISTRO_ASISTENCIA_LOCAL);tFragment = TipoFragment.REGISTRO_ASISTENCIA_LOCAL;break;
+                                    case 1: cerrarSesion();break;
+                                }break;
+                            }else{
+                                switch (childPosition) {
+                                    case 0: cerrarSesion();break;
+                                }break;
+                            }
+
 
                     }
                 }
@@ -348,13 +362,13 @@ public class MainActivity extends AppCompatActivity {
             listDataChild.put(listDataHeader.get(1), salidaCajas);
             listDataChild.put(listDataHeader.get(2), reportes);
 
+            listDataHeader.add("Mas Opciones");
+            List<String> masOpciones = new ArrayList<String>();
             if (numeroVersion < 5){
-                listDataHeader.add("Mas Opciones");
-                List<String> masOpciones = new ArrayList<String>();
                 masOpciones.add("Reset BD");
-                masOpciones.add("Cerrar Sesión");
-                listDataChild.put(listDataHeader.get(3), masOpciones);
             }
+            masOpciones.add("Cerrar Sesión");
+            listDataChild.put(listDataHeader.get(3), masOpciones);
         }else if (rol == 2){
             listDataHeader.add("Registro de Control de Asistencia");
             listDataHeader.add("Registro de Control de Inventario");
@@ -385,18 +399,18 @@ public class MainActivity extends AppCompatActivity {
             listDataChild.put(listDataHeader.get(2), reportes);
             listDataChild.put(listDataHeader.get(3), consultaPadron);
 
+            listDataHeader.add("Mas Opciones");
+            List<String> masOpciones = new ArrayList<String>();
             if (numeroVersion < 5){
-                listDataHeader.add("Mas Opciones");
-                List<String> masOpciones = new ArrayList<String>();
                 masOpciones.add("Reset BD");
-                masOpciones.add("Cerrar Sesión");
-                listDataChild.put(listDataHeader.get(4), masOpciones);
             }
+            masOpciones.add("Cerrar Sesión");
+            listDataChild.put(listDataHeader.get(4), masOpciones);
         }
     }
     public void borrarData(){
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-        builder.setMessage("¿Está seguro que desea borrar los datos?")
+        builder.setMessage("¿Está seguro que desea borrar todos los datos, tendrá que volver a iniciar sesión?")
                 .setTitle("Aviso").setCancelable(false)
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -407,13 +421,11 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int id) {
                         Data data = new Data(MainActivity.this);
                         data.open();
-                        data.deleteAllElementosFromTabla(SQLConstantes.tablacajasentrada);
-                        data.deleteAllElementosFromTabla(SQLConstantes.tablacajassalida);
-                        data.deleteAllElementosFromTabla(SQLConstantes.tablaasistenciaaula);
-                        data.deleteAllElementosFromTabla(SQLConstantes.tablaasistencialocal);
-                        data.deleteAllElementosFromTabla(SQLConstantes.tablafichas);
-                        data.deleteAllElementosFromTabla(SQLConstantes.tablacuadernillos);
-                        data.deleteAllElementosFromTabla(SQLConstantes.tablalistados);
+                        data.deleteAllElementosFromTabla(SQLConstantes.tablacajasreg);
+                        data.deleteAllElementosFromTabla(SQLConstantes.tablaasistenciasreg);
+                        data.deleteAllElementosFromTabla(SQLConstantes.tablainventariosreg);
+                        data.deleteAllElementosFromTabla(SQLConstantes.tablainventariosreg);
+                        data.deleteAllElementosFromTabla(SQLConstantes.tablahistorialusuarios);
                         data.close();
                         CajasInFragment cajasInFragment = new CajasInFragment(nroLocal,MainActivity.this);
                         FragmentManager fragmentManage = getSupportFragmentManager();

@@ -2,6 +2,7 @@ package pe.com.ricindigus.appednom2018.fragments.registro_control_inventario;
 
 
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -32,9 +33,9 @@ import java.util.Calendar;
 import java.util.Date;
 
 import pe.com.ricindigus.appednom2018.R;
-import pe.com.ricindigus.appednom2018.modelo.Cuadernillo;
 import pe.com.ricindigus.appednom2018.modelo.Data;
-import pe.com.ricindigus.appednom2018.modelo.Material;
+import pe.com.ricindigus.appednom2018.modelo.InventarioReg;
+import pe.com.ricindigus.appednom2018.modelo.SQLConstantes;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -131,22 +132,21 @@ public class InvCuaderFragment extends Fragment {
 
     public void clickBoton(){
         ocultarTeclado(edtCuadernillo);
-        String codigoCuadernillo = edtCuadernillo.getText().toString();
+        String codigoInventario = edtCuadernillo.getText().toString();
         Data data = new Data(context);
         data.open();
-        Material material = data.getMaterial(codigoCuadernillo,2);
+        InventarioReg inventarioReg = data.getInventarioReg(codigoInventario,1);
         String aula = spAulas.getSelectedItem().toString();
         int nroAula = 0;
         nroAula = data.getNumeroAula(aula,nroLocal);
-        if(material == null){
-            mostrarErrorCodigo(codigoCuadernillo);
+        if(inventarioReg == null){
+            mostrarErrorCodigo(codigoInventario);
         }else{
-            if(material.getIdlocal() == nroLocal && material.getNaula() == nroAula){
-                Cuadernillo cuadernillo = data.getCuadernillo(codigoCuadernillo);
-                if(cuadernillo == null) registrarCuadernillo(material);
-                else mostrarYaRegistrado(material.getDni(),material.getNombres() + " " + material.getApe_paterno() + " " + material.getApe_materno(),material.getNaula());
+            if(inventarioReg.getNaula() == nroAula){
+                if(inventarioReg.getEstado() == 0) registrarInventario(inventarioReg);
+                else mostrarYaRegistrado(inventarioReg.getDni(),inventarioReg.getNombres() + " " + inventarioReg.getApe_paterno() + " " + inventarioReg.getApe_materno(),inventarioReg.getNaula());
             }else{
-                mostrarErrorAula(material.getDni(),material.getNombres() +" "+ material.getApe_paterno() +" "+ material.getApe_materno(), "" + material.getNaula());
+                mostrarErrorAula(inventarioReg.getDni(),inventarioReg.getNombres() +" "+ inventarioReg.getApe_paterno() +" "+ inventarioReg.getApe_materno(), "" + inventarioReg.getNaula());
             }
         }
         edtCuadernillo.setText("");
@@ -158,7 +158,7 @@ public class InvCuaderFragment extends Fragment {
         InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         mgr.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
-    public void registrarCuadernillo(Material material){
+    public void registrarInventario(InventarioReg inventarioReg){
         Data data = new Data(context);
         data.open();
         Calendar calendario = Calendar.getInstance();
@@ -168,47 +168,32 @@ public class InvCuaderFragment extends Fragment {
         int hora = calendario.get(Calendar.HOUR_OF_DAY);
         int minuto = calendario.get(Calendar.MINUTE);
         int seg = calendario.get(Calendar.SECOND);
-        Cuadernillo cuadernillo = new Cuadernillo();
-        cuadernillo.setCodigo(material.getCodigo());
-        cuadernillo.setTipo(material.getTipo());
-        cuadernillo.setIdnacional(material.getIdnacional());
-        cuadernillo.setCcdd(material.getCcdd());
-        cuadernillo.setIdsede(material.getIdsede());
-        cuadernillo.setSede(material.getSede());
-        cuadernillo.setIdlocal(material.getIdlocal());
-        cuadernillo.setLocal(material.getLocal());
-        cuadernillo.setDni(material.getDni());
-        cuadernillo.setNombres(material.getNombres());
-        cuadernillo.setApe_paterno(material.getApe_paterno());
-        cuadernillo.setApe_materno(material.getApe_materno());
-        cuadernillo.setNaula(material.getNaula());
-        cuadernillo.setCodpagina(material.getCodpagina());
-        cuadernillo.setDia(dd);
-        cuadernillo.setMes(mm);
-        cuadernillo.setAnio(yy);
-        cuadernillo.setHora(hora);
-        cuadernillo.setMin(minuto);
-        cuadernillo.setSeg(seg);
-        cuadernillo.setEstado(0);
-        data.insertarCuadernillo(cuadernillo);
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SQLConstantes.inventarioreg_dia,dd);
+        contentValues.put(SQLConstantes.inventarioreg_mes,mm);
+        contentValues.put(SQLConstantes.inventarioreg_anio,yy);
+        contentValues.put(SQLConstantes.inventarioreg_hora,hora);
+        contentValues.put(SQLConstantes.inventarioreg_min,minuto);
+        contentValues.put(SQLConstantes.inventarioreg_seg,seg);
+        contentValues.put(SQLConstantes.inventarioreg_estado,1);
+        data.actualizarInventarioReg(inventarioReg.getCodigo(),2,contentValues);
         data.close();
-        mostrarCorrecto(cuadernillo.getDni(),cuadernillo.getNombres() +" "+ cuadernillo.getApe_paterno() +" "+ cuadernillo.getApe_materno(),cuadernillo.getCodigo());
-        final String c = cuadernillo.getCodigo();
+        mostrarCorrecto(inventarioReg.getDni(),inventarioReg.getNombres() +" "+ inventarioReg.getApe_paterno() +" "+ inventarioReg.getApe_materno(),inventarioReg.getCodigo());
+        final String c = inventarioReg.getCodigo();
         WriteBatch batch = FirebaseFirestore.getInstance().batch();
-        DocumentReference documentReference = FirebaseFirestore.getInstance().collection("inventario").document(cuadernillo.getTipo()+""+cuadernillo.getCodigo());
+        DocumentReference documentReference = FirebaseFirestore.getInstance().collection("inventario").document(inventarioReg.getTipo()+""+inventarioReg.getCodigo());
         batch.update(documentReference, "check_registro", 1);
         batch.update(documentReference, "fecha_transferencia", FieldValue.serverTimestamp());
         batch.update(documentReference, "usuario_registro", usuario);
         batch.update(documentReference, "fecha_registro",
-                new Timestamp(new Date(cuadernillo.getAnio()-1900,cuadernillo.getMes()-1,cuadernillo.getDia(),
-                        cuadernillo.getHora(),cuadernillo.getMin(),cuadernillo.getSeg())));
-
+                new Timestamp(new Date(inventarioReg.getAnio()-1900,inventarioReg.getMes()-1,inventarioReg.getDia(),
+                        inventarioReg.getHora(),inventarioReg.getMin(),inventarioReg.getSeg())));
         batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 Data data = new Data(context);
                 data.open();
-                data.actualizarCuadernilloSubido(c);
+                data.actualizarInventarioRegSubido(c,1);
                 data.close();
             }
         }).addOnFailureListener(new OnFailureListener() {

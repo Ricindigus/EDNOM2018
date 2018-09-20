@@ -57,9 +57,9 @@ public class CuadroResumenCajasInFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Data data =  new Data(context);
         data.open();
-        int ap = data.getNroCajaInxTipo(nroLocal,1);
-        int ad = data.getNroCajaInxTipo(nroLocal,2);
-        int cand = data.getNroCajaInxTipo(nroLocal,3);
+        int ap = data.getNroCajaEntradaxTipo(nroLocal,1);
+        int ad = data.getNroCajaEntradaxTipo(nroLocal,2);
+        int cand = data.getNroCajaEntradaxTipo(nroLocal,3);
         txtAplicacion.setText(ap+"");
         txtAdicionales.setText(ad+"");
         txtCandado.setText(cand+"");

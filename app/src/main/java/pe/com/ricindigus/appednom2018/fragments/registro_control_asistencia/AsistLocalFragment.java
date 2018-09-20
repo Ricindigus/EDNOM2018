@@ -8,8 +8,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,8 +31,7 @@ import java.util.Date;
 
 import pe.com.ricindigus.appednom2018.R;
 import pe.com.ricindigus.appednom2018.modelo.Asistencia;
-import pe.com.ricindigus.appednom2018.modelo.AsistenciaAula;
-import pe.com.ricindigus.appednom2018.modelo.AsistenciaLocal;
+import pe.com.ricindigus.appednom2018.modelo.AsistenciaReg;
 import pe.com.ricindigus.appednom2018.modelo.Data;
 import pe.com.ricindigus.appednom2018.modelo.SQLConstantes;
 
@@ -132,18 +129,17 @@ public class AsistLocalFragment extends Fragment {
         String dni = edtDni.getText().toString();
         Data data = new Data(context);
         data.open();
-        Asistencia asistencia = data.getAsistenciaxDni(dni);
-        if(asistencia == null){
-            mostrarErrorDni();
+        AsistenciaReg asistenciaReg = data.getAsistenciaReg(dni);
+        if(asistenciaReg == null){
+            Asistencia asistenciaPadron = data.getAsistenciaxDni(dni);
+            if (asistenciaPadron != null) mostrarErrorLocal(asistenciaPadron.getNom_sede(),asistenciaPadron.getNom_local(),asistenciaPadron.getDireccion(),""+asistenciaPadron.getNaula());
+            else mostrarErrorDni();
         }else{
-            if(asistencia.getIdlocal() == nroLocal){
-                AsistenciaLocal asistenciaLocal = data.getAsistenciaLocal(asistencia.getDni());
-                if (asistenciaLocal == null) registrarAsistencia(asistencia);
-                else mostrarYaRegistrado(asistenciaLocal.getDni(),asistenciaLocal.getNombres() + " " + asistenciaLocal.getApe_paterno() + " " + asistenciaLocal.getApe_materno(),asistenciaLocal.getNaula(),
-                        checkDigito(asistenciaLocal.getDia()) +"/"+ checkDigito(asistenciaLocal.getMes()) +"/"+ asistenciaLocal.getAnio() +
-                                " " + checkDigito(asistenciaLocal.getHora()) + ":" + checkDigito(asistenciaLocal.getMin()) + ":" + checkDigito(asistenciaLocal.getSeg()));
-            }
-            else mostrarErrorLocal(asistencia.getSede(),asistencia.getLocal(),asistencia.getDireccion(),""+asistencia.getNaula());
+            if (asistenciaReg.getEstado_local() == 0) registrarAsistencia(asistenciaReg);
+            else mostrarYaRegistrado(asistenciaReg.getDni(),
+                    asistenciaReg.getNombres() + " " + asistenciaReg.getApe_paterno() + " " + asistenciaReg.getApe_materno(), asistenciaReg.getNaula(),
+                    checkDigito(asistenciaReg.getDia_local()) +"/"+ checkDigito(asistenciaReg.getMes_local()) +"/"+ asistenciaReg.getAnio_local() +
+                            " " + checkDigito(asistenciaReg.getHora_local()) + ":" + checkDigito(asistenciaReg.getMin_local()) + ":" + checkDigito(asistenciaReg.getSeg_local()));
         }
         edtDni.setText("");
         edtDni.requestFocus();
@@ -153,7 +149,7 @@ public class AsistLocalFragment extends Fragment {
         InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         mgr.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
-    public void registrarAsistencia(Asistencia asistencia){
+    public void registrarAsistencia(AsistenciaReg asistenciaReg){
         Data data = new Data(context);
         data.open();
         Calendar calendario = Calendar.getInstance();
@@ -163,46 +159,31 @@ public class AsistLocalFragment extends Fragment {
         int hora = calendario.get(Calendar.HOUR_OF_DAY);
         int minuto = calendario.get(Calendar.MINUTE);
         int seg = calendario.get(Calendar.SECOND);
-        AsistenciaLocal asistenciaLocal = new AsistenciaLocal();
-        asistenciaLocal.setDni(asistencia.getDni());
-        asistenciaLocal.setIdnacional(asistencia.getIdnacional());
-        asistenciaLocal.setCcdd(asistencia.getCcdd());
-        asistenciaLocal.setIdsede(asistencia.getIdsede());
-        asistenciaLocal.setSede(asistencia.getSede());
-        asistenciaLocal.setIdlocal(asistencia.getIdlocal());
-        asistenciaLocal.setLocal(asistencia.getLocal());
-        asistenciaLocal.setDireccion(asistencia.getDireccion());
-        asistenciaLocal.setNombres(asistencia.getNombres());
-        asistenciaLocal.setApe_materno(asistencia.getApe_materno());
-        asistenciaLocal.setApe_paterno(asistencia.getApe_paterno());
-        asistenciaLocal.setNaula(asistencia.getNaula());
-        asistenciaLocal.setDiscapacidad(asistencia.getDiscapacidad());
-        asistenciaLocal.setPrioridad(asistencia.getPrioridad());
-        asistenciaLocal.setDia(dd);
-        asistenciaLocal.setMes(mm);
-        asistenciaLocal.setAnio(yy);
-        asistenciaLocal.setHora(hora);
-        asistenciaLocal.setMin(minuto);
-        asistenciaLocal.setSeg(seg);
-        asistenciaLocal.setEstado(0);
-        data.insertarAsistenciaLocal(asistenciaLocal);
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SQLConstantes.asistenciareg_dia_local,dd);
+        contentValues.put(SQLConstantes.asistenciareg_mes_local,mm);
+        contentValues.put(SQLConstantes.asistenciareg_anio_local,yy);
+        contentValues.put(SQLConstantes.asistenciareg_hora_local,hora);
+        contentValues.put(SQLConstantes.asistenciareg_min_local,minuto);
+        contentValues.put(SQLConstantes.asistenciareg_seg_local,seg);
+        contentValues.put(SQLConstantes.asistenciareg_estado_local,1);
+        data.actualizarAsistenciaReg(asistenciaReg.getDni(),contentValues);
         data.close();
-        mostrarCorrecto(asistenciaLocal.getDni(),asistenciaLocal.getNombres() +" "+ asistenciaLocal.getApe_paterno() +" "+ asistenciaLocal.getApe_materno(),asistenciaLocal.getSede(),asistenciaLocal.getLocal(),asistenciaLocal.getNaula());
-        final String c = asistenciaLocal.getDni();
+        mostrarCorrecto(asistenciaReg.getDni(),asistenciaReg.getNombres() +" "+ asistenciaReg.getApe_paterno() +" "+ asistenciaReg.getApe_materno(),asistenciaReg.getNom_sede(),asistenciaReg.getNom_local(),asistenciaReg.getNaula());
+        final String c = asistenciaReg.getDni();
         WriteBatch batch = FirebaseFirestore.getInstance().batch();
-        DocumentReference documentReference = FirebaseFirestore.getInstance().collection("asistencia").document(asistenciaLocal.getDni());
+        DocumentReference documentReference = FirebaseFirestore.getInstance().collection("asistencia").document(asistenciaReg.getDni());
         batch.update(documentReference, "check_registro_local", 1);
         batch.update(documentReference, "fecha_transferencia_local", FieldValue.serverTimestamp());
         batch.update(documentReference, "usuario_registro_local", usuario);
-        batch.update(documentReference, "fecha_registro_local",
-                new Timestamp(new Date(asistenciaLocal.getAnio()-1900,asistenciaLocal.getMes()-1,asistenciaLocal.getDia(),
-                        asistenciaLocal.getHora(),asistenciaLocal.getMin(),asistenciaLocal.getSeg())));
+        batch.update(documentReference, "fecha_registro_local", new Timestamp(new Date(asistenciaReg.getAnio_local()-1900,asistenciaReg.getMes_local()-1,asistenciaReg.getDia_local(),
+                        asistenciaReg.getHora_local(),asistenciaReg.getMin_local(),asistenciaReg.getSeg_local())));
         batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 Data data = new Data(context);
                 data.open();
-                data.actualizarAsistenciaLocalSubido(c);
+                data.actualizarAsistenciaRegLocalSubido(c);
                 data.close();
             }
         }).addOnFailureListener(new OnFailureListener() {

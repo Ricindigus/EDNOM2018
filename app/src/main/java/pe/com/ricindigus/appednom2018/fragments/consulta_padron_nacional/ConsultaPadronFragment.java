@@ -107,7 +107,9 @@ public class ConsultaPadronFragment extends Fragment {
         if(asistencia == null){
             mostrarErrorDni();
         }else{
-            mostrarCorrecto(asistencia.getDni(),asistencia.getNombres() +" "+ asistencia.getApe_paterno() +" "+ asistencia.getApe_materno(),asistencia.getSede(),asistencia.getLocal(),asistencia.getNaula(),asistencia.getDireccion());
+            mostrarCorrecto(asistencia.getDni(),
+                    asistencia.getNombres() +" "+ asistencia.getApe_paterno() +" "+ asistencia.getApe_materno(),
+                    asistencia.getNom_sede(),asistencia.getNom_local(),asistencia.getNaula(),asistencia.getDireccion());
         }
         edtDni.setText("");
         edtDni.requestFocus();

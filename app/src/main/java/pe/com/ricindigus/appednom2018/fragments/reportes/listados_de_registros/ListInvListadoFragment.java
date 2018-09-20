@@ -33,7 +33,7 @@ import java.util.Date;
 import pe.com.ricindigus.appednom2018.R;
 import pe.com.ricindigus.appednom2018.adapters.InventarioListadoAdapter;
 import pe.com.ricindigus.appednom2018.modelo.Data;
-import pe.com.ricindigus.appednom2018.modelo.Listado;
+import pe.com.ricindigus.appednom2018.modelo.InventarioReg;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -44,8 +44,8 @@ public class ListInvListadoFragment extends Fragment {
     Spinner spAulas;
     String usuario;
     RecyclerView recyclerView;
-    ArrayList<Listado> listados;
-    ArrayList<Listado> datosNoEnviados;
+    ArrayList<InventarioReg> listados;
+    ArrayList<InventarioReg> datosNoEnviados;
     Data data;
     FloatingActionButton fabUpLoad;
     TextView txtNumero;
@@ -118,13 +118,13 @@ public class ListInvListadoFragment extends Fragment {
                 String aula = spAulas.getSelectedItem().toString();
                 int nroAula = 0;
                 if(seleccion > 0) nroAula = data.getNumeroAula(aula,nroLocal);
-                datosNoEnviados = data.getAllListadosSinEnviar(nroLocal,nroAula);
+                datosNoEnviados = data.getInventarioListasSinEnviar(nroLocal,nroAula);
                 data.close();
 
                 if(datosNoEnviados.size() > 0){
                     final int total = datosNoEnviados.size();
                     int i = 0;
-                    for (final Listado listado : datosNoEnviados){
+                    for (final InventarioReg listado : datosNoEnviados){
                         i++;
                         final int j = i;
                         final String c = listado.getCodigo();
@@ -141,7 +141,7 @@ public class ListInvListadoFragment extends Fragment {
                             public void onSuccess(Void aVoid) {
                                 Data data = new Data(context);
                                 data.open();
-                                data.actualizarListadoSubido(c);
+                                data.actualizarInventarioRegSubido(c,3);
                                 data.close();
                                 if (j == total) {
                                     Toast.makeText(context, total + " registros subidos", Toast.LENGTH_SHORT).show();
@@ -166,14 +166,14 @@ public class ListInvListadoFragment extends Fragment {
         });
     }
     public void cargaData(){
-        listados = new ArrayList<Listado>();
+        listados = new ArrayList<InventarioReg>();
         Data d = new Data(context);
         d.open();
         int seleccion = spAulas.getSelectedItemPosition();
         String aula = spAulas.getSelectedItem().toString();
         int nroAula = 0;
         if(seleccion > 0) nroAula = d.getNumeroAula(aula,nroLocal);
-        listados = d.getAllListados(nroLocal,nroAula);
+        listados = d.getListadoInventarioLista(nroLocal,nroAula);
         txtNumero.setText("REGISTROS: " + listados.size());
         d.close();
     }

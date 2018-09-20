@@ -2,6 +2,7 @@ package pe.com.ricindigus.appednom2018.fragments.registro_control_inventario;
 
 
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -33,8 +34,8 @@ import java.util.Date;
 
 import pe.com.ricindigus.appednom2018.R;
 import pe.com.ricindigus.appednom2018.modelo.Data;
-import pe.com.ricindigus.appednom2018.modelo.Listado;
-import pe.com.ricindigus.appednom2018.modelo.Material;
+import pe.com.ricindigus.appednom2018.modelo.InventarioReg;
+import pe.com.ricindigus.appednom2018.modelo.SQLConstantes;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -129,24 +130,21 @@ public class InvListAsisFragment extends Fragment {
 
     public void clickBoton(){
         ocultarTeclado(edtLista);
-        String codigoListado = edtLista.getText().toString();
+        String codigoInventario = edtLista.getText().toString();
         Data data = new Data(context);
         data.open();
-        Material material = data.getMaterial(codigoListado,3);
+        InventarioReg inventarioReg = data.getInventarioReg(codigoInventario,3);
         String aula = spAulas.getSelectedItem().toString();
         int nroAula = 0;
-        int nroPostulantes = 0;
         nroAula = data.getNumeroAula(aula,nroLocal);
-        if(material == null){
-            mostrarErrorCodigo(codigoListado);
+        if(inventarioReg == null){
+            mostrarErrorCodigo(codigoInventario);
         }else{
-            nroPostulantes = data.getNroPostulantesListado(material.getCodigo());
-            if(material.getIdlocal() == nroLocal && material.getNaula() == nroAula){
-                Listado listado = data.getListado(codigoListado);
-                if(listado == null) registrarListado(material);
-                else mostrarYaRegistrado(material.getCodigo(),nroPostulantes,material.getNaula());
+            if(inventarioReg.getNaula() == nroAula){
+                if(inventarioReg.getEstado() == 0) registrarInventario(inventarioReg);
+                else mostrarYaRegistrado(inventarioReg.getCodigo(),inventarioReg.getNpostulantes(),inventarioReg.getNaula());
             }else{
-                mostrarErrorAula(material.getDni(),nroPostulantes, material.getNaula());
+                mostrarErrorAula(inventarioReg.getCodigo(),inventarioReg.getNpostulantes(), inventarioReg.getNaula());
             }
         }
         edtLista.setText("");
@@ -158,11 +156,9 @@ public class InvListAsisFragment extends Fragment {
         InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         mgr.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
-    public void registrarListado(Material material){
+    public void registrarInventario(InventarioReg inventarioReg){
         Data data = new Data(context);
         data.open();
-        int nroPostulantes = 0;
-        nroPostulantes = data.getNroPostulantesListado(material.getCodigo());
         Calendar calendario = Calendar.getInstance();
         int yy = calendario.get(Calendar.YEAR);
         int mm = calendario.get(Calendar.MONTH)+1;
@@ -170,42 +166,34 @@ public class InvListAsisFragment extends Fragment {
         int hora = calendario.get(Calendar.HOUR_OF_DAY);
         int minuto = calendario.get(Calendar.MINUTE);
         int seg = calendario.get(Calendar.SECOND);
-        Listado listado = new Listado();
-        listado.setCodigo(material.getCodigo());
-        listado.setTipo(material.getTipo());
-        listado.setIdnacional(material.getIdnacional());
-        listado.setCcdd(material.getCcdd());
-        listado.setIdsede(material.getIdsede());
-        listado.setSede(material.getSede());
-        listado.setIdlocal(material.getIdlocal());
-        listado.setLocal(material.getLocal());
-        listado.setNaula(material.getNaula());
-        listado.setNpostulantes(nroPostulantes);
-        listado.setDia(dd);
-        listado.setMes(mm);
-        listado.setAnio(yy);
-        listado.setHora(hora);
-        listado.setMin(minuto);
-        listado.setSeg(seg);
-        listado.setEstado(0);
-        data.insertarListado(listado);
+        int nroPostulantes = data.getNroPostulantesListado(inventarioReg.getCodpagina());
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SQLConstantes.inventarioreg_dia,dd);
+        contentValues.put(SQLConstantes.inventarioreg_mes,mm);
+        contentValues.put(SQLConstantes.inventarioreg_anio,yy);
+        contentValues.put(SQLConstantes.inventarioreg_hora,hora);
+        contentValues.put(SQLConstantes.inventarioreg_min,minuto);
+        contentValues.put(SQLConstantes.inventarioreg_seg,seg);
+        contentValues.put(SQLConstantes.inventarioreg_npostulantes,nroPostulantes);
+        contentValues.put(SQLConstantes.inventarioreg_estado,1);
+        data.actualizarInventarioReg(inventarioReg.getCodigo(),3,contentValues);
         data.close();
-        mostrarCorrecto(listado.getCodigo(),nroPostulantes);
-        final String c = listado.getCodigo();
+        mostrarCorrecto(inventarioReg.getCodigo(),inventarioReg.getNpostulantes());
+        final String c = inventarioReg.getCodigo();
         WriteBatch batch = FirebaseFirestore.getInstance().batch();
-        DocumentReference documentReference = FirebaseFirestore.getInstance().collection("inventario").document(listado.getCodigo());
+        DocumentReference documentReference = FirebaseFirestore.getInstance().collection("inventario").document(inventarioReg.getCodigo());
         batch.update(documentReference, "check_registro", 1);
         batch.update(documentReference, "fecha_transferencia", FieldValue.serverTimestamp());
         batch.update(documentReference, "usuario_registro", usuario);
         batch.update(documentReference, "fecha_registro",
-                new Timestamp(new Date(listado.getAnio()-1900,listado.getMes()-1,listado.getDia(),
-                        listado.getHora(),listado.getMin(),listado.getSeg())));
+                new Timestamp(new Date(inventarioReg.getAnio()-1900,inventarioReg.getMes()-1,inventarioReg.getDia(),
+                        inventarioReg.getHora(),inventarioReg.getMin(),inventarioReg.getSeg())));
         batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 Data data = new Data(context);
                 data.open();
-                data.actualizarListadoSubido(c);
+                data.actualizarInventarioRegSubido(c,3);
                 data.close();
             }
         }).addOnFailureListener(new OnFailureListener() {

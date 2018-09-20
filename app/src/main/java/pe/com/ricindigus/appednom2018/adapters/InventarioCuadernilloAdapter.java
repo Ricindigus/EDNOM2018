@@ -12,13 +12,13 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import pe.com.ricindigus.appednom2018.R;
-import pe.com.ricindigus.appednom2018.modelo.Cuadernillo;
+import pe.com.ricindigus.appednom2018.modelo.InventarioReg;
 
 public class InventarioCuadernilloAdapter extends RecyclerView.Adapter<InventarioCuadernilloAdapter.ViewHolder>{
-    ArrayList<Cuadernillo> cuadernillos;
+    ArrayList<InventarioReg> cuadernillos;
     Context context;
 
-    public InventarioCuadernilloAdapter(ArrayList<Cuadernillo> cuadernillos, Context context) {
+    public InventarioCuadernilloAdapter(ArrayList<InventarioReg> cuadernillos, Context context) {
         this.cuadernillos = cuadernillos;
         this.context = context;
     }
@@ -32,7 +32,7 @@ public class InventarioCuadernilloAdapter extends RecyclerView.Adapter<Inventari
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        Cuadernillo cuadernillo = cuadernillos.get(position);
+        InventarioReg cuadernillo = cuadernillos.get(position);
         holder.txtDni.setText(cuadernillo.getDni());
         holder.txtNombres.setText(cuadernillo.getNombres() + " " + cuadernillo.getApe_paterno() + " " + cuadernillo.getApe_materno());
         holder.txtCodigo.setText(cuadernillo.getCodigo());

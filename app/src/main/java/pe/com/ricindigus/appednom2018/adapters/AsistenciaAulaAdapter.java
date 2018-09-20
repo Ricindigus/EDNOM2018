@@ -12,13 +12,13 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import pe.com.ricindigus.appednom2018.R;
-import pe.com.ricindigus.appednom2018.modelo.AsistenciaAula;
+import pe.com.ricindigus.appednom2018.modelo.AsistenciaReg;
 
 public class AsistenciaAulaAdapter extends RecyclerView.Adapter<AsistenciaAulaAdapter.ViewHolder>{
-    ArrayList<AsistenciaAula> asistenciaAulas;
+    ArrayList<AsistenciaReg> asistenciaAulas;
     Context context;
 
-    public AsistenciaAulaAdapter(ArrayList<AsistenciaAula> asistenciaAulas, Context context) {
+    public AsistenciaAulaAdapter(ArrayList<AsistenciaReg> asistenciaAulas, Context context) {
         this.asistenciaAulas = asistenciaAulas;
         this.context = context;
     }
@@ -32,14 +32,15 @@ public class AsistenciaAulaAdapter extends RecyclerView.Adapter<AsistenciaAulaAd
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        AsistenciaAula asistenciaAula = asistenciaAulas.get(position);
+        AsistenciaReg asistenciaAula = asistenciaAulas.get(position);
         holder.txtDni.setText(asistenciaAula.getDni());
         holder.txtNombres.setText(asistenciaAula.getNombres() + " " + asistenciaAula.getApe_paterno() + " " + asistenciaAula.getApe_materno());
         holder.txtAula.setText(asistenciaAula.getNaula()+"");
-        holder.txtFecha.setText(checkDigito(asistenciaAula.getDia()) + "-"
-                + checkDigito(asistenciaAula.getMes()) + "-" + checkDigito(asistenciaAula.getAnio()) + " "
-                + checkDigito(asistenciaAula.getHora()) + ":" + checkDigito(asistenciaAula.getMin())+ ":" + checkDigito(asistenciaAula.getSeg()));
-        if(asistenciaAula.getEstado() == 1) holder.cv.setCardBackgroundColor(ContextCompat.getColor(context, R.color.greenPrimaryLight));
+        holder.txtFecha.setText(checkDigito(asistenciaAula.getDia_aula()) + "-"
+                + checkDigito(asistenciaAula.getMes_aula()) + "-" + checkDigito(asistenciaAula.getAnio_aula()) + " "
+                + checkDigito(asistenciaAula.getHora_aula()) + ":" + checkDigito(asistenciaAula.getMin_aula())+ ":"
+                + checkDigito(asistenciaAula.getSeg_aula()));
+        if(asistenciaAula.getEstado_aula() == 1) holder.cv.setCardBackgroundColor(ContextCompat.getColor(context, R.color.greenPrimaryLight));
         else holder.cv.setCardBackgroundColor(ContextCompat.getColor(context, R.color.redPrimaryLight));
     }
 

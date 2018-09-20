@@ -29,7 +29,7 @@ import java.util.Date;
 
 import pe.com.ricindigus.appednom2018.R;
 import pe.com.ricindigus.appednom2018.adapters.CajasSalidaAdapter;
-import pe.com.ricindigus.appednom2018.modelo.CajaOut;
+import pe.com.ricindigus.appednom2018.modelo.CajaReg;
 import pe.com.ricindigus.appednom2018.modelo.Data;
 
 /**
@@ -40,8 +40,8 @@ public class ListSalidaCajasFragment extends Fragment {
 
     RecyclerView recyclerView;
     Context context;
-    ArrayList<CajaOut> cajaOuts;
-    ArrayList<CajaOut> noEnviados;
+    ArrayList<CajaReg> cajaRegs;
+    ArrayList<CajaReg> noEnviados;
     String usuario;
 
     int nroLocal;
@@ -88,7 +88,7 @@ public class ListSalidaCajasFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);
         cargaData();
-        cajasSalidaAdapter = new CajasSalidaAdapter(cajaOuts,context);
+        cajasSalidaAdapter = new CajasSalidaAdapter(cajaRegs,context);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(cajasSalidaAdapter);
 
@@ -99,12 +99,12 @@ public class ListSalidaCajasFragment extends Fragment {
                 noEnviados = new ArrayList<>();
                 data = new Data(context);
                 data.open();
-                noEnviados = data.getAllCajasOutNoEnviados(nroLocal);
+                noEnviados = data.getListCajasSalidaCompletas(nroLocal);
                 data.close();
                 if(noEnviados.size() > 0){
                     final int total = noEnviados.size();
                     int i = 0;
-                    for (final CajaOut cajaOut10 : noEnviados){
+                    for (final CajaReg cajaOut10 : noEnviados){
                         i++;
                         final int j = i;
                         if (cajaOut10.getTipo() != 3){
@@ -113,16 +113,16 @@ public class ListSalidaCajasFragment extends Fragment {
                             batch.update(documentReference10, "check_registro", 2);
                             batch.update(documentReference10, "fecha_transferencia_salida", FieldValue.serverTimestamp());
                             batch.update(documentReference10, "usuario_registro_salida", usuario);
-                            batch.update(documentReference10, "fecha_registro_salida", new Timestamp(new Date(cajaOut10.getAnio()-1900,cajaOut10.getMes()-1,cajaOut10.getDia(),cajaOut10.getHora(),cajaOut10.getMin(),cajaOut10.getSeg())));
+                            batch.update(documentReference10, "fecha_registro_salida", new Timestamp(new Date(cajaOut10.getAnio_salida()-1900,cajaOut10.getMes_salida()-1,cajaOut10.getDia_salida(),cajaOut10.getHora_salida(),cajaOut10.getMin_salida(),cajaOut10.getSeg_salida())));
                             Data d = new Data(context);
                             d.open();
-                            CajaOut cajaOut20 = d.getCajaOut(getCodigo20(cajaOut10.getCod_barra_caja()));
+                            CajaReg cajaOut20 = d.getCajaReg(getCodigo20(cajaOut10.getCod_barra_caja()),nroLocal);
                             d.close();
                             DocumentReference documentReference20 = FirebaseFirestore.getInstance().collection("cajas").document(cajaOut20.getCod_barra_caja());
                             batch.update(documentReference20, "check_registro", 2);
                             batch.update(documentReference20, "fecha_transferencia_salida", FieldValue.serverTimestamp());
                             batch.update(documentReference20, "usuario_registro_salida", usuario);
-                            batch.update(documentReference20, "fecha_registro_salida", new Timestamp(new Date(cajaOut20.getAnio()-1900,cajaOut20.getMes()-1,cajaOut20.getDia(),cajaOut20.getHora(),cajaOut20.getMin(),cajaOut20.getSeg())));
+                            batch.update(documentReference20, "fecha_registro_salida", new Timestamp(new Date(cajaOut20.getAnio_salida()-1900,cajaOut20.getMes_salida()-1,cajaOut20.getDia_salida(),cajaOut20.getHora_salida(),cajaOut20.getMin_salida(),cajaOut20.getSeg_salida())));
                             final String codigoBarra = cajaOut10.getCod_barra_caja();
                             final String codigoBarra20 = cajaOut20.getCod_barra_caja();
 
@@ -131,13 +131,13 @@ public class ListSalidaCajasFragment extends Fragment {
                                 public void onSuccess(Void aVoid) {
                                     Data data = new Data(context);
                                     data.open();
-                                    data.actualizarCajaOutSubido(codigoBarra);
-                                    data.actualizarCajaOutSubido(codigoBarra20);
+                                    data.actualizarCajaRegSubidoSalida(codigoBarra);
+                                    data.actualizarCajaRegSubidoSalida(codigoBarra20);
                                     data.close();
                                     if (j == total) {
                                         Toast.makeText(context, total + " registros subidos", Toast.LENGTH_SHORT).show();
                                         cargaData();
-                                        cajasSalidaAdapter = new CajasSalidaAdapter(cajaOuts,context);
+                                        cajasSalidaAdapter = new CajasSalidaAdapter(cajaRegs,context);
                                         recyclerView.setAdapter(cajasSalidaAdapter);
                                     }
                                 }
@@ -153,19 +153,19 @@ public class ListSalidaCajasFragment extends Fragment {
                             batch.update(documentReference10, "check_registro", 2);
                             batch.update(documentReference10, "fecha_transferencia_salida", FieldValue.serverTimestamp());
                             batch.update(documentReference10, "usuario_registro_salida", usuario);
-                            batch.update(documentReference10, "fecha_registro_salida", new Timestamp(new Date(cajaOut10.getAnio()-1900,cajaOut10.getMes()-1,cajaOut10.getDia(),cajaOut10.getHora(),cajaOut10.getMin(),cajaOut10.getSeg())));
+                            batch.update(documentReference10, "fecha_registro_salida", new Timestamp(new Date(cajaOut10.getAnio_salida()-1900,cajaOut10.getMes_salida()-1,cajaOut10.getDia_salida(),cajaOut10.getHora_salida(),cajaOut10.getMin_salida(),cajaOut10.getSeg_salida())));
                             final String codigoBarra = cajaOut10.getCod_barra_caja();
                             batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
                                     Data data = new Data(context);
                                     data.open();
-                                    data.actualizarCajaOutSubido(codigoBarra);
+                                    data.actualizarCajaRegSubidoSalida(codigoBarra);
                                     data.close();
                                     if (j == total) {
                                         Toast.makeText(context, total + " registros subidos", Toast.LENGTH_SHORT).show();
                                         cargaData();
-                                        cajasSalidaAdapter = new CajasSalidaAdapter(cajaOuts,context);
+                                        cajasSalidaAdapter = new CajasSalidaAdapter(cajaRegs,context);
                                         recyclerView.setAdapter(cajasSalidaAdapter);
                                     }
                                 }
@@ -191,20 +191,15 @@ public class ListSalidaCajasFragment extends Fragment {
     }
 
     public void cargaData(){
-
-        cajaOuts = new ArrayList<CajaOut>();
-        noEnviados = new ArrayList<CajaOut>();
-
+        cajaRegs = new ArrayList<CajaReg>();
         Data data = new Data(context);
         data.open();
-        cajaOuts = data.getAllCajaOutListado(nroLocal);
-        noEnviados = data.getAllCajasOutNoEnviados(nroLocal);
-
-        txtNumero.setText("Esperados: " + cajaOuts.size());
-        txtNoRegistrados.setText("No registrados: " + data.getNroCajasOutNoRegistrados(nroLocal));
-        txtIncompletos.setText("Incompletos: " + data.getNroCajasOutNoCompletos(nroLocal));
-        txtCompletos.setText("Completos: " + data.getNroCajasOutCompletos(nroLocal));
-        txtTransferidos.setText("Tranferidos: " + data.getNroCajasOutTransferidos(nroLocal));
+        cajaRegs = data.getListadoCajasSalida(nroLocal);
+        txtNumero.setText("Totales: " + cajaRegs.size());
+        txtNoRegistrados.setText("No registrados: " + data.getNroCajasSalidaSinRegistrar(nroLocal));
+        txtIncompletos.setText("Incompletos: " + data.getNroCajasSalidaIncompletas(nroLocal));
+        txtCompletos.setText("Completos: " + data.getNroCajasSalidaCompletas(nroLocal));
+        txtTransferidos.setText("Tranferidos: " + data.getNroCajasSalidaTransferidos(nroLocal));
         data.close();
     }
 

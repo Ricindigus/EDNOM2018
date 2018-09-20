@@ -32,7 +32,7 @@ import java.util.Date;
 
 import pe.com.ricindigus.appednom2018.R;
 import pe.com.ricindigus.appednom2018.adapters.AsistenciaAulaAdapter;
-import pe.com.ricindigus.appednom2018.modelo.AsistenciaAula;
+import pe.com.ricindigus.appednom2018.modelo.AsistenciaReg;
 import pe.com.ricindigus.appednom2018.modelo.Data;
 
 /**
@@ -44,8 +44,8 @@ public class ListAsisAulaFragment extends Fragment {
     Spinner spAulas;
     RecyclerView recyclerView;
     String usuario;
-    ArrayList<AsistenciaAula> asistenciaAulas;
-    ArrayList<AsistenciaAula> noEnviados;
+    ArrayList<AsistenciaReg> asistenciaAulas;
+    ArrayList<AsistenciaReg> noEnviados;
     Data data;
     FloatingActionButton fabUpLoad;
     TextView txtNumero;
@@ -117,12 +117,12 @@ public class ListAsisAulaFragment extends Fragment {
                 String aula = spAulas.getSelectedItem().toString();
                 int nroAula = 0;
                 if(seleccion > 0) nroAula = data.getNumeroAula(aula,nroLocal);
-                noEnviados = data.getAsistenciaAulaSinEnviar(nroLocal,nroAula);
+                noEnviados = data.getAsistenciasAulaSinEnviar(nroLocal,nroAula);
                 data.close();
                 if(noEnviados.size() > 0){
                     final int total = noEnviados.size();
                     int i = 0;
-                    for (final AsistenciaAula asistenciaAula : noEnviados){
+                    for (final AsistenciaReg asistenciaAula : noEnviados){
                         i++;
                         final int j = i;
                         final String c = asistenciaAula.getDni();
@@ -132,14 +132,14 @@ public class ListAsisAulaFragment extends Fragment {
                         batch.update(documentReference, "fecha_transferencia", FieldValue.serverTimestamp());
                         batch.update(documentReference, "usuario_registro", usuario);
                         batch.update(documentReference, "fecha_registro",
-                                new Timestamp(new Date(asistenciaAula.getAnio()-1900,asistenciaAula.getMes()-1,asistenciaAula.getDia(),
-                                        asistenciaAula.getHora(),asistenciaAula.getMin(),asistenciaAula.getSeg())));
+                                new Timestamp(new Date(asistenciaAula.getAnio_aula()-1900,asistenciaAula.getMes_aula()-1,asistenciaAula.getDia_aula(),
+                                        asistenciaAula.getHora_aula(),asistenciaAula.getMin_aula(),asistenciaAula.getSeg_aula())));
                         batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 Data data = new Data(context);
                                 data.open();
-                                data.actualizarAsistenciaAulaSubido(c);
+                                data.actualizarAsistenciaRegAulaSubido(c);
                                 data.close();
                                 if (j == total) {
                                     Toast.makeText(context, total + " registros subidos", Toast.LENGTH_SHORT).show();
@@ -163,14 +163,14 @@ public class ListAsisAulaFragment extends Fragment {
         });
     }
     public void cargaData(){
-        asistenciaAulas = new ArrayList<AsistenciaAula>();
+        asistenciaAulas = new ArrayList<AsistenciaReg>();
         Data d = new Data(context);
         d.open();
         int seleccion = spAulas.getSelectedItemPosition();
         String aula = spAulas.getSelectedItem().toString();
         int nroAula = 0;
-        if(seleccion > 0) nroAula = d.getNumeroAula(aula,nroLocal);
-        asistenciaAulas = d.getAllAsistenciaAula(nroLocal,nroAula);
+        nroAula = d.getNumeroAula(aula,nroLocal);
+        asistenciaAulas = d.getListadoAsistenciaAula(nroLocal,nroAula);
         txtNumero.setText("TOTAL REGISTROS: " + asistenciaAulas.size());
         d.close();
     }

@@ -12,14 +12,14 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import pe.com.ricindigus.appednom2018.R;
-import pe.com.ricindigus.appednom2018.modelo.CajaOut;
+import pe.com.ricindigus.appednom2018.modelo.CajaReg;
 
 public class CajasSalidaAdapter extends RecyclerView.Adapter<CajasSalidaAdapter.ViewHolder>{
-    ArrayList<CajaOut> cajas;
+    ArrayList<CajaReg> cajaRegs;
     Context context;
 
-    public CajasSalidaAdapter(ArrayList<CajaOut> cajas, Context context) {
-        this.cajas = cajas;
+    public CajasSalidaAdapter(ArrayList<CajaReg> cajaRegs, Context context) {
+        this.cajaRegs = cajaRegs;
         this.context = context;
     }
 
@@ -32,18 +32,19 @@ public class CajasSalidaAdapter extends RecyclerView.Adapter<CajasSalidaAdapter.
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        CajaOut caja = cajas.get(position);
-        holder.txtCodBarra.setText(caja.getCod_barra_caja());
-        holder.txtAcl.setText("ACL: " + caja.getAcl());
-        holder.txtFecha.setText(checkDigito(caja.getDia()) + "-"
-                + checkDigito(caja.getMes()) + "-" + checkDigito(caja.getAnio()) + " "
-                + checkDigito(caja.getHora()) + ":" + checkDigito(caja.getMin())+ ":" + checkDigito(caja.getSeg()));
+        CajaReg cajaReg = cajaRegs.get(position);
+        holder.txtCodBarra.setText(cajaReg.getCod_barra_caja());
+        holder.txtAcl.setText("ACL: " + cajaReg.getAcl());
+        holder.txtFecha.setText(checkDigito(cajaReg.getDia_salida()) + "-"
+                + checkDigito(cajaReg.getMes_salida()) + "-" + checkDigito(cajaReg.getAnio_salida()) + " "
+                + checkDigito(cajaReg.getHora_salida()) + ":" + checkDigito(cajaReg.getMin_salida())+ ":"
+                + checkDigito(cajaReg.getSeg_salida()));
 
-        if(caja.getEstado() == 3){
+        if(cajaReg.getEstado_salida() == 3){
             holder.cv.setCardBackgroundColor(ContextCompat.getColor(context, R.color.greenPrimaryLight));
-        }else if(caja.getEstado() == 2){
+        }else if(cajaReg.getEstado_salida() == 2){
             holder.cv.setCardBackgroundColor(ContextCompat.getColor(context, R.color.amberPrimaryLight));
-        }else if(caja.getEstado() == 1){
+        }else if(cajaReg.getEstado_salida() == 1){
             holder.cv.setCardBackgroundColor(ContextCompat.getColor(context, R.color.bluePrimaryLight));
         }else{
             holder.cv.setCardBackgroundColor(ContextCompat.getColor(context, R.color.redPrimaryLight));
@@ -56,7 +57,7 @@ public class CajasSalidaAdapter extends RecyclerView.Adapter<CajasSalidaAdapter.
 
     @Override
     public int getItemCount() {
-        return cajas.size();
+        return cajaRegs.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{

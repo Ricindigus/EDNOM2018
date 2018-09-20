@@ -5,41 +5,26 @@ public class UsuarioLocal {
     private String usuario;
     private String clave;
     private int rol;
-    private int nro_local;
-    private String nombreLocal;
+    private int idlocal;
+    private String nom_local;
     private int naulas;
-    private int ncontingencia;
-    private int codsede;
-    private String sede;
-    private String nombre;
+    private int idsede;
+    private String nom_sede;
 
 
-    public UsuarioLocal(int _id, String usuario, String clave, int rol, int nro_local, String nombreLocal, int naulas, int ncontingencia, int codsede, String sede, String nombre) {
+    public UsuarioLocal(int _id, String usuario, String clave, int rol, int idlocal, String nom_local, int naulas, int idsede, String nom_sede) {
         this._id = _id;
         this.usuario = usuario;
         this.clave = clave;
         this.rol = rol;
-        this.nro_local = nro_local;
-        this.nombreLocal = nombreLocal;
+        this.idlocal = idlocal;
+        this.nom_local = nom_local;
         this.naulas = naulas;
-        this.ncontingencia = ncontingencia;
-        this.codsede = codsede;
-        this.sede = sede;
-        this.nombre = nombre;
+        this.idsede = idsede;
+        this.nom_sede = nom_sede;
     }
 
     public UsuarioLocal() {
-        this._id = 0;
-        this.usuario = "";
-        this.clave = "";
-        this.rol = 0;
-        this.nro_local = 0;
-        this.nombreLocal = "";
-        this.naulas = 0;
-        this.ncontingencia = 0;
-        this.codsede = 0;
-        this.sede = "";
-        this.nombre = "";
     }
 
     public int get_id() {
@@ -74,20 +59,20 @@ public class UsuarioLocal {
         this.rol = rol;
     }
 
-    public int getNro_local() {
-        return nro_local;
+    public int getIdlocal() {
+        return idlocal;
     }
 
-    public void setNro_local(int nro_local) {
-        this.nro_local = nro_local;
+    public void setIdlocal(int idlocal) {
+        this.idlocal = idlocal;
     }
 
-    public String getNombreLocal() {
-        return nombreLocal;
+    public String getNom_local() {
+        return nom_local;
     }
 
-    public void setNombreLocal(String nombreLocal) {
-        this.nombreLocal = nombreLocal;
+    public void setNom_local(String nom_local) {
+        this.nom_local = nom_local;
     }
 
     public int getNaulas() {
@@ -98,35 +83,19 @@ public class UsuarioLocal {
         this.naulas = naulas;
     }
 
-    public int getNcontingencia() {
-        return ncontingencia;
+    public int getIdsede() {
+        return idsede;
     }
 
-    public void setNcontingencia(int ncontingencia) {
-        this.ncontingencia = ncontingencia;
+    public void setIdsede(int idsede) {
+        this.idsede = idsede;
     }
 
-    public int getCodsede() {
-        return codsede;
+    public String getNom_sede() {
+        return nom_sede;
     }
 
-    public void setCodsede(int codsede) {
-        this.codsede = codsede;
-    }
-
-    public String getSede() {
-        return sede;
-    }
-
-    public void setSede(String sede) {
-        this.sede = sede;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setNom_sede(String nom_sede) {
+        this.nom_sede = nom_sede;
     }
 }

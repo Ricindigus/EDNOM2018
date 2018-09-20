@@ -29,7 +29,7 @@ import java.util.Date;
 
 import pe.com.ricindigus.appednom2018.R;
 import pe.com.ricindigus.appednom2018.adapters.AsistenciaLocalAdapter;
-import pe.com.ricindigus.appednom2018.modelo.AsistenciaLocal;
+import pe.com.ricindigus.appednom2018.modelo.AsistenciaReg;
 import pe.com.ricindigus.appednom2018.modelo.Data;
 
 /**
@@ -40,8 +40,8 @@ public class ListAsisLocalFragment extends Fragment {
     RecyclerView recyclerView;
     Context context;
     String usuario;
-    ArrayList<AsistenciaLocal> asistenciaLocals;
-    ArrayList<AsistenciaLocal> noEnviados;
+    ArrayList<AsistenciaReg> asistenciaLocals;
+    ArrayList<AsistenciaReg> noEnviados;
     int nroLocal;
     Data data;
     FloatingActionButton fabUpLoad;
@@ -89,12 +89,12 @@ public class ListAsisLocalFragment extends Fragment {
                 noEnviados = new ArrayList<>();
                 data = new Data(context);
                 data.open();
-                noEnviados = data.getAsistenciaLocalSinEnviar(nroLocal);
+                noEnviados = data.getAsistenciasLocalSinEnviar(nroLocal);
                 data.close();
                 if(noEnviados.size() > 0){
                     final int total = noEnviados.size();
                     int i = 0;
-                    for (final AsistenciaLocal asistenciaLocal : noEnviados){
+                    for (final AsistenciaReg asistenciaLocal : noEnviados){
                         i++;
                         final int j = i;
                         final String c = asistenciaLocal.getDni();
@@ -104,14 +104,14 @@ public class ListAsisLocalFragment extends Fragment {
                         batch.update(documentReference, "fecha_transferencia", FieldValue.serverTimestamp());
                         batch.update(documentReference, "usuario_registro", usuario);
                         batch.update(documentReference, "fecha_registro",
-                                new Timestamp(new Date(asistenciaLocal.getAnio()-1900,asistenciaLocal.getMes()-1,asistenciaLocal.getDia(),
-                                        asistenciaLocal.getHora(),asistenciaLocal.getMin(),asistenciaLocal.getSeg())));
+                                new Timestamp(new Date(asistenciaLocal.getAnio_local()-1900,asistenciaLocal.getMes_local()-1,asistenciaLocal.getDia_local(),
+                                        asistenciaLocal.getHora_local(),asistenciaLocal.getMin_local(),asistenciaLocal.getSeg_local())));
                         batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 Data data = new Data(context);
                                 data.open();
-                                data.actualizarAsistenciaLocalSubido(c);
+                                data.actualizarAsistenciaRegLocalSubido(c);
                                 data.close();
                                 if (j == total) {
                                     Toast.makeText(context, total + " registros subidos", Toast.LENGTH_SHORT).show();
@@ -136,10 +136,10 @@ public class ListAsisLocalFragment extends Fragment {
     }
 
     public void cargaData(){
-        asistenciaLocals = new ArrayList<AsistenciaLocal>();
+        asistenciaLocals = new ArrayList<AsistenciaReg>();
         Data data = new Data(context);
         data.open();
-        asistenciaLocals = data.getAllAsistenciaLocal(nroLocal);
+        asistenciaLocals = data.getListadoAsistenciaLocal(nroLocal);
         txtNumero.setText("TOTAL REGISTROS: " + asistenciaLocals.size());
         data.close();
     }

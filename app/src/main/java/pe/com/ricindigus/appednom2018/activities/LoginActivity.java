@@ -7,25 +7,20 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
 import pe.com.ricindigus.appednom2018.modelo.Asistencia;
-import pe.com.ricindigus.appednom2018.modelo.AsistenciaAula;
-import pe.com.ricindigus.appednom2018.modelo.AsistenciaLocal;
-import pe.com.ricindigus.appednom2018.modelo.CajaIn;
-import pe.com.ricindigus.appednom2018.modelo.CajaOut;
-import pe.com.ricindigus.appednom2018.modelo.UsuarioActual;
+import pe.com.ricindigus.appednom2018.modelo.AsistenciaReg;
+import pe.com.ricindigus.appednom2018.modelo.CajaReg;
+import pe.com.ricindigus.appednom2018.modelo.InventarioReg;
 import pe.com.ricindigus.appednom2018.util.FileChooser;
 import pe.com.ricindigus.appednom2018.R;
 import pe.com.ricindigus.appednom2018.modelo.Data;
@@ -92,41 +87,34 @@ public class LoginActivity extends AppCompatActivity {
             }else{
                 switch (usuarioLocal.getRol()){
                     case 2:
-                        maximo = data.getNroAsistenciasIdLocal(usuarioLocal.getNro_local());
-                        progressBar.setMax(maximo*2);
+                        maximo = data.getNroAsistenciasIdLocal(usuarioLocal.getIdlocal())+
+                                data.getNroInventariosIdLocal(usuarioLocal.getIdlocal());
+                        progressBar.setMax(maximo);
                         new MyAsyncTask().execute(0);
                         break;
                     case 3:
-                        filtrarMarcoCajas(usuarioLocal.getNro_local(),clave);
+                        filtrarMarcoCajas(usuarioLocal.getIdlocal(),clave);
                         break;
                 }
                 data.guardarClave(clave);
-                data.close();
             }
         }else {
             Toast.makeText(this, "CLAVE INCORRECTA", Toast.LENGTH_SHORT).show();
         }
-
-
-
+        data.close();
     }
 
     public void filtrarMarcoCajas(int nroLocal, String clave){
 
         Data data = new Data(LoginActivity.this);
         data.open();
-        if (data.getNumeroItemsCajasIn() == 0){
-            ArrayList<CajaIn> cajaIns = data.getCopiaCajasInxLocal(nroLocal);
-            ArrayList<CajaOut> cajaOuts = data.getCopiaCajasOutxLocal(nroLocal);
 
-            for (CajaIn caja : cajaIns){
-                data.insertarCajaIn(caja);
-            }
-            for (CajaOut caja : cajaOuts){
-                data.insertarCajaOut(caja);
-            }
-            data.insertarHistorialUsuario(clave);
+        ArrayList<CajaReg> cajaRegs = data.filtrarMarcoCajas(nroLocal);
+
+        for (CajaReg cajaReg : cajaRegs){
+            data.insertarCajaReg(cajaReg);
         }
+        data.insertarHistorialUsuario(clave);
         data.close();
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
@@ -170,26 +158,26 @@ public class LoginActivity extends AppCompatActivity {
             int i = 1;
             Data data = new Data(LoginActivity.this);
             data.open();
-            ArrayList<AsistenciaLocal> asistenciaLocals = data.filtrarMarcoAsistenciaLocal(usuarioLocal.getNro_local());
-            ArrayList<AsistenciaAula> asistenciaAulas = data.filtrarMarcoAsistenciaAula(usuarioLocal.getNro_local());
+            ArrayList<AsistenciaReg> asistenciaRegs = data.filtrarMarcoAsistencia(usuarioLocal.getIdlocal());
+            ArrayList<InventarioReg> inventarioRegs = data.filtrarMarcoInventario(usuarioLocal.getIdlocal());
 
-            for (AsistenciaLocal asistenciaLocal : asistenciaLocals) {
+            for (AsistenciaReg asistenciaReg : asistenciaRegs) {
                 try {
-                    data.insertarAsistenciaLocal(asistenciaLocal);
+                    data.insertarAsistenciaReg(asistenciaReg);
                 }catch (SQLiteException e){
                     e.printStackTrace();
                 }
-                publishProgress(i,(int)Math.floor((i*100)/(maximo*2)));
+                publishProgress(i,i);
+//                publishProgress(i,(int)Math.floor((i*100)/maximo));
                 i++;
             }
-
-            for (AsistenciaAula asistenciaAula : asistenciaAulas) {
+            for (InventarioReg inventarioReg : inventarioRegs) {
                 try {
-                    data.insertarAsistenciaAula(asistenciaAula);
+                    data.insertarInventarioReg(inventarioReg);
                 }catch (SQLiteException e){
                     e.printStackTrace();
                 }
-                publishProgress(i,(int)Math.floor((i*100)/(maximo*2)));
+                publishProgress(i,i);
                 i++;
             }
             mensaje = "LISTO, BIENVENIDO";
