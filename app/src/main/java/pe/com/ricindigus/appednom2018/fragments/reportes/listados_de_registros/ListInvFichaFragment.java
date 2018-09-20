@@ -167,10 +167,10 @@ public class ListInvFichaFragment extends Fragment {
         fichas = new ArrayList<InventarioReg>();
         Data d = new Data(context);
         d.open();
-        int seleccion = spAulas.getSelectedItemPosition();
         String aula = spAulas.getSelectedItem().toString();
         int nroAula = 0;
-        if(seleccion > 0) nroAula = d.getNumeroAula(aula,nroLocal);
+        nroAula = d.getNumeroAula(aula,nroLocal);
+        long n = d.getNumeroItemsInventarioReg();
         fichas = d.getListadoInventarioFichas(nroLocal,nroAula);
         txtNumero.setText("TOTAL REGISTROS: " + fichas.size());
         d.close();

@@ -169,10 +169,9 @@ public class ListInvListadoFragment extends Fragment {
         listados = new ArrayList<InventarioReg>();
         Data d = new Data(context);
         d.open();
-        int seleccion = spAulas.getSelectedItemPosition();
         String aula = spAulas.getSelectedItem().toString();
         int nroAula = 0;
-        if(seleccion > 0) nroAula = d.getNumeroAula(aula,nroLocal);
+        nroAula = d.getNumeroAula(aula,nroLocal);
         listados = d.getListadoInventarioLista(nroLocal,nroAula);
         txtNumero.setText("REGISTROS: " + listados.size());
         d.close();

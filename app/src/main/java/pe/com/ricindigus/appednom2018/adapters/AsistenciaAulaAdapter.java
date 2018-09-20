@@ -40,7 +40,8 @@ public class AsistenciaAulaAdapter extends RecyclerView.Adapter<AsistenciaAulaAd
                 + checkDigito(asistenciaAula.getMes_aula()) + "-" + checkDigito(asistenciaAula.getAnio_aula()) + " "
                 + checkDigito(asistenciaAula.getHora_aula()) + ":" + checkDigito(asistenciaAula.getMin_aula())+ ":"
                 + checkDigito(asistenciaAula.getSeg_aula()));
-        if(asistenciaAula.getEstado_aula() == 1) holder.cv.setCardBackgroundColor(ContextCompat.getColor(context, R.color.greenPrimaryLight));
+        if(asistenciaAula.getEstado_aula() == 2) holder.cv.setCardBackgroundColor(ContextCompat.getColor(context, R.color.greenPrimaryLight));
+        else if(asistenciaAula.getEstado_aula() == 1) holder.cv.setCardBackgroundColor(ContextCompat.getColor(context, R.color.amberPrimaryLight));
         else holder.cv.setCardBackgroundColor(ContextCompat.getColor(context, R.color.redPrimaryLight));
     }
 

@@ -181,17 +181,19 @@ public class AsistAulaFragment extends Fragment {
         contentValues.put(SQLConstantes.asistenciareg_seg_aula,seg);
         contentValues.put(SQLConstantes.asistenciareg_estado_aula,1);
         data.actualizarAsistenciaReg(asistenciaReg.getDni(),contentValues);
+        AsistenciaReg asis = data.getAsistenciaReg(asistenciaReg.getDni());
         data.close();
-        mostrarCorrecto(asistenciaReg.getDni(),asistenciaReg.getNombres() +" "+ asistenciaReg.getApe_paterno() +" "+ asistenciaReg.getApe_materno());
-        final String c = asistenciaReg.getDni();
+        mostrarCorrecto(asis.getDni(),asis.getNombres() +" "+ asis.getApe_paterno() +" "+ asis.getApe_materno());
+        final String c = asis.getDni();
         WriteBatch batch = FirebaseFirestore.getInstance().batch();
-        DocumentReference documentReference = FirebaseFirestore.getInstance().collection("asistencia").document(asistenciaReg.getDni());
+        DocumentReference documentReference = FirebaseFirestore.getInstance().collection("asistencia").document(asis.getDni());
         batch.update(documentReference, "check_registro_aula", 1);
+        batch.update(documentReference, "estado_aula", asis.getEstado_aula());
         batch.update(documentReference, "fecha_transferencia_aula", FieldValue.serverTimestamp());
         batch.update(documentReference, "usuario_registro_aula", usuario);
         batch.update(documentReference, "fecha_registro_aula",
-                new Timestamp(new Date(asistenciaReg.getAnio_aula()-1900,asistenciaReg.getMes_aula()-1,asistenciaReg.getDia_aula(),
-                        asistenciaReg.getHora_aula(),asistenciaReg.getMin_aula(),asistenciaReg.getSeg_aula())));
+                new Timestamp(new Date(asis.getAnio_aula()-1900,asis.getMes_aula()-1,asis.getDia_aula(),
+                        asis.getHora_aula(),asis.getMin_aula(),asis.getSeg_aula())));
         batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {

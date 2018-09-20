@@ -177,17 +177,18 @@ public class InvListAsisFragment extends Fragment {
         contentValues.put(SQLConstantes.inventarioreg_npostulantes,nroPostulantes);
         contentValues.put(SQLConstantes.inventarioreg_estado,1);
         data.actualizarInventarioReg(inventarioReg.getCodigo(),3,contentValues);
+        InventarioReg invReg = data.getInventarioReg(inventarioReg.getCodigo(),3);
         data.close();
-        mostrarCorrecto(inventarioReg.getCodigo(),inventarioReg.getNpostulantes());
-        final String c = inventarioReg.getCodigo();
+        mostrarCorrecto(invReg.getCodigo(),invReg.getNpostulantes());
+        final String c = invReg.getCodigo();
         WriteBatch batch = FirebaseFirestore.getInstance().batch();
-        DocumentReference documentReference = FirebaseFirestore.getInstance().collection("inventario").document(inventarioReg.getCodigo());
+        DocumentReference documentReference = FirebaseFirestore.getInstance().collection("inventario").document(invReg.getCodigo());
         batch.update(documentReference, "check_registro", 1);
         batch.update(documentReference, "fecha_transferencia", FieldValue.serverTimestamp());
         batch.update(documentReference, "usuario_registro", usuario);
         batch.update(documentReference, "fecha_registro",
-                new Timestamp(new Date(inventarioReg.getAnio()-1900,inventarioReg.getMes()-1,inventarioReg.getDia(),
-                        inventarioReg.getHora(),inventarioReg.getMin(),inventarioReg.getSeg())));
+                new Timestamp(new Date(invReg.getAnio()-1900,invReg.getMes()-1,invReg.getDia(),
+                        invReg.getHora(),invReg.getMin(),invReg.getSeg())));
         batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {

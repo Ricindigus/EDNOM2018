@@ -40,7 +40,8 @@ public class InventarioCuadernilloAdapter extends RecyclerView.Adapter<Inventari
                 + checkDigito(cuadernillo.getMes()) + "-" + checkDigito(cuadernillo.getAnio()) + " "
                 + checkDigito(cuadernillo.getHora()) + ":" + checkDigito(cuadernillo.getMin())+ ":" + checkDigito(cuadernillo.getSeg()));
 
-        if(cuadernillo.getEstado() == 1) holder.cv.setCardBackgroundColor(ContextCompat.getColor(context, R.color.greenPrimaryLight));
+        if(cuadernillo.getEstado() == 2) holder.cv.setCardBackgroundColor(ContextCompat.getColor(context, R.color.greenPrimaryLight));
+        else if(cuadernillo.getEstado() == 1) holder.cv.setCardBackgroundColor(ContextCompat.getColor(context, R.color.amberPrimaryLight));
         else holder.cv.setCardBackgroundColor(ContextCompat.getColor(context, R.color.redPrimaryLight));
     }
 

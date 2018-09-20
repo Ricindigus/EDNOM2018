@@ -277,7 +277,6 @@ public class Data {
 
     public ArrayList<String> getArrayAulasListado(int nroLocal){
         ArrayList<String> aulas = new ArrayList<>();
-        aulas.add("TODAS LAS AULAS");
         String[] whereArgs = new String[]{Integer.toString(nroLocal)};
         Cursor cursor = null;
         try{
@@ -874,6 +873,20 @@ public class Data {
                 asistenciaReg.setIdlocal(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_idlocal)));
                 asistenciaReg.setNom_local(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistenciareg_nom_local)));
                 asistenciaReg.setDireccion(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistenciareg_direccion)));
+                asistenciaReg.setDia_local(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_dia_local)));
+                asistenciaReg.setMes_local(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_mes_local)));
+                asistenciaReg.setAnio_local(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_anio_local)));
+                asistenciaReg.setHora_local(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_hora_local)));
+                asistenciaReg.setMin_local(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_min_local)));
+                asistenciaReg.setSeg_local(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_seg_local)));
+                asistenciaReg.setEstado_local(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_estado_local)));
+                asistenciaReg.setDia_aula(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_dia_aula)));
+                asistenciaReg.setMes_aula(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_mes_aula)));
+                asistenciaReg.setAnio_aula(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_anio_aula)));
+                asistenciaReg.setHora_aula(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_hora_aula)));
+                asistenciaReg.setMin_aula(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_min_aula)));
+                asistenciaReg.setSeg_aula(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_seg_aula)));
+                asistenciaReg.setEstado_aula(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_estado_aula)));
             }
         }finally{
             if(cursor != null) cursor.close();
@@ -921,7 +934,7 @@ public class Data {
         Cursor cursor = null;
         try{
             cursor = sqLiteDatabase.query(SQLConstantes.tablaasistenciasreg,
-                    null,SQLConstantes.WHERE_CLAUSE_ID_LOCAL,whereArgs,null,null,"ASC estado_local");
+                    null,SQLConstantes.WHERE_CLAUSE_ID_LOCAL,whereArgs,null,null,"estado_local ASC");
             while(cursor.moveToNext()){
                 AsistenciaReg asistenciaReg = new AsistenciaReg();
                 asistenciaReg = new AsistenciaReg();
@@ -963,7 +976,7 @@ public class Data {
         try{
             cursor = sqLiteDatabase.query(SQLConstantes.tablaasistenciasreg,
                     null,SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
-                            SQLConstantes.WHERE_CLAUSE_NRO_AULA,whereArgs,null,null,"ASC estado_aula");
+                            SQLConstantes.WHERE_CLAUSE_NRO_AULA,whereArgs,null,null,"estado_aula ASC");
             while(cursor.moveToNext()){
                 AsistenciaReg asistenciaReg = new AsistenciaReg();
                 asistenciaReg = new AsistenciaReg();
@@ -1228,6 +1241,7 @@ public class Data {
                 inventarioReg.setNombres(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_nombres)));
                 inventarioReg.setNaula(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventario_naula)));
                 inventarioReg.setCodpagina(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_codpagina)));
+                inventarioRegs.add(inventarioReg);
             }
         }finally{
             if(cursor != null) cursor.close();
@@ -1243,7 +1257,7 @@ public class Data {
             cursor = sqLiteDatabase.query(SQLConstantes.tablainventariosreg, null,
                     SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
                             SQLConstantes.WHERE_CLAUSE_NRO_AULA+ " AND " +
-                            SQLConstantes.WHERE_CLAUSE_TIPO_MATERIAL,whereArgs,null,null,null);
+                            SQLConstantes.WHERE_CLAUSE_TIPO_MATERIAL,whereArgs,null,null,"estado ASC");
             while(cursor.moveToNext()){
                 InventarioReg inventarioReg = new InventarioReg();
                 inventarioReg.setId(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_dni)));
@@ -1286,7 +1300,7 @@ public class Data {
             cursor = sqLiteDatabase.query(SQLConstantes.tablainventariosreg, null,
                     SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
                             SQLConstantes.WHERE_CLAUSE_NRO_AULA+ " AND " +
-                            SQLConstantes.WHERE_CLAUSE_TIPO_MATERIAL,whereArgs,null,null,null);
+                            SQLConstantes.WHERE_CLAUSE_TIPO_MATERIAL,whereArgs,null,null,"estado ASC");
             while(cursor.moveToNext()){
                 InventarioReg inventarioReg = new InventarioReg();
                 inventarioReg.setId(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_dni)));
@@ -1329,7 +1343,7 @@ public class Data {
             cursor = sqLiteDatabase.query(SQLConstantes.tablainventariosreg, null,
                     SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
                             SQLConstantes.WHERE_CLAUSE_NRO_AULA+ " AND " +
-                            SQLConstantes.WHERE_CLAUSE_TIPO_MATERIAL,whereArgs,null,null,null);
+                            SQLConstantes.WHERE_CLAUSE_TIPO_MATERIAL,whereArgs,null,null,"estado ASC");
             while(cursor.moveToNext()){
                 InventarioReg inventarioReg = new InventarioReg();
                 inventarioReg.setId(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_dni)));

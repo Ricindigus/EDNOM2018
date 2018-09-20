@@ -15,7 +15,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="LISTA DE FICHAS REGISTRADAS"
+            android:text="LISTA DE CUADERNILLOS REGISTRADOS"
             android:layout_marginTop="@dimen/margin8dp"
             android:textSize="20sp"
             android:gravity="center"

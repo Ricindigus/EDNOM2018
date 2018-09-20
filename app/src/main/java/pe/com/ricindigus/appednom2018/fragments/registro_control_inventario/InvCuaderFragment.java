@@ -135,7 +135,7 @@ public class InvCuaderFragment extends Fragment {
         String codigoInventario = edtCuadernillo.getText().toString();
         Data data = new Data(context);
         data.open();
-        InventarioReg inventarioReg = data.getInventarioReg(codigoInventario,1);
+        InventarioReg inventarioReg = data.getInventarioReg(codigoInventario,2);
         String aula = spAulas.getSelectedItem().toString();
         int nroAula = 0;
         nroAula = data.getNumeroAula(aula,nroLocal);
@@ -143,7 +143,7 @@ public class InvCuaderFragment extends Fragment {
             mostrarErrorCodigo(codigoInventario);
         }else{
             if(inventarioReg.getNaula() == nroAula){
-                if(inventarioReg.getEstado() == 0) registrarInventario(inventarioReg);
+                if(inventarioReg.getEstado() == 0) registrarInventario(inventarioReg.getCodigo());
                 else mostrarYaRegistrado(inventarioReg.getDni(),inventarioReg.getNombres() + " " + inventarioReg.getApe_paterno() + " " + inventarioReg.getApe_materno(),inventarioReg.getNaula());
             }else{
                 mostrarErrorAula(inventarioReg.getDni(),inventarioReg.getNombres() +" "+ inventarioReg.getApe_paterno() +" "+ inventarioReg.getApe_materno(), "" + inventarioReg.getNaula());
@@ -158,7 +158,7 @@ public class InvCuaderFragment extends Fragment {
         InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         mgr.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
-    public void registrarInventario(InventarioReg inventarioReg){
+    public void registrarInventario(String codInventario){
         Data data = new Data(context);
         data.open();
         Calendar calendario = Calendar.getInstance();
@@ -176,7 +176,8 @@ public class InvCuaderFragment extends Fragment {
         contentValues.put(SQLConstantes.inventarioreg_min,minuto);
         contentValues.put(SQLConstantes.inventarioreg_seg,seg);
         contentValues.put(SQLConstantes.inventarioreg_estado,1);
-        data.actualizarInventarioReg(inventarioReg.getCodigo(),2,contentValues);
+        data.actualizarInventarioReg(codInventario,2,contentValues);
+        InventarioReg inventarioReg = data.getInventarioReg(codInventario,2);
         data.close();
         mostrarCorrecto(inventarioReg.getDni(),inventarioReg.getNombres() +" "+ inventarioReg.getApe_paterno() +" "+ inventarioReg.getApe_materno(),inventarioReg.getCodigo());
         final String c = inventarioReg.getCodigo();

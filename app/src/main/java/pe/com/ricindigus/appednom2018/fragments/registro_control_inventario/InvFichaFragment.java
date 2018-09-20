@@ -145,7 +145,7 @@ public class InvFichaFragment extends Fragment {
             mostrarErrorCodigo(codigoInventario);
         }else{
             if(inventarioReg.getNaula() == nroAula){
-                if(inventarioReg.getEstado() == 0) registrarInventario(inventarioReg);
+                if(inventarioReg.getEstado() == 0) registrarInventario(inventarioReg.getCodigo());
                 else mostrarYaRegistrado(inventarioReg.getDni(),inventarioReg.getNombres() + " " + inventarioReg.getApe_paterno() + " " + inventarioReg.getApe_materno(),inventarioReg.getNaula(), inventarioReg.getCodigo());
             }else{
                 mostrarErrorAula(inventarioReg.getDni(),inventarioReg.getNombres() +" "+ inventarioReg.getApe_paterno() +" "+ inventarioReg.getApe_materno(), "" + inventarioReg.getNaula());
@@ -160,7 +160,7 @@ public class InvFichaFragment extends Fragment {
         InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         mgr.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
-    public void registrarInventario(InventarioReg inventarioReg){
+    public void registrarInventario(String codInventario){
         Data data = new Data(context);
         data.open();
         Calendar calendario = Calendar.getInstance();
@@ -178,7 +178,8 @@ public class InvFichaFragment extends Fragment {
         contentValues.put(SQLConstantes.inventarioreg_min,minuto);
         contentValues.put(SQLConstantes.inventarioreg_seg,seg);
         contentValues.put(SQLConstantes.inventarioreg_estado,1);
-        data.actualizarInventarioReg(inventarioReg.getCodigo(),1,contentValues);
+        data.actualizarInventarioReg(codInventario,1,contentValues);
+        InventarioReg inventarioReg = data.getInventarioReg(codInventario,1);
         data.close();
         mostrarCorrecto(inventarioReg.getDni(),inventarioReg.getNombres() +" "+ inventarioReg.getApe_paterno() +" "+ inventarioReg.getApe_materno(),inventarioReg.getCodigo());
         final String c = inventarioReg.getCodigo();

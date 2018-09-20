@@ -39,7 +39,8 @@ public class AsistenciaLocalAdapter extends RecyclerView.Adapter<AsistenciaLocal
         holder.txtFecha.setText(checkDigito(asistenciaLocal.getDia_local()) + "-"
                 + checkDigito(asistenciaLocal.getMes_local()) + "-" + checkDigito(asistenciaLocal.getAnio_local()) + " "
                 + checkDigito(asistenciaLocal.getHora_local()) + ":" + checkDigito(asistenciaLocal.getMin_local())+ ":" + checkDigito(asistenciaLocal.getSeg_local()));
-        if(asistenciaLocal.getEstado_local() == 1) holder.cv.setCardBackgroundColor(ContextCompat.getColor(context, R.color.greenPrimaryLight));
+        if(asistenciaLocal.getEstado_local() == 2) holder.cv.setCardBackgroundColor(ContextCompat.getColor(context, R.color.greenPrimaryLight));
+        else if(asistenciaLocal.getEstado_local() == 1) holder.cv.setCardBackgroundColor(ContextCompat.getColor(context, R.color.amberPrimaryLight));
         else holder.cv.setCardBackgroundColor(ContextCompat.getColor(context, R.color.redPrimaryLight));
     }
 

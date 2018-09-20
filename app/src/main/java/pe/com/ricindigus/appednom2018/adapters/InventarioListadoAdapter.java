@@ -40,7 +40,8 @@ public class InventarioListadoAdapter extends RecyclerView.Adapter<InventarioLis
                 + checkDigito(listado.getMes()) + "-" + checkDigito(listado.getAnio()) + " "
                 + checkDigito(listado.getHora()) + ":" + checkDigito(listado.getMin())+ ":" + checkDigito(listado.getSeg()));
 
-        if(listado.getEstado() == 1) holder.cv.setCardBackgroundColor(ContextCompat.getColor(context, R.color.greenPrimaryLight));
+        if(listado.getEstado() == 2) holder.cv.setCardBackgroundColor(ContextCompat.getColor(context, R.color.greenPrimaryLight));
+        else if(listado.getEstado() == 1) holder.cv.setCardBackgroundColor(ContextCompat.getColor(context, R.color.amberPrimaryLight));
         else holder.cv.setCardBackgroundColor(ContextCompat.getColor(context, R.color.redPrimaryLight));
     }
 
