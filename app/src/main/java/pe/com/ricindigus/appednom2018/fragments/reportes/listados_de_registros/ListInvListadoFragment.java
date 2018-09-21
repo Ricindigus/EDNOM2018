@@ -48,7 +48,6 @@ public class ListInvListadoFragment extends Fragment {
     ArrayList<InventarioReg> datosNoEnviados;
     Data data;
     FloatingActionButton fabUpLoad;
-    TextView txtNumero;
     InventarioListadoAdapter inventarioListadoAdapter;
     boolean b = false;
 
@@ -71,7 +70,6 @@ public class ListInvListadoFragment extends Fragment {
         spAulas = (Spinner) rootView.findViewById(R.id.lista_spAula);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.lista_recycler);
         fabUpLoad = (FloatingActionButton) rootView.findViewById(R.id.lista_btnUpload);
-        txtNumero = (TextView) rootView.findViewById(R.id.lista_txtNumero);
         return rootView;
     }
 
@@ -173,7 +171,6 @@ public class ListInvListadoFragment extends Fragment {
         int nroAula = 0;
         nroAula = d.getNumeroAula(aula,nroLocal);
         listados = d.getListadoInventarioLista(nroLocal,nroAula);
-        txtNumero.setText("REGISTROS: " + listados.size());
         d.close();
     }
     public String checkDigito (int number) {

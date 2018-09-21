@@ -17,10 +17,11 @@ public class Inventario {
     private String nombres;
     private int naula;
     private String codpagina;
+    private String direccion;
 
     public Inventario(){}
 
-    public Inventario(String id, String codigo, int tipo, String ccdd, String departamento, int idnacional, String idsede, String nom_sede, int idlocal, String nom_local, String dni, String ape_paterno, String ape_materno, String nombres, int naula, String codpagina) {
+    public Inventario(String id, String codigo, int tipo, String ccdd, String departamento, int idnacional, String idsede, String nom_sede, int idlocal, String nom_local, String dni, String ape_paterno, String ape_materno, String nombres, int naula, String codpagina, String direccion) {
         this.id = id;
         this.codigo = codigo;
         this.tipo = tipo;
@@ -37,6 +38,15 @@ public class Inventario {
         this.nombres = nombres;
         this.naula = naula;
         this.codpagina = codpagina;
+        this.direccion = direccion;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
     }
 
     public String getId() {

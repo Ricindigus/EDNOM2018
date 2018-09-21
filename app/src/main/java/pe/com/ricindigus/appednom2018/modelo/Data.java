@@ -337,6 +337,7 @@ public class Data {
                 caja.setTipo(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_tipo)));
                 caja.setNlado(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_nlado)));
                 caja.setAcl(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajas_acl)));
+                caja.setDireccion(cursor.getString(cursor.getColumnIndex(SQLConstantes.cajas_direccion)));
             }
         }finally{
             if(cursor != null) cursor.close();
@@ -395,6 +396,7 @@ public class Data {
                 cajaReg.setTipo(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajasreg_tipo)));
                 cajaReg.setNlado(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajasreg_nlado)));
                 cajaReg.setAcl(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajasreg_acl)));
+                cajaReg.setDireccion(cursor.getString(cursor.getColumnIndex(SQLConstantes.cajasreg_direccion)));
                 cajaReg.setDia_entrada(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajasreg_dia_entrada)));
                 cajaReg.setMes_entrada(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajasreg_mes_entrada )));
                 cajaReg.setAnio_entrada(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajasreg_anio_entrada )));
@@ -439,6 +441,7 @@ public class Data {
                 cajaReg.setTipo(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajasreg_tipo)));
                 cajaReg.setNlado(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajasreg_nlado)));
                 cajaReg.setAcl(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajasreg_acl)));
+                cajaReg.setDireccion(cursor.getString(cursor.getColumnIndex(SQLConstantes.cajasreg_direccion)));
                 cajaRegs.add(cajaReg);
             }
         }finally{
@@ -469,6 +472,7 @@ public class Data {
                 cajaReg.setTipo(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajasreg_tipo)));
                 cajaReg.setNlado(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajasreg_nlado)));
                 cajaReg.setAcl(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajasreg_acl)));
+                cajaReg.setDireccion(cursor.getString(cursor.getColumnIndex(SQLConstantes.cajasreg_direccion)));
                 cajaReg.setDia_entrada(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajasreg_dia_entrada)));
                 cajaReg.setMes_entrada(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajasreg_mes_entrada)));
                 cajaReg.setAnio_entrada(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajasreg_anio_entrada)));
@@ -484,6 +488,8 @@ public class Data {
         }
         return cajaRegs;
     }
+
+
 
     public ArrayList<CajaReg> getListadoCajasSalida(int nroLocal){
         ArrayList<CajaReg> cajaRegs = new ArrayList<>();
@@ -507,6 +513,7 @@ public class Data {
                 cajaReg.setTipo(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajasreg_tipo)));
                 cajaReg.setNlado(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajasreg_nlado)));
                 cajaReg.setAcl(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajasreg_acl)));
+                cajaReg.setDireccion(cursor.getString(cursor.getColumnIndex(SQLConstantes.cajasreg_direccion)));
                 cajaReg.setDia_salida(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajasreg_dia_salida)));
                 cajaReg.setMes_salida(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajasreg_mes_salida)));
                 cajaReg.setAnio_salida(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajasreg_anio_salida)));
@@ -546,6 +553,7 @@ public class Data {
                 cajaReg.setTipo(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajasreg_tipo)));
                 cajaReg.setNlado(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajasreg_nlado)));
                 cajaReg.setAcl(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajasreg_acl)));
+                cajaReg.setDireccion(cursor.getString(cursor.getColumnIndex(SQLConstantes.cajasreg_direccion)));
                 cajaReg.setDia_entrada(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajasreg_dia_entrada)));
                 cajaReg.setMes_entrada(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajasreg_mes_entrada)));
                 cajaReg.setAnio_entrada(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajasreg_anio_entrada)));
@@ -584,6 +592,7 @@ public class Data {
                 cajaReg.setTipo(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajasreg_tipo)));
                 cajaReg.setNlado(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajasreg_nlado)));
                 cajaReg.setAcl(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajasreg_acl)));
+                cajaReg.setDireccion(cursor.getString(cursor.getColumnIndex(SQLConstantes.cajasreg_direccion)));
                 cajaReg.setDia_salida(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajasreg_dia_salida)));
                 cajaReg.setMes_salida(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajasreg_mes_salida)));
                 cajaReg.setAnio_salida(cursor.getInt(cursor.getColumnIndex(SQLConstantes.cajasreg_anio_salida)));
@@ -597,6 +606,21 @@ public class Data {
             if(cursor != null) cursor.close();
         }
         return cajaRegs;
+    }
+
+    public int getNroCajasTotales(int nroLocal){
+        int numero = 0;
+        String[] whereArgs = new String[]{String.valueOf(nroLocal),"1"};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablacajasreg, null,
+                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " + SQLConstantes.WHERE_CLAUSE_NRO_LADO
+                    ,whereArgs,null,null,null);
+            if (cursor != null) numero = cursor.getCount();
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return numero;
     }
 
 
@@ -1051,6 +1075,22 @@ public class Data {
         }
         return asistenciaRegs;
     }
+
+    public int getNroAsistenciasLocalRegistradas(int idLocal){
+        int numero = 0;
+        String[] whereArgs = new String[]{String.valueOf(idLocal),"1"};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablaasistenciasreg,
+                    null,SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
+                            SQLConstantes.WHERE_CLAUSE_ESTADO_LOCAL,whereArgs,null,null,null);
+            if (cursor != null) numero = cursor.getCount();
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return numero;
+    }
+
     public ArrayList<AsistenciaReg> getAsistenciasAulaSinEnviar(int idLocal,int nroAula){
         ArrayList<AsistenciaReg> asistenciaRegs = new ArrayList<>();
         String[] whereArgs = new String[]{String.valueOf(idLocal),String.valueOf(nroAula),"1"};
@@ -1093,6 +1133,37 @@ public class Data {
         }
         return asistenciaRegs;
     }
+
+    public int getNroAsistenciasAulaRegistradas(int idLocal,int nroAula){
+        int numero = 0;
+        String[] whereArgs = new String[]{String.valueOf(idLocal),String.valueOf(nroAula),"1"};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablaasistenciasreg,
+                    null,SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
+                            SQLConstantes.WHERE_CLAUSE_NRO_AULA + " AND " +
+                            SQLConstantes.WHERE_CLAUSE_ESTADO_AULA,whereArgs,null,null,null);
+            if (cursor != null) numero =  cursor.getCount();
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return numero;
+    }
+
+    public int getNroAsistenciasAulaTotales(int idLocal,int nroAula){
+        int numero = 0;
+        String[] whereArgs = new String[]{String.valueOf(idLocal),String.valueOf(nroAula)};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablaasistenciasreg,
+                    null,SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
+                            SQLConstantes.WHERE_CLAUSE_NRO_AULA ,whereArgs,null,null,null);
+            if (cursor != null) numero =  cursor.getCount();
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return numero;
+    }
     /**
      * --------------------------------FIN QUERYS ASISTENCIA -----------------------------------
      * */
@@ -1128,6 +1199,7 @@ public class Data {
                 inventario.setNombres(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_nombres)));
                 inventario.setNaula(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventario_naula)));
                 inventario.setCodpagina(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_codpagina)));
+                inventario.setDireccion(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_direccion)));
             }
         }finally{
             if(cursor != null) cursor.close();
@@ -1200,6 +1272,7 @@ public class Data {
                 inventarioReg.setNombres(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_nombres)));
                 inventarioReg.setNaula(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_naula)));
                 inventarioReg.setCodpagina(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_codpagina)));
+                inventarioReg.setDireccion(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_direccion)));
                 inventarioReg.setDia(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_dia)));
                 inventarioReg.setMes(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_mes)));
                 inventarioReg.setAnio(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_anio)));
@@ -1241,6 +1314,7 @@ public class Data {
                 inventarioReg.setNombres(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_nombres)));
                 inventarioReg.setNaula(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventario_naula)));
                 inventarioReg.setCodpagina(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_codpagina)));
+                inventarioReg.setDireccion(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_direccion)));
                 inventarioRegs.add(inventarioReg);
             }
         }finally{
@@ -1276,6 +1350,7 @@ public class Data {
                 inventarioReg.setNombres(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_nombres)));
                 inventarioReg.setNaula(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_naula)));
                 inventarioReg.setCodpagina(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_codpagina)));
+                inventarioReg.setDireccion(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_direccion)));
                 inventarioReg.setDia(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_dia)));
                 inventarioReg.setMes(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_mes)));
                 inventarioReg.setAnio(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_anio)));
@@ -1291,6 +1366,8 @@ public class Data {
         }
         return inventarioRegs;
     }
+
+
 
     public ArrayList<InventarioReg> getListadoInventarioCuadernillo(int idLocal, int nroAula){
         ArrayList<InventarioReg> inventarioRegs = new ArrayList<InventarioReg>();
@@ -1319,6 +1396,7 @@ public class Data {
                 inventarioReg.setNombres(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_nombres)));
                 inventarioReg.setNaula(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_naula)));
                 inventarioReg.setCodpagina(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_codpagina)));
+                inventarioReg.setDireccion(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_direccion)));
                 inventarioReg.setDia(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_dia)));
                 inventarioReg.setMes(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_mes)));
                 inventarioReg.setAnio(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_anio)));
@@ -1362,6 +1440,7 @@ public class Data {
                 inventarioReg.setNombres(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_nombres)));
                 inventarioReg.setNaula(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_naula)));
                 inventarioReg.setCodpagina(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_codpagina)));
+                inventarioReg.setDireccion(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_direccion)));
                 inventarioReg.setDia(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_dia)));
                 inventarioReg.setMes(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_mes)));
                 inventarioReg.setAnio(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_anio)));
@@ -1378,6 +1457,104 @@ public class Data {
         return inventarioRegs;
     }
 
+    public int getNroFichasTotales(int idLocal, int nroAula){
+        int numero = 0;
+        Cursor cursor = null;
+        try{
+            String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula),"1"};
+            cursor = sqLiteDatabase.query(SQLConstantes.tablainventariosreg, null,
+                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
+                            SQLConstantes.WHERE_CLAUSE_NRO_AULA+ " AND " +
+                            SQLConstantes.WHERE_CLAUSE_TIPO_MATERIAL,whereArgs,null,null,null);
+            if (cursor != null) numero = cursor.getCount();
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return numero;
+    }
+
+    public int getNroFichasRegistradas(int idLocal, int nroAula){
+        int numero = 0;
+        Cursor cursor = null;
+        try{
+            String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula),"1","1"};
+            cursor = sqLiteDatabase.query(SQLConstantes.tablainventariosreg, null,
+                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
+                            SQLConstantes.WHERE_CLAUSE_NRO_AULA+ " AND " +
+                            SQLConstantes.WHERE_CLAUSE_TIPO_MATERIAL + " AND " +
+                            SQLConstantes.WHERE_CLAUSE_ESTADO,whereArgs,null,null,null);
+            if (cursor != null) numero = cursor.getCount();
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return numero;
+    }
+
+    public int getNroCuadernillosTotales(int idLocal, int nroAula){
+        int numero = 0;
+        Cursor cursor = null;
+        try{
+            String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula),"2"};
+            cursor = sqLiteDatabase.query(SQLConstantes.tablainventariosreg, null,
+                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
+                            SQLConstantes.WHERE_CLAUSE_NRO_AULA+ " AND " +
+                            SQLConstantes.WHERE_CLAUSE_TIPO_MATERIAL,whereArgs,null,null,null);
+            if (cursor != null) numero = cursor.getCount();
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return numero;
+    }
+
+    public int getNroCuadernillosRegistrados(int idLocal, int nroAula){
+        int numero = 0;
+        Cursor cursor = null;
+        try{
+            String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula),"2","1"};
+            cursor = sqLiteDatabase.query(SQLConstantes.tablainventariosreg, null,
+                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
+                            SQLConstantes.WHERE_CLAUSE_NRO_AULA+ " AND " +
+                            SQLConstantes.WHERE_CLAUSE_TIPO_MATERIAL + " AND " +
+                            SQLConstantes.WHERE_CLAUSE_ESTADO,whereArgs,null,null,null);
+            if (cursor != null) numero = cursor.getCount();
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return numero;
+    }
+
+    public int getNroListasTotales(int idLocal, int nroAula){
+        int numero = 0;
+        Cursor cursor = null;
+        try{
+            String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula),"3"};
+            cursor = sqLiteDatabase.query(SQLConstantes.tablainventariosreg, null,
+                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
+                            SQLConstantes.WHERE_CLAUSE_NRO_AULA+ " AND " +
+                            SQLConstantes.WHERE_CLAUSE_TIPO_MATERIAL,whereArgs,null,null,null);
+            if (cursor != null) numero = cursor.getCount();
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return numero;
+    }
+
+    public int getNroListasRegistradas(int idLocal, int nroAula){
+        int numero = 0;
+        Cursor cursor = null;
+        try{
+            String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula),"3","1"};
+            cursor = sqLiteDatabase.query(SQLConstantes.tablainventariosreg, null,
+                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
+                            SQLConstantes.WHERE_CLAUSE_NRO_AULA+ " AND " +
+                            SQLConstantes.WHERE_CLAUSE_TIPO_MATERIAL + " AND " +
+                            SQLConstantes.WHERE_CLAUSE_ESTADO,whereArgs,null,null,null);
+            if (cursor != null) numero = cursor.getCount();
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return numero;
+    }
 
     public ArrayList<InventarioReg> getInventarioFichasSinEnviar(int idLocal, int nroAula){
         ArrayList<InventarioReg> inventarioRegs = new ArrayList<InventarioReg>();
@@ -1407,6 +1584,7 @@ public class Data {
                 inventarioReg.setNombres(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_nombres)));
                 inventarioReg.setNaula(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_naula)));
                 inventarioReg.setCodpagina(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_codpagina)));
+                inventarioReg.setDireccion(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_direccion)));
                 inventarioReg.setDia(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_dia)));
                 inventarioReg.setMes(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_mes)));
                 inventarioReg.setAnio(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_anio)));
@@ -1451,6 +1629,7 @@ public class Data {
                 inventarioReg.setNombres(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_nombres)));
                 inventarioReg.setNaula(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_naula)));
                 inventarioReg.setCodpagina(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_codpagina)));
+                inventarioReg.setDireccion(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_direccion)));
                 inventarioReg.setDia(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_dia)));
                 inventarioReg.setMes(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_mes)));
                 inventarioReg.setAnio(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_anio)));
@@ -1495,6 +1674,7 @@ public class Data {
                 inventarioReg.setNombres(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_nombres)));
                 inventarioReg.setNaula(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_naula)));
                 inventarioReg.setCodpagina(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_codpagina)));
+                inventarioReg.setDireccion(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_direccion)));
                 inventarioReg.setDia(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_dia)));
                 inventarioReg.setMes(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_mes)));
                 inventarioReg.setAnio(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_anio)));

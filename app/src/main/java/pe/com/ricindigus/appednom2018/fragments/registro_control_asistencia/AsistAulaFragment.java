@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -69,6 +70,8 @@ public class AsistAulaFragment extends Fragment {
     LinearLayout lytYaRegistrado;
     LinearLayout lytErrorDni;
 
+    TextView txtRegistrados;
+
 
     public AsistAulaFragment() {
         // Required empty public constructor
@@ -108,6 +111,8 @@ public class AsistAulaFragment extends Fragment {
         lytErrorLocal = (LinearLayout) rootView.findViewById(R.id.asistencia_local_lytErrorLocal);
         lytYaRegistrado = (LinearLayout) rootView.findViewById(R.id.asistencia_local_lytYaRegistrado);
         lytErrorDni = (LinearLayout) rootView.findViewById(R.id.asistencia_local_ErrorDni);
+
+        txtRegistrados = (TextView) rootView.findViewById(R.id.asistencia_aula_txtRegistrados);
         return rootView;
     }
 
@@ -121,8 +126,28 @@ public class AsistAulaFragment extends Fragment {
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, aulas);
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spAulas.setAdapter(dataAdapter);
+            String aula = spAulas.getSelectedItem().toString();
+            int nroAula = data.getNumeroAula(aula,nroLocal);
+            txtRegistrados.setText("Registrados: " + data.getNroAsistenciasAulaRegistradas(nroLocal,nroAula)+"/"+data.getNroAsistenciasAulaTotales(nroLocal,nroAula));
             data.close();
         }
+
+        spAulas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Data data =  new Data(context);
+                data.open();
+                String aula = spAulas.getSelectedItem().toString();
+                int nroAula = data.getNumeroAula(aula,nroLocal);
+                txtRegistrados.setText("Registrados: " + data.getNroAsistenciasAulaRegistradas(nroLocal,nroAula)+"/"+data.getNroAsistenciasAulaTotales(nroLocal,nroAula));
+                data.close();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         btnBuscar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -181,6 +206,7 @@ public class AsistAulaFragment extends Fragment {
         contentValues.put(SQLConstantes.asistenciareg_seg_aula,seg);
         contentValues.put(SQLConstantes.asistenciareg_estado_aula,1);
         data.actualizarAsistenciaReg(asistenciaReg.getDni(),contentValues);
+        txtRegistrados.setText("Registrados: " + data.getNroAsistenciasAulaRegistradas(nroLocal,asistenciaReg.getNaula())+"/"+data.getNroAsistenciasAulaTotales(nroLocal,asistenciaReg.getNaula()));
         AsistenciaReg asis = data.getAsistenciaReg(asistenciaReg.getDni());
         data.close();
         mostrarCorrecto(asis.getDni(),asis.getNombres() +" "+ asis.getApe_paterno() +" "+ asis.getApe_materno());

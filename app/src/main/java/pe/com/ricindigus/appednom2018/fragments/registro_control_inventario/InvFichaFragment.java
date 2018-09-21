@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -68,6 +69,8 @@ public class InvFichaFragment extends Fragment {
     LinearLayout lytYaRegistrado;
     LinearLayout lytErrorFicha;
 
+    TextView txtRegistrados;
+
     public InvFichaFragment() {
         // Required empty public constructor
     }
@@ -108,6 +111,8 @@ public class InvFichaFragment extends Fragment {
         lytErrorFichaAula = (LinearLayout) rootView.findViewById(R.id.inventario_ficha_lytErrorAula);
         lytYaRegistrado = (LinearLayout) rootView.findViewById(R.id.inventario_ficha_lytYaRegistrado);
         lytErrorFicha = (LinearLayout) rootView.findViewById(R.id.inventario_ficha_lytErrorFicha);
+
+        txtRegistrados = (TextView) rootView.findViewById(R.id.inventario_ficha_txtRegistrados);
         return rootView;
     }
 
@@ -121,8 +126,28 @@ public class InvFichaFragment extends Fragment {
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, aulas);
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spAulas.setAdapter(dataAdapter);
+            String aula = spAulas.getSelectedItem().toString();
+            int nroAula = data.getNumeroAula(aula,nroLocal);
+            txtRegistrados.setText("Registrados: " + data.getNroFichasRegistradas(nroLocal,nroAula)+"/"+data.getNroFichasTotales(nroLocal,nroAula));
             data.close();
         }
+
+        spAulas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Data data =  new Data(context);
+                data.open();
+                String aula = spAulas.getSelectedItem().toString();
+                int nroAula = data.getNumeroAula(aula,nroLocal);
+                txtRegistrados.setText("Registrados: " + data.getNroFichasRegistradas(nroLocal,nroAula)+"/"+data.getNroFichasTotales(nroLocal,nroAula));
+                data.close();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         btnBuscar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -180,6 +205,7 @@ public class InvFichaFragment extends Fragment {
         contentValues.put(SQLConstantes.inventarioreg_estado,1);
         data.actualizarInventarioReg(codInventario,1,contentValues);
         InventarioReg inventarioReg = data.getInventarioReg(codInventario,1);
+        txtRegistrados.setText("Registrados: " + data.getNroFichasRegistradas(nroLocal,inventarioReg.getNaula())+"/"+data.getNroFichasTotales(nroLocal,inventarioReg.getNaula()));
         data.close();
         mostrarCorrecto(inventarioReg.getDni(),inventarioReg.getNombres() +" "+ inventarioReg.getApe_paterno() +" "+ inventarioReg.getApe_materno(),inventarioReg.getCodigo());
         final String c = inventarioReg.getCodigo();

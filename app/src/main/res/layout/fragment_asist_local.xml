@@ -6,21 +6,25 @@
     android:orientation="vertical"
     android:padding="@dimen/margin8dp"
     tools:context=".fragments.registro_control_asistencia.AsistLocalFragment">
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textColor="@color/colorPrimary"
-        android:textSize="24sp"
-        android:textStyle="bold"
+        android:theme="@style/estilo_titulo_fragment"
         android:text="REGISTRO DE ASISTENCIA AL LOCAL"/>
+    <TextView
+        android:id="@+id/asistencia_local_txtRegistrados"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/estilo_total_registrados"
+        android:text="Registrados:30/100"/>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="wrap_content"
         android:gravity="center"
-        android:padding="16dp"
+        android:padding="8dp"
         android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
         android:layout_gravity="center"
         android:background="@drawable/borde_azul_buscador"
         android:orientation="horizontal">

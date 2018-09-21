@@ -45,7 +45,6 @@ public class ListAsisLocalFragment extends Fragment {
     int nroLocal;
     Data data;
     FloatingActionButton fabUpLoad;
-    TextView txtNumero;
     AsistenciaLocalAdapter asistenciaLocalAdapter;
     boolean b = false;
 
@@ -67,7 +66,6 @@ public class ListAsisLocalFragment extends Fragment {
         View rootView =  inflater.inflate(R.layout.fragment_list_asis_local, container, false);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.listado_recycler);
         fabUpLoad = (FloatingActionButton) rootView.findViewById(R.id.listado_btnUpload);
-        txtNumero = (TextView) rootView.findViewById(R.id.listado_txtNumero);
         return rootView;
     }
 
@@ -140,7 +138,6 @@ public class ListAsisLocalFragment extends Fragment {
         Data data = new Data(context);
         data.open();
         asistenciaLocals = data.getListadoAsistenciaLocal(nroLocal);
-        txtNumero.setText("TOTAL REGISTROS: " + asistenciaLocals.size());
         data.close();
     }
 

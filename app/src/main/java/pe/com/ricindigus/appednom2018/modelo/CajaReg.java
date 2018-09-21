@@ -15,6 +15,7 @@ public class CajaReg {
     private int tipo;
     private int nlado;
     private int acl;
+    private String direccion;
     private int dia_entrada;
     private int mes_entrada;
     private int anio_entrada;
@@ -23,7 +24,6 @@ public class CajaReg {
     private int seg_entrada;
     private int estado_entrada;
     private int check_entrada;
-
     private int dia_salida;
     private int mes_salida;
     private int anio_salida;
@@ -33,7 +33,8 @@ public class CajaReg {
     private int estado_salida;
     private int check_salida;
 
-    public CajaReg(String _id, String cod_barra_caja, String ccdd, String departamento, int idnacional, String idsede, String nom_sede, int idlocal, String nom_local, int tipo, int nlado, int acl, int dia_entrada, int mes_entrada, int anio_entrada, int hora_entrada, int min_entrada, int seg_entrada, int estado_entrada, int check_entrada, int dia_salida, int mes_salida, int anio_salida, int hora_salida, int min_salida, int seg_salida, int estado_salida, int check_salida) {
+
+    public CajaReg(String _id, String cod_barra_caja, String ccdd, String departamento, int idnacional, String idsede, String nom_sede, int idlocal, String nom_local, int tipo, int nlado, int acl, String direccion, int dia_entrada, int mes_entrada, int anio_entrada, int hora_entrada, int min_entrada, int seg_entrada, int estado_entrada, int check_entrada, int dia_salida, int mes_salida, int anio_salida, int hora_salida, int min_salida, int seg_salida, int estado_salida, int check_salida) {
         this._id = _id;
         this.cod_barra_caja = cod_barra_caja;
         this.ccdd = ccdd;
@@ -46,6 +47,7 @@ public class CajaReg {
         this.tipo = tipo;
         this.nlado = nlado;
         this.acl = acl;
+        this.direccion = direccion;
         this.dia_entrada = dia_entrada;
         this.mes_entrada = mes_entrada;
         this.anio_entrada = anio_entrada;
@@ -81,6 +83,15 @@ public class CajaReg {
         this.estado_salida = 0;
         this.check_entrada = 0;
         this.check_salida = 0;
+    }
+
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
     }
 
     public int getCheck_entrada() {
@@ -321,6 +332,7 @@ public class CajaReg {
         contentValues.put(SQLConstantes.cajasreg_tipo,tipo);
         contentValues.put(SQLConstantes.cajasreg_nlado,nlado);
         contentValues.put(SQLConstantes.cajasreg_acl,acl);
+        contentValues.put(SQLConstantes.cajasreg_direccion,direccion);
         contentValues.put(SQLConstantes.cajasreg_dia_entrada,dia_entrada);
         contentValues.put(SQLConstantes.cajasreg_mes_entrada,mes_entrada);
         contentValues.put(SQLConstantes.cajasreg_anio_entrada,anio_entrada);

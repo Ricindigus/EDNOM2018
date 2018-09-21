@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -66,6 +67,8 @@ public class InvListAsisFragment extends Fragment {
     LinearLayout lytYaRegistrado;
     LinearLayout lytErrorLista;
 
+    TextView txtRegistrados;
+
     public InvListAsisFragment() {
         // Required empty public constructor
     }
@@ -104,6 +107,8 @@ public class InvListAsisFragment extends Fragment {
         lytErrorListaAula = (LinearLayout) rootView.findViewById(R.id.inventario_lista_lytErrorAula);
         lytYaRegistrado = (LinearLayout) rootView.findViewById(R.id.inventario_lista_lytYaRegistrado);
         lytErrorLista = (LinearLayout) rootView.findViewById(R.id.inventario_lista_lytErrorLista);
+
+        txtRegistrados = (TextView) rootView.findViewById(R.id.inventario_lista_txtRegistrados);
         return rootView;
     }
 
@@ -117,8 +122,28 @@ public class InvListAsisFragment extends Fragment {
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, aulas);
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spAulas.setAdapter(dataAdapter);
+            String aula = spAulas.getSelectedItem().toString();
+            int nroAula = data.getNumeroAula(aula,nroLocal);
+            txtRegistrados.setText("Registrados: " + data.getNroListasRegistradas(nroLocal,nroAula)+"/"+data.getNroListasTotales(nroLocal,nroAula));
             data.close();
         }
+
+        spAulas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Data data =  new Data(context);
+                data.open();
+                String aula = spAulas.getSelectedItem().toString();
+                int nroAula = data.getNumeroAula(aula,nroLocal);
+                txtRegistrados.setText("Registrados: " + data.getNroListasRegistradas(nroLocal,nroAula)+"/"+data.getNroListasTotales(nroLocal,nroAula));
+                data.close();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         btnBuscar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -178,6 +203,7 @@ public class InvListAsisFragment extends Fragment {
         contentValues.put(SQLConstantes.inventarioreg_estado,1);
         data.actualizarInventarioReg(inventarioReg.getCodigo(),3,contentValues);
         InventarioReg invReg = data.getInventarioReg(inventarioReg.getCodigo(),3);
+        txtRegistrados.setText("Registrados: " + data.getNroListasRegistradas(nroLocal,inventarioReg.getNaula())+"/"+data.getNroListasTotales(nroLocal,inventarioReg.getNaula()));
         data.close();
         mostrarCorrecto(invReg.getCodigo(),invReg.getNpostulantes());
         final String c = invReg.getCodigo();

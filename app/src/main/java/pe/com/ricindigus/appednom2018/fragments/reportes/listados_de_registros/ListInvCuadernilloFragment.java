@@ -49,7 +49,6 @@ public class ListInvCuadernilloFragment extends Fragment {
     ArrayList<InventarioReg> datosNoEnviados;
     Data data;
     FloatingActionButton fabUpLoad;
-    TextView txtNumero;
     InventarioCuadernilloAdapter inventarioCuadernilloAdapter;
     boolean b = false;
 
@@ -72,7 +71,6 @@ public class ListInvCuadernilloFragment extends Fragment {
         spAulas = (Spinner) rootView.findViewById(R.id.lista_spAula);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.lista_recycler);
         fabUpLoad = (FloatingActionButton) rootView.findViewById(R.id.lista_btnUpload);
-        txtNumero = (TextView) rootView.findViewById(R.id.lista_txtNumero);
         return rootView;
     }
 
@@ -172,7 +170,6 @@ public class ListInvCuadernilloFragment extends Fragment {
         int nroAula = 0;
         nroAula = d.getNumeroAula(aula,nroLocal);
         cuadernillos = d.getListadoInventarioCuadernillo(nroLocal,nroAula);
-        txtNumero.setText("TOTAL REGISTROS: " + cuadernillos.size());
         d.close();
     }
     public String checkDigito (int number) {

@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setSubtitle("EVALUACIÓN DOCENTE PARA EL NOMBRAMIENTO");
+        toolbar.setSubtitle(usuarioLocal.getNom_local());
         getSupportActionBar().setTitle(temaApp);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

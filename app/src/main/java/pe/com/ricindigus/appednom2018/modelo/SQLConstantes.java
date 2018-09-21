@@ -52,6 +52,8 @@ public class SQLConstantes {
     public static String cajas_tipo = "tipo";
     public static String cajas_nlado = "nlado";
     public static String cajas_acl = "acl";
+    public static String cajas_direccion = "direccion";
+
 
     //TABLA ASISTENCIA
     public static String asistencia_id = "_id";
@@ -88,6 +90,8 @@ public class SQLConstantes {
     public static String inventario_nombres = "nombres";
     public static String inventario_naula = "naula";
     public static String inventario_codpagina = "codpagina";
+    public static String inventario_direccion = "direccion";
+
     /**
      * ----------------------------FIN TABLAS INICIALES----------------------------
      * */
@@ -144,6 +148,7 @@ public class SQLConstantes {
     public static String cajasreg_tipo = "tipo";
     public static String cajasreg_nlado = "nlado";
     public static String cajasreg_acl = "acl";
+    public static String cajasreg_direccion = "acl";
     public static String cajasreg_dia_entrada = "dia_entrada";
     public static String cajasreg_mes_entrada = "mes_entrada";
     public static String cajasreg_anio_entrada = "anio_entrada";
@@ -176,6 +181,7 @@ public class SQLConstantes {
                     cajasreg_tipo + " INTEGER," +
                     cajasreg_nlado + " INTEGER," +
                     cajasreg_acl + " INTEGER," +
+                    cajasreg_direccion + " TEXT," +
                     cajasreg_dia_entrada + " INTEGER," +
                     cajasreg_mes_entrada + " INTEGER," +
                     cajasreg_anio_entrada + " INTEGER," +
@@ -278,6 +284,7 @@ public class SQLConstantes {
     public static String inventarioreg_nombres = "nombres";
     public static String inventarioreg_naula = "naula";
     public static String inventarioreg_codpagina = "codpagina";
+    public static String inventarioreg_direccion = "direccion";
     public static String inventarioreg_dia = "dia";
     public static String inventarioreg_mes = "mes";
     public static String inventarioreg_anio = "anio";
@@ -305,6 +312,7 @@ public class SQLConstantes {
                     inventarioreg_nombres + " TEXT," +
                     inventarioreg_naula + " INTEGER," +
                     inventarioreg_codpagina + " INTEGER," +
+                    inventarioreg_direccion + " TEXT," +
                     inventarioreg_dia + " INTEGER," +
                     inventarioreg_mes + " INTEGER," +
                     inventarioreg_anio + " INTEGER," +
@@ -314,8 +322,6 @@ public class SQLConstantes {
                     inventarioreg_estado + " INTEGER," +
                     inventarioreg_npostulantes + " INTEGER" + ");"
             ;
-
-
     /**
      * -----------------FIN TABLAS GENERADAS PARA GUARDAR RESPUESTAS--------------------
      * */
@@ -336,8 +342,6 @@ public class SQLConstantes {
     public static final String WHERE_CLAUSE_ESTADO_LOCAL = "estado_local=?";
     public static final String WHERE_CLAUSE_ESTADO_AULA = "estado_aula=?";
     public static final String WHERE_CLAUSE_ESTADO = "estado=?";
-
-
     public static final String WHERE_CLAUSE_DNI = "dni=?";
     public static final String WHERE_CLAUSE_NRO_AULA = "naula=?";
     public static final String WHERE_CLAUSE_CODIGO = "codigo=?";

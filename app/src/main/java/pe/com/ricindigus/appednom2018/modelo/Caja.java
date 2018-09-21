@@ -13,8 +13,9 @@ public class Caja {
     private int tipo;
     private int nlado;
     private int acl;
+    private String direccion;
 
-    public Caja(String _id, String cod_barra_caja, String ccdd, String departamento, int idnacional, String idsede, String nom_sede, int idlocal, String nom_local, int tipo, int nlado, int acl) {
+    public Caja(String _id, String cod_barra_caja, String ccdd, String departamento, int idnacional, String idsede, String nom_sede, int idlocal, String nom_local, int tipo, int nlado, int acl, String direccion) {
         this._id = _id;
         this.cod_barra_caja = cod_barra_caja;
         this.ccdd = ccdd;
@@ -27,9 +28,18 @@ public class Caja {
         this.tipo = tipo;
         this.nlado = nlado;
         this.acl = acl;
+        this.direccion = direccion;
     }
 
     public Caja() {
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
     }
 
     public String get_id() {

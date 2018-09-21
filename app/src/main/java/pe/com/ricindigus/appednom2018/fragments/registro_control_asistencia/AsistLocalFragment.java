@@ -30,6 +30,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import pe.com.ricindigus.appednom2018.R;
+import pe.com.ricindigus.appednom2018.activities.MainActivity;
 import pe.com.ricindigus.appednom2018.modelo.Asistencia;
 import pe.com.ricindigus.appednom2018.modelo.AsistenciaReg;
 import pe.com.ricindigus.appednom2018.modelo.Data;
@@ -60,6 +61,8 @@ public class AsistLocalFragment extends Fragment {
     LinearLayout lytErrorLocal;
     LinearLayout lytYaRegistrado;
     LinearLayout lytErrorDni;
+
+    TextView txtxRegistrados;
 
     EditText edtDni;
     ImageView btnBuscar;
@@ -105,6 +108,7 @@ public class AsistLocalFragment extends Fragment {
         lytYaRegistrado = (LinearLayout) rootView.findViewById(R.id.asistencia_local_lytYaRegistrado);
         lytErrorDni = (LinearLayout) rootView.findViewById(R.id.asistencia_local_ErrorDni);
 
+        txtxRegistrados = (TextView) rootView.findViewById(R.id.asistencia_local_txtRegistrados);
 
         edtDni = (EditText) rootView.findViewById(R.id.asistencia_local_edtCodigo);
         btnBuscar = (ImageView) rootView.findViewById(R.id.asistencia_local_btnBuscar);
@@ -115,7 +119,10 @@ public class AsistLocalFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        Data data =  new Data(context);
+        data.open();
+        txtxRegistrados.setText("Registrados: " + data.getNroAsistenciasLocalRegistradas(nroLocal)+"/"+data.getNumeroItemsAsistenciaReg());
+        data.close();
         btnBuscar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -168,6 +175,7 @@ public class AsistLocalFragment extends Fragment {
         contentValues.put(SQLConstantes.asistenciareg_seg_local,seg);
         contentValues.put(SQLConstantes.asistenciareg_estado_local,1);
         data.actualizarAsistenciaReg(asistenciaReg.getDni(),contentValues);
+        txtxRegistrados.setText("Registrados: " + data.getNroAsistenciasLocalRegistradas(nroLocal)+"/"+data.getNumeroItemsAsistenciaReg());
         AsistenciaReg asis = data.getAsistenciaReg(asistenciaReg.getDni());
         data.close();
         mostrarCorrecto(asis.getDni(),asis.getNombres() +" "+ asis.getApe_paterno() +" "+ asis.getApe_materno(),asis.getNom_sede(),asis.getNom_local(),asis.getNaula());

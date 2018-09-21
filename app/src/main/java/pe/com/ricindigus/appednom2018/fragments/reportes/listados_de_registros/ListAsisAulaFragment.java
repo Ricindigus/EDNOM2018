@@ -48,7 +48,6 @@ public class ListAsisAulaFragment extends Fragment {
     ArrayList<AsistenciaReg> noEnviados;
     Data data;
     FloatingActionButton fabUpLoad;
-    TextView txtNumero;
     AsistenciaAulaAdapter asistenciaAulaAdapter;
     boolean b = false;
 
@@ -71,7 +70,6 @@ public class ListAsisAulaFragment extends Fragment {
         spAulas = (Spinner) rootView.findViewById(R.id.asistencia_aula_spAula);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.listado_recycler);
         fabUpLoad = (FloatingActionButton) rootView.findViewById(R.id.listado_btnUpload);
-        txtNumero = (TextView) rootView.findViewById(R.id.listado_txtNumero);
         return rootView;
     }
 
@@ -171,7 +169,6 @@ public class ListAsisAulaFragment extends Fragment {
         int nroAula = 0;
         nroAula = d.getNumeroAula(aula,nroLocal);
         asistenciaAulas = d.getListadoAsistenciaAula(nroLocal,nroAula);
-        txtNumero.setText("TOTAL REGISTROS: " + asistenciaAulas.size());
         d.close();
     }
     public String checkDigito (int number) {

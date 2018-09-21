@@ -19,6 +19,7 @@ public class InventarioReg {
     private String nombres;
     private int naula;
     private String codpagina;
+    private String direccion;
     private int dia;
     private int mes;
     private int anio;
@@ -39,7 +40,7 @@ public class InventarioReg {
         this.npostulantes = 0;
     }
 
-    public InventarioReg(String _id, String codigo, int tipo, String ccdd, String departamento, int idnacional, String idsede, String nom_sede, int idlocal, String nom_local, String dni, String ape_paterno, String ape_materno, String nombres, int naula, String codpagina, int dia, int mes, int anio, int hora, int min, int seg, int estado, int npostulantes) {
+    public InventarioReg(String _id, String codigo, int tipo, String ccdd, String departamento, int idnacional, String idsede, String nom_sede, int idlocal, String nom_local, String dni, String ape_paterno, String ape_materno, String nombres, int naula, String codpagina, String direccion, int dia, int mes, int anio, int hora, int min, int seg, int estado, int npostulantes) {
         this._id = _id;
         this.codigo = codigo;
         this.tipo = tipo;
@@ -56,6 +57,7 @@ public class InventarioReg {
         this.nombres = nombres;
         this.naula = naula;
         this.codpagina = codpagina;
+        this.direccion = direccion;
         this.dia = dia;
         this.mes = mes;
         this.anio = anio;
@@ -258,6 +260,22 @@ public class InventarioReg {
         this.npostulantes = npostulantes;
     }
 
+    public String get_id() {
+        return _id;
+    }
+
+    public void set_id(String _id) {
+        this._id = _id;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+
     public ContentValues toValues(){
         ContentValues contentValues = new ContentValues();
         contentValues.put(SQLConstantes.inventarioreg_id,_id);
@@ -276,6 +294,7 @@ public class InventarioReg {
         contentValues.put(SQLConstantes.inventarioreg_nombres,nombres);
         contentValues.put(SQLConstantes.inventarioreg_naula,naula);
         contentValues.put(SQLConstantes.inventarioreg_codpagina,codpagina);
+        contentValues.put(SQLConstantes.inventarioreg_direccion,direccion);
         contentValues.put(SQLConstantes.inventarioreg_dia,dia);
         contentValues.put(SQLConstantes.inventarioreg_mes,mes);
         contentValues.put(SQLConstantes.inventarioreg_anio,anio);

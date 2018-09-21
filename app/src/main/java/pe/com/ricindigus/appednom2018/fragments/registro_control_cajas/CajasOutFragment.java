@@ -20,6 +20,7 @@ import android.widget.TextView;
 import java.util.Calendar;
 
 import pe.com.ricindigus.appednom2018.R;
+import pe.com.ricindigus.appednom2018.modelo.Caja;
 import pe.com.ricindigus.appednom2018.modelo.CajaReg;
 import pe.com.ricindigus.appednom2018.modelo.Data;
 import pe.com.ricindigus.appednom2018.modelo.SQLConstantes;
@@ -34,13 +35,21 @@ public class CajasOutFragment extends Fragment {
     TextView correctoTxtSede;
     TextView correctoTxtLocal;
 
+    TextView txtRegistrados;
+
     TextView yaRegistradoTxtCodBarra;
     TextView yaRegistradoTxtAcl;
     TextView yaRegistradoTxtFechaHora;
 
+    TextView errorLocalTxtCodBarra;
+    TextView errorLocalTxtDireccion;
+    TextView errorLocalTxtSede;
+    TextView errorLocalTxtLocal;
+
     LinearLayout lytCorrecto;
     LinearLayout lytDuplicado;
     LinearLayout lytNoExiste;
+    LinearLayout lytErrorLocal;
 
     EditText edtCodigo;
     ImageView btnBuscar;
@@ -72,19 +81,31 @@ public class CajasOutFragment extends Fragment {
         yaRegistradoTxtAcl = (TextView) rootView.findViewById(R.id.caja_duplicada_txtAcl);
         yaRegistradoTxtFechaHora = (TextView) rootView.findViewById(R.id.caja_duplicada_txtFechaHora);
 
+        errorLocalTxtCodBarra = (TextView) rootView.findViewById(R.id.caja_errorlocal_txtCodBarra);
+        errorLocalTxtDireccion = (TextView) rootView.findViewById(R.id.caja_errorlocal_txtDireccion);
+        errorLocalTxtSede = (TextView) rootView.findViewById(R.id.caja_errorlocal_txtSede);
+        errorLocalTxtLocal = (TextView) rootView.findViewById(R.id.caja_errorlocal_txtLocal);
+
         lytCorrecto = (LinearLayout) rootView.findViewById(R.id.cajas_salida_lytCorrecto);
         lytDuplicado = (LinearLayout) rootView.findViewById(R.id.cajas_salida_lytYaRegistrado);
         lytNoExiste = (LinearLayout) rootView.findViewById(R.id.cajas_salida_lytNoExiste);
+        lytErrorLocal = (LinearLayout) rootView.findViewById(R.id.cajas_salida_lytErrorLocal);
+
 
         edtCodigo = (EditText) rootView.findViewById(R.id.salida_cajas_edtCodigo);
         btnBuscar = (ImageView) rootView.findViewById(R.id.salida_cajas_btnBuscar);
+
+        txtRegistrados = (TextView) rootView.findViewById(R.id.salida_cajas_txtRegistrados);
         return rootView;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        Data data =  new Data(context);
+        data.open();
+        txtRegistrados.setText("Registrados: " + data.getNroCajasSalidaCompletas(numeroLocal)+"/"+data.getNroCajasTotales(numeroLocal));
+        data.close();
         btnBuscar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,12 +120,17 @@ public class CajasOutFragment extends Fragment {
         Data data = new Data(context);
         data.open();
         CajaReg cajaOut = data.getCajaReg(codigoBarra,numeroLocal);
-        data.close();
         if(cajaOut == null){
-            mostrarCodigoNoExiste();
+            Caja caja = data.getCaja(codigoBarra);
+            if (caja == null){
+                mostrarCodigoNoExiste();
+            }else{
+                mostrarErrorLocal(codigoBarra,caja.getNom_sede(),caja.getNom_local(),caja.getDireccion());
+            }
         }else{
             registrarCaja(cajaOut);
         }
+        data.close();
         edtCodigo.setText("");
         edtCodigo.requestFocus();
     }
@@ -137,14 +163,17 @@ public class CajasOutFragment extends Fragment {
             if (cajaOut.getNlado() == 1){
                 if (cajaOut.getTipo() == 3) contentValues.put(SQLConstantes.cajasreg_estado_salida,2);
                 else contentValues.put(SQLConstantes.cajasreg_estado_salida,cajaOut.getEstado_salida() + 1);
+                data.actualizarCajaReg(codigoBarra,contentValues);
+                txtRegistrados.setText("Registrados: " + data.getNroCajasSalidaCompletas(numeroLocal)+"/"+data.getNroCajasTotales(numeroLocal));
             }
-            data.actualizarCajaReg(codigoBarra,contentValues);
+
             //Si es codigo "20" debe guardar en el otro codigo "10"
             if(cajaOut.getNlado() == 2){
                 CajaReg cajaOut1 = data.getCajaReg(getCodigoAux(codigoBarra),numeroLocal);
                 contentValues = new ContentValues();
                 contentValues.put(SQLConstantes.cajasreg_estado_salida,cajaOut1.getEstado_salida() + 1);
                 data.actualizarCajaReg(cajaOut1.getCod_barra_caja(),contentValues);
+                txtRegistrados.setText("Registrados: " + data.getNroCajasSalidaCompletas(numeroLocal)+"/"+data.getNroCajasTotales(numeroLocal));
             }
             data.close();
             mostrarCorrecto(cajaOut.getCod_barra_caja(), cajaOut.getAcl(), cajaOut.getNom_sede(), cajaOut.getNom_local());
@@ -174,6 +203,7 @@ public class CajasOutFragment extends Fragment {
         lytDuplicado.setVisibility(View.GONE);
         lytNoExiste.setVisibility(View.GONE);
         lytCorrecto.setVisibility(View.VISIBLE);
+        lytErrorLocal.setVisibility(View.GONE);
         correctoTxtCodBarra.setText(codigoBarra);
         correctoTxtAcl.setText("ACL: " + acl);
         correctoTxtSede.setText(sede);
@@ -183,12 +213,24 @@ public class CajasOutFragment extends Fragment {
         lytNoExiste.setVisibility(View.VISIBLE);
         lytDuplicado.setVisibility(View.GONE);
         lytCorrecto.setVisibility(View.GONE);
+        lytErrorLocal.setVisibility(View.GONE);
+    }
+    public void mostrarErrorLocal(String codigoBarra,String sede, String local,String direccion){
+        lytDuplicado.setVisibility(View.GONE);
+        lytNoExiste.setVisibility(View.GONE);
+        lytCorrecto.setVisibility(View.GONE);
+        lytErrorLocal.setVisibility(View.VISIBLE);
+        errorLocalTxtCodBarra.setText(codigoBarra);
+        errorLocalTxtSede.setText(sede);
+        errorLocalTxtLocal.setText(local);
+        errorLocalTxtDireccion.setText(direccion);
     }
 
     public void mostrarDuplicado(String codBarra, int acl, String fecha){
         lytCorrecto.setVisibility(View.GONE);
         lytDuplicado.setVisibility(View.VISIBLE);
         lytNoExiste.setVisibility(View.GONE);
+        lytErrorLocal.setVisibility(View.GONE);
         yaRegistradoTxtCodBarra.setText(codBarra);
         yaRegistradoTxtAcl.setText("ACL: " + acl);
         yaRegistradoTxtFechaHora.setText(fecha);

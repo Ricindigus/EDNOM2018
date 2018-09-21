@@ -48,7 +48,6 @@ public class ListInvFichaFragment extends Fragment {
     ArrayList<InventarioReg> datosNoEnviados;
     Data data;
     FloatingActionButton fabUpLoad;
-    TextView txtNumero;
     InventarioFichaAdapter inventarioFichaAdapter;
     boolean b = false;
 
@@ -71,7 +70,6 @@ public class ListInvFichaFragment extends Fragment {
         spAulas = (Spinner) rootView.findViewById(R.id.lista_spAula);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.lista_recycler);
         fabUpLoad = (FloatingActionButton) rootView.findViewById(R.id.lista_btnUpload);
-        txtNumero = (TextView) rootView.findViewById(R.id.lista_txtNumero);
         return rootView;
     }
 
@@ -118,7 +116,7 @@ public class ListInvFichaFragment extends Fragment {
                 String aula = spAulas.getSelectedItem().toString();
                 int nroAula = 0;
                 if(seleccion > 0) nroAula = data.getNumeroAula(aula,nroLocal);
-                datosNoEnviados = data.getInventarioCuadernillosSinEnviar(nroLocal,nroAula);
+                datosNoEnviados = data.getInventarioFichasSinEnviar(nroLocal,nroAula);
                 data.close();
                 if(datosNoEnviados.size() > 0){
                     final int total = datosNoEnviados.size();
@@ -172,7 +170,6 @@ public class ListInvFichaFragment extends Fragment {
         nroAula = d.getNumeroAula(aula,nroLocal);
         long n = d.getNumeroItemsInventarioReg();
         fichas = d.getListadoInventarioFichas(nroLocal,nroAula);
-        txtNumero.setText("TOTAL REGISTROS: " + fichas.size());
         d.close();
     }
     public String checkDigito (int number) {
