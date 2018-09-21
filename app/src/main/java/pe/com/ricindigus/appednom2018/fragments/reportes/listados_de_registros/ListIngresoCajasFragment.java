@@ -116,7 +116,7 @@ public class ListIngresoCajasFragment extends Fragment {
                             String codCaja = cajaIn10.getCod_barra_caja().substring(0,cajaIn10.getCod_barra_caja().length()-2);
                             WriteBatch batch = FirebaseFirestore.getInstance().batch();
                             DocumentReference documentReference = FirebaseFirestore.getInstance().collection("cajas").document(codCaja);
-                            batch.update(documentReference, "check_registro_ingreso", 1);
+                            batch.update(documentReference, "check_registro", 1);
                             batch.update(documentReference, "fecha_registro_ingreso_10", new Timestamp(
                                     new Date(cajaIn10.getAnio_entrada()-1900,cajaIn10.getMes_entrada()-1,cajaIn10.getDia_entrada(),cajaIn10.getHora_entrada(),cajaIn10.getMin_entrada(),cajaIn10.getSeg_entrada())));
                             batch.update(documentReference, "fecha_registro_ingreso_20", new Timestamp(

@@ -111,7 +111,7 @@ public class CajasInFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Data data =  new Data(context);
         data.open();
-        txtRegistrados.setText("Total: " +data.getNroCajasTotales(numeroLocal));
+        txtTotal.setText("Total: " +data.getNroCajasTotales(numeroLocal));
         txtRegistrados.setText("Registrados: " + data.getNroCajasEntradaLeidas(numeroLocal));
         txtTransferidos.setText("Transferidos: " + data.getNroCajasEntradaTransferidos(numeroLocal));
 
