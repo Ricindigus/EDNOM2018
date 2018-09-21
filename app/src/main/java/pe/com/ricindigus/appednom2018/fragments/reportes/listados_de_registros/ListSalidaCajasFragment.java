@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import pe.com.ricindigus.appednom2018.R;
+import pe.com.ricindigus.appednom2018.adapters.CajasEntradaAdapter;
 import pe.com.ricindigus.appednom2018.adapters.CajasSalidaAdapter;
 import pe.com.ricindigus.appednom2018.modelo.CajaReg;
 import pe.com.ricindigus.appednom2018.modelo.Data;
@@ -100,7 +101,6 @@ public class ListSalidaCajasFragment extends Fragment {
                 data = new Data(context);
                 data.open();
                 noEnviados = data.getListCajasSalidaCompletas(nroLocal);
-                data.close();
                 if(noEnviados.size() > 0){
                     final int total = noEnviados.size();
                     int i = 0;
@@ -108,31 +108,24 @@ public class ListSalidaCajasFragment extends Fragment {
                         i++;
                         final int j = i;
                         if (cajaOut10.getTipo() != 3){
+                            CajaReg cajaOut20 = data.getCajaReg(getCodigo20(cajaOut10.getCod_barra_caja()),nroLocal);
+                            String codCaja = cajaOut10.getCod_barra_caja().substring(0,cajaOut10.getCod_barra_caja().length()-2);
                             WriteBatch batch = FirebaseFirestore.getInstance().batch();
-                            DocumentReference documentReference10 = FirebaseFirestore.getInstance().collection("cajas").document(cajaOut10.getCod_barra_caja());
-                            batch.update(documentReference10, "check_registro", 2);
-                            batch.update(documentReference10, "fecha_transferencia_salida", FieldValue.serverTimestamp());
-                            batch.update(documentReference10, "usuario_registro_salida", usuario);
-                            batch.update(documentReference10, "fecha_registro_salida", new Timestamp(new Date(cajaOut10.getAnio_salida()-1900,cajaOut10.getMes_salida()-1,cajaOut10.getDia_salida(),cajaOut10.getHora_salida(),cajaOut10.getMin_salida(),cajaOut10.getSeg_salida())));
-                            Data d = new Data(context);
-                            d.open();
-                            CajaReg cajaOut20 = d.getCajaReg(getCodigo20(cajaOut10.getCod_barra_caja()),nroLocal);
-                            d.close();
-                            DocumentReference documentReference20 = FirebaseFirestore.getInstance().collection("cajas").document(cajaOut20.getCod_barra_caja());
-                            batch.update(documentReference20, "check_registro", 2);
-                            batch.update(documentReference20, "fecha_transferencia_salida", FieldValue.serverTimestamp());
-                            batch.update(documentReference20, "usuario_registro_salida", usuario);
-                            batch.update(documentReference20, "fecha_registro_salida", new Timestamp(new Date(cajaOut20.getAnio_salida()-1900,cajaOut20.getMes_salida()-1,cajaOut20.getDia_salida(),cajaOut20.getHora_salida(),cajaOut20.getMin_salida(),cajaOut20.getSeg_salida())));
-                            final String codigoBarra = cajaOut10.getCod_barra_caja();
-                            final String codigoBarra20 = cajaOut20.getCod_barra_caja();
-
+                            DocumentReference documentReference = FirebaseFirestore.getInstance().collection("cajas").document(codCaja);
+                            batch.update(documentReference, "check_registro_salida", 1);
+                            batch.update(documentReference, "fecha_registro_salida_10", new Timestamp(
+                                    new Date(cajaOut10.getAnio_salida()-1900,cajaOut10.getMes_salida()-1,cajaOut10.getDia_salida(),cajaOut10.getHora_salida(),cajaOut10.getMin_salida(),cajaOut10.getSeg_salida())));
+                            batch.update(documentReference, "fecha_registro_salida_20", new Timestamp(
+                                    new Date(cajaOut10.getAnio_salida()-1900,cajaOut20.getMes_salida()-1,cajaOut20.getDia_salida(),cajaOut20.getHora_salida(),cajaOut20.getMin_salida(),cajaOut20.getSeg_salida())));
+                            batch.update(documentReference, "fecha_transferencia_salida", FieldValue.serverTimestamp());
+                            batch.update(documentReference, "usuario_registro_salida", usuario);
+                            final String codigoBarra10 = cajaOut10.getCod_barra_caja();
                             batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
                                     Data data = new Data(context);
                                     data.open();
-                                    data.actualizarCajaRegSubidoSalida(codigoBarra);
-                                    data.actualizarCajaRegSubidoSalida(codigoBarra20);
+                                    data.actualizarCajaRegSubidoSalida(codigoBarra10);
                                     data.close();
                                     if (j == total) {
                                         Toast.makeText(context, total + " registros subidos", Toast.LENGTH_SHORT).show();
@@ -148,19 +141,21 @@ public class ListSalidaCajasFragment extends Fragment {
                                 }
                             });
                         }else{
+                            String codCaja = cajaOut10.getCod_barra_caja().substring(0,cajaOut10.getCod_barra_caja().length()-2);
                             WriteBatch batch = FirebaseFirestore.getInstance().batch();
-                            DocumentReference documentReference10 = FirebaseFirestore.getInstance().collection("cajas").document(cajaOut10.getCod_barra_caja());
-                            batch.update(documentReference10, "check_registro", 2);
-                            batch.update(documentReference10, "fecha_transferencia_salida", FieldValue.serverTimestamp());
-                            batch.update(documentReference10, "usuario_registro_salida", usuario);
-                            batch.update(documentReference10, "fecha_registro_salida", new Timestamp(new Date(cajaOut10.getAnio_salida()-1900,cajaOut10.getMes_salida()-1,cajaOut10.getDia_salida(),cajaOut10.getHora_salida(),cajaOut10.getMin_salida(),cajaOut10.getSeg_salida())));
-                            final String codigoBarra = cajaOut10.getCod_barra_caja();
+                            DocumentReference documentReference = FirebaseFirestore.getInstance().collection("cajas").document(codCaja);
+                            batch.update(documentReference, "check_registro_salida", 1);
+                            batch.update(documentReference, "fecha_registro_salida_10", new Timestamp(
+                                    new Date(cajaOut10.getAnio_salida()-1900,cajaOut10.getMes_salida()-1,cajaOut10.getDia_salida(),cajaOut10.getHora_salida(),cajaOut10.getMin_salida(),cajaOut10.getSeg_salida())));
+                            batch.update(documentReference, "fecha_transferencia_salida", FieldValue.serverTimestamp());
+                            batch.update(documentReference, "usuario_registro_salida", usuario);
+                            final String codigoBarra10 = cajaOut10.getCod_barra_caja();
                             batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
                                     Data data = new Data(context);
                                     data.open();
-                                    data.actualizarCajaRegSubidoSalida(codigoBarra);
+                                    data.actualizarCajaRegSubidoSalida(codigoBarra10);
                                     data.close();
                                     if (j == total) {
                                         Toast.makeText(context, total + " registros subidos", Toast.LENGTH_SHORT).show();
@@ -180,7 +175,7 @@ public class ListSalidaCajasFragment extends Fragment {
                 }else{
                     Toast.makeText(context, "No hay registros nuevos para subir", Toast.LENGTH_SHORT).show();
                 }
-
+                data.close();
             }
         });
     }

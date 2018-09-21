@@ -35,7 +35,10 @@ public class CajasOutFragment extends Fragment {
     TextView correctoTxtSede;
     TextView correctoTxtLocal;
 
+    TextView txtTotal;
     TextView txtRegistrados;
+    TextView txtTransferidos;
+
 
     TextView yaRegistradoTxtCodBarra;
     TextView yaRegistradoTxtAcl;
@@ -104,7 +107,9 @@ public class CajasOutFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Data data =  new Data(context);
         data.open();
-        txtRegistrados.setText("Registrados: " + data.getNroCajasSalidaCompletas(numeroLocal)+"/"+data.getNroCajasTotales(numeroLocal));
+        txtTotal.setText("Total: " + data.getNroCajasTotales(numeroLocal));
+        txtRegistrados.setText("Registrados: " + data.getNroCajasSalidaLeidas(numeroLocal));
+        txtTransferidos.setText("Transferidos: " + data.getNroCajasSalidaTransferidos(numeroLocal));
         data.close();
         btnBuscar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -164,7 +169,7 @@ public class CajasOutFragment extends Fragment {
                 if (cajaOut.getTipo() == 3) contentValues.put(SQLConstantes.cajasreg_estado_salida,2);
                 else contentValues.put(SQLConstantes.cajasreg_estado_salida,cajaOut.getEstado_salida() + 1);
                 data.actualizarCajaReg(codigoBarra,contentValues);
-                txtRegistrados.setText("Registrados: " + data.getNroCajasSalidaCompletas(numeroLocal)+"/"+data.getNroCajasTotales(numeroLocal));
+                txtRegistrados.setText("Registrados: " + data.getNroCajasSalidaLeidas(numeroLocal));
             }
 
             //Si es codigo "20" debe guardar en el otro codigo "10"
@@ -173,7 +178,7 @@ public class CajasOutFragment extends Fragment {
                 contentValues = new ContentValues();
                 contentValues.put(SQLConstantes.cajasreg_estado_salida,cajaOut1.getEstado_salida() + 1);
                 data.actualizarCajaReg(cajaOut1.getCod_barra_caja(),contentValues);
-                txtRegistrados.setText("Registrados: " + data.getNroCajasSalidaCompletas(numeroLocal)+"/"+data.getNroCajasTotales(numeroLocal));
+                txtRegistrados.setText("Registrados: " + data.getNroCajasSalidaLeidas(numeroLocal));
             }
             data.close();
             mostrarCorrecto(cajaOut.getCod_barra_caja(), cajaOut.getAcl(), cajaOut.getNom_sede(), cajaOut.getNom_local());

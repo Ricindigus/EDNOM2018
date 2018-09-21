@@ -89,6 +89,7 @@ public class ListIngresoCajasFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);
         cargaData();
@@ -104,7 +105,6 @@ public class ListIngresoCajasFragment extends Fragment {
                 data = new Data(context);
                 data.open();
                 noEnviados = data.getListCajasEntradaCompletas(nroLocal);
-                data.close();
                 if(noEnviados.size() > 0){
                     final int total = noEnviados.size();
                     int i = 0;
@@ -112,32 +112,24 @@ public class ListIngresoCajasFragment extends Fragment {
                         i++;
                         final int j = i;
                         if (cajaIn10.getTipo() != 3){
+                            CajaReg cajaIn20 = data.getCajaReg(getCodigo20(cajaIn10.getCod_barra_caja()),nroLocal);
+                            String codCaja = cajaIn10.getCod_barra_caja().substring(0,cajaIn10.getCod_barra_caja().length()-2);
                             WriteBatch batch = FirebaseFirestore.getInstance().batch();
-                            DocumentReference documentReference10 = FirebaseFirestore.getInstance().collection("cajas").document(cajaIn10.getCod_barra_caja());
-                            batch.update(documentReference10, "check_registro", 1);
-                            batch.update(documentReference10, "fecha_transferencia_ingreso", FieldValue.serverTimestamp());
-                            batch.update(documentReference10, "usuario_registro_ingreso", usuario);
-                            batch.update(documentReference10, "fecha_registro_ingreso", new Timestamp(new Date(cajaIn10.getAnio_entrada()-1900,cajaIn10.getMes_entrada()-1,cajaIn10.getDia_entrada(),cajaIn10.getHora_entrada(),cajaIn10.getMin_entrada(),cajaIn10.getSeg_entrada())));
-                            Data d = new Data(context);
-                            d.open();
-                            CajaReg cajaIn20 = d.getCajaReg(getCodigo20(cajaIn10.getCod_barra_caja()),nroLocal);
-                            d.close();
-                            DocumentReference documentReference20 = FirebaseFirestore.getInstance().collection("cajas").document(cajaIn20.getCod_barra_caja());
-                            batch.update(documentReference20, "check_registro", 1);
-                            batch.update(documentReference20, "fecha_transferencia_ingreso", FieldValue.serverTimestamp());
-                            batch.update(documentReference20, "usuario_registro_ingreso", usuario);
-                            batch.update(documentReference20, "fecha_registro_ingreso", new Timestamp(new Date(cajaIn20.getAnio_entrada()-1900,cajaIn20.getMes_entrada()-1,cajaIn20.getDia_entrada(),cajaIn20.getHora_entrada(),cajaIn20.getMin_entrada(),cajaIn20.getSeg_entrada())));
-
+                            DocumentReference documentReference = FirebaseFirestore.getInstance().collection("cajas").document(codCaja);
+                            batch.update(documentReference, "check_registro_ingreso", 1);
+                            batch.update(documentReference, "fecha_registro_ingreso_10", new Timestamp(
+                                    new Date(cajaIn10.getAnio_entrada()-1900,cajaIn10.getMes_entrada()-1,cajaIn10.getDia_entrada(),cajaIn10.getHora_entrada(),cajaIn10.getMin_entrada(),cajaIn10.getSeg_entrada())));
+                            batch.update(documentReference, "fecha_registro_ingreso_20", new Timestamp(
+                                    new Date(cajaIn10.getAnio_entrada()-1900,cajaIn20.getMes_entrada()-1,cajaIn20.getDia_entrada(),cajaIn20.getHora_entrada(),cajaIn20.getMin_entrada(),cajaIn20.getSeg_entrada())));
+                            batch.update(documentReference, "fecha_transferencia_ingreso", FieldValue.serverTimestamp());
+                            batch.update(documentReference, "usuario_registro_ingreso", usuario);
                             final String codigoBarra10 = cajaIn10.getCod_barra_caja();
-                            final String codigoBarra20 = cajaIn20.getCod_barra_caja();
-
                             batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
                                     Data data = new Data(context);
                                     data.open();
                                     data.actualizarCajaRegSubidoEntrada(codigoBarra10);
-                                    data.actualizarCajaRegSubidoEntrada(codigoBarra20);
                                     data.close();
                                     if (j == total) {
                                         Toast.makeText(context, total + " registros subidos", Toast.LENGTH_SHORT).show();
@@ -153,14 +145,15 @@ public class ListIngresoCajasFragment extends Fragment {
                                 }
                             });
                         }else{
+                            String codCaja = cajaIn10.getCod_barra_caja().substring(0,cajaIn10.getCod_barra_caja().length()-2);
                             WriteBatch batch = FirebaseFirestore.getInstance().batch();
-                            DocumentReference documentReference10 = FirebaseFirestore.getInstance().collection("cajas").document(cajaIn10.getCod_barra_caja());
-                            batch.update(documentReference10, "check_registro", 1);
-                            batch.update(documentReference10, "fecha_transferencia_ingreso", FieldValue.serverTimestamp());
-                            batch.update(documentReference10, "usuario_registro_ingreso", usuario);
-                            batch.update(documentReference10, "fecha_registro_ingreso", new Timestamp(new Date(cajaIn10.getAnio_entrada()-1900,cajaIn10.getMes_entrada()-1,cajaIn10.getDia_entrada(),cajaIn10.getHora_entrada(),cajaIn10.getMin_entrada(),cajaIn10.getSeg_entrada())));
+                            DocumentReference documentReference = FirebaseFirestore.getInstance().collection("cajas").document(codCaja);
+                            batch.update(documentReference, "check_registro_ingreso", 1);
+                            batch.update(documentReference, "fecha_registro_ingreso_10", new Timestamp(
+                                    new Date(cajaIn10.getAnio_entrada()-1900,cajaIn10.getMes_entrada()-1,cajaIn10.getDia_entrada(),cajaIn10.getHora_entrada(),cajaIn10.getMin_entrada(),cajaIn10.getSeg_entrada())));
+                            batch.update(documentReference, "fecha_transferencia_ingreso", FieldValue.serverTimestamp());
+                            batch.update(documentReference, "usuario_registro_ingreso", usuario);
                             final String codigoBarra10 = cajaIn10.getCod_barra_caja();
-
                             batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
@@ -186,7 +179,7 @@ public class ListIngresoCajasFragment extends Fragment {
                 }else{
                     Toast.makeText(context, "No hay registros nuevos para subir", Toast.LENGTH_SHORT).show();
                 }
-
+                data.close();
             }
         });
     }

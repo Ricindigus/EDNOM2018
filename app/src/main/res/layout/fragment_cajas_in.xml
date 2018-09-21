@@ -13,12 +13,33 @@
         android:gravity="center"
         android:theme="@style/estilo_titulo_fragment"
         android:text="INGRESO DE CAJAS AL LOCAL"/>
-    <TextView
-        android:id="@+id/ingreso_cajas_txtRegistrados"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/estilo_total_registrados"
-        android:text="Registrados:30/100"/>
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/ingreso_cajas_txtTotales"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:theme="@style/estilo_total_registrados"
+            android:text="Totales:30/100"/>
+        <TextView
+            android:id="@+id/ingreso_cajas_txtRegistrados"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:theme="@style/estilo_total_registrados"
+            android:text="Registrados:30/100"/>
+        <TextView
+            android:id="@+id/ingreso_cajas_txtTransferidos"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:theme="@style/estilo_total_registrados"
+            android:text="Transferidos:30/100"/>
+    </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

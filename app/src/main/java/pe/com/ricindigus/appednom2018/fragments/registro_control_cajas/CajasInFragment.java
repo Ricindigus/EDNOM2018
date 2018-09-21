@@ -36,7 +36,10 @@ public class CajasInFragment extends Fragment {
     TextView correctoTxtSede;
     TextView correctoTxtLocal;
 
+    TextView txtTotal;
     TextView txtRegistrados;
+    TextView txtTransferidos;
+
 
     TextView yaRegistradoTxtCodBarra;
     TextView yaRegistradoTxtAcl;
@@ -96,7 +99,10 @@ public class CajasInFragment extends Fragment {
         edtCodigo = (EditText) rootView.findViewById(R.id.ingreso_cajas_edtCodigo);
         btnBuscar = (ImageView) rootView.findViewById(R.id.ingreso_cajas_btnBuscar);
 
+        txtTotal = (TextView) rootView.findViewById(R.id.ingreso_cajas_txtTotales);
         txtRegistrados = (TextView) rootView.findViewById(R.id.ingreso_cajas_txtRegistrados);
+        txtTransferidos = (TextView) rootView.findViewById(R.id.ingreso_cajas_txtTransferidos);
+
         return rootView;
     }
 
@@ -105,7 +111,10 @@ public class CajasInFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Data data =  new Data(context);
         data.open();
-        txtRegistrados.setText("Registrados: " + data.getNroCajasEntradaCompletas(numeroLocal)+"/"+data.getNroCajasTotales(numeroLocal));
+        txtRegistrados.setText("Total: " +data.getNroCajasTotales(numeroLocal));
+        txtRegistrados.setText("Registrados: " + data.getNroCajasEntradaLeidas(numeroLocal));
+        txtTransferidos.setText("Transferidos: " + data.getNroCajasEntradaTransferidos(numeroLocal));
+
         data.close();
         btnBuscar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -168,7 +177,7 @@ public class CajasInFragment extends Fragment {
                 if (cajaIn.getTipo() == 3) contentValues.put(SQLConstantes.cajasreg_estado_entrada,2);
                 else contentValues.put(SQLConstantes.cajasreg_estado_entrada,cajaIn.getEstado_entrada() + 1);
                 data.actualizarCajaReg(codigoBarra,contentValues);
-                txtRegistrados.setText("Registrados: " + data.getNroCajasEntradaCompletas(numeroLocal)+"/"+data.getNroCajasTotales(numeroLocal));
+                txtRegistrados.setText("Registrados: " + data.getNroCajasEntradaLeidas(numeroLocal));
             }
 
             //Si es codigo "20" debe guardar en el otro codigo "10"
@@ -177,7 +186,7 @@ public class CajasInFragment extends Fragment {
                 contentValues = new ContentValues();
                 contentValues.put(SQLConstantes.cajasreg_estado_entrada,cajaIn1.getEstado_entrada() + 1);
                 data.actualizarCajaReg(cajaIn1.getCod_barra_caja(),contentValues);
-                txtRegistrados.setText("Registrados: " + data.getNroCajasEntradaCompletas(numeroLocal)+"/"+data.getNroCajasTotales(numeroLocal));
+                txtRegistrados.setText("Registrados: " + data.getNroCajasEntradaLeidas(numeroLocal));
             }
             data.close();
             mostrarCorrecto(cajaIn.getCod_barra_caja(), cajaIn.getAcl(), cajaIn.getNom_sede(), cajaIn.getNom_local());

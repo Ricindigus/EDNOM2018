@@ -725,6 +725,40 @@ public class Data {
         return numero;
     }
 
+    public int getNroCajasEntradaLeidas(int nroLocal){
+        int numero = 0;
+        String[] whereArgs = new String[]{String.valueOf(nroLocal),"1","1"};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablacajasreg, null,
+                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL +" AND " +
+                            SQLConstantes.WHERE_CLAUSE_NRO_LADO+" AND " +
+                            "estado_entrada>?",whereArgs,null,null,null);
+
+            if (cursor != null) numero = cursor.getCount();
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return numero;
+    }
+
+    public int getNroCajasSalidaLeidas(int nroLocal){
+        int numero = 0;
+        String[] whereArgs = new String[]{String.valueOf(nroLocal),"1","1"};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablacajasreg, null,
+                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL +" AND " +
+                            SQLConstantes.WHERE_CLAUSE_NRO_LADO+" AND " +
+                            "estado_salida>?",whereArgs,null,null,null);
+
+            if (cursor != null) numero = cursor.getCount();
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return numero;
+    }
+
     public int getNroCajasEntradaTransferidos(int nroLocal){
         int numero = 0;
         String[] whereArgs = new String[]{String.valueOf(nroLocal),"1","3"};
@@ -758,7 +792,7 @@ public class Data {
         return numero;
     }
 
-    public int getNroCajaEntradaxTipo(int nroLocal, int tipo){
+    public int getNroCajasEntradaLeidasxTipo(int nroLocal, int tipo){
         int cantidad = 0;
         String[] whereArgs = new String[]{String.valueOf(nroLocal), String.valueOf(tipo),"1","1"};
         Cursor cursor = null;
@@ -774,7 +808,7 @@ public class Data {
         }
         return cantidad;
     }
-    public int getNroCajaSalidaxTipo(int nroLocal, int tipo){
+    public int getNroCajasSalidaLeidasxTipo(int nroLocal, int tipo){
         int cantidad = 0;
         String[] whereArgs = new String[]{String.valueOf(nroLocal), String.valueOf(tipo),"1","1"};
         Cursor cursor = null;
@@ -1696,7 +1730,7 @@ public class Data {
         String[] whereArgs = new String[]{codPagina};
         Cursor cursor = null;
         try{
-            cursor = sqLiteDatabase.query(SQLConstantes.tablaasistencia, null, SQLConstantes.WHERE_CLAUSE_COD_PAGINA,whereArgs,null,null,null);
+            cursor = sqLiteDatabase.query(SQLConstantes.tablainventario, null, SQLConstantes.WHERE_CLAUSE_COD_PAGINA,whereArgs,null,null,null);
             if(cursor!= null) nroPostulantes = cursor.getCount();
         }finally{
             if(cursor != null) cursor.close();

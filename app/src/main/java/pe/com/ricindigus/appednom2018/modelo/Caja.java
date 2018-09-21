@@ -1,5 +1,8 @@
 package pe.com.ricindigus.appednom2018.modelo;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Caja {
     private String _id;
     private String cod_barra_caja;

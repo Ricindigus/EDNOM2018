@@ -148,7 +148,7 @@ public class SQLConstantes {
     public static String cajasreg_tipo = "tipo";
     public static String cajasreg_nlado = "nlado";
     public static String cajasreg_acl = "acl";
-    public static String cajasreg_direccion = "acl";
+    public static String cajasreg_direccion = "direccion";
     public static String cajasreg_dia_entrada = "dia_entrada";
     public static String cajasreg_mes_entrada = "mes_entrada";
     public static String cajasreg_anio_entrada = "anio_entrada";
