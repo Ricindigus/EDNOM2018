@@ -51,6 +51,11 @@ public class ListAsisAulaFragment extends Fragment {
     AsistenciaAulaAdapter asistenciaAulaAdapter;
     boolean b = false;
 
+    TextView txtTotal;
+    TextView txtSinRegistro;
+    TextView txtRegistrados;
+    TextView txtTransferidos;
+
     public ListAsisAulaFragment() {
         // Required empty public constructor
     }
@@ -70,6 +75,10 @@ public class ListAsisAulaFragment extends Fragment {
         spAulas = (Spinner) rootView.findViewById(R.id.asistencia_aula_spAula);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.listado_recycler);
         fabUpLoad = (FloatingActionButton) rootView.findViewById(R.id.listado_btnUpload);
+        txtTotal = (TextView) rootView.findViewById(R.id.lista_txtTotales);
+        txtSinRegistro = (TextView) rootView.findViewById(R.id.lista_txtSinRegistro);
+        txtRegistrados = (TextView) rootView.findViewById(R.id.lista_txtRegistrados);
+        txtTransferidos = (TextView) rootView.findViewById(R.id.lista_txtTransferidos);
         return rootView;
     }
 
@@ -96,6 +105,15 @@ public class ListAsisAulaFragment extends Fragment {
                 cargaData();
                 asistenciaAulaAdapter = new AsistenciaAulaAdapter(asistenciaAulas,context);
                 recyclerView.setAdapter(asistenciaAulaAdapter);
+                Data d = new Data(context);
+                d.open();
+                String aula = spAulas.getSelectedItem().toString();
+                int nroAula = d.getNumeroAula(aula,nroLocal);
+                txtTotal.setText("Total: " + asistenciaAulas.size());
+                txtSinRegistro.setText("Sin Registro: " + d.getNroAsistenciasAulaSinRegistro(nroLocal,nroAula));
+                txtRegistrados.setText("Registrados: " + d.getNroAsistenciasAulaLeidas(nroLocal,nroAula));
+                txtTransferidos.setText("Transferidos: " + d.getNroAsistenciasAulaTransferidos(nroLocal,nroAula));
+                d.close();
             }
 
             @Override
@@ -164,11 +182,13 @@ public class ListAsisAulaFragment extends Fragment {
         asistenciaAulas = new ArrayList<AsistenciaReg>();
         Data d = new Data(context);
         d.open();
-        int seleccion = spAulas.getSelectedItemPosition();
         String aula = spAulas.getSelectedItem().toString();
-        int nroAula = 0;
-        nroAula = d.getNumeroAula(aula,nroLocal);
+        int nroAula = d.getNumeroAula(aula,nroLocal);
         asistenciaAulas = d.getListadoAsistenciaAula(nroLocal,nroAula);
+        txtTotal.setText("Total: " + asistenciaAulas.size());
+        txtSinRegistro.setText("Sin Registro: " + d.getNroAsistenciasAulaSinRegistro(nroLocal,nroAula));
+        txtRegistrados.setText("Registrados: " + d.getNroAsistenciasAulaLeidas(nroLocal,nroAula));
+        txtTransferidos.setText("Transferidos: " + d.getNroAsistenciasAulaTransferidos(nroLocal,nroAula));
         d.close();
     }
     public String checkDigito (int number) {

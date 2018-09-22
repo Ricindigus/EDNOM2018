@@ -895,14 +895,14 @@ public class Data {
     public void actualizarAsistenciaRegLocalSubido(String dni){
         String[] whereArgs = new String[]{dni};
         ContentValues contentValues = new ContentValues();
-        contentValues.put(SQLConstantes.asistenciareg_estado_local,3);
+        contentValues.put(SQLConstantes.asistenciareg_estado_local,2);
         sqLiteDatabase.update(SQLConstantes.tablaasistenciasreg,contentValues,SQLConstantes.WHERE_CLAUSE_DNI,whereArgs);
     }
 
     public void actualizarAsistenciaRegAulaSubido(String dni){
         String[] whereArgs = new String[]{dni};
         ContentValues contentValues = new ContentValues();
-        contentValues.put(SQLConstantes.asistenciareg_estado_aula,3);
+        contentValues.put(SQLConstantes.asistenciareg_estado_aula,2);
         sqLiteDatabase.update(SQLConstantes.tablaasistenciasreg,contentValues,SQLConstantes.WHERE_CLAUSE_DNI,whereArgs);
     }
     public AsistenciaReg getAsistenciaReg(String dni){
@@ -1125,6 +1125,21 @@ public class Data {
         return numero;
     }
 
+    public int getNroAsistenciasLocalLeidas(int idLocal){
+        int numero = 0;
+        String[] whereArgs = new String[]{String.valueOf(idLocal),"0"};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablaasistenciasreg,
+                    null,SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
+                            "estado_local>?",whereArgs,null,null,null);
+            if (cursor != null) numero = cursor.getCount();
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return numero;
+    }
+
     public ArrayList<AsistenciaReg> getAsistenciasAulaSinEnviar(int idLocal,int nroAula){
         ArrayList<AsistenciaReg> asistenciaRegs = new ArrayList<>();
         String[] whereArgs = new String[]{String.valueOf(idLocal),String.valueOf(nroAula),"1"};
@@ -1184,6 +1199,22 @@ public class Data {
         return numero;
     }
 
+    public int getNroAsistenciasAulaLeidas(int idLocal,int nroAula){
+        int numero = 0;
+        String[] whereArgs = new String[]{String.valueOf(idLocal),String.valueOf(nroAula),"0"};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablaasistenciasreg,
+                    null,SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
+                            SQLConstantes.WHERE_CLAUSE_NRO_AULA + " AND " +
+                            "estado_aula>?",whereArgs,null,null,null);
+            if (cursor != null) numero =  cursor.getCount();
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return numero;
+    }
+
     public int getNroAsistenciasAulaTotales(int idLocal,int nroAula){
         int numero = 0;
         String[] whereArgs = new String[]{String.valueOf(idLocal),String.valueOf(nroAula)};
@@ -1192,6 +1223,68 @@ public class Data {
             cursor = sqLiteDatabase.query(SQLConstantes.tablaasistenciasreg,
                     null,SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
                             SQLConstantes.WHERE_CLAUSE_NRO_AULA ,whereArgs,null,null,null);
+            if (cursor != null) numero =  cursor.getCount();
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return numero;
+    }
+
+    public int getNroAsistenciasLocalSinRegistro(int idLocal){
+        int numero = 0;
+        String[] whereArgs = new String[]{String.valueOf(idLocal),"0"};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablaasistenciasreg,
+                    null,SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
+                            SQLConstantes.WHERE_CLAUSE_ESTADO_LOCAL ,whereArgs,null,null,null);
+            if (cursor != null) numero =  cursor.getCount();
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return numero;
+    }
+
+    public int getNroAsistenciasAulaSinRegistro(int idLocal,int nroAula){
+        int numero = 0;
+        String[] whereArgs = new String[]{String.valueOf(idLocal),String.valueOf(nroAula),"0"};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablaasistenciasreg,
+                    null,SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
+                            SQLConstantes.WHERE_CLAUSE_NRO_AULA + " AND " +
+                            SQLConstantes.WHERE_CLAUSE_ESTADO_AULA,whereArgs,null,null,null);
+            if (cursor != null) numero =  cursor.getCount();
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return numero;
+    }
+
+    public int getNroAsistenciasLocalTransferidos(int idLocal){
+        int numero = 0;
+        String[] whereArgs = new String[]{String.valueOf(idLocal),"2"};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablaasistenciasreg,
+                    null,SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
+                            SQLConstantes.WHERE_CLAUSE_ESTADO_LOCAL ,whereArgs,null,null,null);
+            if (cursor != null) numero =  cursor.getCount();
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return numero;
+    }
+
+    public int getNroAsistenciasAulaTransferidos(int idLocal,int nroAula){
+        int numero = 0;
+        String[] whereArgs = new String[]{String.valueOf(idLocal),String.valueOf(nroAula),"2"};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablaasistenciasreg,
+                    null,SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
+                            SQLConstantes.WHERE_CLAUSE_NRO_AULA + " AND " +
+                            SQLConstantes.WHERE_CLAUSE_ESTADO_AULA,whereArgs,null,null,null);
             if (cursor != null) numero =  cursor.getCount();
         }finally{
             if(cursor != null) cursor.close();

@@ -13,12 +13,41 @@
         android:gravity="center"
         android:theme="@style/estilo_titulo_fragment"
         android:text="REGISTRO DE ASISTENCIA AL LOCAL"/>
-    <TextView
-        android:id="@+id/asistencia_local_txtRegistrados"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/estilo_total_registrados"
-        android:text="Registrados:30/100"/>
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:id="@+id/asistencia_local_txtTotal"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:theme="@style/estilo_total_registrados"
+            android:text="Registrados:30/100"/>
+        <TextView
+            android:id="@+id/asistencia_local_txtFaltan"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:theme="@style/estilo_total_registrados"
+            android:text="Faltan:30/100"/>
+        <TextView
+            android:id="@+id/asistencia_local_txtRegistrados"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:theme="@style/estilo_total_registrados"
+            android:text="Registrados:30/100"/>
+        <TextView
+            android:id="@+id/asistencia_local_txtTransferidos"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:theme="@style/estilo_total_registrados"
+            android:text="Registrados:30/100"/>
+    </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

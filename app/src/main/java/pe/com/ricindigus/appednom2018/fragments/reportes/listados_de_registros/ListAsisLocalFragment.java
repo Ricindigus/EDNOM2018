@@ -48,6 +48,12 @@ public class ListAsisLocalFragment extends Fragment {
     AsistenciaLocalAdapter asistenciaLocalAdapter;
     boolean b = false;
 
+    TextView txtTotal;
+    TextView txtSinRegistro;
+    TextView txtRegistrados;
+    TextView txtTransferidos;
+
+
     public ListAsisLocalFragment() {
         // Required empty public constructor
     }
@@ -66,13 +72,16 @@ public class ListAsisLocalFragment extends Fragment {
         View rootView =  inflater.inflate(R.layout.fragment_list_asis_local, container, false);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.listado_recycler);
         fabUpLoad = (FloatingActionButton) rootView.findViewById(R.id.listado_btnUpload);
+        txtTotal = (TextView) rootView.findViewById(R.id.lista_txtTotales);
+        txtSinRegistro = (TextView) rootView.findViewById(R.id.lista_txtSinRegistro);
+        txtRegistrados = (TextView) rootView.findViewById(R.id.lista_txtRegistrados);
+        txtTransferidos = (TextView) rootView.findViewById(R.id.lista_txtTransferidos);
         return rootView;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);
         cargaData();
@@ -138,6 +147,10 @@ public class ListAsisLocalFragment extends Fragment {
         Data data = new Data(context);
         data.open();
         asistenciaLocals = data.getListadoAsistenciaLocal(nroLocal);
+        txtTotal.setText("Total: " + asistenciaLocals.size());
+        txtSinRegistro.setText("Sin Registro: " + data.getNroAsistenciasLocalSinRegistro(nroLocal));
+        txtRegistrados.setText("Registrados: " + data.getNroAsistenciasLocalLeidas(nroLocal));
+        txtTransferidos.setText("Transferidos: " + data.getNroAsistenciasLocalTransferidos(nroLocal));
         data.close();
     }
 

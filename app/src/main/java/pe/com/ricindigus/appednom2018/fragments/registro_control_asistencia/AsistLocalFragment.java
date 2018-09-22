@@ -62,7 +62,10 @@ public class AsistLocalFragment extends Fragment {
     LinearLayout lytYaRegistrado;
     LinearLayout lytErrorDni;
 
-    TextView txtxRegistrados;
+    TextView txtRegistrados;
+    TextView txtFaltan;
+    TextView txtTotal;
+    TextView txtTransferidos;
 
     EditText edtDni;
     ImageView btnBuscar;
@@ -108,7 +111,11 @@ public class AsistLocalFragment extends Fragment {
         lytYaRegistrado = (LinearLayout) rootView.findViewById(R.id.asistencia_local_lytYaRegistrado);
         lytErrorDni = (LinearLayout) rootView.findViewById(R.id.asistencia_local_ErrorDni);
 
-        txtxRegistrados = (TextView) rootView.findViewById(R.id.asistencia_local_txtRegistrados);
+        txtTotal = (TextView) rootView.findViewById(R.id.asistencia_local_txtTotal);
+        txtFaltan = (TextView) rootView.findViewById(R.id.asistencia_local_txtFaltan);
+        txtRegistrados = (TextView) rootView.findViewById(R.id.asistencia_local_txtRegistrados);
+        txtTransferidos = (TextView) rootView.findViewById(R.id.asistencia_local_txtTransferidos);
+
 
         edtDni = (EditText) rootView.findViewById(R.id.asistencia_local_edtCodigo);
         btnBuscar = (ImageView) rootView.findViewById(R.id.asistencia_local_btnBuscar);
@@ -121,7 +128,10 @@ public class AsistLocalFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Data data =  new Data(context);
         data.open();
-        txtxRegistrados.setText("Registrados: " + data.getNroAsistenciasLocalRegistradas(nroLocal)+"/"+data.getNumeroItemsAsistenciaReg());
+        txtTotal.setText("Total: " + data.getNumeroItemsAsistenciaReg());
+        txtFaltan.setText("Faltan: " + data.getNroAsistenciasLocalSinRegistro(nroLocal));
+        txtRegistrados.setText("Leidos: " + data.getNroAsistenciasLocalLeidas(nroLocal));
+        txtTransferidos.setText("Transferidos: " + data.getNroAsistenciasLocalTransferidos(nroLocal));
         data.close();
         btnBuscar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -175,7 +185,9 @@ public class AsistLocalFragment extends Fragment {
         contentValues.put(SQLConstantes.asistenciareg_seg_local,seg);
         contentValues.put(SQLConstantes.asistenciareg_estado_local,1);
         data.actualizarAsistenciaReg(asistenciaReg.getDni(),contentValues);
-        txtxRegistrados.setText("Registrados: " + data.getNroAsistenciasLocalRegistradas(nroLocal)+"/"+data.getNumeroItemsAsistenciaReg());
+        txtFaltan.setText("Faltan: " + data.getNroAsistenciasLocalSinRegistro(nroLocal));
+        txtRegistrados.setText("Leidos: " + data.getNroAsistenciasLocalLeidas(nroLocal));
+
         AsistenciaReg asis = data.getAsistenciaReg(asistenciaReg.getDni());
         data.close();
         mostrarCorrecto(asis.getDni(),asis.getNombres() +" "+ asis.getApe_paterno() +" "+ asis.getApe_materno(),asis.getNom_sede(),asis.getNom_local(),asis.getNaula());
@@ -183,7 +195,6 @@ public class AsistLocalFragment extends Fragment {
         WriteBatch batch = FirebaseFirestore.getInstance().batch();
         DocumentReference documentReference = FirebaseFirestore.getInstance().collection("asistencia").document(asis.getDni());
         batch.update(documentReference, "check_registro_local", 1);
-        batch.update(documentReference, "estado_local", asis.getEstado_local());
         batch.update(documentReference, "fecha_transferencia_local", FieldValue.serverTimestamp());
         batch.update(documentReference, "usuario_registro_local", usuario);
         batch.update(documentReference, "fecha_registro_local", new Timestamp(
@@ -195,6 +206,7 @@ public class AsistLocalFragment extends Fragment {
                 Data data = new Data(context);
                 data.open();
                 data.actualizarAsistenciaRegLocalSubido(c);
+                txtTransferidos.setText("Transferidos: " + data.getNroAsistenciasLocalTransferidos(nroLocal));
                 data.close();
             }
         }).addOnFailureListener(new OnFailureListener() {
