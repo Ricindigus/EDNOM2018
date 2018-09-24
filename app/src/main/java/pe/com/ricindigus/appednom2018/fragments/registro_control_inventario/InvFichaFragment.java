@@ -35,6 +35,7 @@ import java.util.Date;
 
 import pe.com.ricindigus.appednom2018.R;
 import pe.com.ricindigus.appednom2018.modelo.Data;
+import pe.com.ricindigus.appednom2018.modelo.Inventario;
 import pe.com.ricindigus.appednom2018.modelo.InventarioReg;
 import pe.com.ricindigus.appednom2018.modelo.SQLConstantes;
 
@@ -69,7 +70,10 @@ public class InvFichaFragment extends Fragment {
     LinearLayout lytYaRegistrado;
     LinearLayout lytErrorFicha;
 
+    TextView txtTotal;
+    TextView txtFaltan;
     TextView txtRegistrados;
+    TextView txtTransferidos;
 
     public InvFichaFragment() {
         // Required empty public constructor
@@ -112,7 +116,11 @@ public class InvFichaFragment extends Fragment {
         lytYaRegistrado = (LinearLayout) rootView.findViewById(R.id.inventario_ficha_lytYaRegistrado);
         lytErrorFicha = (LinearLayout) rootView.findViewById(R.id.inventario_ficha_lytErrorFicha);
 
+        txtTotal = (TextView) rootView.findViewById(R.id.inventario_ficha_txtTotal);
         txtRegistrados = (TextView) rootView.findViewById(R.id.inventario_ficha_txtRegistrados);
+        txtFaltan = (TextView) rootView.findViewById(R.id.inventario_ficha_txtFaltan);
+        txtTransferidos = (TextView) rootView.findViewById(R.id.inventario_ficha_txtTransferidos);
+
         return rootView;
     }
 
@@ -126,9 +134,6 @@ public class InvFichaFragment extends Fragment {
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, aulas);
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spAulas.setAdapter(dataAdapter);
-            String aula = spAulas.getSelectedItem().toString();
-            int nroAula = data.getNumeroAula(aula,nroLocal);
-            txtRegistrados.setText("Registrados: " + data.getNroFichasRegistradas(nroLocal,nroAula)+"/"+data.getNroFichasTotales(nroLocal,nroAula));
             data.close();
         }
 
@@ -139,7 +144,14 @@ public class InvFichaFragment extends Fragment {
                 data.open();
                 String aula = spAulas.getSelectedItem().toString();
                 int nroAula = data.getNumeroAula(aula,nroLocal);
-                txtRegistrados.setText("Registrados: " + data.getNroFichasRegistradas(nroLocal,nroAula)+"/"+data.getNroFichasTotales(nroLocal,nroAula));
+                txtTotal.setText("Total: " + data.getNroFichasTotales(nroLocal, nroAula));
+                txtFaltan.setText("Faltan: " + data.getNroFichasFaltan(nroLocal,nroAula));
+                txtRegistrados.setText("Registrados: " + data.getNroFichasRegistradas(nroLocal,nroAula));
+                txtTransferidos.setText("Transferidos: " + data.getNroFichasTransferidas(nroLocal,nroAula));
+                lytCorrecto.setVisibility(View.GONE);
+                lytErrorFicha.setVisibility(View.GONE);
+                lytYaRegistrado.setVisibility(View.GONE);
+                lytErrorFichaAula.setVisibility(View.GONE);
                 data.close();
             }
 
@@ -162,12 +174,16 @@ public class InvFichaFragment extends Fragment {
         String codigoInventario = edtFicha.getText().toString();
         Data data = new Data(context);
         data.open();
-        InventarioReg inventarioReg = data.getInventarioReg(codigoInventario,1);
+        InventarioReg inventarioReg = data.getFichaReg(codigoInventario);
         String aula = spAulas.getSelectedItem().toString();
         int nroAula = 0;
         nroAula = data.getNumeroAula(aula,nroLocal);
         if(inventarioReg == null){
-            mostrarErrorCodigo(codigoInventario);
+            Inventario fichaPadron = data.getFicha(codigoInventario);
+            if (fichaPadron == null) mostrarErrorCodigo(codigoInventario);
+            else mostrarErrorAula(fichaPadron.getDni(),
+                    fichaPadron.getNombres() +" "+ fichaPadron.getApe_paterno() +" "+ fichaPadron.getApe_materno(),
+                    "" + fichaPadron.getNaula());
         }else{
             if(inventarioReg.getNaula() == nroAula){
                 if(inventarioReg.getEstado() == 0) registrarInventario(inventarioReg.getCodigo());
@@ -203,9 +219,10 @@ public class InvFichaFragment extends Fragment {
         contentValues.put(SQLConstantes.inventarioreg_min,minuto);
         contentValues.put(SQLConstantes.inventarioreg_seg,seg);
         contentValues.put(SQLConstantes.inventarioreg_estado,1);
-        data.actualizarInventarioReg(codInventario,1,contentValues);
-        InventarioReg inventarioReg = data.getInventarioReg(codInventario,1);
-        txtRegistrados.setText("Registrados: " + data.getNroFichasRegistradas(nroLocal,inventarioReg.getNaula())+"/"+data.getNroFichasTotales(nroLocal,inventarioReg.getNaula()));
+        data.actualizarFichaReg(codInventario,contentValues);
+        InventarioReg inventarioReg = data.getFichaReg(codInventario);
+        txtFaltan.setText("Faltan: " + data.getNroFichasFaltan(nroLocal,inventarioReg.getNaula()));
+        txtRegistrados.setText("Registrados: " + data.getNroFichasRegistradas(nroLocal,inventarioReg.getNaula()));
         data.close();
         mostrarCorrecto(inventarioReg.getDni(),inventarioReg.getNombres() +" "+ inventarioReg.getApe_paterno() +" "+ inventarioReg.getApe_materno(),inventarioReg.getCodigo());
         final String c = inventarioReg.getCodigo();
@@ -222,7 +239,7 @@ public class InvFichaFragment extends Fragment {
             public void onSuccess(Void aVoid) {
                 Data data = new Data(context);
                 data.open();
-                data.actualizarInventarioRegSubido(c,1);
+                data.actualizarFichaRegSubido(c);
                 data.close();
             }
         }).addOnFailureListener(new OnFailureListener() {

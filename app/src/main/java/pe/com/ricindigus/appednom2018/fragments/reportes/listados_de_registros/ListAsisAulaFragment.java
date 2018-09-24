@@ -41,6 +41,7 @@ import pe.com.ricindigus.appednom2018.modelo.Data;
 public class ListAsisAulaFragment extends Fragment {
     Context context;
     int nroLocal;
+    int nroAula;
     Spinner spAulas;
     RecyclerView recyclerView;
     String usuario;
@@ -108,7 +109,7 @@ public class ListAsisAulaFragment extends Fragment {
                 Data d = new Data(context);
                 d.open();
                 String aula = spAulas.getSelectedItem().toString();
-                int nroAula = d.getNumeroAula(aula,nroLocal);
+                nroAula = d.getNumeroAula(aula,nroLocal);
                 txtTotal.setText("Total: " + asistenciaAulas.size());
                 txtSinRegistro.setText("Sin Registro: " + d.getNroAsistenciasAulaSinRegistro(nroLocal,nroAula));
                 txtRegistrados.setText("Registrados: " + d.getNroAsistenciasAulaLeidas(nroLocal,nroAula));
@@ -129,10 +130,8 @@ public class ListAsisAulaFragment extends Fragment {
                 noEnviados = new ArrayList<>();
                 data = new Data(context);
                 data.open();
-                int seleccion = spAulas.getSelectedItemPosition();
                 String aula = spAulas.getSelectedItem().toString();
-                int nroAula = 0;
-                if(seleccion > 0) nroAula = data.getNumeroAula(aula,nroLocal);
+                nroAula = data.getNumeroAula(aula,nroLocal);
                 noEnviados = data.getAsistenciasAulaSinEnviar(nroLocal,nroAula);
                 data.close();
                 if(noEnviados.size() > 0){
@@ -156,13 +155,13 @@ public class ListAsisAulaFragment extends Fragment {
                                 Data data = new Data(context);
                                 data.open();
                                 data.actualizarAsistenciaRegAulaSubido(c);
-                                data.close();
                                 if (j == total) {
                                     Toast.makeText(context, total + " registros subidos", Toast.LENGTH_SHORT).show();
                                     cargaData();
                                     asistenciaAulaAdapter = new AsistenciaAulaAdapter(asistenciaAulas,context);
                                     recyclerView.setAdapter(asistenciaAulaAdapter);
                                 }
+                                data.close();
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override

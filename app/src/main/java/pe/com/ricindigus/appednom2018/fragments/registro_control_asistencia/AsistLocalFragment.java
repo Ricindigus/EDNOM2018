@@ -112,7 +112,7 @@ public class AsistLocalFragment extends Fragment {
         lytErrorDni = (LinearLayout) rootView.findViewById(R.id.asistencia_local_ErrorDni);
 
         txtTotal = (TextView) rootView.findViewById(R.id.asistencia_local_txtTotal);
-        txtFaltan = (TextView) rootView.findViewById(R.id.asistencia_local_txtFaltan);
+//        txtFaltan = (TextView) rootView.findViewById(R.id.asistencia_local_txtFaltan);
         txtRegistrados = (TextView) rootView.findViewById(R.id.asistencia_local_txtRegistrados);
         txtTransferidos = (TextView) rootView.findViewById(R.id.asistencia_local_txtTransferidos);
 
@@ -129,7 +129,7 @@ public class AsistLocalFragment extends Fragment {
         Data data =  new Data(context);
         data.open();
         txtTotal.setText("Total: " + data.getNumeroItemsAsistenciaReg());
-        txtFaltan.setText("Faltan: " + data.getNroAsistenciasLocalSinRegistro(nroLocal));
+//        txtFaltan.setText("Faltan: " + data.getNroAsistenciasLocalSinRegistro(nroLocal));
         txtRegistrados.setText("Leidos: " + data.getNroAsistenciasLocalLeidas(nroLocal));
         txtTransferidos.setText("Transferidos: " + data.getNroAsistenciasLocalTransferidos(nroLocal));
         data.close();
@@ -185,7 +185,7 @@ public class AsistLocalFragment extends Fragment {
         contentValues.put(SQLConstantes.asistenciareg_seg_local,seg);
         contentValues.put(SQLConstantes.asistenciareg_estado_local,1);
         data.actualizarAsistenciaReg(asistenciaReg.getDni(),contentValues);
-        txtFaltan.setText("Faltan: " + data.getNroAsistenciasLocalSinRegistro(nroLocal));
+//        txtFaltan.setText("Faltan: " + data.getNroAsistenciasLocalSinRegistro(nroLocal));
         txtRegistrados.setText("Leidos: " + data.getNroAsistenciasLocalLeidas(nroLocal));
 
         AsistenciaReg asis = data.getAsistenciaReg(asistenciaReg.getDni());

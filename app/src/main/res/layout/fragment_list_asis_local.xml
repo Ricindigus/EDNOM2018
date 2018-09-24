@@ -33,23 +33,25 @@
                 android:textColor="@color/greyBluePrimary"
                 android:layout_height="wrap_content"
                 android:text="Totales:"
+                android:gravity="center"
                 />
-            <TextView
-                android:id="@+id/lista_txtSinRegistro"
-                android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:textStyle="bold"
-                android:textSize="@dimen/texto_medio"
-                android:textColor="@color/redPrimary"
-                android:text="Sin registro:"
-                />
+            <!--<TextView-->
+                <!--android:id="@+id/lista_txtSinRegistro"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_weight="1"-->
+                <!--android:textStyle="bold"-->
+                <!--android:textSize="@dimen/texto_medio"-->
+                <!--android:textColor="@color/redPrimary"-->
+                <!--android:text="Sin registro:"-->
+                <!--/>-->
             <TextView
                 android:id="@+id/lista_txtRegistrados"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:textStyle="bold"
                 android:textSize="@dimen/texto_medio"
+                android:gravity="center"
                 android:textColor="@color/amberPrimaryDark"
                 android:layout_height="wrap_content"
                 android:text="Registrados:"
@@ -60,6 +62,7 @@
                 android:layout_weight="1"
                 android:textStyle="bold"
                 android:textSize="@dimen/texto_medio"
+                android:gravity="center"
                 android:textColor="@color/greenPrimary"
                 android:layout_height="wrap_content"
                 android:text="Transferidos:"

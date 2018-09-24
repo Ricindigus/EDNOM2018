@@ -119,13 +119,13 @@ public class ListAsisLocalFragment extends Fragment {
                                 Data data = new Data(context);
                                 data.open();
                                 data.actualizarAsistenciaRegLocalSubido(c);
-                                data.close();
                                 if (j == total) {
                                     Toast.makeText(context, total + " registros subidos", Toast.LENGTH_SHORT).show();
                                     cargaData();
                                     asistenciaLocalAdapter = new AsistenciaLocalAdapter(asistenciaLocals,context);
                                     recyclerView.setAdapter(asistenciaLocalAdapter);
                                 }
+                                data.close();
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
@@ -147,9 +147,9 @@ public class ListAsisLocalFragment extends Fragment {
         Data data = new Data(context);
         data.open();
         asistenciaLocals = data.getListadoAsistenciaLocal(nroLocal);
-        txtTotal.setText("Total: " + asistenciaLocals.size());
-        txtSinRegistro.setText("Sin Registro: " + data.getNroAsistenciasLocalSinRegistro(nroLocal));
-        txtRegistrados.setText("Registrados: " + data.getNroAsistenciasLocalLeidas(nroLocal));
+        txtTotal.setText("Total: " + data.getNumeroItemsAsistenciaReg());
+//        txtSinRegistro.setText("Sin Registro: " + data.getNroAsistenciasLocalSinRegistro(nroLocal));
+        txtRegistrados.setText("Leídos: " + data.getNroAsistenciasLocalLeidas(nroLocal));
         txtTransferidos.setText("Transferidos: " + data.getNroAsistenciasLocalTransferidos(nroLocal));
         data.close();
     }

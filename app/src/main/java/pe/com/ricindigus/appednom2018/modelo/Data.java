@@ -52,7 +52,9 @@ public class Data {
                 sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_HISTORIAL_USUARIOS);
                 sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_CAJAS_REGISTRADAS);
                 sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_ASISTENCIAS_REGISTRADAS);
-                sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_INVENTARIOS_REGISTRADOS);
+                sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_FICHAS_REGISTRADAS);
+                sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_LISTADOS_REGISTRADOS);
+                sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_CUADERNILLOS_REGISTRADOS);
                 sqLiteDatabase.close();
             }catch (IOException e){
                 throw new Error("Error: copiando base de datos");
@@ -61,7 +63,7 @@ public class Data {
 
     }
 
-    @SuppressLint("NewApi")
+
     public void createDataBase(String inputPath) throws IOException {
         boolean dbExist = checkDataBase();
         if(dbExist){
@@ -77,7 +79,9 @@ public class Data {
             sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_HISTORIAL_USUARIOS);
             sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_CAJAS_REGISTRADAS);
             sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_ASISTENCIAS_REGISTRADAS);
-            sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_INVENTARIOS_REGISTRADOS);
+            sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_FICHAS_REGISTRADAS);
+            sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_LISTADOS_REGISTRADOS);
+            sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_CUADERNILLOS_REGISTRADOS);
             sqLiteDatabase.close();
         }catch (IOException e){
             throw new Error("Error: copiando base de datos");
@@ -988,11 +992,12 @@ public class Data {
 
     public ArrayList<AsistenciaReg> getListadoAsistenciaLocal(int idLocal){
         ArrayList<AsistenciaReg> asistenciaRegs = new ArrayList<>();
-        String[] whereArgs = new String[]{String.valueOf(idLocal)};
+        String[] whereArgs = new String[]{String.valueOf(idLocal),"0"};
         Cursor cursor = null;
         try{
             cursor = sqLiteDatabase.query(SQLConstantes.tablaasistenciasreg,
-                    null,SQLConstantes.WHERE_CLAUSE_ID_LOCAL,whereArgs,null,null,"estado_local ASC");
+                    null,SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND "
+                    + "estado_local>?",whereArgs,null,null,"estado_local ASC");
             while(cursor.moveToNext()){
                 AsistenciaReg asistenciaReg = new AsistenciaReg();
                 asistenciaReg = new AsistenciaReg();
@@ -1112,12 +1117,12 @@ public class Data {
 
     public int getNroAsistenciasLocalRegistradas(int idLocal){
         int numero = 0;
-        String[] whereArgs = new String[]{String.valueOf(idLocal),"1"};
+        String[] whereArgs = new String[]{String.valueOf(idLocal),"0"};
         Cursor cursor = null;
         try{
             cursor = sqLiteDatabase.query(SQLConstantes.tablaasistenciasreg,
                     null,SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
-                            SQLConstantes.WHERE_CLAUSE_ESTADO_LOCAL,whereArgs,null,null,null);
+                            "estado_local>?",whereArgs,null,null,null);
             if (cursor != null) numero = cursor.getCount();
         }finally{
             if(cursor != null) cursor.close();
@@ -1297,16 +1302,80 @@ public class Data {
 
 
     /**
-     * --------------------------------QUERYS INVENTARIO -----------------------------------
+     * --------------------------------QUERYS INVENTARIO: FICHAS, CUADERNILLOS, LISTADOS -----------------------------------
      * */
 
-    public Inventario getInventario(String codMaterial, int tipo){
+    //BUSCAR FICHAS, CUADERNILLOS, LISTADOS EN MARCO TOTAL
+    public Inventario getFicha(String codMaterial){
         Inventario inventario = null;
-        String[] whereArgs = new String[]{codMaterial, String.valueOf(tipo)};
+        String[] whereArgs = new String[]{codMaterial};
         Cursor cursor = null;
         try{
-            cursor = sqLiteDatabase.query(SQLConstantes.tablainventario, null,
-                    SQLConstantes.WHERE_CLAUSE_CODIGO + " AND " + SQLConstantes.WHERE_CLAUSE_TIPO_MATERIAL,whereArgs,null,null,null);
+            cursor = sqLiteDatabase.query(SQLConstantes.tablafichas, null, SQLConstantes.WHERE_CLAUSE_CODIGO,whereArgs,null,null,null);
+            if(cursor.getCount() == 1){
+                cursor.moveToFirst();
+                inventario = new Inventario();
+                inventario.setId(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_id)));
+                inventario.setCodigo(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_codigo)));
+                inventario.setTipo(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventario_tipo)));
+                inventario.setCcdd(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_ccdd)));
+                inventario.setDepartamento(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_departamento)));
+                inventario.setIdnacional(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventario_idnacional)));
+                inventario.setIdsede(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_idsede)));
+                inventario.setNom_sede(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_nom_sede)));
+                inventario.setIdlocal(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventario_idlocal)));
+                inventario.setNom_local(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_nom_local)));
+                inventario.setDni(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_dni)));
+                inventario.setApe_paterno(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_ape_paterno)));
+                inventario.setApe_materno(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_ape_materno)));
+                inventario.setNombres(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_nombres)));
+                inventario.setNaula(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventario_naula)));
+                inventario.setCodpagina(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_codpagina)));
+                inventario.setDireccion(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_direccion)));
+            }
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return inventario;
+    }
+    public Inventario getCuadernillo(String codMaterial){
+        Inventario inventario = null;
+        String[] whereArgs = new String[]{codMaterial};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablacuadernillos, null, SQLConstantes.WHERE_CLAUSE_CODIGO,whereArgs,null,null,null);
+            if(cursor.getCount() == 1){
+                cursor.moveToFirst();
+                inventario = new Inventario();
+                inventario.setId(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_id)));
+                inventario.setCodigo(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_codigo)));
+                inventario.setTipo(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventario_tipo)));
+                inventario.setCcdd(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_ccdd)));
+                inventario.setDepartamento(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_departamento)));
+                inventario.setIdnacional(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventario_idnacional)));
+                inventario.setIdsede(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_idsede)));
+                inventario.setNom_sede(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_nom_sede)));
+                inventario.setIdlocal(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventario_idlocal)));
+                inventario.setNom_local(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_nom_local)));
+                inventario.setDni(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_dni)));
+                inventario.setApe_paterno(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_ape_paterno)));
+                inventario.setApe_materno(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_ape_materno)));
+                inventario.setNombres(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_nombres)));
+                inventario.setNaula(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventario_naula)));
+                inventario.setCodpagina(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_codpagina)));
+                inventario.setDireccion(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_direccion)));
+            }
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return inventario;
+    }
+    public Inventario getListado(String codMaterial){
+        Inventario inventario = null;
+        String[] whereArgs = new String[]{codMaterial};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablalistados, null, SQLConstantes.WHERE_CLAUSE_CODIGO,whereArgs,null,null,null);
             if(cursor.getCount() == 1){
                 cursor.moveToFirst();
                 inventario = new Inventario();
@@ -1334,15 +1403,37 @@ public class Data {
         return inventario;
     }
 
-
-    
-    public int getNroInventariosIdLocal(int idLocal){
+    //NUMERO DE FICHAS , CUADERNILLOS, LISTADOS POR EL LOCAL EN EL MARCO TOTAL
+    public int getNroFichasIdLocal(int idLocal){
         int numero = 0;
         String[] whereArgs = new String[]{String.valueOf(idLocal)};
         Cursor cursor = null;
         try{
-            cursor = sqLiteDatabase.query(SQLConstantes.tablainventario,
-                    null,SQLConstantes.WHERE_CLAUSE_ID_LOCAL,whereArgs,null,null,null);
+            cursor = sqLiteDatabase.query(SQLConstantes.tablafichas, null,SQLConstantes.WHERE_CLAUSE_ID_LOCAL,whereArgs,null,null,null);
+            if(cursor!= null) numero =  cursor.getCount();
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return numero;
+    }
+    public int getNroCuadernillosIdLocal(int idLocal){
+        int numero = 0;
+        String[] whereArgs = new String[]{String.valueOf(idLocal)};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablacuadernillos, null,SQLConstantes.WHERE_CLAUSE_ID_LOCAL,whereArgs,null,null,null);
+            if(cursor!= null) numero =  cursor.getCount();
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return numero;
+    }
+    public int getNroListadosIdLocal(int idLocal){
+        int numero = 0;
+        String[] whereArgs = new String[]{String.valueOf(idLocal)};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablalistados, null,SQLConstantes.WHERE_CLAUSE_ID_LOCAL,whereArgs,null,null,null);
             if(cursor!= null) numero =  cursor.getCount();
         }finally{
             if(cursor != null) cursor.close();
@@ -1350,36 +1441,73 @@ public class Data {
         return numero;
     }
 
-    public long getNumeroItemsInventarioReg(){
-        return DatabaseUtils.queryNumEntries(sqLiteDatabase, SQLConstantes.tablainventariosreg);
+    //NUMERO DE ITEMS EN LAS TABLAS DE REGISTRO DE FICHAS, CUADERNILLOS Y LISTADOS
+    public long getNumeroItemsFichasReg(){
+        return DatabaseUtils.queryNumEntries(sqLiteDatabase, SQLConstantes.tablafichasreg);
+    }
+    public long getNumeroItemsCuadernillosReg(){
+        return DatabaseUtils.queryNumEntries(sqLiteDatabase, SQLConstantes.tablacuadernillosreg);
+    }
+    public long getNumeroItemsListadosReg(){
+        return DatabaseUtils.queryNumEntries(sqLiteDatabase, SQLConstantes.tablalistadosreg);
     }
 
-    public void insertarInventarioReg(InventarioReg inventarioReg){
+    //INSERT PARA LAS TABLAS DE REGISTRO DE FICHAS, CUADERNILLOS Y LISTADOS
+    public void insertarFichaReg(InventarioReg inventarioReg){
         ContentValues contentValues = inventarioReg.toValues();
-        sqLiteDatabase.insert(SQLConstantes.tablainventariosreg,null,contentValues);
+        sqLiteDatabase.insert(SQLConstantes.tablafichasreg,null,contentValues);
+    }
+    public void insertarCuadernilloReg(InventarioReg inventarioReg){
+        ContentValues contentValues = inventarioReg.toValues();
+        sqLiteDatabase.insert(SQLConstantes.tablacuadernillosreg,null,contentValues);
+    }
+    public void insertarListadoReg(InventarioReg inventarioReg){
+        ContentValues contentValues = inventarioReg.toValues();
+        sqLiteDatabase.insert(SQLConstantes.tablalistadosreg,null,contentValues);
     }
 
-    public void actualizarInventarioReg(String codigo, int tipo, ContentValues valores){
-        String[] whereArgs = new String[]{codigo,String.valueOf(tipo)};
-        sqLiteDatabase.update(SQLConstantes.tablainventariosreg,valores,
-                SQLConstantes.WHERE_CLAUSE_CODIGO + " AND " + SQLConstantes.WHERE_CLAUSE_TIPO_MATERIAL,whereArgs);
+    //ACTUALIZAR PARA LAS TABLAS DE REGISTRO DE FICHAS, CUADERNILLOS Y LISTADOS
+    public void actualizarFichaReg(String codigo, ContentValues valores){
+        String[] whereArgs = new String[]{codigo};
+        sqLiteDatabase.update(SQLConstantes.tablafichasreg,valores,SQLConstantes.WHERE_CLAUSE_CODIGO,whereArgs);
+    }
+    public void actualizarCuadernilloReg(String codigo, ContentValues valores){
+        String[] whereArgs = new String[]{codigo};
+        sqLiteDatabase.update(SQLConstantes.tablacuadernillosreg,valores,SQLConstantes.WHERE_CLAUSE_CODIGO,whereArgs);
+    }
+    public void actualizarListadoReg(String codigo, ContentValues valores){
+        String[] whereArgs = new String[]{codigo};
+        sqLiteDatabase.update(SQLConstantes.tablalistadosreg,valores,SQLConstantes.WHERE_CLAUSE_CODIGO,whereArgs);
     }
 
-    public void actualizarInventarioRegSubido(String codigo, int tipo){
+
+    //ACTUALIZAR TRANSFERIDO PARA LAS TABLAS DE REGISTRO DE FICHAS, CUADERNILLOS Y LISTADOS
+    public void actualizarFichaRegSubido(String codigo){
         ContentValues contentValues = new ContentValues();
         contentValues.put(SQLConstantes.inventarioreg_estado,2);
-        String[] whereArgs = new String[]{codigo,String.valueOf(tipo)};
-        sqLiteDatabase.update(SQLConstantes.tablainventariosreg,contentValues,
-                SQLConstantes.WHERE_CLAUSE_CODIGO + " AND " + SQLConstantes.WHERE_CLAUSE_TIPO_MATERIAL,whereArgs);
+        String[] whereArgs = new String[]{codigo};
+        sqLiteDatabase.update(SQLConstantes.tablafichasreg,contentValues,SQLConstantes.WHERE_CLAUSE_CODIGO,whereArgs);
+    }
+    public void actualizarCuadernilloRegSubido(String codigo){
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SQLConstantes.inventarioreg_estado,2);
+        String[] whereArgs = new String[]{codigo};
+        sqLiteDatabase.update(SQLConstantes.tablacuadernillosreg,contentValues,SQLConstantes.WHERE_CLAUSE_CODIGO,whereArgs);
+    }
+    public void actualizarListadoRegSubido(String codigo){
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SQLConstantes.inventarioreg_estado,2);
+        String[] whereArgs = new String[]{codigo};
+        sqLiteDatabase.update(SQLConstantes.tablalistadosreg,contentValues,SQLConstantes.WHERE_CLAUSE_CODIGO,whereArgs);
     }
 
-    public InventarioReg getInventarioReg(String codMaterial, int tipo){
+    //OBTENER FICHAS, CUADERNILLOS Y LISTADOS REGISTRADOS
+    public InventarioReg getFichaReg(String codMaterial){
         InventarioReg inventarioReg = null;
-        String[] whereArgs = new String[]{codMaterial, String.valueOf(tipo)};
+        String[] whereArgs = new String[]{codMaterial};
         Cursor cursor = null;
         try{
-            cursor = sqLiteDatabase.query(SQLConstantes.tablainventariosreg, null,
-                    SQLConstantes.WHERE_CLAUSE_CODIGO + " AND " + SQLConstantes.WHERE_CLAUSE_TIPO_MATERIAL,whereArgs,null,null,null);
+            cursor = sqLiteDatabase.query(SQLConstantes.tablafichasreg, null,SQLConstantes.WHERE_CLAUSE_CODIGO,whereArgs,null,null,null);
             if(cursor.getCount() == 1){
                 cursor.moveToFirst();
                 inventarioReg = new InventarioReg();
@@ -1415,13 +1543,99 @@ public class Data {
         }
         return inventarioReg;
     }
+
+    public InventarioReg getCuadernilloReg(String codMaterial){
+        InventarioReg inventarioReg = null;
+        String[] whereArgs = new String[]{codMaterial};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablacuadernillosreg, null,SQLConstantes.WHERE_CLAUSE_CODIGO,whereArgs,null,null,null);
+            if(cursor.getCount() == 1){
+                cursor.moveToFirst();
+                inventarioReg = new InventarioReg();
+                inventarioReg.setId(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_dni)));
+                inventarioReg.setCodigo(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_codigo)));
+                inventarioReg.setTipo(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_tipo)));
+                inventarioReg.setCcdd(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_ccdd)));
+                inventarioReg.setDepartamento(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_departamento)));
+                inventarioReg.setIdnacional(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_idnacional)));
+                inventarioReg.setIdsede(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_idsede)));
+                inventarioReg.setNom_sede(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_nom_sede)));
+                inventarioReg.setIdlocal(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_idlocal)));
+                inventarioReg.setNom_local(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_nom_local)));
+                inventarioReg.setDni(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_dni)));
+                inventarioReg.setApe_paterno(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_ape_paterno)));
+                inventarioReg.setApe_materno(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_ape_materno)));
+                inventarioReg.setNombres(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_nombres)));
+                inventarioReg.setNaula(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_naula)));
+                inventarioReg.setCodpagina(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_codpagina)));
+                inventarioReg.setDireccion(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_direccion)));
+                inventarioReg.setDia(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_dia)));
+                inventarioReg.setMes(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_mes)));
+                inventarioReg.setAnio(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_anio)));
+                inventarioReg.setHora(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_hora)));
+                inventarioReg.setMin(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_min)));
+                inventarioReg.setSeg(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_seg)));
+                inventarioReg.setEstado(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_estado)));
+                inventarioReg.setNpostulantes(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_npostulantes)));
+
+            }
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return inventarioReg;
+    }
+
+    public InventarioReg getListadoReg(String codMaterial){
+        InventarioReg inventarioReg = null;
+        String[] whereArgs = new String[]{codMaterial};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablalistadosreg, null,SQLConstantes.WHERE_CLAUSE_CODIGO,whereArgs,null,null,null);
+            if(cursor.getCount() == 1){
+                cursor.moveToFirst();
+                inventarioReg = new InventarioReg();
+                inventarioReg.setId(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_dni)));
+                inventarioReg.setCodigo(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_codigo)));
+                inventarioReg.setTipo(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_tipo)));
+                inventarioReg.setCcdd(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_ccdd)));
+                inventarioReg.setDepartamento(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_departamento)));
+                inventarioReg.setIdnacional(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_idnacional)));
+                inventarioReg.setIdsede(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_idsede)));
+                inventarioReg.setNom_sede(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_nom_sede)));
+                inventarioReg.setIdlocal(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_idlocal)));
+                inventarioReg.setNom_local(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_nom_local)));
+                inventarioReg.setDni(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_dni)));
+                inventarioReg.setApe_paterno(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_ape_paterno)));
+                inventarioReg.setApe_materno(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_ape_materno)));
+                inventarioReg.setNombres(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_nombres)));
+                inventarioReg.setNaula(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_naula)));
+                inventarioReg.setCodpagina(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_codpagina)));
+                inventarioReg.setDireccion(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_direccion)));
+                inventarioReg.setDia(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_dia)));
+                inventarioReg.setMes(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_mes)));
+                inventarioReg.setAnio(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_anio)));
+                inventarioReg.setHora(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_hora)));
+                inventarioReg.setMin(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_min)));
+                inventarioReg.setSeg(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_seg)));
+                inventarioReg.setEstado(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_estado)));
+                inventarioReg.setNpostulantes(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventarioreg_npostulantes)));
+
+            }
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return inventarioReg;
+    }
+
+    //FILTRAR MARCO INVENTARIO PARA FICHAS, CUADERNILLOS Y LISTADOS
     
-    public ArrayList<InventarioReg> filtrarMarcoInventario(int idLocal){
+    public ArrayList<InventarioReg> filtrarMarcoInventarioFichas(int idLocal){
         ArrayList<InventarioReg> inventarioRegs = new ArrayList<>();
         String[] whereArgs = new String[]{String.valueOf(idLocal)};
         Cursor cursor = null;
         try{
-            cursor = sqLiteDatabase.query(SQLConstantes.tablainventario, null,
+            cursor = sqLiteDatabase.query(SQLConstantes.tablafichas, null,
                     SQLConstantes.WHERE_CLAUSE_ID_LOCAL,whereArgs,null,null,null);
             while (cursor.moveToNext()){
                 InventarioReg inventarioReg = new InventarioReg();
@@ -1450,15 +1664,84 @@ public class Data {
         return inventarioRegs;
     }
 
+    public ArrayList<InventarioReg> filtrarMarcoInventarioCuadernillos(int idLocal){
+        ArrayList<InventarioReg> inventarioRegs = new ArrayList<>();
+        String[] whereArgs = new String[]{String.valueOf(idLocal)};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablacuadernillos, null,
+                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL,whereArgs,null,null,null);
+            while (cursor.moveToNext()){
+                InventarioReg inventarioReg = new InventarioReg();
+                inventarioReg.setId(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_id)));
+                inventarioReg.setCodigo(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_codigo)));
+                inventarioReg.setTipo(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventario_tipo)));
+                inventarioReg.setCcdd(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_ccdd)));
+                inventarioReg.setDepartamento(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_departamento)));
+                inventarioReg.setIdnacional(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventario_idnacional)));
+                inventarioReg.setIdsede(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_idsede)));
+                inventarioReg.setNom_sede(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_nom_sede)));
+                inventarioReg.setIdlocal(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventario_idlocal)));
+                inventarioReg.setNom_local(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_nom_local)));
+                inventarioReg.setDni(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_dni)));
+                inventarioReg.setApe_paterno(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_ape_paterno)));
+                inventarioReg.setApe_materno(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_ape_materno)));
+                inventarioReg.setNombres(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_nombres)));
+                inventarioReg.setNaula(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventario_naula)));
+                inventarioReg.setCodpagina(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_codpagina)));
+                inventarioReg.setDireccion(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_direccion)));
+                inventarioRegs.add(inventarioReg);
+            }
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return inventarioRegs;
+    }
+
+    public ArrayList<InventarioReg> filtrarMarcoInventarioListados(int idLocal){
+        ArrayList<InventarioReg> inventarioRegs = new ArrayList<>();
+        String[] whereArgs = new String[]{String.valueOf(idLocal)};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablalistados, null,
+                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL,whereArgs,null,null,null);
+            while (cursor.moveToNext()){
+                InventarioReg inventarioReg = new InventarioReg();
+                inventarioReg.setId(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_id)));
+                inventarioReg.setCodigo(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_codigo)));
+                inventarioReg.setTipo(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventario_tipo)));
+                inventarioReg.setCcdd(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_ccdd)));
+                inventarioReg.setDepartamento(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_departamento)));
+                inventarioReg.setIdnacional(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventario_idnacional)));
+                inventarioReg.setIdsede(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_idsede)));
+                inventarioReg.setNom_sede(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_nom_sede)));
+                inventarioReg.setIdlocal(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventario_idlocal)));
+                inventarioReg.setNom_local(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_nom_local)));
+                inventarioReg.setDni(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_dni)));
+                inventarioReg.setApe_paterno(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_ape_paterno)));
+                inventarioReg.setApe_materno(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_ape_materno)));
+                inventarioReg.setNombres(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_nombres)));
+                inventarioReg.setNaula(cursor.getInt(cursor.getColumnIndex(SQLConstantes.inventario_naula)));
+                inventarioReg.setCodpagina(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_codpagina)));
+                inventarioReg.setDireccion(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventario_direccion)));
+                inventarioRegs.add(inventarioReg);
+            }
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return inventarioRegs;
+    }
+
+    //LISTADO DE INVENTARIO REGISTRADO: FICHAS, CUADERNILLOS Y LISTADOS
+
     public ArrayList<InventarioReg> getListadoInventarioFichas(int idLocal, int nroAula){
         ArrayList<InventarioReg> inventarioRegs = new ArrayList<InventarioReg>();
         Cursor cursor = null;
         try{
-            String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula),"1"};
-            cursor = sqLiteDatabase.query(SQLConstantes.tablainventariosreg, null,
+            String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula)};
+            cursor = sqLiteDatabase.query(SQLConstantes.tablafichasreg, null,
                     SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
-                            SQLConstantes.WHERE_CLAUSE_NRO_AULA+ " AND " +
-                            SQLConstantes.WHERE_CLAUSE_TIPO_MATERIAL,whereArgs,null,null,"estado ASC");
+                            SQLConstantes.WHERE_CLAUSE_NRO_AULA,whereArgs,null,null,"estado ASC");
             while(cursor.moveToNext()){
                 InventarioReg inventarioReg = new InventarioReg();
                 inventarioReg.setId(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_dni)));
@@ -1500,11 +1783,10 @@ public class Data {
         ArrayList<InventarioReg> inventarioRegs = new ArrayList<InventarioReg>();
         Cursor cursor = null;
         try{
-            String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula),"2"};
-            cursor = sqLiteDatabase.query(SQLConstantes.tablainventariosreg, null,
+            String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula)};
+            cursor = sqLiteDatabase.query(SQLConstantes.tablacuadernillosreg, null,
                     SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
-                            SQLConstantes.WHERE_CLAUSE_NRO_AULA+ " AND " +
-                            SQLConstantes.WHERE_CLAUSE_TIPO_MATERIAL,whereArgs,null,null,"estado ASC");
+                            SQLConstantes.WHERE_CLAUSE_NRO_AULA,whereArgs,null,null,"estado ASC");
             while(cursor.moveToNext()){
                 InventarioReg inventarioReg = new InventarioReg();
                 inventarioReg.setId(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_dni)));
@@ -1544,11 +1826,10 @@ public class Data {
         ArrayList<InventarioReg> inventarioRegs = new ArrayList<InventarioReg>();
         Cursor cursor = null;
         try{
-            String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula),"3"};
-            cursor = sqLiteDatabase.query(SQLConstantes.tablainventariosreg, null,
+            String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula)};
+            cursor = sqLiteDatabase.query(SQLConstantes.tablalistadosreg, null,
                     SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
-                            SQLConstantes.WHERE_CLAUSE_NRO_AULA+ " AND " +
-                            SQLConstantes.WHERE_CLAUSE_TIPO_MATERIAL,whereArgs,null,null,"estado ASC");
+                            SQLConstantes.WHERE_CLAUSE_NRO_AULA,whereArgs,null,null,"estado ASC");
             while(cursor.moveToNext()){
                 InventarioReg inventarioReg = new InventarioReg();
                 inventarioReg.setId(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_dni)));
@@ -1584,48 +1865,62 @@ public class Data {
         return inventarioRegs;
     }
 
+    //NUMERO INVENTARIOS TOTALES: FICHAS,CUADERNILLOS Y LISTADOS
+
     public int getNroFichasTotales(int idLocal, int nroAula){
         int numero = 0;
         Cursor cursor = null;
         try{
-            String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula),"1"};
-            cursor = sqLiteDatabase.query(SQLConstantes.tablainventariosreg, null,
+            String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula)};
+            cursor = sqLiteDatabase.query(SQLConstantes.tablafichasreg, null,
                     SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
-                            SQLConstantes.WHERE_CLAUSE_NRO_AULA+ " AND " +
-                            SQLConstantes.WHERE_CLAUSE_TIPO_MATERIAL,whereArgs,null,null,null);
+                            SQLConstantes.WHERE_CLAUSE_NRO_AULA,whereArgs,null,null,null);
             if (cursor != null) numero = cursor.getCount();
         }finally{
             if(cursor != null) cursor.close();
         }
         return numero;
     }
+    public int getNroCuadernillosTotales(int idLocal, int nroAula){
+        int numero = 0;
+        Cursor cursor = null;
+        try{
+            String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula)};
+            cursor = sqLiteDatabase.query(SQLConstantes.tablacuadernillosreg, null,
+                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
+                            SQLConstantes.WHERE_CLAUSE_NRO_AULA,whereArgs,null,null,null);
+            if (cursor != null) numero = cursor.getCount();
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return numero;
+    }
+    public int getNroListasTotales(int idLocal, int nroAula){
+        int numero = 0;
+        Cursor cursor = null;
+        try{
+            String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula)};
+            cursor = sqLiteDatabase.query(SQLConstantes.tablalistadosreg, null,
+                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
+                            SQLConstantes.WHERE_CLAUSE_NRO_AULA,whereArgs,null,null,null);
+            if (cursor != null) numero = cursor.getCount();
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return numero;
+    }
+
+    ////NUMERO INVENTARIOS TOTALES REGISTRADOS: FICHAS,CUADERNILLOS Y LISTADOS
 
     public int getNroFichasRegistradas(int idLocal, int nroAula){
         int numero = 0;
         Cursor cursor = null;
         try{
-            String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula),"1","1"};
-            cursor = sqLiteDatabase.query(SQLConstantes.tablainventariosreg, null,
+            String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula),"1"};
+            cursor = sqLiteDatabase.query(SQLConstantes.tablafichasreg, null,
                     SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
                             SQLConstantes.WHERE_CLAUSE_NRO_AULA+ " AND " +
-                            SQLConstantes.WHERE_CLAUSE_TIPO_MATERIAL + " AND " +
                             SQLConstantes.WHERE_CLAUSE_ESTADO,whereArgs,null,null,null);
-            if (cursor != null) numero = cursor.getCount();
-        }finally{
-            if(cursor != null) cursor.close();
-        }
-        return numero;
-    }
-
-    public int getNroCuadernillosTotales(int idLocal, int nroAula){
-        int numero = 0;
-        Cursor cursor = null;
-        try{
-            String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula),"2"};
-            cursor = sqLiteDatabase.query(SQLConstantes.tablainventariosreg, null,
-                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
-                            SQLConstantes.WHERE_CLAUSE_NRO_AULA+ " AND " +
-                            SQLConstantes.WHERE_CLAUSE_TIPO_MATERIAL,whereArgs,null,null,null);
             if (cursor != null) numero = cursor.getCount();
         }finally{
             if(cursor != null) cursor.close();
@@ -1637,28 +1932,11 @@ public class Data {
         int numero = 0;
         Cursor cursor = null;
         try{
-            String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula),"2","1"};
-            cursor = sqLiteDatabase.query(SQLConstantes.tablainventariosreg, null,
+            String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula),"1"};
+            cursor = sqLiteDatabase.query(SQLConstantes.tablacuadernillosreg, null,
                     SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
                             SQLConstantes.WHERE_CLAUSE_NRO_AULA+ " AND " +
-                            SQLConstantes.WHERE_CLAUSE_TIPO_MATERIAL + " AND " +
                             SQLConstantes.WHERE_CLAUSE_ESTADO,whereArgs,null,null,null);
-            if (cursor != null) numero = cursor.getCount();
-        }finally{
-            if(cursor != null) cursor.close();
-        }
-        return numero;
-    }
-
-    public int getNroListasTotales(int idLocal, int nroAula){
-        int numero = 0;
-        Cursor cursor = null;
-        try{
-            String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula),"3"};
-            cursor = sqLiteDatabase.query(SQLConstantes.tablainventariosreg, null,
-                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
-                            SQLConstantes.WHERE_CLAUSE_NRO_AULA+ " AND " +
-                            SQLConstantes.WHERE_CLAUSE_TIPO_MATERIAL,whereArgs,null,null,null);
             if (cursor != null) numero = cursor.getCount();
         }finally{
             if(cursor != null) cursor.close();
@@ -1670,11 +1948,10 @@ public class Data {
         int numero = 0;
         Cursor cursor = null;
         try{
-            String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula),"3","1"};
-            cursor = sqLiteDatabase.query(SQLConstantes.tablainventariosreg, null,
+            String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula),"1"};
+            cursor = sqLiteDatabase.query(SQLConstantes.tablalistadosreg, null,
                     SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
                             SQLConstantes.WHERE_CLAUSE_NRO_AULA+ " AND " +
-                            SQLConstantes.WHERE_CLAUSE_TIPO_MATERIAL + " AND " +
                             SQLConstantes.WHERE_CLAUSE_ESTADO,whereArgs,null,null,null);
             if (cursor != null) numero = cursor.getCount();
         }finally{
@@ -1683,15 +1960,116 @@ public class Data {
         return numero;
     }
 
+    ////NUMERO INVENTARIOS TOTALES FALTAN: FICHAS,CUADERNILLOS Y LISTADOS
+
+    public int getNroFichasFaltan(int idLocal, int nroAula){
+        int numero = 0;
+        Cursor cursor = null;
+        try{
+            String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula),"0"};
+            cursor = sqLiteDatabase.query(SQLConstantes.tablafichasreg, null,
+                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
+                            SQLConstantes.WHERE_CLAUSE_NRO_AULA+ " AND " +
+                            SQLConstantes.WHERE_CLAUSE_ESTADO,whereArgs,null,null,null);
+            if (cursor != null) numero = cursor.getCount();
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return numero;
+    }
+
+    public int getNroCuadernillosFaltan(int idLocal, int nroAula){
+        int numero = 0;
+        Cursor cursor = null;
+        try{
+            String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula),"0"};
+            cursor = sqLiteDatabase.query(SQLConstantes.tablacuadernillosreg, null,
+                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
+                            SQLConstantes.WHERE_CLAUSE_NRO_AULA+ " AND " +
+                            SQLConstantes.WHERE_CLAUSE_ESTADO,whereArgs,null,null,null);
+            if (cursor != null) numero = cursor.getCount();
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return numero;
+    }
+
+    public int getNroListasFaltan(int idLocal, int nroAula){
+        int numero = 0;
+        Cursor cursor = null;
+        try{
+            String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula),"0"};
+            cursor = sqLiteDatabase.query(SQLConstantes.tablalistadosreg, null,
+                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
+                            SQLConstantes.WHERE_CLAUSE_NRO_AULA+ " AND " +
+                            SQLConstantes.WHERE_CLAUSE_ESTADO,whereArgs,null,null,null);
+            if (cursor != null) numero = cursor.getCount();
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return numero;
+    }
+
+    ////NUMERO INVENTARIOS TOTALES TRANSFERIDOS: FICHAS,CUADERNILLOS Y LISTADOS
+
+    public int getNroFichasTransferidas(int idLocal, int nroAula){
+        int numero = 0;
+        Cursor cursor = null;
+        try{
+            String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula),"2"};
+            cursor = sqLiteDatabase.query(SQLConstantes.tablafichasreg, null,
+                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
+                            SQLConstantes.WHERE_CLAUSE_NRO_AULA+ " AND " +
+                            SQLConstantes.WHERE_CLAUSE_ESTADO,whereArgs,null,null,null);
+            if (cursor != null) numero = cursor.getCount();
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return numero;
+    }
+
+    public int getNroCuadernillosTransferidos(int idLocal, int nroAula){
+        int numero = 0;
+        Cursor cursor = null;
+        try{
+            String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula),"2"};
+            cursor = sqLiteDatabase.query(SQLConstantes.tablacuadernillosreg, null,
+                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
+                            SQLConstantes.WHERE_CLAUSE_NRO_AULA+ " AND " +
+                            SQLConstantes.WHERE_CLAUSE_ESTADO,whereArgs,null,null,null);
+            if (cursor != null) numero = cursor.getCount();
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return numero;
+    }
+
+    public int getNroListasTransferidas(int idLocal, int nroAula){
+        int numero = 0;
+        Cursor cursor = null;
+        try{
+            String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula),"2"};
+            cursor = sqLiteDatabase.query(SQLConstantes.tablalistadosreg, null,
+                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
+                            SQLConstantes.WHERE_CLAUSE_NRO_AULA+ " AND " +
+                            SQLConstantes.WHERE_CLAUSE_ESTADO,whereArgs,null,null,null);
+            if (cursor != null) numero = cursor.getCount();
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return numero;
+    }
+
+    ////INVENTARIOS TOTALES SIN ENVIAR: FICHAS,CUADERNILLOS Y LISTADOS
+
     public ArrayList<InventarioReg> getInventarioFichasSinEnviar(int idLocal, int nroAula){
         ArrayList<InventarioReg> inventarioRegs = new ArrayList<InventarioReg>();
         Cursor cursor = null;
         try{
-            String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula),"1","1"};
-            cursor = sqLiteDatabase.query(SQLConstantes.tablainventariosreg, null,
+            String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula),"1"};
+            cursor = sqLiteDatabase.query(SQLConstantes.tablafichasreg, null,
                     SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
                             SQLConstantes.WHERE_CLAUSE_NRO_AULA+ " AND " +
-                            SQLConstantes.WHERE_CLAUSE_TIPO_MATERIAL + " AND " +
                             SQLConstantes.WHERE_CLAUSE_ESTADO,whereArgs,null,null,null);
             while(cursor.moveToNext()){
                 InventarioReg inventarioReg = new InventarioReg();
@@ -1732,11 +2110,10 @@ public class Data {
         ArrayList<InventarioReg> inventarioRegs = new ArrayList<InventarioReg>();
         Cursor cursor = null;
         try{
-            String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula),"2","1"};
-            cursor = sqLiteDatabase.query(SQLConstantes.tablainventariosreg, null,
+            String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula),"1"};
+            cursor = sqLiteDatabase.query(SQLConstantes.tablacuadernillosreg, null,
                     SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
                             SQLConstantes.WHERE_CLAUSE_NRO_AULA+ " AND " +
-                            SQLConstantes.WHERE_CLAUSE_TIPO_MATERIAL + " AND " +
                             SQLConstantes.WHERE_CLAUSE_ESTADO,whereArgs,null,null,null);
             while(cursor.moveToNext()){
                 InventarioReg inventarioReg = new InventarioReg();
@@ -1777,11 +2154,10 @@ public class Data {
         ArrayList<InventarioReg> inventarioRegs = new ArrayList<InventarioReg>();
         Cursor cursor = null;
         try{
-            String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula),"3","1"};
-            cursor = sqLiteDatabase.query(SQLConstantes.tablainventariosreg, null,
+            String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula),"1"};
+            cursor = sqLiteDatabase.query(SQLConstantes.tablalistadosreg, null,
                     SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
                             SQLConstantes.WHERE_CLAUSE_NRO_AULA+ " AND " +
-                            SQLConstantes.WHERE_CLAUSE_TIPO_MATERIAL + " AND " +
                             SQLConstantes.WHERE_CLAUSE_ESTADO,whereArgs,null,null,null);
             while(cursor.moveToNext()){
                 InventarioReg inventarioReg = new InventarioReg();
@@ -1818,12 +2194,13 @@ public class Data {
         return inventarioRegs;
     }
 
+
     public int getNroPostulantesListado(String codPagina){
         int nroPostulantes = 0;
         String[] whereArgs = new String[]{codPagina};
         Cursor cursor = null;
         try{
-            cursor = sqLiteDatabase.query(SQLConstantes.tablainventario, null, SQLConstantes.WHERE_CLAUSE_COD_PAGINA,whereArgs,null,null,null);
+            cursor = sqLiteDatabase.query(SQLConstantes.tablaasistenciasreg, null, SQLConstantes.WHERE_CLAUSE_COD_PAGINA,whereArgs,null,null,null);
             if(cursor!= null) nroPostulantes = cursor.getCount();
         }finally{
             if(cursor != null) cursor.close();

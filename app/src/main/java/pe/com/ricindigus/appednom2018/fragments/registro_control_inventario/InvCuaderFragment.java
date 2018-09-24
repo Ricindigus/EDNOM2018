@@ -35,6 +35,7 @@ import java.util.Date;
 
 import pe.com.ricindigus.appednom2018.R;
 import pe.com.ricindigus.appednom2018.modelo.Data;
+import pe.com.ricindigus.appednom2018.modelo.Inventario;
 import pe.com.ricindigus.appednom2018.modelo.InventarioReg;
 import pe.com.ricindigus.appednom2018.modelo.SQLConstantes;
 
@@ -68,7 +69,10 @@ public class InvCuaderFragment extends Fragment {
     LinearLayout lytYaRegistrado;
     LinearLayout lytErrorCuadernillo;
 
+    TextView txtTotal;
+    TextView txtFaltan;
     TextView txtRegistrados;
+    TextView txtTransferidos;
 
     public InvCuaderFragment() {
         // Required empty public constructor
@@ -110,7 +114,11 @@ public class InvCuaderFragment extends Fragment {
         lytYaRegistrado = (LinearLayout) rootView.findViewById(R.id.inventario_cuadernillo_lytYaRegistrado);
         lytErrorCuadernillo = (LinearLayout) rootView.findViewById(R.id.inventario_cuadernillo_ErrorCodigo);
 
+        txtTotal = (TextView) rootView.findViewById(R.id.inventario_cuadernillo_txtTotal);
         txtRegistrados = (TextView) rootView.findViewById(R.id.inventario_cuadernillo_txtRegistrados);
+        txtFaltan = (TextView) rootView.findViewById(R.id.inventario_cuadernillo_txtFaltan);
+        txtTransferidos = (TextView) rootView.findViewById(R.id.inventario_cuadernillo_txtTransferidos);
+
         return rootView;
     }
     @Override
@@ -123,9 +131,6 @@ public class InvCuaderFragment extends Fragment {
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, aulas);
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spAulas.setAdapter(dataAdapter);
-            String aula = spAulas.getSelectedItem().toString();
-            int nroAula = data.getNumeroAula(aula,nroLocal);
-            txtRegistrados.setText("Registrados: " + data.getNroFichasRegistradas(nroLocal,nroAula)+"/"+data.getNroFichasTotales(nroLocal,nroAula));
             data.close();
 
         }
@@ -137,7 +142,14 @@ public class InvCuaderFragment extends Fragment {
                 data.open();
                 String aula = spAulas.getSelectedItem().toString();
                 int nroAula = data.getNumeroAula(aula,nroLocal);
-                txtRegistrados.setText("Registrados: " + data.getNroCuadernillosRegistrados(nroLocal,nroAula)+"/"+data.getNroCuadernillosTotales(nroLocal,nroAula));
+                txtTotal.setText("Total: " + data.getNroCuadernillosTotales(nroLocal, nroAula));
+                txtFaltan.setText("Faltan: " + data.getNroCuadernillosFaltan(nroLocal,nroAula));
+                txtRegistrados.setText("Registrados: " + data.getNroCuadernillosRegistrados(nroLocal,nroAula));
+                txtTransferidos.setText("Transferidos: " + data.getNroCuadernillosTransferidos(nroLocal,nroAula));
+                lytCorrecto.setVisibility(View.GONE);
+                lytErrorCuadernillo.setVisibility(View.GONE);
+                lytYaRegistrado.setVisibility(View.GONE);
+                lytErrorCuadernilloAula.setVisibility(View.GONE);
                 data.close();
             }
 
@@ -160,16 +172,22 @@ public class InvCuaderFragment extends Fragment {
         String codigoInventario = edtCuadernillo.getText().toString();
         Data data = new Data(context);
         data.open();
-        InventarioReg inventarioReg = data.getInventarioReg(codigoInventario,2);
+        InventarioReg inventarioReg = data.getCuadernilloReg(codigoInventario);
         String aula = spAulas.getSelectedItem().toString();
         int nroAula = 0;
         nroAula = data.getNumeroAula(aula,nroLocal);
         if(inventarioReg == null){
-            mostrarErrorCodigo(codigoInventario);
+            Inventario cuadernilloPadron = data.getCuadernillo(codigoInventario);
+            if (cuadernilloPadron == null) mostrarErrorCodigo(codigoInventario);
+            else mostrarErrorAula(cuadernilloPadron.getDni(),
+                    cuadernilloPadron.getNombres() +" "+ cuadernilloPadron.getApe_paterno() +" "+ cuadernilloPadron.getApe_materno(),
+                    "" + cuadernilloPadron.getNaula());
         }else{
             if(inventarioReg.getNaula() == nroAula){
                 if(inventarioReg.getEstado() == 0) registrarInventario(inventarioReg.getCodigo());
-                else mostrarYaRegistrado(inventarioReg.getDni(),inventarioReg.getNombres() + " " + inventarioReg.getApe_paterno() + " " + inventarioReg.getApe_materno(),inventarioReg.getNaula());
+                else mostrarYaRegistrado(inventarioReg.getDni(),
+                        inventarioReg.getNombres() + " " + inventarioReg.getApe_paterno() + " " + inventarioReg.getApe_materno(),
+                        inventarioReg.getNaula());
             }else{
                 mostrarErrorAula(inventarioReg.getDni(),inventarioReg.getNombres() +" "+ inventarioReg.getApe_paterno() +" "+ inventarioReg.getApe_materno(), "" + inventarioReg.getNaula());
             }
@@ -201,8 +219,8 @@ public class InvCuaderFragment extends Fragment {
         contentValues.put(SQLConstantes.inventarioreg_min,minuto);
         contentValues.put(SQLConstantes.inventarioreg_seg,seg);
         contentValues.put(SQLConstantes.inventarioreg_estado,1);
-        data.actualizarInventarioReg(codInventario,2,contentValues);
-        InventarioReg inventarioReg = data.getInventarioReg(codInventario,2);
+        data.actualizarCuadernilloReg(codInventario,contentValues);
+        InventarioReg inventarioReg = data.getCuadernilloReg(codInventario);
         txtRegistrados.setText("Registrados: " + data.getNroCuadernillosRegistrados(nroLocal,inventarioReg.getNaula())+"/"+data.getNroCuadernillosTotales(nroLocal,inventarioReg.getNaula()));
         data.close();
         mostrarCorrecto(inventarioReg.getDni(),inventarioReg.getNombres() +" "+ inventarioReg.getApe_paterno() +" "+ inventarioReg.getApe_materno(),inventarioReg.getCodigo());
@@ -220,7 +238,7 @@ public class InvCuaderFragment extends Fragment {
             public void onSuccess(Void aVoid) {
                 Data data = new Data(context);
                 data.open();
-                data.actualizarInventarioRegSubido(c,1);
+                data.actualizarCuadernilloRegSubido(c);
                 data.close();
             }
         }).addOnFailureListener(new OnFailureListener() {

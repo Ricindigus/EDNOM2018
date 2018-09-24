@@ -111,22 +111,7 @@
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
-        <ProgressBar
-            android:id="@+id/login_progreso"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/themeprogress"
-            android:visibility="gone"
-            android:layout_marginTop="30dp"/>
-        <TextView
-            android:id="@+id/login_mensaje_carga"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:gravity="center"
-            android:textStyle="bold"
-            android:textSize="@dimen/texto_medio"
-            android:textColor="@color/colorIcons"/>
+
     </LinearLayout>
 
 

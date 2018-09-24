@@ -13,12 +13,40 @@
         android:gravity="center"
         android:theme="@style/estilo_titulo_fragment"
         android:text="REGISTRO DE INVENTARIO - FICHA"/>
-    <TextView
-        android:id="@+id/inventario_ficha_txtRegistrados"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/estilo_total_registrados"
-        android:text="Registrados:30/100"/>
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:id="@+id/inventario_ficha_txtTotal"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:theme="@style/estilo_total_registrados"
+            android:text="Total:30/100"/>
+        <TextView
+            android:id="@+id/inventario_ficha_txtFaltan"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:theme="@style/estilo_total_registrados"
+            android:text="Faltan:30/100"/>
+        <TextView
+            android:id="@+id/inventario_ficha_txtRegistrados"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:theme="@style/estilo_total_registrados"
+            android:text="Leidos:30/100"/>
+        <TextView
+            android:id="@+id/inventario_ficha_txtTransferidos"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:theme="@style/estilo_total_registrados"
+            android:text="Transferidos:30/100"/>
+    </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -153,7 +181,7 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/margin16dp"
             android:visibility="gone"
-            android:background="@drawable/fondo_rojo">
+            android:background="@drawable/fondo_crema">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

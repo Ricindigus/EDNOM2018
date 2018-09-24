@@ -47,8 +47,14 @@ public class ListInvFichaFragment extends Fragment {
     ArrayList<InventarioReg> fichas;
     ArrayList<InventarioReg> datosNoEnviados;
     Data data;
+    RecyclerView.LayoutManager layoutManager;
     FloatingActionButton fabUpLoad;
     InventarioFichaAdapter inventarioFichaAdapter;
+
+    TextView txtTotal;
+    TextView txtSinRegistro;
+    TextView txtRegistrados;
+    TextView txtTransferidos;
     boolean b = false;
 
     public ListInvFichaFragment() {
@@ -70,12 +76,18 @@ public class ListInvFichaFragment extends Fragment {
         spAulas = (Spinner) rootView.findViewById(R.id.lista_spAula);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.lista_recycler);
         fabUpLoad = (FloatingActionButton) rootView.findViewById(R.id.lista_btnUpload);
+        txtTotal = (TextView) rootView.findViewById(R.id.lista_txtTotales);
+        txtSinRegistro = (TextView) rootView.findViewById(R.id.lista_txtSinRegistro);
+        txtRegistrados = (TextView) rootView.findViewById(R.id.lista_txtRegistrados);
+        txtTransferidos = (TextView) rootView.findViewById(R.id.lista_txtTransferidos);
         return rootView;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        recyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(context);
         Data d =  new Data(context);
         d.open();
         ArrayList<String> aulas =  d.getArrayAulasListado(nroLocal);
@@ -83,18 +95,13 @@ public class ListInvFichaFragment extends Fragment {
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spAulas.setAdapter(dataAdapter);
         d.close();
-        recyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);
-        cargaData();
-        inventarioFichaAdapter = new InventarioFichaAdapter(fichas,context);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(inventarioFichaAdapter);
 
         spAulas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 cargaData();
                 inventarioFichaAdapter = new InventarioFichaAdapter(fichas,context);
+                recyclerView.setLayoutManager(layoutManager);
                 recyclerView.setAdapter(inventarioFichaAdapter);
             }
 
@@ -138,7 +145,7 @@ public class ListInvFichaFragment extends Fragment {
                             public void onSuccess(Void aVoid) {
                                 Data data = new Data(context);
                                 data.open();
-                                data.actualizarInventarioRegSubido(c,1);
+                                data.actualizarFichaRegSubido(c);
                                 data.close();
                                 if (j == total) {
                                     Toast.makeText(context, total + " registros subidos", Toast.LENGTH_SHORT).show();
@@ -166,10 +173,12 @@ public class ListInvFichaFragment extends Fragment {
         Data d = new Data(context);
         d.open();
         String aula = spAulas.getSelectedItem().toString();
-        int nroAula = 0;
-        nroAula = d.getNumeroAula(aula,nroLocal);
-        long n = d.getNumeroItemsInventarioReg();
+        int nroAula = d.getNumeroAula(aula,nroLocal);
         fichas = d.getListadoInventarioFichas(nroLocal,nroAula);
+        txtTotal.setText("Total: " + fichas.size());
+        txtSinRegistro.setText("Faltan: " + d.getNroFichasFaltan(nroLocal,nroAula));
+        txtRegistrados.setText("Leídos: " + d.getNroFichasRegistradas(nroLocal,nroAula));
+        txtTransferidos.setText("Transferidos: " + d.getNroFichasTransferidas(nroLocal,nroAula));
         d.close();
     }
     public String checkDigito (int number) {

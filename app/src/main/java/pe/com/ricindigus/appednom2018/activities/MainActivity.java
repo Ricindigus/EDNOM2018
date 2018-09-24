@@ -423,18 +423,14 @@ public class MainActivity extends AppCompatActivity {
                         data.open();
                         data.deleteAllElementosFromTabla(SQLConstantes.tablacajasreg);
                         data.deleteAllElementosFromTabla(SQLConstantes.tablaasistenciasreg);
-                        data.deleteAllElementosFromTabla(SQLConstantes.tablainventariosreg);
-                        data.deleteAllElementosFromTabla(SQLConstantes.tablainventariosreg);
+                        data.deleteAllElementosFromTabla(SQLConstantes.tablafichasreg);
+                        data.deleteAllElementosFromTabla(SQLConstantes.tablacuadernillosreg);
+                        data.deleteAllElementosFromTabla(SQLConstantes.tablalistadosreg);
                         data.deleteAllElementosFromTabla(SQLConstantes.tablahistorialusuarios);
                         data.close();
                         Intent intent = new Intent(MainActivity.this,LoginActivity.class);
                         startActivity(intent);
                         finish();
-//                        CajasInFragment cajasInFragment = new CajasInFragment(nroLocal,MainActivity.this);
-//                        FragmentManager fragmentManage = getSupportFragmentManager();
-//                        FragmentTransaction fragmentTransact = fragmentManage.beginTransaction();
-//                        fragmentTransact.replace(R.id.fragment_layout, cajasInFragment);
-//                        fragmentTransact.commit();
                     }
                 });
         AlertDialog alert = builder.create();

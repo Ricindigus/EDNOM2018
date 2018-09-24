@@ -8,13 +8,19 @@ public class SQLConstantes {
     public static String tablaaulas = "aulas";
     public static String tablacajas = "cajas";
     public static String tablaasistencia = "asistencia";
-    public static String tablainventario = "inventario";
+    public static String tablafichas = "fichas";
+    public static String tablacuadernillos = "cuadernillos";
+    public static String tablalistados = "listados";
+
 
     public static String tablausuarioactual = "usuario_actual";
     public static String tablahistorialusuarios = "historial_usuario";
     public static String tablacajasreg = "cajas_reg";
     public static String tablaasistenciasreg = "asistencia_reg";
-    public static String tablainventariosreg = "inventario_reg";
+    public static String tablafichasreg = "fichas_reg";
+    public static String tablacuadernillosreg = "cuadernillos_reg";
+    public static String tablalistadosreg = "listados_reg";
+
 
 
     /**
@@ -62,6 +68,7 @@ public class SQLConstantes {
     public static String asistencia_ape_paterno = "ape_paterno";
     public static String asistencia_ape_materno = "ape_materno";
     public static String asistencia_naula = "naula";
+    public static String asistencia_codpagina = "codpagina";
     public static String asistencia_discapacidad = "discapacidad";
     public static String asistencia_prioridad = "prioridad";
     public static String asistencia_idnacional = "idnacional";
@@ -73,7 +80,7 @@ public class SQLConstantes {
     public static String asistencia_nom_local = "nom_local";
     public static String asistencia_direccion = "direccion";
 
-    //TABLA INVENTARIO
+    //TABLA FICHAS,CUADERNILLO Y LISTADOS
     public static String inventario_id = "_id";
     public static String inventario_codigo = "codigo";
     public static String inventario_tipo = "tipo";
@@ -91,6 +98,8 @@ public class SQLConstantes {
     public static String inventario_naula = "naula";
     public static String inventario_codpagina = "codpagina";
     public static String inventario_direccion = "direccion";
+
+
 
     /**
      * ----------------------------FIN TABLAS INICIALES----------------------------
@@ -208,6 +217,7 @@ public class SQLConstantes {
     public static String asistenciareg_ape_paterno = "ape_paterno";
     public static String asistenciareg_ape_materno = "ape_materno";
     public static String asistenciareg_naula = "naula";
+    public static String asistenciareg_codpagina = "codpagina";
     public static String asistenciareg_discapacidad = "discapacidad";
     public static String asistenciareg_prioridad = "prioridad";
     public static String asistenciareg_idnacional = "idnacional";
@@ -241,6 +251,7 @@ public class SQLConstantes {
                     asistenciareg_ape_paterno + " TEXT," +
                     asistenciareg_ape_materno + " TEXT," +
                     asistenciareg_naula + " INTEGER," +
+                    asistenciareg_codpagina + " TEXT," +
                     asistenciareg_discapacidad+ " TEXT," +
                     asistenciareg_prioridad + " TEXT," +
                     asistenciareg_idnacional + " TEXT," +
@@ -267,7 +278,7 @@ public class SQLConstantes {
                     asistenciareg_estado_aula + " INTEGER" + ");"
             ;
 
-    //TABLA INVENTARIO REGISTRADOS
+    //TABLA FICHAS, CUADERNILLOS Y LISTADOS REGISTRADOS
     public static String inventarioreg_id = "_id";
     public static String inventarioreg_codigo = "codigo";
     public static String inventarioreg_tipo = "tipo";
@@ -294,8 +305,8 @@ public class SQLConstantes {
     public static String inventarioreg_estado = "estado";
     public static String inventarioreg_npostulantes = "npostulantes";
 
-    public static final String SQL_CREATE_TABLA_INVENTARIOS_REGISTRADOS=
-            "CREATE TABLE " + tablainventariosreg + "(" +
+    public static final String SQL_CREATE_TABLA_FICHAS_REGISTRADAS=
+            "CREATE TABLE " + tablafichasreg + "(" +
                     inventarioreg_id + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                     inventarioreg_codigo + " TEXT," +
                     inventarioreg_tipo + " INTEGER," +
@@ -311,7 +322,69 @@ public class SQLConstantes {
                     inventarioreg_ape_materno + " TEXT," +
                     inventarioreg_nombres + " TEXT," +
                     inventarioreg_naula + " INTEGER," +
-                    inventarioreg_codpagina + " INTEGER," +
+                    inventarioreg_codpagina + " TEXT," +
+                    inventarioreg_direccion + " TEXT," +
+                    inventarioreg_dia + " INTEGER," +
+                    inventarioreg_mes + " INTEGER," +
+                    inventarioreg_anio + " INTEGER," +
+                    inventarioreg_hora + " INTEGER," +
+                    inventarioreg_min + " INTEGER," +
+                    inventarioreg_seg + " INTEGER," +
+                    inventarioreg_estado + " INTEGER," +
+                    inventarioreg_npostulantes + " INTEGER" + ");"
+            ;
+
+
+
+
+    public static final String SQL_CREATE_TABLA_CUADERNILLOS_REGISTRADOS=
+            "CREATE TABLE " + tablacuadernillosreg + "(" +
+                    inventarioreg_id + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    inventarioreg_codigo + " TEXT," +
+                    inventarioreg_tipo + " INTEGER," +
+                    inventarioreg_ccdd + " TEXT," +
+                    inventarioreg_departamento + " TEXT," +
+                    inventarioreg_idnacional + " INTEGER," +
+                    inventarioreg_idsede + " TEXT," +
+                    inventarioreg_nom_sede + " TEXT," +
+                    inventarioreg_idlocal + " INTEGER," +
+                    inventarioreg_nom_local + " TEXT," +
+                    inventarioreg_dni + " TEXT," +
+                    inventarioreg_ape_paterno + " TEXT," +
+                    inventarioreg_ape_materno + " TEXT," +
+                    inventarioreg_nombres + " TEXT," +
+                    inventarioreg_naula + " INTEGER," +
+                    inventarioreg_codpagina + " TEXT," +
+                    inventarioreg_direccion + " TEXT," +
+                    inventarioreg_dia + " INTEGER," +
+                    inventarioreg_mes + " INTEGER," +
+                    inventarioreg_anio + " INTEGER," +
+                    inventarioreg_hora + " INTEGER," +
+                    inventarioreg_min + " INTEGER," +
+                    inventarioreg_seg + " INTEGER," +
+                    inventarioreg_estado + " INTEGER," +
+                    inventarioreg_npostulantes + " INTEGER" + ");"
+            ;
+
+
+    public static final String SQL_CREATE_TABLA_LISTADOS_REGISTRADOS=
+            "CREATE TABLE " + tablalistadosreg + "(" +
+                    inventarioreg_id + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    inventarioreg_codigo + " TEXT," +
+                    inventarioreg_tipo + " INTEGER," +
+                    inventarioreg_ccdd + " TEXT," +
+                    inventarioreg_departamento + " TEXT," +
+                    inventarioreg_idnacional + " INTEGER," +
+                    inventarioreg_idsede + " TEXT," +
+                    inventarioreg_nom_sede + " TEXT," +
+                    inventarioreg_idlocal + " INTEGER," +
+                    inventarioreg_nom_local + " TEXT," +
+                    inventarioreg_dni + " TEXT," +
+                    inventarioreg_ape_paterno + " TEXT," +
+                    inventarioreg_ape_materno + " TEXT," +
+                    inventarioreg_nombres + " TEXT," +
+                    inventarioreg_naula + " INTEGER," +
+                    inventarioreg_codpagina + " TEXT," +
                     inventarioreg_direccion + " TEXT," +
                     inventarioreg_dia + " INTEGER," +
                     inventarioreg_mes + " INTEGER," +

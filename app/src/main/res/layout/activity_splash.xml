@@ -29,7 +29,12 @@ tools:context=".activities.SplashActivity">
             android:gravity="center"
             android:textStyle="bold"
             android:textColor="@color/colorPrimaryDark"
-            android:text="EDNOM 2018 - DIA D"/>
+            android:text=""/>
+        <ProgressBar
+            android:id="@+id/progreso_copia"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:visibility="gone"/>
     </LinearLayout>
 </FrameLayout>
 </android.support.design.widget.CoordinatorLayout>

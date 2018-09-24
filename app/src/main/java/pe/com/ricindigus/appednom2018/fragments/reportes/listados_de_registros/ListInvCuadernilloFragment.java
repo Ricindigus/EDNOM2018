@@ -32,6 +32,7 @@ import java.util.Date;
 
 import pe.com.ricindigus.appednom2018.R;
 import pe.com.ricindigus.appednom2018.adapters.InventarioCuadernilloAdapter;
+import pe.com.ricindigus.appednom2018.adapters.InventarioFichaAdapter;
 import pe.com.ricindigus.appednom2018.modelo.AsistenciaReg;
 import pe.com.ricindigus.appednom2018.modelo.Data;
 import pe.com.ricindigus.appednom2018.modelo.InventarioReg;
@@ -50,7 +51,12 @@ public class ListInvCuadernilloFragment extends Fragment {
     Data data;
     FloatingActionButton fabUpLoad;
     InventarioCuadernilloAdapter inventarioCuadernilloAdapter;
-    boolean b = false;
+    RecyclerView.LayoutManager layoutManager;
+
+    TextView txtTotal;
+    TextView txtSinRegistro;
+    TextView txtRegistrados;
+    TextView txtTransferidos;
 
     public ListInvCuadernilloFragment() {
         // Required empty public constructor
@@ -71,12 +77,18 @@ public class ListInvCuadernilloFragment extends Fragment {
         spAulas = (Spinner) rootView.findViewById(R.id.lista_spAula);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.lista_recycler);
         fabUpLoad = (FloatingActionButton) rootView.findViewById(R.id.lista_btnUpload);
+        txtTotal = (TextView) rootView.findViewById(R.id.lista_txtTotales);
+        txtSinRegistro = (TextView) rootView.findViewById(R.id.lista_txtSinRegistro);
+        txtRegistrados = (TextView) rootView.findViewById(R.id.lista_txtRegistrados);
+        txtTransferidos = (TextView) rootView.findViewById(R.id.lista_txtTransferidos);
         return rootView;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        recyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(context);
         Data d =  new Data(context);
         d.open();
         ArrayList<String> aulas =  d.getArrayAulasListado(nroLocal);
@@ -84,18 +96,13 @@ public class ListInvCuadernilloFragment extends Fragment {
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spAulas.setAdapter(dataAdapter);
         d.close();
-        recyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);
-        cargaData();
-        inventarioCuadernilloAdapter = new InventarioCuadernilloAdapter(cuadernillos,context);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(inventarioCuadernilloAdapter);
 
         spAulas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 cargaData();
                 inventarioCuadernilloAdapter = new InventarioCuadernilloAdapter(cuadernillos,context);
+                recyclerView.setLayoutManager(layoutManager);
                 recyclerView.setAdapter(inventarioCuadernilloAdapter);
             }
 
@@ -108,14 +115,11 @@ public class ListInvCuadernilloFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Toast.makeText(context, "Subiendo...", Toast.LENGTH_SHORT).show();
-                b = false;
                 datosNoEnviados = new ArrayList<InventarioReg>();
                 data = new Data(context);
                 data.open();
-                int seleccion = spAulas.getSelectedItemPosition();
                 String aula = spAulas.getSelectedItem().toString();
-                int nroAula = 0;
-                if(seleccion > 0) nroAula = data.getNumeroAula(aula,nroLocal);
+                int nroAula = data.getNumeroAula(aula,nroLocal);
                 datosNoEnviados = data.getInventarioCuadernillosSinEnviar(nroLocal,nroAula);
                 data.close();
                 if(datosNoEnviados.size() > 0){
@@ -139,7 +143,7 @@ public class ListInvCuadernilloFragment extends Fragment {
                             public void onSuccess(Void aVoid) {
                                 Data data = new Data(context);
                                 data.open();
-                                data.actualizarInventarioRegSubido(c,2);
+                                data.actualizarCuadernilloRegSubido(c);
                                 data.close();
                                 if (j == total) {
                                     Toast.makeText(context, total + " registros subidos", Toast.LENGTH_SHORT).show();
@@ -170,6 +174,10 @@ public class ListInvCuadernilloFragment extends Fragment {
         int nroAula = 0;
         nroAula = d.getNumeroAula(aula,nroLocal);
         cuadernillos = d.getListadoInventarioCuadernillo(nroLocal,nroAula);
+        txtTotal.setText("Total: " + cuadernillos.size());
+        txtSinRegistro.setText("Faltan: " + d.getNroCuadernillosFaltan(nroLocal,nroAula));
+        txtRegistrados.setText("Leídos: " + d.getNroCuadernillosRegistrados(nroLocal,nroAula));
+        txtTransferidos.setText("Transferidos: " + d.getNroCuadernillosTransferidos(nroLocal,nroAula));
         d.close();
     }
     public String checkDigito (int number) {

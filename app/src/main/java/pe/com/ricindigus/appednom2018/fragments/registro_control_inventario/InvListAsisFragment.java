@@ -35,6 +35,7 @@ import java.util.Date;
 
 import pe.com.ricindigus.appednom2018.R;
 import pe.com.ricindigus.appednom2018.modelo.Data;
+import pe.com.ricindigus.appednom2018.modelo.Inventario;
 import pe.com.ricindigus.appednom2018.modelo.InventarioReg;
 import pe.com.ricindigus.appednom2018.modelo.SQLConstantes;
 
@@ -67,7 +68,11 @@ public class InvListAsisFragment extends Fragment {
     LinearLayout lytYaRegistrado;
     LinearLayout lytErrorLista;
 
+    TextView txtTotal;
+    TextView txtFaltan;
     TextView txtRegistrados;
+    TextView txtTransferidos;
+
 
     public InvListAsisFragment() {
         // Required empty public constructor
@@ -108,7 +113,10 @@ public class InvListAsisFragment extends Fragment {
         lytYaRegistrado = (LinearLayout) rootView.findViewById(R.id.inventario_lista_lytYaRegistrado);
         lytErrorLista = (LinearLayout) rootView.findViewById(R.id.inventario_lista_lytErrorLista);
 
-        txtRegistrados = (TextView) rootView.findViewById(R.id.inventario_lista_txtRegistrados);
+        txtTotal = (TextView) rootView.findViewById(R.id.inventario_listado_txtTotal);
+        txtRegistrados = (TextView) rootView.findViewById(R.id.inventario_listado_txtRegistrados);
+        txtFaltan = (TextView) rootView.findViewById(R.id.inventario_listado_txtFaltan);
+        txtTransferidos = (TextView) rootView.findViewById(R.id.inventario_listado_txtTransferidos);
         return rootView;
     }
 
@@ -122,9 +130,6 @@ public class InvListAsisFragment extends Fragment {
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, aulas);
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spAulas.setAdapter(dataAdapter);
-            String aula = spAulas.getSelectedItem().toString();
-            int nroAula = data.getNumeroAula(aula,nroLocal);
-            txtRegistrados.setText("Registrados: " + data.getNroListasRegistradas(nroLocal,nroAula)+"/"+data.getNroListasTotales(nroLocal,nroAula));
             data.close();
         }
 
@@ -135,7 +140,14 @@ public class InvListAsisFragment extends Fragment {
                 data.open();
                 String aula = spAulas.getSelectedItem().toString();
                 int nroAula = data.getNumeroAula(aula,nroLocal);
-                txtRegistrados.setText("Registrados: " + data.getNroListasRegistradas(nroLocal,nroAula)+"/"+data.getNroListasTotales(nroLocal,nroAula));
+                txtTotal.setText("Total: " + data.getNroListasTotales(nroLocal, nroAula));
+                txtFaltan.setText("Faltan: " + data.getNroListasFaltan(nroLocal,nroAula));
+                txtRegistrados.setText("Registrados: " + data.getNroListasRegistradas(nroLocal,nroAula));
+                txtTransferidos.setText("Transferidos: " + data.getNroListasTransferidas(nroLocal,nroAula));
+                lytCorrecto.setVisibility(View.GONE);
+                lytErrorLista.setVisibility(View.GONE);
+                lytYaRegistrado.setVisibility(View.GONE);
+                lytErrorListaAula.setVisibility(View.GONE);
                 data.close();
             }
 
@@ -158,12 +170,14 @@ public class InvListAsisFragment extends Fragment {
         String codigoInventario = edtLista.getText().toString();
         Data data = new Data(context);
         data.open();
-        InventarioReg inventarioReg = data.getInventarioReg(codigoInventario,3);
+        InventarioReg inventarioReg = data.getListadoReg(codigoInventario);
         String aula = spAulas.getSelectedItem().toString();
         int nroAula = 0;
         nroAula = data.getNumeroAula(aula,nroLocal);
         if(inventarioReg == null){
-            mostrarErrorCodigo(codigoInventario);
+            Inventario listadoPadron = data.getListado(codigoInventario);
+            if (listadoPadron == null) mostrarErrorCodigo(codigoInventario);
+            else mostrarErrorAula(listadoPadron.getCodigo(),data.getNroPostulantesListado(listadoPadron.getCodpagina()), listadoPadron.getNaula());
         }else{
             if(inventarioReg.getNaula() == nroAula){
                 if(inventarioReg.getEstado() == 0) registrarInventario(inventarioReg);
@@ -201,9 +215,10 @@ public class InvListAsisFragment extends Fragment {
         contentValues.put(SQLConstantes.inventarioreg_seg,seg);
         contentValues.put(SQLConstantes.inventarioreg_npostulantes,nroPostulantes);
         contentValues.put(SQLConstantes.inventarioreg_estado,1);
-        data.actualizarInventarioReg(inventarioReg.getCodigo(),3,contentValues);
-        InventarioReg invReg = data.getInventarioReg(inventarioReg.getCodigo(),3);
-        txtRegistrados.setText("Registrados: " + data.getNroListasRegistradas(nroLocal,inventarioReg.getNaula())+"/"+data.getNroListasTotales(nroLocal,inventarioReg.getNaula()));
+        data.actualizarListadoReg(inventarioReg.getCodigo(),contentValues);
+        InventarioReg invReg = data.getListadoReg(inventarioReg.getCodigo());
+        txtFaltan.setText("Faltan: " + data.getNroListasFaltan(nroLocal,invReg.getNaula()));
+        txtRegistrados.setText("Registrados: " + data.getNroListasRegistradas(nroLocal,invReg.getNaula()));
         data.close();
         mostrarCorrecto(invReg.getCodigo(),invReg.getNpostulantes());
         final String c = invReg.getCodigo();
@@ -220,7 +235,7 @@ public class InvListAsisFragment extends Fragment {
             public void onSuccess(Void aVoid) {
                 Data data = new Data(context);
                 data.open();
-                data.actualizarInventarioRegSubido(c,3);
+                data.actualizarListadoRegSubido(c);
                 data.close();
             }
         }).addOnFailureListener(new OnFailureListener() {
