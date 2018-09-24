@@ -230,11 +230,11 @@ public class InvCuaderFragment extends Fragment {
         mostrarCorrecto(inventarioReg.getDni(),inventarioReg.getNombres() +" "+ inventarioReg.getApe_paterno() +" "+ inventarioReg.getApe_materno(),inventarioReg.getCodigo());
         final String c = inventarioReg.getCodigo();
         WriteBatch batch = FirebaseFirestore.getInstance().batch();
-        DocumentReference documentReference = FirebaseFirestore.getInstance().collection(nombreColeccion).document(inventarioReg.getTipo()+""+inventarioReg.getCodigo());
-        batch.update(documentReference, "check_registro", 1);
-        batch.update(documentReference, "fecha_transferencia", FieldValue.serverTimestamp());
-        batch.update(documentReference, "usuario_registro", usuario);
-        batch.update(documentReference, "fecha_registro",
+        DocumentReference documentReference = FirebaseFirestore.getInstance().collection(nombreColeccion).document(inventarioReg.getCodigo());
+        batch.update(documentReference, "check_registro_cuadernillo", 1);
+        batch.update(documentReference, "fecha_transferencia_cuadernillo", FieldValue.serverTimestamp());
+        batch.update(documentReference, "usuario_registro_cuadernillo", usuario);
+        batch.update(documentReference, "fecha_registro_cuadernillo",
                 new Timestamp(new Date(inventarioReg.getAnio()-1900,inventarioReg.getMes()-1,inventarioReg.getDia(),
                         inventarioReg.getHora(),inventarioReg.getMin(),inventarioReg.getSeg())));
         batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {

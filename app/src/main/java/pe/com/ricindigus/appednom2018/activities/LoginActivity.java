@@ -28,7 +28,7 @@ import pe.com.ricindigus.appednom2018.modelo.UsuarioLocal;
 public class LoginActivity extends AppCompatActivity {
 
     TextInputEditText edtClave;
-    TextView txtAquiMarco;
+//    TextView txtAquiMarco;
     Button btnIngresar;
     String temaApp;
     UsuarioLocal usuarioLocal;
@@ -41,14 +41,14 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         edtClave = (TextInputEditText) findViewById(R.id.login_edtClave);
         btnIngresar = (Button) findViewById(R.id.login_btnIngresar);
-        txtAquiMarco = (TextView) findViewById(R.id.login_txtAquiMarco);
+//        txtAquiMarco = (TextView) findViewById(R.id.login_txtAquiMarco);
         TextView txtTitulo = (TextView) findViewById(R.id.login_titulo_encuesta);
         Data data = new Data(LoginActivity.this);
         data.open();
         temaApp = data.getNombreApp();
         data.close();
         txtTitulo.setText(temaApp);
-        edtClave.setText("R6VDXC");
+//        edtClave.setText("R6VDXC");
 
         btnIngresar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,12 +58,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        txtAquiMarco.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cargarMarco();
-            }
-        });
+
     }
 
     public void ingresar(String clave){
@@ -71,24 +66,31 @@ public class LoginActivity extends AppCompatActivity {
         data.open();
         usuarioLocal = data.getUsuarioLocal(clave);
         if (usuarioLocal != null){
-            if(data.existeUsuario(clave)) {
-                data.guardarClave(clave);
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            if (usuarioLocal.getRol() == 1){
+                Intent intent = new Intent(LoginActivity.this, AdministradorActivity.class);
                 startActivity(intent);
                 finish();
             }else{
-                switch (usuarioLocal.getRol()){
-                    case 2:
-                        Intent intent = new Intent(LoginActivity.this, ProgressActivity.class);
-                        intent.putExtra("clave",clave);
-                        startActivity(intent);
-                        finish();
-                        break;
-                    case 3:
-                        filtrarMarcoCajas(usuarioLocal.getIdlocal(),clave);
-                        break;
+                if(data.existeUsuario(clave)) {
+                    data.guardarClave(clave);
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }else{
+                    switch (usuarioLocal.getRol()){
+                        case 2:
+                            Intent intent = new Intent(LoginActivity.this, ProgressActivity.class);
+                            intent.putExtra("clave",clave);
+                            startActivity(intent);
+                            finish();
+                            break;
+                        case 3:
+                            filtrarMarcoCajas(usuarioLocal.getIdlocal(),clave);
+                            break;
+                    }
                 }
             }
+
         }else {
             Toast.makeText(this, "CLAVE INCORRECTA", Toast.LENGTH_SHORT).show();
         }
@@ -110,26 +112,5 @@ public class LoginActivity extends AppCompatActivity {
         finish();
     }
 
-    public void cargarMarco(){
-        FileChooser fileChooser = new FileChooser(LoginActivity.this);
-        fileChooser.setFileListener(new FileChooser.FileSelectedListener() {
-            @Override
-            public void fileSelected(File file) {
-                String filename = file.getAbsolutePath();
-                Log.d("File", filename);
-                Toast.makeText(LoginActivity.this, "Cargando..." + filename, Toast.LENGTH_SHORT).show();
-                try {
-                    Data data = new Data(LoginActivity.this,filename);
-                    data.open();
-                    data.close();
-                    Intent intent = new Intent(LoginActivity.this,SplashActivity.class);
-                    startActivity(intent);
-                    finish();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        fileChooser.showDialog();
-    }
+
 }

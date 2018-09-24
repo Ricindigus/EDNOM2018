@@ -171,7 +171,7 @@ public class ListAsisAulaFragment extends Fragment {
         asistenciaAulas = new ArrayList<AsistenciaReg>();
         Data d = new Data(context);
         d.open();
-        nombreColeccion = data.getNombreColeccionAsistencia();
+        nombreColeccion = d.getNombreColeccionAsistencia();
         String aula = spAulas.getSelectedItem().toString();
         int nroAula = d.getNumeroAula(aula,nroLocal);
         asistenciaAulas = d.getListadoAsistenciaAula(nroLocal,nroAula);

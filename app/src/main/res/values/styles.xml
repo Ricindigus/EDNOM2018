@@ -19,12 +19,14 @@
     <style name="themeprogress" parent="ThemeOverlay.AppCompat.Light">
         <item name="colorAccent">@color/greyBluePrimaryLight</item>
     </style>
+
     <style name="estilo_titulo_fragment" parent="ThemeOverlay.AppCompat.Light">
         <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:textSize">20sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:gravity">center</item>
     </style>
+
     <style name="estilo_total_registrados" parent="ThemeOverlay.AppCompat.Light">
         <item name="android:textColor">@color/greyBluePrimaryDark</item>
         <item name="android:textSize">@dimen/texto_chico</item>

@@ -15,7 +15,7 @@
         <activity
             android:name=".activities.LoginActivity"
             android:configChanges="screenSize|orientation|keyboardHidden"
-            android:screenOrientation="landscape"></activity>
+            android:screenOrientation="landscape" />
         <activity
             android:name=".activities.MainActivity"
             android:configChanges="screenSize|orientation|keyboardHidden"
@@ -28,7 +28,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.ProgressActivity"></activity>
+        <activity android:name=".activities.ProgressActivity" />
+        <activity
+            android:name=".activities.AdministradorActivity"
+            android:label="@string/title_activity_administrador"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

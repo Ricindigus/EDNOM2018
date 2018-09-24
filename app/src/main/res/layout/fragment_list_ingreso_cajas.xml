@@ -130,7 +130,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentBottom="true"
                 android:layout_margin="10dp"
-                android:src="@drawable/ic_search"
+                android:src="@drawable/ic_event_available"
                 android:tint="@color/colorIcons"
                 />
             <android.support.design.widget.FloatingActionButton
