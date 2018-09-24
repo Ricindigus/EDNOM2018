@@ -98,7 +98,9 @@ public class CajasOutFragment extends Fragment {
         edtCodigo = (EditText) rootView.findViewById(R.id.salida_cajas_edtCodigo);
         btnBuscar = (ImageView) rootView.findViewById(R.id.salida_cajas_btnBuscar);
 
+        txtTotal = (TextView) rootView.findViewById(R.id.salida_cajas_txtTotales);
         txtRegistrados = (TextView) rootView.findViewById(R.id.salida_cajas_txtRegistrados);
+        txtTransferidos = (TextView) rootView.findViewById(R.id.salida_cajas_txtTransferidos);
         return rootView;
     }
 
@@ -245,3 +247,4 @@ public class CajasOutFragment extends Fragment {
         return number <= 9 ? "0" + number : String.valueOf(number);
     }
 }
+
