@@ -25,6 +25,8 @@ import pe.com.ricindigus.appednom2018.modelo.Caja;
 import pe.com.ricindigus.appednom2018.modelo.CajaReg;
 import pe.com.ricindigus.appednom2018.modelo.Data;
 import pe.com.ricindigus.appednom2018.modelo.SQLConstantes;
+import pe.com.ricindigus.appednom2018.util.ActividadInterfaz;
+import pe.com.ricindigus.appednom2018.util.TipoFragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -58,6 +60,8 @@ public class CajasInFragment extends Fragment {
 
     EditText edtCodigo;
     ImageView btnBuscar;
+    ImageView btnReporte;
+
 
     int numeroLocal;
     Context context;
@@ -98,6 +102,8 @@ public class CajasInFragment extends Fragment {
 
         edtCodigo = (EditText) rootView.findViewById(R.id.ingreso_cajas_edtCodigo);
         btnBuscar = (ImageView) rootView.findViewById(R.id.ingreso_cajas_btnBuscar);
+        btnReporte = (ImageView) rootView.findViewById(R.id.ingreso_cajas_btnReporte);
+
 
         txtTotal = (TextView) rootView.findViewById(R.id.ingreso_cajas_txtTotales);
         txtRegistrados = (TextView) rootView.findViewById(R.id.ingreso_cajas_txtRegistrados);
@@ -122,6 +128,14 @@ public class CajasInFragment extends Fragment {
                 clickBoton();
             }
         });
+
+        btnReporte.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ActividadInterfaz actividadInterfaz = (ActividadInterfaz) getActivity();
+                actividadInterfaz.irReporte(TipoFragment.REPORTES_LISTADO_INGRESO_CAJAS);
+            }
+        });
     }
 
 
@@ -132,7 +146,6 @@ public class CajasInFragment extends Fragment {
         Data data = new Data(context);
         data.open();
         CajaReg cajaIn = data.getCajaReg(codigoBarra,numeroLocal);
-
         if(cajaIn == null){
             Caja caja = data.getCaja(codigoBarra);
             if (caja == null){
@@ -173,19 +186,21 @@ public class CajasInFragment extends Fragment {
             contentValues.put(SQLConstantes.cajasreg_min_entrada,minuto);
             contentValues.put(SQLConstantes.cajasreg_seg_entrada,segundos);
             contentValues.put(SQLConstantes.cajasreg_check_entrada,1);
+            data.actualizarCajaReg(codigoBarra,contentValues);
             if (cajaIn.getNlado() == 1){
-                if (cajaIn.getTipo() == 3) contentValues.put(SQLConstantes.cajasreg_estado_entrada,2);
-                else contentValues.put(SQLConstantes.cajasreg_estado_entrada,cajaIn.getEstado_entrada() + 1);
-                data.actualizarCajaReg(codigoBarra,contentValues);
+                ContentValues contentValues1 = new ContentValues();
+                if (cajaIn.getTipo() == 3) contentValues1.put(SQLConstantes.cajasreg_estado_entrada,2);
+                else contentValues1.put(SQLConstantes.cajasreg_estado_entrada,cajaIn.getEstado_entrada() + 1);
+                data.actualizarCajaReg(codigoBarra,contentValues1);
                 txtRegistrados.setText("Registrados: " + data.getNroCajasEntradaLeidas(numeroLocal));
             }
 
             //Si es codigo "20" debe guardar en el otro codigo "10"
             if(cajaIn.getNlado() == 2){
                 CajaReg cajaIn1 = data.getCajaReg(getCodigoAux(codigoBarra),numeroLocal);
-                contentValues = new ContentValues();
-                contentValues.put(SQLConstantes.cajasreg_estado_entrada,cajaIn1.getEstado_entrada() + 1);
-                data.actualizarCajaReg(cajaIn1.getCod_barra_caja(),contentValues);
+                ContentValues contentValues2 = new ContentValues();
+                contentValues2.put(SQLConstantes.cajasreg_estado_entrada,cajaIn1.getEstado_entrada() + 1);
+                data.actualizarCajaReg(cajaIn1.getCod_barra_caja(),contentValues2);
                 txtRegistrados.setText("Registrados: " + data.getNroCajasEntradaLeidas(numeroLocal));
             }
             data.close();

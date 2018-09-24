@@ -50,9 +50,10 @@ import pe.com.ricindigus.appednom2018.modelo.Data;
 import pe.com.ricindigus.appednom2018.modelo.SQLConstantes;
 import pe.com.ricindigus.appednom2018.modelo.UsuarioActual;
 import pe.com.ricindigus.appednom2018.modelo.UsuarioLocal;
+import pe.com.ricindigus.appednom2018.util.ActividadInterfaz;
 import pe.com.ricindigus.appednom2018.util.TipoFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ActividadInterfaz{
 
     int nroLocal;
     String usuario;
@@ -458,4 +459,8 @@ public class MainActivity extends AppCompatActivity {
         alert.show();
     }
 
+    @Override
+    public void irReporte(int fragment) {
+        setFragment(fragment);
+    }
 }

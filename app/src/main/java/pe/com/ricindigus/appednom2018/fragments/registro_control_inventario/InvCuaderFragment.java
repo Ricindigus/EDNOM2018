@@ -74,6 +74,9 @@ public class InvCuaderFragment extends Fragment {
     TextView txtRegistrados;
     TextView txtTransferidos;
 
+
+    String nombreColeccion;
+
     public InvCuaderFragment() {
         // Required empty public constructor
     }
@@ -172,6 +175,7 @@ public class InvCuaderFragment extends Fragment {
         String codigoInventario = edtCuadernillo.getText().toString();
         Data data = new Data(context);
         data.open();
+        nombreColeccion = data.getNombreColeccionInventario();
         InventarioReg inventarioReg = data.getCuadernilloReg(codigoInventario);
         String aula = spAulas.getSelectedItem().toString();
         int nroAula = 0;
@@ -226,7 +230,7 @@ public class InvCuaderFragment extends Fragment {
         mostrarCorrecto(inventarioReg.getDni(),inventarioReg.getNombres() +" "+ inventarioReg.getApe_paterno() +" "+ inventarioReg.getApe_materno(),inventarioReg.getCodigo());
         final String c = inventarioReg.getCodigo();
         WriteBatch batch = FirebaseFirestore.getInstance().batch();
-        DocumentReference documentReference = FirebaseFirestore.getInstance().collection("inventario").document(inventarioReg.getTipo()+""+inventarioReg.getCodigo());
+        DocumentReference documentReference = FirebaseFirestore.getInstance().collection(nombreColeccion).document(inventarioReg.getTipo()+""+inventarioReg.getCodigo());
         batch.update(documentReference, "check_registro", 1);
         batch.update(documentReference, "fecha_transferencia", FieldValue.serverTimestamp());
         batch.update(documentReference, "usuario_registro", usuario);

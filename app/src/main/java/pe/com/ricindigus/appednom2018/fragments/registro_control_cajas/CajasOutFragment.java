@@ -24,6 +24,8 @@ import pe.com.ricindigus.appednom2018.modelo.Caja;
 import pe.com.ricindigus.appednom2018.modelo.CajaReg;
 import pe.com.ricindigus.appednom2018.modelo.Data;
 import pe.com.ricindigus.appednom2018.modelo.SQLConstantes;
+import pe.com.ricindigus.appednom2018.util.ActividadInterfaz;
+import pe.com.ricindigus.appednom2018.util.TipoFragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -56,6 +58,8 @@ public class CajasOutFragment extends Fragment {
 
     EditText edtCodigo;
     ImageView btnBuscar;
+    ImageView btnReporte;
+
 
     int numeroLocal;
     Context context;
@@ -97,6 +101,8 @@ public class CajasOutFragment extends Fragment {
 
         edtCodigo = (EditText) rootView.findViewById(R.id.salida_cajas_edtCodigo);
         btnBuscar = (ImageView) rootView.findViewById(R.id.salida_cajas_btnBuscar);
+        btnReporte = (ImageView) rootView.findViewById(R.id.salida_cajas_btnReporte);
+
 
         txtTotal = (TextView) rootView.findViewById(R.id.salida_cajas_txtTotales);
         txtRegistrados = (TextView) rootView.findViewById(R.id.salida_cajas_txtRegistrados);
@@ -117,6 +123,13 @@ public class CajasOutFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 clickBoton();
+            }
+        });
+        btnReporte.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ActividadInterfaz actividadInterfaz = (ActividadInterfaz) getActivity();
+                actividadInterfaz.irReporte(TipoFragment.REPORTES_LISTADO_SALIDA_CAJAS);
             }
         });
     }

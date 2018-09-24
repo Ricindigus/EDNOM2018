@@ -73,6 +73,8 @@ public class InvListAsisFragment extends Fragment {
     TextView txtRegistrados;
     TextView txtTransferidos;
 
+    String nombreColeccion;
+
 
     public InvListAsisFragment() {
         // Required empty public constructor
@@ -126,6 +128,7 @@ public class InvListAsisFragment extends Fragment {
         if (context != null){
             Data data =  new Data(context);
             data.open();
+            nombreColeccion = data.getNombreColeccionInventario();
             ArrayList<String> aulas =  data.getArrayAulasRegistro(nroLocal);
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, aulas);
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -223,7 +226,7 @@ public class InvListAsisFragment extends Fragment {
         mostrarCorrecto(invReg.getCodigo(),invReg.getNpostulantes());
         final String c = invReg.getCodigo();
         WriteBatch batch = FirebaseFirestore.getInstance().batch();
-        DocumentReference documentReference = FirebaseFirestore.getInstance().collection("inventario").document(invReg.getCodigo());
+        DocumentReference documentReference = FirebaseFirestore.getInstance().collection(nombreColeccion).document(invReg.getCodigo());
         batch.update(documentReference, "check_registro", 1);
         batch.update(documentReference, "fecha_transferencia", FieldValue.serverTimestamp());
         batch.update(documentReference, "usuario_registro", usuario);

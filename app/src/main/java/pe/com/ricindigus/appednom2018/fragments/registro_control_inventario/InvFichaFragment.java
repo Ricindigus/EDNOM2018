@@ -75,6 +75,8 @@ public class InvFichaFragment extends Fragment {
     TextView txtRegistrados;
     TextView txtTransferidos;
 
+    String nombreColeccion;
+
     public InvFichaFragment() {
         // Required empty public constructor
     }
@@ -130,6 +132,7 @@ public class InvFichaFragment extends Fragment {
         if (context != null){
             Data data =  new Data(context);
             data.open();
+            nombreColeccion = data.getNombreColeccionInventario();
             ArrayList<String> aulas =  data.getArrayAulasRegistro(nroLocal);
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, aulas);
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -227,7 +230,7 @@ public class InvFichaFragment extends Fragment {
         mostrarCorrecto(inventarioReg.getDni(),inventarioReg.getNombres() +" "+ inventarioReg.getApe_paterno() +" "+ inventarioReg.getApe_materno(),inventarioReg.getCodigo());
         final String c = inventarioReg.getCodigo();
         WriteBatch batch = FirebaseFirestore.getInstance().batch();
-        DocumentReference documentReference = FirebaseFirestore.getInstance().collection("inventario").document(inventarioReg.getTipo()+""+inventarioReg.getCodigo());
+        DocumentReference documentReference = FirebaseFirestore.getInstance().collection(nombreColeccion).document(inventarioReg.getTipo()+""+inventarioReg.getCodigo());
         batch.update(documentReference, "check_registro", 1);
         batch.update(documentReference, "fecha_transferencia", FieldValue.serverTimestamp());
         batch.update(documentReference, "usuario_registro", usuario);

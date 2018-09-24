@@ -58,6 +58,8 @@ public class ListInvCuadernilloFragment extends Fragment {
     TextView txtRegistrados;
     TextView txtTransferidos;
 
+    String nombreColeccion;
+
     public ListInvCuadernilloFragment() {
         // Required empty public constructor
     }
@@ -130,7 +132,7 @@ public class ListInvCuadernilloFragment extends Fragment {
                         final int j = i;
                         final String c = cuadernillo.getCodigo();
                         WriteBatch batch = FirebaseFirestore.getInstance().batch();
-                        DocumentReference documentReference = FirebaseFirestore.getInstance().collection("inventario").document(cuadernillo.getTipo()+""+cuadernillo.getCodigo());
+                        DocumentReference documentReference = FirebaseFirestore.getInstance().collection(nombreColeccion).document(cuadernillo.getTipo()+""+cuadernillo.getCodigo());
                         batch.update(documentReference, "check_registro", 1);
                         batch.update(documentReference, "fecha_transferencia", FieldValue.serverTimestamp());
                         batch.update(documentReference, "usuario_registro", usuario);
@@ -170,6 +172,7 @@ public class ListInvCuadernilloFragment extends Fragment {
         cuadernillos = new ArrayList<InventarioReg>();
         Data d = new Data(context);
         d.open();
+        nombreColeccion = d.getNombreColeccionInventario();
         String aula = spAulas.getSelectedItem().toString();
         int nroAula = 0;
         nroAula = d.getNumeroAula(aula,nroLocal);

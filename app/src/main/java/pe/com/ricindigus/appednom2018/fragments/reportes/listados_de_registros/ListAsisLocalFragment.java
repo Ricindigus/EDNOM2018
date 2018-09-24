@@ -53,6 +53,7 @@ public class ListAsisLocalFragment extends Fragment {
     TextView txtRegistrados;
     TextView txtTransferidos;
 
+    String nombreColeccion;
 
     public ListAsisLocalFragment() {
         // Required empty public constructor
@@ -106,7 +107,7 @@ public class ListAsisLocalFragment extends Fragment {
                         final int j = i;
                         final String c = asistenciaLocal.getDni();
                         WriteBatch batch = FirebaseFirestore.getInstance().batch();
-                        DocumentReference documentReference = FirebaseFirestore.getInstance().collection("asistencia").document(asistenciaLocal.getDni());
+                        DocumentReference documentReference = FirebaseFirestore.getInstance().collection(nombreColeccion).document(asistenciaLocal.getDni());
                         batch.update(documentReference, "check_registro", 1);
                         batch.update(documentReference, "fecha_transferencia", FieldValue.serverTimestamp());
                         batch.update(documentReference, "usuario_registro", usuario);
@@ -146,6 +147,7 @@ public class ListAsisLocalFragment extends Fragment {
         asistenciaLocals = new ArrayList<AsistenciaReg>();
         Data data = new Data(context);
         data.open();
+        nombreColeccion = data.getNombreColeccionAsistencia();
         asistenciaLocals = data.getListadoAsistenciaLocal(nroLocal);
         txtTotal.setText("Total: " + data.getNumeroItemsAsistenciaReg());
 //        txtSinRegistro.setText("Sin Registro: " + data.getNroAsistenciasLocalSinRegistro(nroLocal));

@@ -31,6 +31,8 @@ import pe.com.ricindigus.appednom2018.R;
 import pe.com.ricindigus.appednom2018.adapters.CajasEntradaAdapter;
 import pe.com.ricindigus.appednom2018.modelo.CajaReg;
 import pe.com.ricindigus.appednom2018.modelo.Data;
+import pe.com.ricindigus.appednom2018.util.ActividadInterfaz;
+import pe.com.ricindigus.appednom2018.util.TipoFragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -47,6 +49,8 @@ public class ListIngresoCajasFragment extends Fragment {
     int nroLocal;
     Data data;
     FloatingActionButton fabUpLoad;
+    FloatingActionButton fabSearch;
+
     TextView txtNumero;
     TextView txtNoRegistrados;
     TextView txtIncompletos;
@@ -54,7 +58,7 @@ public class ListIngresoCajasFragment extends Fragment {
     TextView txtTransferidos;
 
     String usuario;
-
+    String nombreColeccion;
 
     boolean b = false;
     CajasEntradaAdapter cajasEntradaAdapter;
@@ -77,6 +81,8 @@ public class ListIngresoCajasFragment extends Fragment {
         View rootView =  inflater.inflate(R.layout.fragment_list_ingreso_cajas, container, false);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.listado_recycler);
         fabUpLoad = (FloatingActionButton) rootView.findViewById(R.id.listado_btnUpload);
+        fabSearch = (FloatingActionButton) rootView.findViewById(R.id.listado_btnBuscar);
+
         txtNumero = (TextView) rootView.findViewById(R.id.listado_txtNumero);
         txtNoRegistrados = (TextView) rootView.findViewById(R.id.listado_txtNoRegistrados);
         txtIncompletos = (TextView) rootView.findViewById(R.id.listado_txtIncompletos);
@@ -88,14 +94,20 @@ public class ListIngresoCajasFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);
         cargaData();
         cajasEntradaAdapter = new CajasEntradaAdapter(cajaRegs,context);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(cajasEntradaAdapter);
+
+        fabSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ActividadInterfaz actividadInterfaz = (ActividadInterfaz) getActivity();
+                actividadInterfaz.irReporte(TipoFragment.CAJAS_IN);
+            }
+        });
 
         fabUpLoad.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,7 +127,7 @@ public class ListIngresoCajasFragment extends Fragment {
                             CajaReg cajaIn20 = data.getCajaReg(getCodigo20(cajaIn10.getCod_barra_caja()),nroLocal);
                             String codCaja = cajaIn10.getCod_barra_caja().substring(0,cajaIn10.getCod_barra_caja().length()-2);
                             WriteBatch batch = FirebaseFirestore.getInstance().batch();
-                            DocumentReference documentReference = FirebaseFirestore.getInstance().collection("cajas").document(codCaja);
+                            DocumentReference documentReference = FirebaseFirestore.getInstance().collection(nombreColeccion).document(codCaja);
                             batch.update(documentReference, "check_registro", 1);
                             batch.update(documentReference, "fecha_registro_ingreso_10", new Timestamp(
                                     new Date(cajaIn10.getAnio_entrada()-1900,cajaIn10.getMes_entrada()-1,cajaIn10.getDia_entrada(),cajaIn10.getHora_entrada(),cajaIn10.getMin_entrada(),cajaIn10.getSeg_entrada())));
@@ -147,7 +159,7 @@ public class ListIngresoCajasFragment extends Fragment {
                         }else{
                             String codCaja = cajaIn10.getCod_barra_caja().substring(0,cajaIn10.getCod_barra_caja().length()-2);
                             WriteBatch batch = FirebaseFirestore.getInstance().batch();
-                            DocumentReference documentReference = FirebaseFirestore.getInstance().collection("cajas").document(codCaja);
+                            DocumentReference documentReference = FirebaseFirestore.getInstance().collection(nombreColeccion).document(codCaja);
                             batch.update(documentReference, "check_registro", 1);
                             batch.update(documentReference, "fecha_registro_ingreso_10", new Timestamp(
                                     new Date(cajaIn10.getAnio_entrada()-1900,cajaIn10.getMes_entrada()-1,cajaIn10.getDia_entrada(),cajaIn10.getHora_entrada(),cajaIn10.getMin_entrada(),cajaIn10.getSeg_entrada())));
@@ -193,6 +205,7 @@ public class ListIngresoCajasFragment extends Fragment {
         cajaRegs = new ArrayList<CajaReg>();
         Data data = new Data(context);
         data.open();
+        nombreColeccion = data.getNombreColeccionCajas();
         cajaRegs = data.getListadoCajasEntrada(nroLocal);
         txtNumero.setText("Totales: " + cajaRegs.size());
         txtNoRegistrados.setText("No registrados: " + data.getNroCajasEntradaSinRegistrar(nroLocal));

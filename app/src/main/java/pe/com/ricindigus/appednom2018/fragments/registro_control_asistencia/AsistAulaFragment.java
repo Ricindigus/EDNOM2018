@@ -50,6 +50,7 @@ public class AsistAulaFragment extends Fragment {
     Context context;
     int nroLocal;
     String usuario;
+    String nombreColeccion;
 
     TextView correctoTxtDni;
     TextView correctoTxtNombre;
@@ -130,6 +131,7 @@ public class AsistAulaFragment extends Fragment {
         if (context != null){
             Data data =  new Data(context);
             data.open();
+            nombreColeccion = data.getNombreColeccionAsistencia();
             ArrayList<String> aulas =  data.getArrayAulasRegistro(nroLocal);
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, aulas);
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -231,7 +233,7 @@ public class AsistAulaFragment extends Fragment {
         final String c = asis.getDni();
         final int nAula = asis.getNaula();
         WriteBatch batch = FirebaseFirestore.getInstance().batch();
-        DocumentReference documentReference = FirebaseFirestore.getInstance().collection("asistencia").document(asis.getDni());
+        DocumentReference documentReference = FirebaseFirestore.getInstance().collection(nombreColeccion).document(asis.getDni());
         batch.update(documentReference, "check_registro_aula", 1);
         batch.update(documentReference, "fecha_transferencia_aula", FieldValue.serverTimestamp());
         batch.update(documentReference, "usuario_registro_aula", usuario);

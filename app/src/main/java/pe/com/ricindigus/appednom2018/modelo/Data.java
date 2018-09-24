@@ -246,6 +246,54 @@ public class Data {
         return nombre;
     }
 
+    public String getNombreColeccionCajas(){
+        String nombre = "";
+        String[] whereArgs = new String[]{"1"};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query("version", null,"_id=?",whereArgs,null,null,null);
+            if(cursor.getCount() == 1){
+                cursor.moveToFirst();
+                nombre = cursor.getString(cursor.getColumnIndex("coleccion_cajas"));
+            }
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return nombre;
+    }
+
+    public String getNombreColeccionInventario(){
+        String nombre = "";
+        String[] whereArgs = new String[]{"1"};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query("version", null,"_id=?",whereArgs,null,null,null);
+            if(cursor.getCount() == 1){
+                cursor.moveToFirst();
+                nombre = cursor.getString(cursor.getColumnIndex("coleccion_inventario"));
+            }
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return nombre;
+    }
+
+    public String getNombreColeccionAsistencia(){
+        String nombre = "";
+        String[] whereArgs = new String[]{"1"};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query("version", null,"_id=?",whereArgs,null,null,null);
+            if(cursor.getCount() == 1){
+                cursor.moveToFirst();
+                nombre = cursor.getString(cursor.getColumnIndex("coleccion_asistencia"));
+            }
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return nombre;
+    }
+
     public int getNumeroApp(){
         int numero = 0;
         String[] whereArgs = new String[]{"1"};
@@ -361,6 +409,13 @@ public class Data {
     public void actualizarCajaReg(String codigo, ContentValues valores){
         String[] whereArgs = new String[]{codigo};
         sqLiteDatabase.update(SQLConstantes.tablacajasreg,valores,SQLConstantes.WHERE_CLAUSE_COD_BARRA,whereArgs);
+    }
+
+    public void actualizarEntradaLadoCajaLeida(String codigo){
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SQLConstantes.cajasreg_check_entrada,1);
+        String[] whereArgs = new String[]{codigo};
+        sqLiteDatabase.update(SQLConstantes.tablacajasreg,contentValues,SQLConstantes.WHERE_CLAUSE_COD_BARRA,whereArgs);
     }
 
     public void actualizarCajaRegSubidoEntrada(String codigo){

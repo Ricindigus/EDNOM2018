@@ -55,6 +55,7 @@ public class ListInvListadoFragment extends Fragment {
     TextView txtRegistrados;
     TextView txtTransferidos;
     RecyclerView.LayoutManager layoutManager;
+    String nombreColeccion;
 
     public ListInvListadoFragment() {
         // Required empty public constructor
@@ -130,7 +131,7 @@ public class ListInvListadoFragment extends Fragment {
                         final int j = i;
                         final String c = listado.getCodigo();
                         WriteBatch batch = FirebaseFirestore.getInstance().batch();
-                        DocumentReference documentReference = FirebaseFirestore.getInstance().collection("inventario").document(listado.getCodigo());
+                        DocumentReference documentReference = FirebaseFirestore.getInstance().collection(nombreColeccion).document(listado.getCodigo());
                         batch.update(documentReference, "check_registro", 1);
                         batch.update(documentReference, "fecha_transferencia", FieldValue.serverTimestamp());
                         batch.update(documentReference, "usuario_registro", usuario);
@@ -170,6 +171,7 @@ public class ListInvListadoFragment extends Fragment {
         listados = new ArrayList<InventarioReg>();
         Data d = new Data(context);
         d.open();
+        nombreColeccion = d.getNombreColeccionInventario();
         String aula = spAulas.getSelectedItem().toString();
         int nroAula = 0;
         nroAula = d.getNumeroAula(aula,nroLocal);

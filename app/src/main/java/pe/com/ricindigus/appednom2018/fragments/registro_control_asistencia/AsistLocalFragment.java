@@ -73,6 +73,7 @@ public class AsistLocalFragment extends Fragment {
     int nroLocal;
     Context context;
     String usuario;
+    String nombreColeccion;
 
     public AsistLocalFragment() {
         // Required empty public constructor
@@ -128,6 +129,7 @@ public class AsistLocalFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Data data =  new Data(context);
         data.open();
+        nombreColeccion = data.getNombreColeccionAsistencia();
         txtTotal.setText("Total: " + data.getNumeroItemsAsistenciaReg());
 //        txtFaltan.setText("Faltan: " + data.getNroAsistenciasLocalSinRegistro(nroLocal));
         txtRegistrados.setText("Leidos: " + data.getNroAsistenciasLocalLeidas(nroLocal));
@@ -193,7 +195,7 @@ public class AsistLocalFragment extends Fragment {
         mostrarCorrecto(asis.getDni(),asis.getNombres() +" "+ asis.getApe_paterno() +" "+ asis.getApe_materno(),asis.getNom_sede(),asis.getNom_local(),asis.getNaula());
         final String c = asis.getDni();
         WriteBatch batch = FirebaseFirestore.getInstance().batch();
-        DocumentReference documentReference = FirebaseFirestore.getInstance().collection("asistencia").document(asis.getDni());
+        DocumentReference documentReference = FirebaseFirestore.getInstance().collection(nombreColeccion).document(asis.getDni());
         batch.update(documentReference, "check_registro_local", 1);
         batch.update(documentReference, "fecha_transferencia_local", FieldValue.serverTimestamp());
         batch.update(documentReference, "usuario_registro_local", usuario);

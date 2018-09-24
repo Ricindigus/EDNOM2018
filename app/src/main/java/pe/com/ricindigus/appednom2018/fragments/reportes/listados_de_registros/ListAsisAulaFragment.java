@@ -57,6 +57,8 @@ public class ListAsisAulaFragment extends Fragment {
     TextView txtRegistrados;
     TextView txtTransferidos;
 
+    String nombreColeccion;
+
     public ListAsisAulaFragment() {
         // Required empty public constructor
     }
@@ -95,10 +97,7 @@ public class ListAsisAulaFragment extends Fragment {
         d.close();
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);
-        cargaData();
-        asistenciaAulaAdapter = new AsistenciaAulaAdapter(asistenciaAulas,context);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(asistenciaAulaAdapter);
 
         spAulas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -106,15 +105,6 @@ public class ListAsisAulaFragment extends Fragment {
                 cargaData();
                 asistenciaAulaAdapter = new AsistenciaAulaAdapter(asistenciaAulas,context);
                 recyclerView.setAdapter(asistenciaAulaAdapter);
-                Data d = new Data(context);
-                d.open();
-                String aula = spAulas.getSelectedItem().toString();
-                nroAula = d.getNumeroAula(aula,nroLocal);
-                txtTotal.setText("Total: " + asistenciaAulas.size());
-                txtSinRegistro.setText("Sin Registro: " + d.getNroAsistenciasAulaSinRegistro(nroLocal,nroAula));
-                txtRegistrados.setText("Registrados: " + d.getNroAsistenciasAulaLeidas(nroLocal,nroAula));
-                txtTransferidos.setText("Transferidos: " + d.getNroAsistenciasAulaTransferidos(nroLocal,nroAula));
-                d.close();
             }
 
             @Override
@@ -142,7 +132,7 @@ public class ListAsisAulaFragment extends Fragment {
                         final int j = i;
                         final String c = asistenciaAula.getDni();
                         WriteBatch batch = FirebaseFirestore.getInstance().batch();
-                        DocumentReference documentReference = FirebaseFirestore.getInstance().collection("asistencia").document(asistenciaAula.getDni());
+                        DocumentReference documentReference = FirebaseFirestore.getInstance().collection(nombreColeccion).document(asistenciaAula.getDni());
                         batch.update(documentReference, "check_registro", 1);
                         batch.update(documentReference, "fecha_transferencia", FieldValue.serverTimestamp());
                         batch.update(documentReference, "usuario_registro", usuario);
@@ -181,6 +171,7 @@ public class ListAsisAulaFragment extends Fragment {
         asistenciaAulas = new ArrayList<AsistenciaReg>();
         Data d = new Data(context);
         d.open();
+        nombreColeccion = data.getNombreColeccionAsistencia();
         String aula = spAulas.getSelectedItem().toString();
         int nroAula = d.getNumeroAula(aula,nroLocal);
         asistenciaAulas = d.getListadoAsistenciaAula(nroLocal,nroAula);
