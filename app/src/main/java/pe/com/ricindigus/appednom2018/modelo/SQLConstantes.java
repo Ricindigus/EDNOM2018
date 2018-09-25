@@ -11,6 +11,8 @@ public class SQLConstantes {
     public static String tablafichas = "fichas";
     public static String tablacuadernillos = "cuadernillos";
     public static String tablalistados = "listados";
+    public static String tablaversion = "version";
+
 
 
     public static String tablausuarioactual = "usuario_actual";
@@ -37,6 +39,19 @@ public class SQLConstantes {
     public static String usuario_local_naulas = "naulas";
     public static String usuario_local_idsede = "idsede";
     public static String usuario_local_nom_sede = "nom_sede";
+
+    //TABLA VERSION
+    public static String version_id = "_id";
+    public static String version_numero = "numero";
+    public static String version_nombre = "nombre";
+    public static String version_coleccion_cajas = "coleccion_cajas";
+    public static String version_coleccion_inventario = "coleccion_inventario";
+    public static String version_coleccion_asistencia = "coleccion_asistencia";
+    public static String version_asis_hora_inicio = "asis_hora_inicio";
+    public static String version_asis_hora_fin = "asis_hora_fin";
+    public static String version_asis_min_inicio = "asis_min_inicio";
+    public static String version_asis_min_fin = "asis_min_fin";
+    public static String version_restriccion = "restriccion";
 
 
     //TABLA AULA

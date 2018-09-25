@@ -17,6 +17,17 @@
             android:text="MODIFICAR MARCO"
             android:layout_marginBottom="32dp"
             android:theme="@style/estilo_titulo_fragment"/>
+        <TextView
+            android:id="@+id/txtArchivo"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:text="Seleccionar archivo"
+            android:padding="@dimen/margin16dp"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:layout_marginBottom="@dimen/margin16dp"
+            android:textStyle="bold"
+            android:background="@drawable/marco_azul"/>
         <Button
             android:id="@+id/btnCargar"
             android:layout_gravity="center"
@@ -27,14 +38,18 @@
             android:textColor="@color/colorIcons"
             android:background="@color/colorPrimaryDark"/>
         <ProgressBar
+            android:id="@+id/progreso_admin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
             />
         <TextView
+            android:id="@+id/mensaje_admin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:textSize="20sp"
+            android:textColor="@color/colorPrimary"
             android:text=""/>
     </LinearLayout>
 </LinearLayout>

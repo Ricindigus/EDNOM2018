@@ -229,6 +229,50 @@ public class Data {
         return existe;
     }
 
+    public Version getVersion(){
+        String[] whereArgs = new String[]{"1"};
+        Cursor cursor = null;
+        Version version = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablaversion, null,"_id=?",whereArgs,null,null,null);
+            if(cursor.getCount() == 1){
+                cursor.moveToFirst();
+                version = new Version();
+                version.setNumero(cursor.getInt(cursor.getColumnIndex(SQLConstantes.version_numero)));
+                version.setNombre(cursor.getString(cursor.getColumnIndex(SQLConstantes.version_nombre)));
+                version.setColeccion_asistencia(cursor.getString(cursor.getColumnIndex(SQLConstantes.version_coleccion_asistencia)));
+                version.setColeccion_cajas(cursor.getString(cursor.getColumnIndex(SQLConstantes.version_coleccion_cajas)));
+                version.setColeccion_inventario(cursor.getString(cursor.getColumnIndex(SQLConstantes.version_coleccion_inventario)));
+                version.setAsis_hora_inicio(cursor.getInt(cursor.getColumnIndex(SQLConstantes.version_asis_hora_inicio)));
+                version.setAsis_min_inicio(cursor.getInt(cursor.getColumnIndex(SQLConstantes.version_asis_min_inicio)));
+                version.setAsis_hora_fin(cursor.getInt(cursor.getColumnIndex(SQLConstantes.version_asis_hora_fin)));
+                version.setAsis_min_fin(cursor.getInt(cursor.getColumnIndex(SQLConstantes.version_asis_min_fin)));
+            }
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return version;
+    }
+
+    public void actualizarHoraAsisDocenteVersion(int hi, int mi, int hf, int mf){
+        String[] whereArgs = new String[]{"1"};
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SQLConstantes.version_asis_hora_inicio,hi);
+        contentValues.put(SQLConstantes.version_asis_hora_fin,hf);
+        contentValues.put(SQLConstantes.version_asis_min_inicio,mi);
+        contentValues.put(SQLConstantes.version_asis_min_fin,mf);
+        contentValues.put(SQLConstantes.version_asis_min_fin,mf);
+        contentValues.put(SQLConstantes.version_restriccion,1);
+        sqLiteDatabase.update(SQLConstantes.tablaversion,contentValues,"_id=?",whereArgs);
+    }
+
+    public void actualizarRestriccionHoraVersion(){
+        String[] whereArgs = new String[]{"1"};
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SQLConstantes.version_restriccion,0);
+        sqLiteDatabase.update(SQLConstantes.tablaversion,contentValues,"_id=?",whereArgs);
+    }
+
 
     public String getNombreApp(){
         String nombre = "";

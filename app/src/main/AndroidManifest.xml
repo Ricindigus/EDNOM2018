@@ -29,10 +29,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.ProgressActivity" />
-        <activity
-            android:name=".activities.AdministradorActivity"
-            android:label="@string/title_activity_administrador"
-            android:theme="@style/AppTheme"></activity>
+        <activity android:name=".activities.AdminActivity" />
+        <activity android:name=".activities.admin.AdmMarcoActivity" />
+        <activity android:name=".activities.admin.AdmHorarioActivity"></activity>
     </application>
 
 </manifest>

@@ -67,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
         usuarioLocal = data.getUsuarioLocal(clave);
         if (usuarioLocal != null){
             if (usuarioLocal.getRol() == 1){
-                Intent intent = new Intent(LoginActivity.this, AdministradorActivity.class);
+                Intent intent = new Intent(LoginActivity.this, AdminActivity.class);
                 startActivity(intent);
                 finish();
             }else{
