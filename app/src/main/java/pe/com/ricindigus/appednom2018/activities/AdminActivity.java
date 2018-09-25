@@ -18,6 +18,7 @@ public class AdminActivity extends AppCompatActivity {
 
     Button btnCargarMarco;
     Button btnHorarioAsistencia;
+    Button btnSalir;
 
 
     @Override
@@ -26,6 +27,7 @@ public class AdminActivity extends AppCompatActivity {
         setContentView(R.layout.activity_admin);
         btnCargarMarco = (Button) findViewById(R.id.btnCargarMarco);
         btnHorarioAsistencia = (Button) findViewById(R.id.btnHorarioAsistencia);
+        btnSalir = (Button) findViewById(R.id.btnSalir);
 
         btnCargarMarco.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,6 +56,15 @@ public class AdminActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(AdminActivity.this, AdmHorarioActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        btnSalir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AdminActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
     }

@@ -14,7 +14,6 @@ import pe.com.ricindigus.appednom2018.R;
 import pe.com.ricindigus.appednom2018.modelo.Data;
 
 public class AdmMarcoActivity extends AppCompatActivity {
-    Button btnCargarMarco;
     ProgressBar progressBar;
     TextView txtMensaje;
     String filename = "";
@@ -23,7 +22,6 @@ public class AdmMarcoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_adm_marco);
-        btnCargarMarco = (Button) findViewById(R.id.btnCargar);
         progressBar = (ProgressBar) findViewById(R.id.progreso_admin);
         txtMensaje = (TextView) findViewById(R.id.mensaje_admin);
         filename = getIntent().getExtras().getString("filename");

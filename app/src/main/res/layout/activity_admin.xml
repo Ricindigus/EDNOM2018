@@ -38,5 +38,11 @@
             android:layout_height="wrap_content"
             android:text="HORARIO ASISTENCIA"
             android:theme="@style/RaisedButtonDark"/>
+        <Button
+            android:id="@+id/btnSalir"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:text="SALIR"
+            android:theme="@style/RaisedButtonDark"/>
     </LinearLayout>
 </LinearLayout>

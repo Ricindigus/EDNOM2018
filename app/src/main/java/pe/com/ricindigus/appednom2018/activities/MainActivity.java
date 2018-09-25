@@ -34,10 +34,8 @@ import pe.com.ricindigus.appednom2018.fragments.registro_control_asistencia.Asis
 import pe.com.ricindigus.appednom2018.fragments.registro_control_inventario.InvCuaderFragment;
 import pe.com.ricindigus.appednom2018.fragments.registro_control_inventario.InvFichaFragment;
 import pe.com.ricindigus.appednom2018.fragments.registro_control_inventario.InvListAsisFragment;
-import pe.com.ricindigus.appednom2018.fragments.reportes.cuadro_resumen.CuadroResumenAsistenciaFragment;
 import pe.com.ricindigus.appednom2018.fragments.reportes.cuadro_resumen.CuadroResumenCajasInFragment;
 import pe.com.ricindigus.appednom2018.fragments.reportes.cuadro_resumen.CuadroResumenCajasOutFragment;
-import pe.com.ricindigus.appednom2018.fragments.reportes.cuadro_resumen.CuadroResumenInventarioFragment;
 import pe.com.ricindigus.appednom2018.fragments.reportes.listados_de_registros.ListIngresoCajasFragment;
 import pe.com.ricindigus.appednom2018.fragments.reportes.listados_de_registros.ListInvCuadernilloFragment;
 import pe.com.ricindigus.appednom2018.fragments.reportes.listados_de_registros.ListAsisAulaFragment;
@@ -48,7 +46,6 @@ import pe.com.ricindigus.appednom2018.fragments.reportes.listados_de_registros.L
 import pe.com.ricindigus.appednom2018.fragments.registro_control_cajas.CajasOutFragment;
 import pe.com.ricindigus.appednom2018.modelo.Data;
 import pe.com.ricindigus.appednom2018.modelo.SQLConstantes;
-import pe.com.ricindigus.appednom2018.modelo.UsuarioActual;
 import pe.com.ricindigus.appednom2018.modelo.UsuarioLocal;
 import pe.com.ricindigus.appednom2018.util.ActividadInterfaz;
 import pe.com.ricindigus.appednom2018.util.TipoFragment;
@@ -137,15 +134,6 @@ public class MainActivity extends AppCompatActivity implements ActividadInterfaz
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         boolean retornar = super.dispatchKeyEvent(event);
-//        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP){
-//            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-//            if (drawer.isDrawerOpen(GravityCompat.START)) {
-//                drawer.closeDrawer(GravityCompat.START);
-//            } else {
-//                cerrarSesion();
-//            }
-//            retornar = true;
-//        }
         if (event.getKeyCode() == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP){
             Fragment fragment = getSupportFragmentManager().findFragmentByTag("fragment_actual");
             switch (tFragment){
@@ -159,7 +147,6 @@ public class MainActivity extends AppCompatActivity implements ActividadInterfaz
                 case TipoFragment.CONSULTA_PADRON_NACIONAL:((ConsultaPadronFragment)fragment).clickBoton();break;
             }
         }
-
         return retornar;
     }
 
@@ -226,14 +213,6 @@ public class MainActivity extends AppCompatActivity implements ActividadInterfaz
             case TipoFragment.REPORTES_RESUMEN_INGRESO_CAJAS:
                 CuadroResumenCajasInFragment cuadroResumenCajasInFragment = new CuadroResumenCajasInFragment(MainActivity.this,nroLocal);
                 fragmentTransaction.replace(R.id.fragment_layout, cuadroResumenCajasInFragment,"fragment_actual");
-                break;
-            case TipoFragment.REPORTES_RESUMEN_ASISTENCIA:
-                CuadroResumenAsistenciaFragment cuadroResumenAsistenciaFragment = new CuadroResumenAsistenciaFragment();
-                fragmentTransaction.replace(R.id.fragment_layout, cuadroResumenAsistenciaFragment,"fragment_actual");
-                break;
-            case TipoFragment.REPORTES_RESUMEN_INVENTARIO:
-                CuadroResumenInventarioFragment cuadroResumenInventarioFragment = new CuadroResumenInventarioFragment();
-                fragmentTransaction.replace(R.id.fragment_layout, cuadroResumenInventarioFragment,"fragment_actual");
                 break;
             case TipoFragment.REPORTES_RESUMEN_SALIDA_CAJAS:
                 CuadroResumenCajasOutFragment cuadroResumenCajasOutFragment = new CuadroResumenCajasOutFragment(MainActivity.this,nroLocal);
@@ -311,8 +290,6 @@ public class MainActivity extends AppCompatActivity implements ActividadInterfaz
                                 case 2: setFragment(TipoFragment.REPORTES_LISTADO_INVENTARIO_FICHA);tFragment = TipoFragment.REPORTES_LISTADO_INVENTARIO_FICHA;break;
                                 case 3: setFragment(TipoFragment.REPORTES_LISTADO_INVENTARIO_CUADERNILLO);tFragment = TipoFragment.REPORTES_LISTADO_INVENTARIO_CUADERNILLO;break;
                                 case 4: setFragment(TipoFragment.REPORTES_LISTADO_INVENTARIO_LISTADO_ASISTENCIA);tFragment = TipoFragment.REPORTES_LISTADO_INVENTARIO_LISTADO_ASISTENCIA;break;
-                                case 5: setFragment(TipoFragment.REPORTES_RESUMEN_ASISTENCIA);tFragment = TipoFragment.REPORTES_RESUMEN_ASISTENCIA;break;
-                                case 6: setFragment(TipoFragment.REPORTES_RESUMEN_INVENTARIO);tFragment = TipoFragment.REPORTES_RESUMEN_INVENTARIO;break;
                             }break;
                         case 3:
                             switch (childPosition){
@@ -390,8 +367,6 @@ public class MainActivity extends AppCompatActivity implements ActividadInterfaz
             reportes.add("Listado de Inventario - Ficha");
             reportes.add("Listado de Inventario - Cuadernillo");
             reportes.add("Listado de Inventario - Listado de Asistencia");
-//        reportes.add("Cuadro Resumen Asistencia");
-//        reportes.add("Cuadro Resumen Inventario");
             List<String> consultaPadron = new ArrayList<String>();
             consultaPadron.add("Consulta Padrón Nacional");
 
