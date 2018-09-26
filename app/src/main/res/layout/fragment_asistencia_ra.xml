@@ -3,62 +3,51 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="@dimen/margin8dp"
-    tools:context=".fragments.registro_control_asistencia.AsistAulaFragment">
+    android:padding="@dimen/margin16dp"
+    tools:context=".fragments.registro_control_asistencia_ra.AsistenciaRAFragment"
+    android:orientation="vertical">
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:theme="@style/estilo_titulo_fragment"
-        android:text="REGISTRO DE ASISTENCIA AL AULA"/>
+        android:text="REGISTRO DE ASISTENCIA - RED ADMINISTRATIVA"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
+        android:orientation="horizontal">
         <TextView
-            android:id="@+id/asistencia_aula_txtTotal"
+            android:id="@+id/asistencia_ra_txtTotal"
             android:layout_width="0dp"
             android:layout_weight="1"
+            android:gravity="center"
             android:layout_height="wrap_content"
             android:theme="@style/estilo_total_registrados"
-            android:text="Total:30/100"/>
+            android:text="Total:"/>
+        <!--<TextView-->
+        <!--android:id="@+id/asistencia_ra_txtFaltan"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_weight="1"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:theme="@style/estilo_total_registrados"-->
+        <!--android:text="Faltan:30/100"/>-->
         <TextView
-            android:id="@+id/asistencia_aula_txtFaltan"
+            android:id="@+id/asistencia_ra_txtRegistrados"
             android:layout_width="0dp"
             android:layout_weight="1"
+            android:gravity="center"
             android:layout_height="wrap_content"
             android:theme="@style/estilo_total_registrados"
-            android:text="Faltan:30/100"/>
+            android:text="Leidos:"/>
         <TextView
-            android:id="@+id/asistencia_aula_txtRegistrados"
+            android:id="@+id/asistencia_ra_txtTransferidos"
             android:layout_width="0dp"
             android:layout_weight="1"
+            android:gravity="center"
             android:layout_height="wrap_content"
             android:theme="@style/estilo_total_registrados"
-            android:text="Leidos:30/100"/>
-        <TextView
-            android:id="@+id/asistencia_aula_txtTransferidos"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:theme="@style/estilo_total_registrados"
-            android:text="Transferidos:30/100"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingLeft="8dp"
-        android:paddingRight="@dimen/margin8dp"
-        android:background="@drawable/borde_spinner">
-        <Spinner
-            android:id="@+id/asistencia_aula_spAula"
-            android:layout_width="match_parent"
-            android:layout_height="32dp"
-            android:drawSelectorOnTop="true"
-            />
+            android:text="Transferidos:"/>
     </LinearLayout>
 
     <LinearLayout
@@ -66,20 +55,19 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="8dp"
-        android:layout_marginTop="@dimen/margin8dp"
-        android:layout_marginBottom="@dimen/margin8dp"
+        android:layout_marginBottom="8dp"
         android:layout_gravity="center"
         android:background="@drawable/borde_azul_buscador"
         android:orientation="horizontal">
         <ImageView
-            android:id="@+id/asistencia_aula_btnReporte"
+            android:id="@+id/asistencia_ra_btnReporte"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_event_note"
             android:tint="@android:color/white"
             />
         <EditText
-            android:id="@+id/asistencia_aula_edtCodigo"
+            android:id="@+id/asistencia_ra_edtCodigo"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="40dp"
@@ -91,7 +79,7 @@
             android:background="@drawable/borde_edit_text"
             />
         <ImageView
-            android:id="@+id/asistencia_aula_btnBuscar"
+            android:id="@+id/asistencia_ra_btnBuscar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_search"
@@ -102,13 +90,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-
         <LinearLayout
-            android:id="@+id/asistencia_local_lytCorrecto"
+            android:id="@+id/asistencia_ra_lytCorrecto"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/margin8dp"
+            android:padding="@dimen/margin16dp"
             android:visibility="gone"
             android:background="@drawable/fondo_verde">
             <TextView
@@ -116,6 +103,7 @@
                 android:layout_height="wrap_content"
                 android:text="DNI CORRECTO"
                 android:layout_marginBottom="@dimen/margin8dp"
+                android:textColor="@color/greenPrimaryDark"
                 android:gravity="center"
                 android:textStyle="bold"
                 android:textSize="@dimen/texto_grande"/>
@@ -124,79 +112,18 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/fondo_blanco"
                 android:padding="@dimen/margin8dp"
-                android:orientation="vertical">
+                android:orientation="horizontal">
                 <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/margin8dp">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textStyle="bold"
-                        android:textColor="@color/bluePrimaryDark"
-                        android:textSize="@dimen/texto_mediano"
-                        android:text="DNI: "/>
-                    <TextView
-                        android:id="@+id/dni_correcto_txtDni"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textStyle="bold"
-                        android:textColor="@color/greenPrimaryDark"
-                        android:textSize="@dimen/texto_mediano"
-                        android:text="43372489"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/margin8dp">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                    <TextView
-                        android:id="@+id/dni_correcto_txtNombre"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="30sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/greenPrimaryDark"
-                        android:text="DENIS RICARDO MORALES RETAMOZO"/>
-                </LinearLayout>
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/asistencia_local_lytErrorLocal"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/margin8dp"
-            android:visibility="gone"
-            android:background="@drawable/fondo_rojo">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="ERROR. SU AULA DE EVALUACIÓN ES"
-                android:textColor="@color/redPrimaryDark"
-                android:gravity="center"
-                android:textStyle="bold"
-                android:textSize="@dimen/texto_mediano"/>
-            <LinearLayout
-                android:background="@drawable/fondo_blanco"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/margin16dp">
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:layout_weight="1">
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content">
                     <LinearLayout
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/margin8dp"
+                        android:background="@drawable/fondo_blanco">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -205,18 +132,107 @@
                             android:textSize="@dimen/texto_mediano"
                             android:text="DNI: "/>
                         <TextView
-                            android:id="@+id/error_local_txtDni"
+                            android:id="@+id/dni_correcto_txtDni"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:textColor="@color/greenPrimaryDark"
+                            android:textSize="@dimen/texto_mediano"
+                            android:text="43372489"/>
+                    </LinearLayout>
+                    <TextView
+                        android:id="@+id/dni_correcto_txtNombre"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/texto_mediano"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="@dimen/margin8dp"
+                        android:textColor="@color/greenPrimaryDark"
+                        android:text="DENIS RICARDO MORALES RETAMOZO"/>
+
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/margin8dp"
+                        android:background="@drawable/fondo_blanco">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:textColor="@color/bluePrimaryDark"
+                            android:textSize="@dimen/texto_mediano"
+                            android:text="SEDE"/>
+                        <TextView
+                            android:id="@+id/dni_correcto_txtSede"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textStyle="bold"
-                            android:textColor="@color/redPrimaryDark"
+                            android:textColor="@color/greenPrimaryDark"
                             android:textSize="@dimen/texto_mediano"
-                            android:text="43372489"/>
+                            android:text="SEDE"/>
                     </LinearLayout>
                     <LinearLayout
                         android:orientation="vertical"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/margin8dp"
+                        android:background="@drawable/fondo_blanco">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/texto_mediano"
+                            android:textStyle="bold"
+                            android:textColor="@color/bluePrimaryDark"
+                            android:text="LOCAL"/>
+                        <TextView
+                            android:id="@+id/dni_correcto_txtLocal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/texto_mediano"
+                            android:textStyle="bold"
+                            android:textColor="@color/greenPrimaryDark"
+                            android:text="EMBLEMATICA INSTITUCION EDUCATIVA"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/asistencia_ra_lytErrorLocal"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin16dp"
+            android:visibility="gone"
+            android:background="@drawable/fondo_ambar">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ERROR. SU LOCAL DE EVALUACIÓN ES"
+                android:textColor="@color/icons"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textSize="@dimen/texto_grande"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/fondo_blanco"
+                android:padding="@dimen/margin16dp"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/margin8dp"
+                        android:background="@drawable/fondo_blanco">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -229,16 +245,17 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textStyle="bold"
-                            android:textColor="@color/redPrimaryDark"
                             android:textSize="@dimen/texto_mediano"
                             android:text="SEDE"/>
                     </LinearLayout>
                     <LinearLayout
                         android:orientation="vertical"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/margin8dp"
+                        android:background="@drawable/fondo_blanco">
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="@dimen/texto_mediano"
                             android:textStyle="bold"
@@ -250,16 +267,16 @@
                             android:layout_height="wrap_content"
                             android:textSize="@dimen/texto_mediano"
                             android:textStyle="bold"
-                            android:textColor="@color/redPrimaryDark"
                             android:text="EMBLEMATICA INSTITUCION EDUCATIVA"/>
                     </LinearLayout>
-                    <LinearLayout
+                    <!--<LinearLayout
                         android:orientation="vertical"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/margin8dp">
+                        android:layout_marginBottom="@dimen/margin8dp"
+                        android:background="@drawable/fondo_blanco">
                         <TextView
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textStyle="bold"
                             android:textColor="@color/bluePrimaryDark"
@@ -270,51 +287,26 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textStyle="bold"
-                            android:textColor="@color/redPrimaryDark"
                             android:textSize="@dimen/texto_mediano"
                             android:text="DIRECCION"/>
-                    </LinearLayout>
+                    </LinearLayout>-->
                 </LinearLayout>
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/margin16dp"
-                    android:layout_margin="@dimen/margin8dp"
-                    android:background="@drawable/marco_azul"
-                    android:layout_marginBottom="@dimen/margin8dp">
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textStyle="bold"
-                        android:textColor="@color/redPrimaryDark"
-                        android:textSize="@dimen/texto_mediano"
-                        android:text="AULA"/>
-                    <TextView
-                        android:id="@+id/error_local_txtAula"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textStyle="bold"
-                        android:textColor="@color/redPrimaryDark"
-                        android:gravity="center"
-                        android:textSize="30sp"
-                        android:text="13"/>
-                </LinearLayout>
+
             </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/asistencia_local_lytYaRegistrado"
+            android:id="@+id/asistencia_ra_lytYaRegistrado"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/margin8dp"
+            android:padding="@dimen/margin16dp"
             android:visibility="gone"
             android:background="@drawable/fondo_rojo">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="ERROR: POSTULANTE YA REGISTRO SU ASISTENCIA"
+                android:text="ERROR. DNI YA REGISTRADO"
                 android:textColor="@color/redPrimaryDark"
                 android:gravity="center"
                 android:textStyle="bold"
@@ -324,15 +316,13 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/margin8dp"
+                android:padding="@dimen/margin16dp"
                 android:background="@drawable/fondo_blanco">
                 <LinearLayout
+                    android:orientation="vertical"
                     android:layout_width="0dp"
                     android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/margin8dp"
-                    android:background="@drawable/fondo_blanco"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content">
                     <LinearLayout
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
@@ -348,7 +338,7 @@
                             android:text="DNI: "/>
                         <TextView
                             android:id="@+id/error_yaregistrado_txtDni"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textStyle="bold"
                             android:textColor="@color/redPrimaryDark"
@@ -364,6 +354,8 @@
                         android:layout_marginBottom="@dimen/margin8dp"
                         android:textColor="@color/redPrimaryDark"
                         android:text="NOMBRE"/>
+
+
                     <LinearLayout
                         android:orientation="vertical"
                         android:layout_width="match_parent"
@@ -371,7 +363,7 @@
                         android:layout_marginBottom="@dimen/margin8dp"
                         android:background="@drawable/fondo_blanco">
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textStyle="bold"
                             android:textColor="@color/bluePrimaryDark"
@@ -384,37 +376,16 @@
                             android:textStyle="bold"
                             android:textColor="@color/redPrimaryDark"
                             android:textSize="@dimen/texto_mediano"
-                            android:text="10-09-2018 12:00"/>
+                            android:text="10-09-2018 13:00"/>
                     </LinearLayout>
                 </LinearLayout>
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:layout_margin="@dimen/margin8dp"
-                    android:padding="@dimen/margin16dp"
-                    android:background="@drawable/marco_azul"
-                    android:orientation="vertical">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textStyle="bold"
-                        android:textSize="@dimen/texto_mediano"
-                        android:text="AULA"/>
-                    <TextView
-                        android:id="@+id/error_yaregistrado_txtAula"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textStyle="bold"
-                        android:textSize="30sp"
-                        android:text="13"/>
-                </LinearLayout>
+
             </LinearLayout>
 
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/asistencia_local_ErrorDni"
+            android:id="@+id/asistencia_ra_ErrorDni"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -431,8 +402,5 @@
                 android:textSize="@dimen/texto_grande"/>
         </LinearLayout>
     </LinearLayout>
-
-
-
 
 </LinearLayout>

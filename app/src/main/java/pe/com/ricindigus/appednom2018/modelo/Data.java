@@ -55,6 +55,8 @@ public class Data {
                 sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_FICHAS_REGISTRADAS);
                 sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_LISTADOS_REGISTRADOS);
                 sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_CUADERNILLOS_REGISTRADOS);
+                sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_ASISTENCIAS_RA_REGISTRADAS);
+
                 sqLiteDatabase.close();
             }catch (IOException e){
                 throw new Error("Error: copiando base de datos");
@@ -82,6 +84,7 @@ public class Data {
             sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_FICHAS_REGISTRADAS);
             sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_LISTADOS_REGISTRADOS);
             sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_CUADERNILLOS_REGISTRADOS);
+            sqLiteDatabase.execSQL(SQLConstantes.SQL_CREATE_TABLA_ASISTENCIAS_RA_REGISTRADAS);
             sqLiteDatabase.close();
         }catch (IOException e){
             throw new Error("Error: copiando base de datos");
@@ -331,6 +334,22 @@ public class Data {
             if(cursor.getCount() == 1){
                 cursor.moveToFirst();
                 nombre = cursor.getString(cursor.getColumnIndex("coleccion_asistencia"));
+            }
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return nombre;
+    }
+
+    public String getNombreColeccionAsistenciaRA(){
+        String nombre = "";
+        String[] whereArgs = new String[]{"1"};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query("version", null,"_id=?",whereArgs,null,null,null);
+            if(cursor.getCount() == 1){
+                cursor.moveToFirst();
+                nombre = cursor.getString(cursor.getColumnIndex("coleccion_asistencia_ra"));
             }
         }finally{
             if(cursor != null) cursor.close();
@@ -968,6 +987,37 @@ public class Data {
         return asistencia;
     }
 
+    public AsistenciaRa getAsistenciaRaxDni(String dni){
+        AsistenciaRa asistenciaRa = null;
+        String[] whereArgs = new String[]{dni};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablaasistencia_ra,
+                    null,SQLConstantes.WHERE_CLAUSE_DNI,whereArgs,null,null,null);
+            if(cursor.getCount() == 1){
+                cursor.moveToFirst();
+                asistenciaRa = new AsistenciaRa();
+                asistenciaRa.setId(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistencia_ra_id)));
+                asistenciaRa.setCcdd(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistencia_ra_ccdd)));
+                asistenciaRa.setDepartamento(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistencia_ra_departamento)));
+                asistenciaRa.setIdsede(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistencia_ra_idsede)));
+                asistenciaRa.setNom_sede(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistencia_ra_nom_sede)));
+                asistenciaRa.setIdnacional(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistencia_ra_idnacional)));
+                asistenciaRa.setIdlocal(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistencia_ra_idlocal)));
+                asistenciaRa.setNom_local(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistencia_ra_nom_local)));
+                asistenciaRa.setRed(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistencia_ra_red)));
+                asistenciaRa.setTipo_cargo(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistencia_ra_tipo_cargo)));
+                asistenciaRa.setNombre_cargo(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistencia_ra_nombre_cargo)));
+                asistenciaRa.setDni(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistencia_ra_dni)));
+                asistenciaRa.setNombres_completos(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistencia_ra_nombres_completos)));
+            }
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return asistenciaRa;
+    }
+
+
     public int getNroAsistenciasIdLocal(int idLocal){
         int numero = 0;
         String[] whereArgs = new String[]{String.valueOf(idLocal)};
@@ -982,8 +1032,26 @@ public class Data {
         return numero;
     }
 
+    public int getNroAsistenciasRaIdLocal(int idLocal){
+        int numero = 0;
+        String[] whereArgs = new String[]{String.valueOf(idLocal)};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablaasistencia_ra,
+                    null,SQLConstantes.WHERE_CLAUSE_ID_LOCAL,whereArgs,null,null,null);
+            if(cursor!= null) numero =  cursor.getCount();
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return numero;
+    }
+
     public long getNumeroItemsAsistenciaReg(){
         return DatabaseUtils.queryNumEntries(sqLiteDatabase, SQLConstantes.tablaasistenciasreg);
+    }
+
+    public long getNumeroItemsAsistenciaRaReg(){
+        return DatabaseUtils.queryNumEntries(sqLiteDatabase, SQLConstantes.tablaasistencias_ra_reg);
     }
 
     public void insertarAsistenciaReg(AsistenciaReg asistenciaReg){
@@ -993,6 +1061,22 @@ public class Data {
     public void actualizarAsistenciaReg(String dni, ContentValues valores){
         String[] whereArgs = new String[]{dni};
         sqLiteDatabase.update(SQLConstantes.tablaasistenciasreg,valores,SQLConstantes.WHERE_CLAUSE_DNI,whereArgs);
+    }
+
+    public void insertarAsistenciaRaReg(AsistenciaRaReg asistenciaRaReg){
+        ContentValues contentValues = asistenciaRaReg.toValues();
+        sqLiteDatabase.insert(SQLConstantes.tablaasistencias_ra_reg,null,contentValues);
+    }
+    public void actualizarAsistenciaRaReg(String dni, ContentValues valores){
+        String[] whereArgs = new String[]{dni};
+        sqLiteDatabase.update(SQLConstantes.tablaasistencias_ra_reg,valores,SQLConstantes.WHERE_CLAUSE_DNI,whereArgs);
+    }
+
+    public void actualizarAsistenciaRaRegSubido(String dni){
+        String[] whereArgs = new String[]{dni};
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SQLConstantes.asistenciareg_ra_estado,2);
+        sqLiteDatabase.update(SQLConstantes.tablaasistencias_ra_reg,contentValues,SQLConstantes.WHERE_CLAUSE_DNI,whereArgs);
     }
 
     public void actualizarAsistenciaRegLocalSubido(String dni){
@@ -1055,6 +1139,42 @@ public class Data {
         return asistenciaReg;
     }
 
+    public AsistenciaRaReg getAsistenciaRaReg(String dni){
+        AsistenciaRaReg asistenciaRaReg = null;
+        String[] whereArgs = new String[]{dni};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablaasistencias_ra_reg,
+                    null,SQLConstantes.WHERE_CLAUSE_DNI,whereArgs,null,null,null);
+            if(cursor.getCount() == 1){
+                cursor.moveToFirst();
+                asistenciaRaReg = new AsistenciaRaReg();
+                asistenciaRaReg.setCcdd(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_ccdd)));
+                asistenciaRaReg.setDepartamento(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_departamento)));
+                asistenciaRaReg.setIdsede(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_idsede)));
+                asistenciaRaReg.setNom_sede(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_nom_sede)));
+                asistenciaRaReg.setIdnacional(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_idnacional)));
+                asistenciaRaReg.setIdlocal(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_idlocal)));
+                asistenciaRaReg.setNom_local(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_nom_local)));
+                asistenciaRaReg.setRed(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_red)));
+                asistenciaRaReg.setTipo_cargo(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_tipo_cargo)));
+                asistenciaRaReg.setNombre_cargo(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_nombre_cargo)));
+                asistenciaRaReg.setDni(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_dni)));
+                asistenciaRaReg.setNombres_completos(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_nombres_completos)));
+                asistenciaRaReg.setDia(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_dia)));
+                asistenciaRaReg.setMes(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_mes)));
+                asistenciaRaReg.setAnio(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_anio)));
+                asistenciaRaReg.setHora(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_hora)));
+                asistenciaRaReg.setMin(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_min)));
+                asistenciaRaReg.setSeg(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_seg)));
+                asistenciaRaReg.setEstado(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_estado)));
+            }
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return asistenciaRaReg;
+    }
+
     public ArrayList<AsistenciaReg> filtrarMarcoAsistencia(int idLocal){
         ArrayList<AsistenciaReg> asistenciaRegs = new ArrayList<>();
         String[] whereArgs = new String[]{String.valueOf(idLocal)};
@@ -1064,7 +1184,6 @@ public class Data {
                     null,SQLConstantes.WHERE_CLAUSE_ID_LOCAL,whereArgs,null,null,null);
             while(cursor.moveToNext()){
                 AsistenciaReg asistenciaReg = new AsistenciaReg();
-                asistenciaReg = new AsistenciaReg();
                 asistenciaReg.set_id(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistenciareg_id)));
                 asistenciaReg.setDni(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistenciareg_dni)));
                 asistenciaReg.setNombres(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistenciareg_nombres)));
@@ -1082,6 +1201,35 @@ public class Data {
                 asistenciaReg.setNom_local(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistenciareg_nom_local)));
                 asistenciaReg.setDireccion(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistenciareg_direccion)));
                 asistenciaRegs.add(asistenciaReg);
+            }
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return asistenciaRegs;
+    }
+
+    public ArrayList<AsistenciaRaReg> filtrarMarcoAsistenciaRA(int idLocal){
+        ArrayList<AsistenciaRaReg> asistenciaRegs = new ArrayList<>();
+        String[] whereArgs = new String[]{String.valueOf(idLocal)};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablaasistencia_ra,
+                    null,SQLConstantes.WHERE_CLAUSE_ID_LOCAL,whereArgs,null,null,null);
+            while(cursor.moveToNext()){
+                AsistenciaRaReg asistenciaRaReg = new AsistenciaRaReg();
+                asistenciaRaReg.setCcdd(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistencia_ra_ccdd)));
+                asistenciaRaReg.setDepartamento(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistencia_ra_departamento)));
+                asistenciaRaReg.setIdsede(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistencia_ra_idsede)));
+                asistenciaRaReg.setNom_sede(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistencia_ra_nom_sede)));
+                asistenciaRaReg.setIdnacional(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistencia_ra_idnacional)));
+                asistenciaRaReg.setIdlocal(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistencia_ra_idlocal)));
+                asistenciaRaReg.setNom_local(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistencia_ra_nom_local)));
+                asistenciaRaReg.setRed(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistencia_ra_red)));
+                asistenciaRaReg.setTipo_cargo(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistencia_ra_tipo_cargo)));
+                asistenciaRaReg.setNombre_cargo(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistencia_ra_nombre_cargo)));
+                asistenciaRaReg.setDni(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistencia_ra_dni)));
+                asistenciaRaReg.setNombres_completos(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistencia_ra_nombres_completos)));
+                asistenciaRegs.add(asistenciaRaReg);
             }
         }finally{
             if(cursor != null) cursor.close();
@@ -1129,6 +1277,42 @@ public class Data {
             if(cursor != null) cursor.close();
         }
         return asistenciaRegs;
+    }
+
+    public ArrayList<AsistenciaRaReg> getListadoAsistenciaRA(int idLocal){
+        ArrayList<AsistenciaRaReg> asistenciaRaRegs = new ArrayList<>();
+        String[] whereArgs = new String[]{String.valueOf(idLocal)};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablaasistencias_ra_reg,
+                    null,SQLConstantes.WHERE_CLAUSE_ID_LOCAL,whereArgs,null,null,"estado ASC");
+            while(cursor.moveToNext()){
+                AsistenciaRaReg asistenciaRaReg = new AsistenciaRaReg();
+                asistenciaRaReg.setCcdd(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_ccdd)));
+                asistenciaRaReg.setDepartamento(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_departamento)));
+                asistenciaRaReg.setIdsede(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_idsede)));
+                asistenciaRaReg.setNom_sede(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_nom_sede)));
+                asistenciaRaReg.setIdnacional(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_idnacional)));
+                asistenciaRaReg.setIdlocal(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_idlocal)));
+                asistenciaRaReg.setNom_local(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_nom_local)));
+                asistenciaRaReg.setRed(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_red)));
+                asistenciaRaReg.setTipo_cargo(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_tipo_cargo)));
+                asistenciaRaReg.setNombre_cargo(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_nombre_cargo)));
+                asistenciaRaReg.setDni(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_dni)));
+                asistenciaRaReg.setNombres_completos(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_nombres_completos)));
+                asistenciaRaReg.setDia(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_dia)));
+                asistenciaRaReg.setMes(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_mes)));
+                asistenciaRaReg.setAnio(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_anio)));
+                asistenciaRaReg.setHora(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_hora)));
+                asistenciaRaReg.setMin(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_min)));
+                asistenciaRaReg.setSeg(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_seg)));
+                asistenciaRaReg.setEstado(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_estado)));
+                asistenciaRaRegs.add(asistenciaRaReg);
+            }
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return asistenciaRaRegs;
     }
 
     public ArrayList<AsistenciaReg> getListadoAsistenciaAula(int idLocal, int nroAula){
@@ -1214,6 +1398,43 @@ public class Data {
         return asistenciaRegs;
     }
 
+    public ArrayList<AsistenciaRaReg> getAsistenciasRASinEnviar(int idLocal){
+        ArrayList<AsistenciaRaReg> asistenciaRARegs = new ArrayList<>();
+        String[] whereArgs = new String[]{String.valueOf(idLocal),"1"};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablaasistencias_ra_reg,
+                    null,SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
+                            SQLConstantes.WHERE_CLAUSE_ESTADO,whereArgs,null,null,null);
+            while(cursor.moveToNext()){
+                AsistenciaRaReg asistenciaRaReg = new AsistenciaRaReg();
+                asistenciaRaReg.setCcdd(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_ccdd)));
+                asistenciaRaReg.setDepartamento(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_departamento)));
+                asistenciaRaReg.setIdsede(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_idsede)));
+                asistenciaRaReg.setNom_sede(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_nom_sede)));
+                asistenciaRaReg.setIdnacional(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_idnacional)));
+                asistenciaRaReg.setIdlocal(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_idlocal)));
+                asistenciaRaReg.setNom_local(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_nom_local)));
+                asistenciaRaReg.setRed(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_red)));
+                asistenciaRaReg.setTipo_cargo(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_tipo_cargo)));
+                asistenciaRaReg.setNombre_cargo(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_nombre_cargo)));
+                asistenciaRaReg.setDni(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_dni)));
+                asistenciaRaReg.setNombres_completos(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_nombres_completos)));
+                asistenciaRaReg.setDia(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_dia)));
+                asistenciaRaReg.setMes(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_mes)));
+                asistenciaRaReg.setAnio(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_anio)));
+                asistenciaRaReg.setHora(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_hora)));
+                asistenciaRaReg.setMin(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_min)));
+                asistenciaRaReg.setSeg(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_seg)));
+                asistenciaRaReg.setEstado(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_estado)));
+                asistenciaRARegs.add(asistenciaRaReg);
+            }
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return asistenciaRARegs;
+    }
+
     public int getNroAsistenciasLocalRegistradas(int idLocal){
         int numero = 0;
         String[] whereArgs = new String[]{String.valueOf(idLocal),"0"};
@@ -1243,6 +1464,22 @@ public class Data {
         }
         return numero;
     }
+
+    public int getNroAsistenciasRALeidas(int idLocal){
+        int numero = 0;
+        String[] whereArgs = new String[]{String.valueOf(idLocal),"0"};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablaasistencias_ra_reg,
+                    null,SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
+                            "estado>?",whereArgs,null,null,null);
+            if (cursor != null) numero = cursor.getCount();
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return numero;
+    }
+
 
     public ArrayList<AsistenciaReg> getAsistenciasAulaSinEnviar(int idLocal,int nroAula){
         ArrayList<AsistenciaReg> asistenciaRegs = new ArrayList<>();
@@ -1380,6 +1617,21 @@ public class Data {
         return numero;
     }
 
+    public int getNroAsistenciasRATransferidos(int idLocal){
+        int numero = 0;
+        String[] whereArgs = new String[]{String.valueOf(idLocal),"2"};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablaasistencias_ra_reg,
+                    null,SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
+                            SQLConstantes.WHERE_CLAUSE_ESTADO ,whereArgs,null,null,null);
+            if (cursor != null) numero =  cursor.getCount();
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return numero;
+    }
+
     public int getNroAsistenciasAulaTransferidos(int idLocal,int nroAula){
         int numero = 0;
         String[] whereArgs = new String[]{String.valueOf(idLocal),String.valueOf(nroAula),"2"};
@@ -1395,6 +1647,9 @@ public class Data {
         }
         return numero;
     }
+
+
+
     /**
      * --------------------------------FIN QUERYS ASISTENCIA -----------------------------------
      * */

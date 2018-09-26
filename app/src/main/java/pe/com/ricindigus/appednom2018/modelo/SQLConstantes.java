@@ -8,6 +8,7 @@ public class SQLConstantes {
     public static String tablaaulas = "aulas";
     public static String tablacajas = "cajas";
     public static String tablaasistencia = "asistencia";
+    public static String tablaasistencia_ra = "asistencia_ra";
     public static String tablafichas = "fichas";
     public static String tablacuadernillos = "cuadernillos";
     public static String tablalistados = "listados";
@@ -19,6 +20,7 @@ public class SQLConstantes {
     public static String tablahistorialusuarios = "historial_usuario";
     public static String tablacajasreg = "cajas_reg";
     public static String tablaasistenciasreg = "asistencia_reg";
+    public static String tablaasistencias_ra_reg = "asistencia_ra_reg";
     public static String tablafichasreg = "fichas_reg";
     public static String tablacuadernillosreg = "cuadernillos_reg";
     public static String tablalistadosreg = "listados_reg";
@@ -94,6 +96,21 @@ public class SQLConstantes {
     public static String asistencia_idlocal = "idlocal";
     public static String asistencia_nom_local = "nom_local";
     public static String asistencia_direccion = "direccion";
+
+    //TABLA ASISTENCIA RA
+    public static String asistencia_ra_id= "_id";
+    public static String asistencia_ra_ccdd = "ccdd";
+    public static String asistencia_ra_departamento = "departamento";
+    public static String asistencia_ra_idsede = "idsede";
+    public static String asistencia_ra_nom_sede = "nom_sede";
+    public static String asistencia_ra_idnacional = "idnacional";
+    public static String asistencia_ra_idlocal = "idlocal";
+    public static String asistencia_ra_nom_local = "nom_local";
+    public static String asistencia_ra_red = "red";
+    public static String asistencia_ra_tipo_cargo = "tipo_cargo";
+    public static String asistencia_ra_nombre_cargo = "nom_cargo";
+    public static String asistencia_ra_dni = "dni";
+    public static String asistencia_ra_nombres_completos = "nombres_completos";
 
     //TABLA FICHAS,CUADERNILLO Y LISTADOS
     public static String inventario_id = "_id";
@@ -293,6 +310,53 @@ public class SQLConstantes {
                     asistenciareg_estado_aula + " INTEGER" + ");"
             ;
 
+    //TABLA ASISTENCIA RA REGISTRADOS
+    public static String asistenciareg_ra_id= "_id";
+    public static String asistenciareg_ra_ccdd = "ccdd";
+    public static String asistenciareg_ra_departamento = "departamento";
+    public static String asistenciareg_ra_idsede = "idsede";
+    public static String asistenciareg_ra_nom_sede = "nom_sede";
+    public static String asistenciareg_ra_idnacional = "idnacional";
+    public static String asistenciareg_ra_idlocal = "idlocal";
+    public static String asistenciareg_ra_nom_local = "nom_local";
+    public static String asistenciareg_ra_red = "red";
+    public static String asistenciareg_ra_tipo_cargo = "tipo_cargo";
+    public static String asistenciareg_ra_nombre_cargo = "nombre_cargo";
+    public static String asistenciareg_ra_dni = "dni";
+    public static String asistenciareg_ra_nombres_completos = "nombres_completos";
+    public static String asistenciareg_ra_dia = "dia";
+    public static String asistenciareg_ra_mes = "mes";
+    public static String asistenciareg_ra_anio = "anio";
+    public static String asistenciareg_ra_hora = "hora";
+    public static String asistenciareg_ra_min = "min";
+    public static String asistenciareg_ra_seg = "seg";
+    public static String asistenciareg_ra_estado = "estado";
+
+    public static final String SQL_CREATE_TABLA_ASISTENCIAS_RA_REGISTRADAS =
+            "CREATE TABLE " + tablaasistencias_ra_reg + "(" +
+                    asistenciareg_ra_id + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    asistenciareg_ra_ccdd + " TEXT," +
+                    asistenciareg_ra_departamento + " TEXT," +
+                    asistenciareg_ra_idsede + " TEXT," +
+                    asistenciareg_ra_nom_sede + " TEXT," +
+                    asistenciareg_ra_idnacional + " INTEGER," +
+                    asistenciareg_ra_idlocal + " INTEGER," +
+                    asistenciareg_ra_nom_local + " TEXT," +
+                    asistenciareg_ra_red + " INTEGER," +
+                    asistenciareg_ra_tipo_cargo + " INTEGER," +
+                    asistenciareg_ra_nombre_cargo + " TEXT," +
+                    asistenciareg_ra_dni + " TEXT," +
+                    asistenciareg_ra_nombres_completos + " TEXT," +
+                    asistenciareg_ra_dia + " INTEGER," +
+                    asistenciareg_ra_mes + " INTEGER," +
+                    asistenciareg_ra_anio + " INTEGER," +
+                    asistenciareg_ra_hora + " INTEGER," +
+                    asistenciareg_ra_min + " INTEGER," +
+                    asistenciareg_ra_seg + " INTEGER," +
+                    asistenciareg_ra_estado + " INTEGER" + ");"
+            ;
+
+
     //TABLA FICHAS, CUADERNILLOS Y LISTADOS REGISTRADOS
     public static String inventarioreg_id = "_id";
     public static String inventarioreg_codigo = "codigo";
@@ -428,6 +492,7 @@ public class SQLConstantes {
     public static final String WHERE_CLAUSE_ESTADO_ENTRADA = "estado_entrada=?";
     public static final String WHERE_CLAUSE_ESTADO_SALIDA = "estado_salida=?";
     public static final String WHERE_CLAUSE_ESTADO_LOCAL = "estado_local=?";
+
     public static final String WHERE_CLAUSE_ESTADO_AULA = "estado_aula=?";
     public static final String WHERE_CLAUSE_ESTADO = "estado=?";
     public static final String WHERE_CLAUSE_DNI = "dni=?";

@@ -35,6 +35,8 @@ import pe.com.ricindigus.appednom2018.adapters.InventarioFichaAdapter;
 import pe.com.ricindigus.appednom2018.adapters.InventarioListadoAdapter;
 import pe.com.ricindigus.appednom2018.modelo.Data;
 import pe.com.ricindigus.appednom2018.modelo.InventarioReg;
+import pe.com.ricindigus.appednom2018.util.ActividadInterfaz;
+import pe.com.ricindigus.appednom2018.util.TipoFragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -49,6 +51,8 @@ public class ListInvListadoFragment extends Fragment {
     ArrayList<InventarioReg> datosNoEnviados;
     Data data;
     FloatingActionButton fabUpLoad;
+    FloatingActionButton fabSearch;
+
     InventarioListadoAdapter inventarioListadoAdapter;
     TextView txtTotal;
     TextView txtSinRegistro;
@@ -76,6 +80,8 @@ public class ListInvListadoFragment extends Fragment {
         spAulas = (Spinner) rootView.findViewById(R.id.lista_spAula);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.lista_recycler);
         fabUpLoad = (FloatingActionButton) rootView.findViewById(R.id.lista_btnUpload);
+        fabSearch = (FloatingActionButton) rootView.findViewById(R.id.listado_btnBuscar);
+
         txtTotal = (TextView) rootView.findViewById(R.id.lista_txtTotales);
         txtSinRegistro = (TextView) rootView.findViewById(R.id.lista_txtSinRegistro);
         txtRegistrados = (TextView) rootView.findViewById(R.id.lista_txtRegistrados);
@@ -108,6 +114,14 @@ public class ListInvListadoFragment extends Fragment {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
+            }
+        });
+
+        fabSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ActividadInterfaz actividadInterfaz = (ActividadInterfaz) getActivity();
+                actividadInterfaz.irReporte(TipoFragment.REGISTRO_INVENTARIO_LISTA_ASISTENCIA);
             }
         });
 

@@ -38,6 +38,8 @@ import pe.com.ricindigus.appednom2018.modelo.Data;
 import pe.com.ricindigus.appednom2018.modelo.Inventario;
 import pe.com.ricindigus.appednom2018.modelo.InventarioReg;
 import pe.com.ricindigus.appednom2018.modelo.SQLConstantes;
+import pe.com.ricindigus.appednom2018.util.ActividadInterfaz;
+import pe.com.ricindigus.appednom2018.util.TipoFragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -46,6 +48,8 @@ public class InvFichaFragment extends Fragment {
     Spinner spAulas;
     EditText edtFicha;
     ImageView btnBuscar;
+    ImageView btnReporte;
+
     Context context;
     int nroLocal;
     String usuario;
@@ -97,6 +101,8 @@ public class InvFichaFragment extends Fragment {
         spAulas = (Spinner) rootView.findViewById(R.id.inventario_ficha_spAula);
         edtFicha = (EditText) rootView.findViewById(R.id.inventario_ficha_edtCodigo);
         btnBuscar = (ImageView) rootView.findViewById(R.id.inventario_ficha_btnBuscar);
+        btnReporte = (ImageView) rootView.findViewById(R.id.inventario_ficha_btnReporte);
+
 
         correctoTxtDni = (TextView) rootView.findViewById(R.id.ficha_correcta_txtDni);
         correctoTxtNombre = (TextView) rootView.findViewById(R.id.ficha_correcta_txtNombre);
@@ -168,6 +174,14 @@ public class InvFichaFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 clickBoton();
+            }
+        });
+
+        btnReporte.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ActividadInterfaz actividadInterfaz = (ActividadInterfaz) getActivity();
+                actividadInterfaz.irReporte(TipoFragment.REPORTES_LISTADO_INVENTARIO_FICHA);
             }
         });
     }

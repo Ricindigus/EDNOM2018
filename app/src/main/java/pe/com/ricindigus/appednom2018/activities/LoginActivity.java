@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import pe.com.ricindigus.appednom2018.modelo.AsistenciaRaReg;
 import pe.com.ricindigus.appednom2018.modelo.AsistenciaReg;
 import pe.com.ricindigus.appednom2018.modelo.CajaReg;
 import pe.com.ricindigus.appednom2018.modelo.InventarioReg;
@@ -81,11 +82,17 @@ public class LoginActivity extends AppCompatActivity {
                         case 2:
                             Intent intent = new Intent(LoginActivity.this, ProgressActivity.class);
                             intent.putExtra("clave",clave);
+                            intent.putExtra("tipo_filtro",2);
                             startActivity(intent);
                             finish();
                             break;
                         case 3:
-                            filtrarMarcoCajas(usuarioLocal.getIdlocal(),clave);
+                            Intent intent1 = new Intent(LoginActivity.this, ProgressActivity.class);
+                            intent1.putExtra("clave",clave);
+                            intent1.putExtra("tipo_filtro",3);
+                            startActivity(intent1);
+                            finish();
+//                            filtrarMarcoCajasAsistenciaRA(usuarioLocal.getIdlocal(),clave);
                             break;
                     }
                 }
@@ -97,12 +104,17 @@ public class LoginActivity extends AppCompatActivity {
         data.close();
     }
 
-    public void filtrarMarcoCajas(int nroLocal, String clave){
+    public void filtrarMarcoCajasAsistenciaRA(int nroLocal, String clave){
         Data data = new Data(LoginActivity.this);
         data.open();
         ArrayList<CajaReg> cajaRegs = data.filtrarMarcoCajas(nroLocal);
         for (CajaReg cajaReg : cajaRegs){
             data.insertarCajaReg(cajaReg);
+        }
+
+        ArrayList<AsistenciaRaReg> asistenciaRaRegs = data.filtrarMarcoAsistenciaRA(nroLocal);
+        for (AsistenciaRaReg asistenciaRaReg : asistenciaRaRegs){
+            data.insertarAsistenciaRaReg(asistenciaRaReg);
         }
         data.guardarClave(clave);
         data.insertarHistorialUsuario(clave);

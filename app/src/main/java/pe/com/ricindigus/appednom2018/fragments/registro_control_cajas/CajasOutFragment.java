@@ -181,18 +181,19 @@ public class CajasOutFragment extends Fragment {
             contentValues.put(SQLConstantes.cajasreg_seg_salida,segundos);
             contentValues.put(SQLConstantes.cajasreg_check_salida,1);
             if (cajaOut.getNlado() == 1){
-                if (cajaOut.getTipo() == 3) contentValues.put(SQLConstantes.cajasreg_estado_salida,2);
-                else contentValues.put(SQLConstantes.cajasreg_estado_salida,cajaOut.getEstado_salida() + 1);
-                data.actualizarCajaReg(codigoBarra,contentValues);
+                ContentValues contentValues1 = new ContentValues();
+                if (cajaOut.getTipo() == 3) contentValues1.put(SQLConstantes.cajasreg_estado_salida,2);
+                else contentValues1.put(SQLConstantes.cajasreg_estado_salida,cajaOut.getEstado_salida() + 1);
+                data.actualizarCajaReg(codigoBarra,contentValues1);
                 txtRegistrados.setText("Registrados: " + data.getNroCajasSalidaLeidas(numeroLocal));
             }
 
             //Si es codigo "20" debe guardar en el otro codigo "10"
             if(cajaOut.getNlado() == 2){
                 CajaReg cajaOut1 = data.getCajaReg(getCodigoAux(codigoBarra),numeroLocal);
-                contentValues = new ContentValues();
-                contentValues.put(SQLConstantes.cajasreg_estado_salida,cajaOut1.getEstado_salida() + 1);
-                data.actualizarCajaReg(cajaOut1.getCod_barra_caja(),contentValues);
+                ContentValues contentValues2 = new ContentValues();
+                contentValues2.put(SQLConstantes.cajasreg_estado_salida,cajaOut1.getEstado_salida() + 1);
+                data.actualizarCajaReg(cajaOut1.getCod_barra_caja(),contentValues2);
                 txtRegistrados.setText("Registrados: " + data.getNroCajasSalidaLeidas(numeroLocal));
             }
             data.close();

@@ -28,6 +28,7 @@ import java.util.Map;
 import pe.com.ricindigus.appednom2018.R;
 import pe.com.ricindigus.appednom2018.adapters.ExpandListAdapter;
 import pe.com.ricindigus.appednom2018.fragments.consulta_padron_nacional.ConsultaPadronFragment;
+import pe.com.ricindigus.appednom2018.fragments.registro_control_asistencia_ra.AsistenciaRAFragment;
 import pe.com.ricindigus.appednom2018.fragments.registro_control_cajas.CajasInFragment;
 import pe.com.ricindigus.appednom2018.fragments.registro_control_asistencia.AsistAulaFragment;
 import pe.com.ricindigus.appednom2018.fragments.registro_control_asistencia.AsistLocalFragment;
@@ -36,6 +37,7 @@ import pe.com.ricindigus.appednom2018.fragments.registro_control_inventario.InvF
 import pe.com.ricindigus.appednom2018.fragments.registro_control_inventario.InvListAsisFragment;
 import pe.com.ricindigus.appednom2018.fragments.reportes.cuadro_resumen.CuadroResumenCajasInFragment;
 import pe.com.ricindigus.appednom2018.fragments.reportes.cuadro_resumen.CuadroResumenCajasOutFragment;
+import pe.com.ricindigus.appednom2018.fragments.reportes.listados_de_registros.ListAsisRAFragment;
 import pe.com.ricindigus.appednom2018.fragments.reportes.listados_de_registros.ListIngresoCajasFragment;
 import pe.com.ricindigus.appednom2018.fragments.reportes.listados_de_registros.ListInvCuadernilloFragment;
 import pe.com.ricindigus.appednom2018.fragments.reportes.listados_de_registros.ListAsisAulaFragment;
@@ -162,6 +164,10 @@ public class MainActivity extends AppCompatActivity implements ActividadInterfaz
                 AsistAulaFragment asistAulaFragment = new AsistAulaFragment(nroLocal,MainActivity.this,usuario);
                 fragmentTransaction.replace(R.id.fragment_layout, asistAulaFragment,"fragment_actual");
                 break;
+            case TipoFragment.REGISTRO_ASISTENCIA_RA:
+                AsistenciaRAFragment asistenciaRAFragment = new AsistenciaRAFragment(nroLocal,MainActivity.this,usuario);
+                fragmentTransaction.replace(R.id.fragment_layout, asistenciaRAFragment,"fragment_actual");
+                break;
             case TipoFragment.REGISTRO_ASISTENCIA_LOCAL:
                 AsistLocalFragment asistLocalFragment = new AsistLocalFragment(nroLocal,MainActivity.this,usuario);
                 fragmentTransaction.replace(R.id.fragment_layout, asistLocalFragment,"fragment_actual");
@@ -193,6 +199,10 @@ public class MainActivity extends AppCompatActivity implements ActividadInterfaz
             case TipoFragment.REPORTES_LISTADO_ASISTENCIA_AULA:
                 ListAsisAulaFragment listAsisAulaFragment = new ListAsisAulaFragment(MainActivity.this,nroLocal,usuario);
                 fragmentTransaction.replace(R.id.fragment_layout, listAsisAulaFragment,"fragment_actual");
+                break;
+            case TipoFragment.REPORTE_LISTADO_ASISTENCIA_RA:
+                ListAsisRAFragment listAsisRAFragment = new ListAsisRAFragment(MainActivity.this,nroLocal,usuario);
+                fragmentTransaction.replace(R.id.fragment_layout, listAsisRAFragment,"fragment_actual");
                 break;
             case TipoFragment.REPORTES_LISTADO_INVENTARIO_FICHA:
                 ListInvFichaFragment listInvFichaFragment = new ListInvFichaFragment(MainActivity.this,nroLocal,usuario);
@@ -246,16 +256,21 @@ public class MainActivity extends AppCompatActivity implements ActividadInterfaz
                             }break;
                         case 1:
                             switch (childPosition){
-                                case 0: setFragment(TipoFragment.CAJAS_OUT);tFragment = TipoFragment.CAJAS_OUT;break;
+                                case 0: setFragment(TipoFragment.REGISTRO_ASISTENCIA_RA);tFragment = TipoFragment.REGISTRO_ASISTENCIA_RA;break;
                             }break;
                         case 2:
                             switch (childPosition){
-                                case 0: setFragment(TipoFragment.REPORTES_LISTADO_INGRESO_CAJAS);tFragment = TipoFragment.REPORTES_LISTADO_INGRESO_CAJAS;break;
-                                case 1: setFragment(TipoFragment.REPORTES_LISTADO_SALIDA_CAJAS);tFragment = TipoFragment.REPORTES_LISTADO_SALIDA_CAJAS;break;
-                                case 2: setFragment(TipoFragment.REPORTES_RESUMEN_INGRESO_CAJAS);tFragment = TipoFragment.REPORTES_RESUMEN_INGRESO_CAJAS;break;
-                                case 3: setFragment(TipoFragment.REPORTES_RESUMEN_SALIDA_CAJAS);tFragment = TipoFragment.REPORTES_RESUMEN_SALIDA_CAJAS;break;
+                                case 0: setFragment(TipoFragment.CAJAS_OUT);tFragment = TipoFragment.CAJAS_OUT;break;
                             }break;
                         case 3:
+                            switch (childPosition){
+                                case 0: setFragment(TipoFragment.REPORTES_LISTADO_INGRESO_CAJAS);tFragment = TipoFragment.REPORTES_LISTADO_INGRESO_CAJAS;break;
+                                case 1: setFragment(TipoFragment.REPORTE_LISTADO_ASISTENCIA_RA);tFragment = TipoFragment.REPORTE_LISTADO_ASISTENCIA_RA;break;
+                                case 2: setFragment(TipoFragment.REPORTES_LISTADO_SALIDA_CAJAS);tFragment = TipoFragment.REPORTES_LISTADO_SALIDA_CAJAS;break;
+                                case 3: setFragment(TipoFragment.REPORTES_RESUMEN_INGRESO_CAJAS);tFragment = TipoFragment.REPORTES_RESUMEN_INGRESO_CAJAS;break;
+                                case 4: setFragment(TipoFragment.REPORTES_RESUMEN_SALIDA_CAJAS);tFragment = TipoFragment.REPORTES_RESUMEN_SALIDA_CAJAS;break;
+                            }break;
+                        case 4:
                             if (numeroVersion < 5){
                                 switch (childPosition){
                                     case 0: borrarData();setFragment(TipoFragment.CAJAS_IN);tFragment = TipoFragment.CAJAS_IN;tFragment = TipoFragment.CAJAS_IN;break;
@@ -321,6 +336,7 @@ public class MainActivity extends AppCompatActivity implements ActividadInterfaz
 
         if (rol == 3){
             listDataHeader.add("Ingreso de Cajas al Local");
+            listDataHeader.add("Registro Asistencia RA");
             listDataHeader.add("Salida de Cajas del Local");
             listDataHeader.add("Reportes");
 
@@ -331,14 +347,20 @@ public class MainActivity extends AppCompatActivity implements ActividadInterfaz
             List<String> salidaCajas = new ArrayList<String>();
             salidaCajas.add("Salida de Cajas");
 
+            List<String> asistenciaRAs = new ArrayList<String>();
+            asistenciaRAs.add("Asistencia RA");
+
             List<String> reportes = new ArrayList<String>();
             reportes.add("Listado Ingreso Cajas a Local");
+            reportes.add("Listado Registro Asistencia RA");
             reportes.add("Listado Salida de Cajas del Local");
             reportes.add("Cuadro Resumen Ingreso Cajas");
             reportes.add("Cuadro Resumen Salida Cajas");
+
             listDataChild.put(listDataHeader.get(0), ingresoCajas);
-            listDataChild.put(listDataHeader.get(1), salidaCajas);
-            listDataChild.put(listDataHeader.get(2), reportes);
+            listDataChild.put(listDataHeader.get(1), asistenciaRAs);
+            listDataChild.put(listDataHeader.get(2), salidaCajas);
+            listDataChild.put(listDataHeader.get(3), reportes);
 
             listDataHeader.add("Mas Opciones");
             List<String> masOpciones = new ArrayList<String>();
@@ -346,7 +368,7 @@ public class MainActivity extends AppCompatActivity implements ActividadInterfaz
                 masOpciones.add("Reset BD");
             }
             masOpciones.add("Cerrar Sesión");
-            listDataChild.put(listDataHeader.get(3), masOpciones);
+            listDataChild.put(listDataHeader.get(4), masOpciones);
         }else if (rol == 2){
             listDataHeader.add("Registro de Control de Asistencia");
             listDataHeader.add("Registro de Control de Inventario");

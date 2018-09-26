@@ -68,6 +68,13 @@
         android:layout_gravity="center"
         android:background="@drawable/borde_azul_buscador"
         android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/inventario_lista_btnReporte"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_event_note"
+            android:tint="@android:color/white"
+            />
         <EditText
             android:id="@+id/inventario_lista_edtCodigo"
             android:layout_width="0dp"

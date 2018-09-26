@@ -124,10 +124,21 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/margin8dp"
             android:layout_marginRight="@dimen/margin8dp">
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/listado_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/listado_btnBuscar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="10dp"
+                android:src="@drawable/ic_event_available"
+                android:tint="@color/colorIcons"
+                />
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/listado_btnUpload"
                 android:layout_width="wrap_content"

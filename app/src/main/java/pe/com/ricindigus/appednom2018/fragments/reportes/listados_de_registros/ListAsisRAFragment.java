@@ -29,6 +29,8 @@ import java.util.Date;
 
 import pe.com.ricindigus.appednom2018.R;
 import pe.com.ricindigus.appednom2018.adapters.AsistenciaLocalAdapter;
+import pe.com.ricindigus.appednom2018.adapters.AsistenciaRaAdapter;
+import pe.com.ricindigus.appednom2018.modelo.AsistenciaRaReg;
 import pe.com.ricindigus.appednom2018.modelo.AsistenciaReg;
 import pe.com.ricindigus.appednom2018.modelo.Data;
 import pe.com.ricindigus.appednom2018.util.ActividadInterfaz;
@@ -37,19 +39,18 @@ import pe.com.ricindigus.appednom2018.util.TipoFragment;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ListAsisLocalFragment extends Fragment {
-
+public class ListAsisRAFragment extends Fragment {
     RecyclerView recyclerView;
     Context context;
     String usuario;
-    ArrayList<AsistenciaReg> asistenciaLocals;
-    ArrayList<AsistenciaReg> noEnviados;
+    ArrayList<AsistenciaRaReg> asistenciaLocals;
+    ArrayList<AsistenciaRaReg> noEnviados;
     int nroLocal;
     Data data;
     FloatingActionButton fabUpLoad;
     FloatingActionButton fabSearch;
 
-    AsistenciaLocalAdapter asistenciaLocalAdapter;
+    AsistenciaRaAdapter asistenciaRaAdapter;
     boolean b = false;
 
     TextView txtTotal;
@@ -59,12 +60,12 @@ public class ListAsisLocalFragment extends Fragment {
 
     String nombreColeccion;
 
-    public ListAsisLocalFragment() {
+    public ListAsisRAFragment() {
         // Required empty public constructor
     }
 
     @SuppressLint("ValidFragment")
-    public ListAsisLocalFragment(Context context, int nroLocal, String usuario) {
+    public ListAsisRAFragment(Context context, int nroLocal, String usuario) {
         this.context = context;
         this.nroLocal = nroLocal;
         this.usuario = usuario;
@@ -92,15 +93,15 @@ public class ListAsisLocalFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);
         cargaData();
-        asistenciaLocalAdapter = new AsistenciaLocalAdapter(asistenciaLocals,context);
+        asistenciaRaAdapter = new AsistenciaRaAdapter(asistenciaLocals,context);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(asistenciaLocalAdapter);
+        recyclerView.setAdapter(asistenciaRaAdapter);
 
         fabSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ActividadInterfaz actividadInterfaz = (ActividadInterfaz) getActivity();
-                actividadInterfaz.irReporte(TipoFragment.REGISTRO_ASISTENCIA_LOCAL);
+                actividadInterfaz.irReporte(TipoFragment.REGISTRO_ASISTENCIA_RA);
             }
         });
 
@@ -111,34 +112,34 @@ public class ListAsisLocalFragment extends Fragment {
                 noEnviados = new ArrayList<>();
                 data = new Data(context);
                 data.open();
-                noEnviados = data.getAsistenciasLocalSinEnviar(nroLocal);
+                noEnviados = data.getAsistenciasRASinEnviar(nroLocal);
                 data.close();
                 if(noEnviados.size() > 0){
                     final int total = noEnviados.size();
                     int i = 0;
-                    for (final AsistenciaReg asistenciaLocal : noEnviados){
+                    for (final AsistenciaRaReg asistenciaRaReg : noEnviados){
                         i++;
                         final int j = i;
-                        final String c = asistenciaLocal.getDni();
+                        final String c = asistenciaRaReg.getDni();
                         WriteBatch batch = FirebaseFirestore.getInstance().batch();
-                        DocumentReference documentReference = FirebaseFirestore.getInstance().collection(nombreColeccion).document(asistenciaLocal.getDni());
+                        DocumentReference documentReference = FirebaseFirestore.getInstance().collection(nombreColeccion).document(asistenciaRaReg.getDni());
                         batch.update(documentReference, "check_registro", 1);
                         batch.update(documentReference, "fecha_transferencia", FieldValue.serverTimestamp());
                         batch.update(documentReference, "usuario_registro", usuario);
                         batch.update(documentReference, "fecha_registro",
-                                new Timestamp(new Date(asistenciaLocal.getAnio_local()-1900,asistenciaLocal.getMes_local()-1,asistenciaLocal.getDia_local(),
-                                        asistenciaLocal.getHora_local(),asistenciaLocal.getMin_local(),asistenciaLocal.getSeg_local())));
+                                new Timestamp(new Date(asistenciaRaReg.getAnio()-1900,asistenciaRaReg.getMes()-1,asistenciaRaReg.getDia(),
+                                        asistenciaRaReg.getHora(),asistenciaRaReg.getMin(),asistenciaRaReg.getSeg())));
                         batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 Data data = new Data(context);
                                 data.open();
-                                data.actualizarAsistenciaRegLocalSubido(c);
+                                data.actualizarAsistenciaRaRegSubido(c);
                                 if (j == total) {
                                     Toast.makeText(context, total + " registros subidos", Toast.LENGTH_SHORT).show();
                                     cargaData();
-                                    asistenciaLocalAdapter = new AsistenciaLocalAdapter(asistenciaLocals,context);
-                                    recyclerView.setAdapter(asistenciaLocalAdapter);
+                                    asistenciaRaAdapter = new AsistenciaRaAdapter(asistenciaLocals,context);
+                                    recyclerView.setAdapter(asistenciaRaAdapter);
                                 }
                                 data.close();
                             }
@@ -158,19 +159,20 @@ public class ListAsisLocalFragment extends Fragment {
     }
 
     public void cargaData(){
-        asistenciaLocals = new ArrayList<AsistenciaReg>();
+        asistenciaLocals = new ArrayList<AsistenciaRaReg>();
         Data data = new Data(context);
         data.open();
-        nombreColeccion = data.getNombreColeccionAsistencia();
-        asistenciaLocals = data.getListadoAsistenciaLocal(nroLocal);
-        txtTotal.setText("Total: " + data.getNumeroItemsAsistenciaReg());
+        nombreColeccion = data.getNombreColeccionAsistenciaRA();
+        asistenciaLocals = data.getListadoAsistenciaRA(nroLocal);
+        txtTotal.setText("Total: " + data.getNumeroItemsAsistenciaRaReg());
 //        txtSinRegistro.setText("Sin Registro: " + data.getNroAsistenciasLocalSinRegistro(nroLocal));
-        txtRegistrados.setText("Leídos: " + data.getNroAsistenciasLocalLeidas(nroLocal));
-        txtTransferidos.setText("Transferidos: " + data.getNroAsistenciasLocalTransferidos(nroLocal));
+        txtRegistrados.setText("Leídos: " + data.getNroAsistenciasRALeidas(nroLocal));
+        txtTransferidos.setText("Transferidos: " + data.getNroAsistenciasRATransferidos(nroLocal));
         data.close();
     }
 
     public String checkDigito (int number) {
         return number <= 9 ? "0" + number : String.valueOf(number);
     }
+
 }
