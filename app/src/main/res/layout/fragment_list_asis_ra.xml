@@ -111,6 +111,11 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/listado_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/listado_btnBuscar"
                 android:layout_width="wrap_content"
@@ -121,10 +126,6 @@
                 android:src="@drawable/ic_event_available"
                 android:tint="@color/colorIcons"
                 />
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/listado_recycler"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/listado_btnUpload"
                 android:layout_width="wrap_content"

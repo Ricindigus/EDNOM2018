@@ -82,7 +82,7 @@
             android:background="@drawable/fondo_verde"
             android:orientation="vertical"
             android:padding="@dimen/margin8dp"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <TextView
                 android:layout_width="match_parent"
@@ -103,7 +103,6 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/margin8dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -142,7 +141,6 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/margin8dp"
                     android:orientation="vertical">
 
                     <TextView
@@ -166,7 +164,6 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/margin8dp"
                     android:background="@drawable/fondo_blanco"
                     android:orientation="vertical">
 
