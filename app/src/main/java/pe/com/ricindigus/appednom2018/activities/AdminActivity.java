@@ -68,6 +68,7 @@ public class AdminActivity extends AppCompatActivity {
                             intent.putExtra("filename",filename);
                             intent.putExtra("tipo_carga",1);
                             startActivity(intent);
+                            finish();
                         }else{
                             Toast.makeText(AdminActivity.this, "archivo de tipo incorrecto", Toast.LENGTH_SHORT).show();
                         }

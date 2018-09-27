@@ -1,5 +1,6 @@
 package pe.com.ricindigus.appednom2018.activities.admin;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +19,9 @@ import java.io.OutputStream;
 import java.util.Timer;
 import java.util.TimerTask;
 import pe.com.ricindigus.appednom2018.R;
+import pe.com.ricindigus.appednom2018.activities.AdminActivity;
+import pe.com.ricindigus.appednom2018.activities.LoginActivity;
+import pe.com.ricindigus.appednom2018.activities.SplashActivity;
 import pe.com.ricindigus.appednom2018.modelo.Data;
 import pe.com.ricindigus.appednom2018.modelo.SQLConstantes;
 
@@ -37,8 +41,10 @@ public class AdmMarcoActivity extends AppCompatActivity {
         filename = getIntent().getExtras().getString("filename");
         tipoCarga = getIntent().getExtras().getInt("tipo_carga");
 
-        if (tipoCarga == 1) new MyAsyncTaskCargarMarco().execute();
-        else new MyAsyncTaskExportarBD().execute();
+        if (tipoCarga == 1)
+            new MyAsyncTaskCargarMarco().execute();
+        else
+            new MyAsyncTaskExportarBD().execute();
 
     }
 
@@ -57,7 +63,6 @@ public class AdmMarcoActivity extends AppCompatActivity {
         myOutput.flush();
         myInput.close();
         myOutput.close();
-        Toast.makeText(this, "Copiado", Toast.LENGTH_SHORT).show();
     }
 
     public class MyAsyncTaskCargarMarco extends AsyncTask<Integer,Integer,String> {
@@ -94,6 +99,8 @@ public class AdmMarcoActivity extends AppCompatActivity {
             TimerTask timerTask = new TimerTask() {
                 @Override
                 public void run() {
+                    Intent intent = new Intent(AdmMarcoActivity.this, SplashActivity.class);
+                    startActivity(intent);
                     finish();
                 }
             };
