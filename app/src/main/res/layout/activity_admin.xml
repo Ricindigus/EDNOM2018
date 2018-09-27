@@ -32,6 +32,13 @@
             android:text="CARGAR MARCO"
             android:layout_marginBottom="@dimen/margin8dp"
             android:theme="@style/RaisedButtonDark"/>
+        <Button
+            android:id="@+id/btnExportaBD"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:text="EXPORTAR BD"
+            android:layout_marginBottom="@dimen/margin8dp"
+            android:theme="@style/RaisedButtonDark"/>
         <!--<Button-->
             <!--android:id="@+id/btnHorarioAsistencia"-->
             <!--android:layout_width="400dp"-->

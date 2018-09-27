@@ -1,6 +1,7 @@
 package pe.com.ricindigus.appednom2018.activities;
 
 import android.content.Intent;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,6 +16,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.WriteBatch;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,6 +41,8 @@ public class AdminActivity extends AppCompatActivity {
     Button btnCargarMarco;
     Button btnHorarioAsistencia;
     Button btnSalir;
+    Button btnExportarBD;
+
 
 
     @Override
@@ -42,6 +50,8 @@ public class AdminActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin);
         btnCargarMarco = (Button) findViewById(R.id.btnCargarMarco);
+        btnExportarBD = (Button) findViewById(R.id.btnExportaBD);
+
 //        btnHorarioAsistencia = (Button) findViewById(R.id.btnHorarioAsistencia);
         btnSalir = (Button) findViewById(R.id.btnSalir);
 
@@ -64,6 +74,17 @@ public class AdminActivity extends AppCompatActivity {
                 });
                 fileChooser.showDialog();
 
+            }
+        });
+
+        btnExportarBD.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    exportarBD();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -181,6 +202,25 @@ public class AdminActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+
+    public void exportarBD()throws IOException {
+        String inFileName = SQLConstantes.DB_PATH + SQLConstantes.DB_NAME;
+        InputStream myInput = new FileInputStream(inFileName);
+        String outFileName = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath() + "/miBD1.sqlite";
+        OutputStream myOutput = new FileOutputStream(outFileName);
+        byte[] buffer = new byte[1024];
+        int length;
+        while ((length = myInput.read(buffer)) != -1){
+            if (length > 0){
+                myOutput.write(buffer,0,length);
+            }
+        }
+        myOutput.flush();
+        myInput.close();
+        myOutput.close();
+        Toast.makeText(this, "Copiado", Toast.LENGTH_SHORT).show();
     }
 
     public Map<String, Object> asistenciaRaToMap(AsistenciaRa asistenciaRa){
