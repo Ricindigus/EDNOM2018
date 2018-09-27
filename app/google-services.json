@@ -1,27 +1,35 @@
 {
   "project_info": {
-    "project_number": "759699968244",
-    "firebase_url": "https://prueba-ednom.firebaseio.com",
-    "project_id": "prueba-ednom",
-    "storage_bucket": "prueba-ednom.appspot.com"
+    "project_number": "608441489202",
+    "firebase_url": "https://piloto-ednom2018.firebaseio.com",
+    "project_id": "piloto-ednom2018",
+    "storage_bucket": "piloto-ednom2018.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:759699968244:android:ec36e0aaedce0dea",
+        "mobilesdk_app_id": "1:608441489202:android:ec36e0aaedce0dea",
         "android_client_info": {
           "package_name": "pe.com.ricindigus.appednom2018"
         }
       },
       "oauth_client": [
         {
-          "client_id": "759699968244-dff1qsgc5knldjtctmc315v53gk6qicq.apps.googleusercontent.com",
+          "client_id": "608441489202-395kj7ulgish24ojq3qrl4kuc5ot2m5n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "pe.com.ricindigus.appednom2018",
+            "certificate_hash": "66e63c7a88c92e832513c8932bc5a1cc75d5fd8e"
+          }
+        },
+        {
+          "client_id": "608441489202-f6u929g58hdnc0fmtdchaqb3pdlm96bj.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBWcngWRZGbEBeRWhSg6Kjq6rXXbxpBT_4"
+          "current_key": "AIzaSyCNWpZFIkR-rMJXjQoMxsqewSiGc9zYQKM"
         }
       ],
       "services": {
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "608441489202-f6u929g58hdnc0fmtdchaqb3pdlm96bj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

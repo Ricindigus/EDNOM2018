@@ -146,7 +146,7 @@ public class ListInvListadoFragment extends Fragment {
                         final String c = listado.getCodigo();
                         WriteBatch batch = FirebaseFirestore.getInstance().batch();
                         DocumentReference documentReference = FirebaseFirestore.getInstance().collection(nombreColeccion).document(listado.getCodigo());
-                        batch.update(documentReference, "check_registro", 1);
+                        batch.update(documentReference, "check_registro_listado", 1);
                         batch.update(documentReference, "fecha_transferencia", FieldValue.serverTimestamp());
                         batch.update(documentReference, "usuario_registro", usuario);
                         batch.update(documentReference, "fecha_registro",
@@ -165,6 +165,7 @@ public class ListInvListadoFragment extends Fragment {
                                     inventarioListadoAdapter = new InventarioListadoAdapter(listados,context);
                                     recyclerView.setAdapter(inventarioListadoAdapter);
                                 }
+
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override

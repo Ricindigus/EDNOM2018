@@ -237,7 +237,7 @@ public class InvListAsisFragment extends Fragment {
         final String c = invReg.getCodigo();
         WriteBatch batch = FirebaseFirestore.getInstance().batch();
         DocumentReference documentReference = FirebaseFirestore.getInstance().collection(nombreColeccion).document(invReg.getCodigo());
-        batch.update(documentReference, "check_registro", 1);
+        batch.update(documentReference, "check_registro_listado", 1);
         batch.update(documentReference, "fecha_transferencia", FieldValue.serverTimestamp());
         batch.update(documentReference, "usuario_registro", usuario);
         batch.update(documentReference, "fecha_registro",
