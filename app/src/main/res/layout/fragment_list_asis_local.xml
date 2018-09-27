@@ -98,7 +98,7 @@
                     android:layout_width="0dp"
                     android:textColor="@color/icons"
                     android:layout_height="wrap_content"
-                    android:text=""
+                    android:text="AULA"
                     />
                 <TextView
                     android:layout_weight="2"

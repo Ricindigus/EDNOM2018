@@ -75,7 +75,7 @@ public class ListAsisRAFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView =  inflater.inflate(R.layout.fragment_list_asis_local, container, false);
+        View rootView =  inflater.inflate(R.layout.fragment_list_asis_ra, container, false);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.listado_recycler);
         fabUpLoad = (FloatingActionButton) rootView.findViewById(R.id.listado_btnUpload);
         fabSearch = (FloatingActionButton) rootView.findViewById(R.id.listado_btnBuscar);

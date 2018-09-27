@@ -75,8 +75,6 @@ public class AsistAulaFragment extends Fragment {
     LinearLayout lytYaRegistrado;
     LinearLayout lytErrorDni;
 
-    TextView txtTotal;
-    TextView txtFaltan;
     TextView txtRegistrados;
     TextView txtTransferidos;
 
@@ -123,8 +121,7 @@ public class AsistAulaFragment extends Fragment {
         lytYaRegistrado = (LinearLayout) rootView.findViewById(R.id.asistencia_local_lytYaRegistrado);
         lytErrorDni = (LinearLayout) rootView.findViewById(R.id.asistencia_local_ErrorDni);
 
-        txtTotal = (TextView) rootView.findViewById(R.id.asistencia_aula_txtTotal);
-        txtFaltan = (TextView) rootView.findViewById(R.id.asistencia_aula_txtFaltan);
+
         txtRegistrados = (TextView) rootView.findViewById(R.id.asistencia_aula_txtRegistrados);
         txtTransferidos = (TextView) rootView.findViewById(R.id.asistencia_aula_txtTransferidos);
 
@@ -142,12 +139,6 @@ public class AsistAulaFragment extends Fragment {
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, aulas);
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spAulas.setAdapter(dataAdapter);
-            String aula = spAulas.getSelectedItem().toString();
-            int nroAula = data.getNumeroAula(aula,nroLocal);
-            txtTotal.setText("Total: " +data.getNroAsistenciasAulaTotales(nroLocal,nroAula));
-            txtFaltan.setText("Faltan: " + data.getNroAsistenciasAulaSinRegistro(nroLocal,nroAula));
-            txtRegistrados.setText("Leidos: " + data.getNroAsistenciasAulaLeidas(nroLocal,nroAula));
-            txtTransferidos.setText("Transferidos: " + data.getNroAsistenciasAulaTransferidos(nroLocal,nroAula));
             data.close();
         }
 
@@ -158,10 +149,10 @@ public class AsistAulaFragment extends Fragment {
                 data.open();
                 String aula = spAulas.getSelectedItem().toString();
                 int nroAula = data.getNumeroAula(aula,nroLocal);
-                txtTotal.setText("Total: " +data.getNroAsistenciasAulaTotales(nroLocal,nroAula));
-                txtFaltan.setText("Faltan: " + data.getNroAsistenciasAulaSinRegistro(nroLocal,nroAula));
-                txtRegistrados.setText("Leidos: " + data.getNroAsistenciasAulaLeidas(nroLocal,nroAula));
-                txtTransferidos.setText("Transferidos: " + data.getNroAsistenciasAulaTransferidos(nroLocal,nroAula));
+//                txtTotal.setText("Total: " +data.getNroAsistenciasAulaTotales(nroLocal,nroAula));
+//                txtFaltan.setText("Faltan: " + data.getNroAsistenciasAulaSinRegistro(nroLocal,nroAula));
+                txtRegistrados.setText("Registrados: " + data.getNroAsistenciasAulaLeidas(nroLocal,nroAula) + "/" + data.getNroAsistenciasAulaSinRegistro(nroLocal,nroAula));
+                txtTransferidos.setText("Transferidos: " + data.getNroAsistenciasAulaTransferidos(nroLocal,nroAula)+"/"+data.getNroAsistenciasAulaSinRegistro(nroLocal,nroAula));
                 lytErrorDni.setVisibility(View.GONE);
                 lytYaRegistrado.setVisibility(View.GONE);
                 lytErrorLocal.setVisibility(View.GONE);
@@ -219,7 +210,7 @@ public class AsistAulaFragment extends Fragment {
         InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         mgr.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
-    public void registrarAsistencia(AsistenciaReg asistenciaReg){
+    public void registrarAsistencia(final AsistenciaReg asistenciaReg){
         Data data = new Data(context);
         data.open();
         Calendar calendario = Calendar.getInstance();
@@ -238,14 +229,11 @@ public class AsistAulaFragment extends Fragment {
         contentValues.put(SQLConstantes.asistenciareg_seg_aula,seg);
         contentValues.put(SQLConstantes.asistenciareg_estado_aula,1);
         data.actualizarAsistenciaReg(asistenciaReg.getDni(),contentValues);
-        txtFaltan.setText("Faltan: " + data.getNroAsistenciasAulaSinRegistro(nroLocal,asistenciaReg.getNaula()));
-        txtRegistrados.setText("Leidos: " + data.getNroAsistenciasAulaLeidas(nroLocal,asistenciaReg.getNaula()));
-
+        txtRegistrados.setText("Registrados: " + data.getNroAsistenciasAulaLeidas(nroLocal,asistenciaReg.getNaula()) + "/" + data.getNroAsistenciasAulaSinRegistro(nroLocal,asistenciaReg.getNaula()));
         AsistenciaReg asis = data.getAsistenciaReg(asistenciaReg.getDni());
         data.close();
         mostrarCorrecto(asis.getDni(),asis.getNombres() +" "+ asis.getApe_paterno() +" "+ asis.getApe_materno());
         final String c = asis.getDni();
-        final int nAula = asis.getNaula();
         WriteBatch batch = FirebaseFirestore.getInstance().batch();
         DocumentReference documentReference = FirebaseFirestore.getInstance().collection(nombreColeccion).document(asis.getDni());
         batch.update(documentReference, "check_registro_aula", 1);
@@ -260,7 +248,8 @@ public class AsistAulaFragment extends Fragment {
                 Data data = new Data(context);
                 data.open();
                 data.actualizarAsistenciaRegAulaSubido(c);
-                txtTransferidos.setText("Transferidos: " + data.getNroAsistenciasAulaTransferidos(nroLocal,nAula));
+                txtTransferidos.setText("Transferidos: " + data.getNroAsistenciasAulaTransferidos(nroLocal,asistenciaReg.getNaula())+"/"+data.getNroAsistenciasAulaSinRegistro(nroLocal,asistenciaReg.getNaula()));
+
                 data.close();
             }
         }).addOnFailureListener(new OnFailureListener() {

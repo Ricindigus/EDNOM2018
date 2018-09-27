@@ -1586,6 +1586,20 @@ public class Data {
         return numero;
     }
 
+    public int getNroAsistenciasRa(int idLocal){
+        int numero = 0;
+        String[] whereArgs = new String[]{String.valueOf(idLocal)};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablaasistencias_ra_reg,
+                    null,SQLConstantes.WHERE_CLAUSE_ID_LOCAL,whereArgs,null,null,null);
+            if (cursor != null) numero =  cursor.getCount();
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return numero;
+    }
+
     public int getNroAsistenciasAulaSinRegistro(int idLocal,int nroAula){
         int numero = 0;
         String[] whereArgs = new String[]{String.valueOf(idLocal),String.valueOf(nroAula),"0"};

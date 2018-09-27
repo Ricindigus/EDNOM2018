@@ -48,7 +48,8 @@ public class AsistenciaRAFragment extends Fragment {
     TextView correctoTxtNombre;
     TextView correctoTxtSede;
     TextView correctoTxtLocal;
-    TextView correctoTxtAula;
+    TextView correctoTxtCargo;
+
 
     TextView errorLocalTxtSede;
     TextView errorLocalTxtLocal;
@@ -67,8 +68,6 @@ public class AsistenciaRAFragment extends Fragment {
     LinearLayout lytErrorDni;
 
     TextView txtRegistrados;
-    TextView txtFaltan;
-    TextView txtTotal;
     TextView txtTransferidos;
 
     EditText edtDni;
@@ -100,7 +99,7 @@ public class AsistenciaRAFragment extends Fragment {
         correctoTxtNombre = (TextView) rootView.findViewById(R.id.dni_correcto_txtNombre);
         correctoTxtSede = (TextView) rootView.findViewById(R.id.dni_correcto_txtSede);
         correctoTxtLocal = (TextView) rootView.findViewById(R.id.dni_correcto_txtLocal);
-        correctoTxtAula = (TextView) rootView.findViewById(R.id.dni_correcto_txtAula);
+        correctoTxtCargo = (TextView) rootView.findViewById(R.id.dni_correcto_txtCargo);
 
         errorLocalTxtSede = (TextView) rootView.findViewById(R.id.error_local_txtSede);
         errorLocalTxtLocal = (TextView) rootView.findViewById(R.id.error_local_txtLocal);
@@ -117,8 +116,6 @@ public class AsistenciaRAFragment extends Fragment {
         lytYaRegistrado = (LinearLayout) rootView.findViewById(R.id.asistencia_ra_lytYaRegistrado);
         lytErrorDni = (LinearLayout) rootView.findViewById(R.id.asistencia_ra_ErrorDni);
 
-        txtTotal = (TextView) rootView.findViewById(R.id.asistencia_ra_txtTotal);
-//        txtFaltan = (TextView) rootView.findViewById(R.id.asistencia_ra_txtFaltan);
         txtRegistrados = (TextView) rootView.findViewById(R.id.asistencia_ra_txtRegistrados);
         txtTransferidos = (TextView) rootView.findViewById(R.id.asistencia_ra_txtTransferidos);
 
@@ -137,10 +134,10 @@ public class AsistenciaRAFragment extends Fragment {
         Data data =  new Data(context);
         data.open();
         nombreColeccion = data.getNombreColeccionAsistenciaRA();
-        txtTotal.setText("Total: " + data.getNumeroItemsAsistenciaRaReg());
+//        txtTotal.setText("Total: " + data.getNroAsistenciasRa(nroLocal));
 //        txtFaltan.setText("Faltan: " + data.getNroAsistenciasLocalSinRegistro(nroLocal));
-        txtRegistrados.setText("Leidos: " + data.getNroAsistenciasRALeidas(nroLocal));
-        txtTransferidos.setText("Transferidos: " + data.getNroAsistenciasRATransferidos(nroLocal));
+        txtRegistrados.setText("Registrados: " + data.getNroAsistenciasRALeidas(nroLocal) +"/"+data.getNroAsistenciasRa(nroLocal));
+        txtTransferidos.setText("Transferidos: " + data.getNroAsistenciasRATransferidos(nroLocal)+"/"+data.getNroAsistenciasRa(nroLocal));
         data.close();
         btnBuscar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -202,11 +199,10 @@ public class AsistenciaRAFragment extends Fragment {
         contentValues.put(SQLConstantes.asistenciareg_ra_seg,seg);
         contentValues.put(SQLConstantes.asistenciareg_ra_estado,1);
         data.actualizarAsistenciaRaReg(asistenciaReg.getDni(),contentValues);
-        txtRegistrados.setText("Leidos: " + data.getNroAsistenciasRALeidas(nroLocal));
-
+        txtRegistrados.setText("Registrados: " + data.getNroAsistenciasRALeidas(nroLocal) +"/"+data.getNroAsistenciasRa(nroLocal));
         AsistenciaRaReg asis = data.getAsistenciaRaReg(asistenciaReg.getDni());
         data.close();
-        mostrarCorrecto(asis.getDni(),asis.getNombres_completos(),asis.getNom_sede(),asis.getNom_local());
+        mostrarCorrecto(asis.getDni(),asis.getNombres_completos(),asis.getNom_sede(),asis.getNom_local(),asis.getNombre_cargo());
         final String c = asis.getDni();
         WriteBatch batch = FirebaseFirestore.getInstance().batch();
         DocumentReference documentReference = FirebaseFirestore.getInstance().collection(nombreColeccion).document(asis.getDni());
@@ -222,7 +218,7 @@ public class AsistenciaRAFragment extends Fragment {
                 Data data = new Data(context);
                 data.open();
                 data.actualizarAsistenciaRaRegSubido(c);
-                txtTransferidos.setText("Transferidos: " + data.getNroAsistenciasRATransferidos(nroLocal));
+                txtTransferidos.setText("Transferidos: " + data.getNroAsistenciasRATransferidos(nroLocal)+"/"+data.getNroAsistenciasRa(nroLocal));
                 data.close();
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -233,7 +229,7 @@ public class AsistenciaRAFragment extends Fragment {
         });
     }
 
-    public void mostrarCorrecto(String dni, String nombre, String sede, String local){
+    public void mostrarCorrecto(String dni, String nombre, String sede, String local,String cargo){
         lytErrorDni.setVisibility(View.GONE);
         lytYaRegistrado.setVisibility(View.GONE);
         lytErrorLocal.setVisibility(View.GONE);
@@ -242,6 +238,7 @@ public class AsistenciaRAFragment extends Fragment {
         correctoTxtNombre.setText(nombre);
         correctoTxtSede.setText(sede);
         correctoTxtLocal.setText(local);
+        correctoTxtCargo.setText(cargo);
 
     }
     public void mostrarErrorDni(){

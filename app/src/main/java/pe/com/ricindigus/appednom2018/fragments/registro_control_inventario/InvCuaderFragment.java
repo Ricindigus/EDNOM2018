@@ -73,8 +73,6 @@ public class InvCuaderFragment extends Fragment {
     LinearLayout lytYaRegistrado;
     LinearLayout lytErrorCuadernillo;
 
-    TextView txtTotal;
-    TextView txtFaltan;
     TextView txtRegistrados;
     TextView txtTransferidos;
 
@@ -123,9 +121,7 @@ public class InvCuaderFragment extends Fragment {
         lytYaRegistrado = (LinearLayout) rootView.findViewById(R.id.inventario_cuadernillo_lytYaRegistrado);
         lytErrorCuadernillo = (LinearLayout) rootView.findViewById(R.id.inventario_cuadernillo_ErrorCodigo);
 
-        txtTotal = (TextView) rootView.findViewById(R.id.inventario_cuadernillo_txtTotal);
         txtRegistrados = (TextView) rootView.findViewById(R.id.inventario_cuadernillo_txtRegistrados);
-        txtFaltan = (TextView) rootView.findViewById(R.id.inventario_cuadernillo_txtFaltan);
         txtTransferidos = (TextView) rootView.findViewById(R.id.inventario_cuadernillo_txtTransferidos);
 
         return rootView;
@@ -151,10 +147,10 @@ public class InvCuaderFragment extends Fragment {
                 data.open();
                 String aula = spAulas.getSelectedItem().toString();
                 int nroAula = data.getNumeroAula(aula,nroLocal);
-                txtTotal.setText("Total: " + data.getNroCuadernillosTotales(nroLocal, nroAula));
-                txtFaltan.setText("Faltan: " + data.getNroCuadernillosFaltan(nroLocal,nroAula));
-                txtRegistrados.setText("Registrados: " + data.getNroCuadernillosRegistrados(nroLocal,nroAula));
-                txtTransferidos.setText("Transferidos: " + data.getNroCuadernillosTransferidos(nroLocal,nroAula));
+//                txtTotal.setText("Total: " + data.getNroCuadernillosTotales(nroLocal, nroAula));
+//                txtFaltan.setText("Faltan: " + data.getNroCuadernillosFaltan(nroLocal,nroAula));
+                txtRegistrados.setText("Registrados: " + data.getNroCuadernillosRegistrados(nroLocal,nroAula)+"/"+ data.getNroCuadernillosTotales(nroLocal, nroAula));
+                txtTransferidos.setText("Transferidos: " + data.getNroCuadernillosTransferidos(nroLocal,nroAula)+"/"+ data.getNroCuadernillosTotales(nroLocal, nroAula));
                 lytCorrecto.setVisibility(View.GONE);
                 lytErrorCuadernillo.setVisibility(View.GONE);
                 lytYaRegistrado.setVisibility(View.GONE);
@@ -238,7 +234,7 @@ public class InvCuaderFragment extends Fragment {
         contentValues.put(SQLConstantes.inventarioreg_seg,seg);
         contentValues.put(SQLConstantes.inventarioreg_estado,1);
         data.actualizarCuadernilloReg(codInventario,contentValues);
-        InventarioReg inventarioReg = data.getCuadernilloReg(codInventario);
+        final InventarioReg inventarioReg = data.getCuadernilloReg(codInventario);
         txtRegistrados.setText("Registrados: " + data.getNroCuadernillosRegistrados(nroLocal,inventarioReg.getNaula())+"/"+data.getNroCuadernillosTotales(nroLocal,inventarioReg.getNaula()));
         data.close();
         mostrarCorrecto(inventarioReg.getDni(),inventarioReg.getNombres() +" "+ inventarioReg.getApe_paterno() +" "+ inventarioReg.getApe_materno(),inventarioReg.getCodigo());
@@ -257,6 +253,7 @@ public class InvCuaderFragment extends Fragment {
                 Data data = new Data(context);
                 data.open();
                 data.actualizarCuadernilloRegSubido(c);
+                txtTransferidos.setText("Transferidos: " + data.getNroCuadernillosTransferidos(nroLocal,inventarioReg.getNaula())+"/"+ data.getNroCuadernillosTotales(nroLocal, inventarioReg.getNaula()));
                 data.close();
             }
         }).addOnFailureListener(new OnFailureListener() {

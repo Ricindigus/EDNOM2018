@@ -18,20 +18,6 @@
         android:orientation="horizontal"
         >
         <TextView
-            android:id="@+id/inventario_listado_txtTotal"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:theme="@style/estilo_total_registrados"
-            android:text="Total:30/100"/>
-        <TextView
-            android:id="@+id/inventario_listado_txtFaltan"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:theme="@style/estilo_total_registrados"
-            android:text="Faltan:30/100"/>
-        <TextView
             android:id="@+id/inventario_listado_txtRegistrados"
             android:layout_width="0dp"
             android:layout_weight="1"

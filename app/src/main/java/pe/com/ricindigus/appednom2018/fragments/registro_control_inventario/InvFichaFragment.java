@@ -74,8 +74,6 @@ public class InvFichaFragment extends Fragment {
     LinearLayout lytYaRegistrado;
     LinearLayout lytErrorFicha;
 
-    TextView txtTotal;
-    TextView txtFaltan;
     TextView txtRegistrados;
     TextView txtTransferidos;
 
@@ -124,9 +122,7 @@ public class InvFichaFragment extends Fragment {
         lytYaRegistrado = (LinearLayout) rootView.findViewById(R.id.inventario_ficha_lytYaRegistrado);
         lytErrorFicha = (LinearLayout) rootView.findViewById(R.id.inventario_ficha_lytErrorFicha);
 
-        txtTotal = (TextView) rootView.findViewById(R.id.inventario_ficha_txtTotal);
         txtRegistrados = (TextView) rootView.findViewById(R.id.inventario_ficha_txtRegistrados);
-        txtFaltan = (TextView) rootView.findViewById(R.id.inventario_ficha_txtFaltan);
         txtTransferidos = (TextView) rootView.findViewById(R.id.inventario_ficha_txtTransferidos);
 
         return rootView;
@@ -153,10 +149,10 @@ public class InvFichaFragment extends Fragment {
                 data.open();
                 String aula = spAulas.getSelectedItem().toString();
                 int nroAula = data.getNumeroAula(aula,nroLocal);
-                txtTotal.setText("Total: " + data.getNroFichasTotales(nroLocal, nroAula));
-                txtFaltan.setText("Faltan: " + data.getNroFichasFaltan(nroLocal,nroAula));
-                txtRegistrados.setText("Registrados: " + data.getNroFichasRegistradas(nroLocal,nroAula));
-                txtTransferidos.setText("Transferidos: " + data.getNroFichasTransferidas(nroLocal,nroAula));
+//                txtTotal.setText("Total: " + data.getNroFichasTotales(nroLocal, nroAula));
+//                txtFaltan.setText("Faltan: " + data.getNroFichasFaltan(nroLocal,nroAula));
+                txtRegistrados.setText("Registrados: " + data.getNroFichasRegistradas(nroLocal,nroAula) + "/" + data.getNroFichasTotales(nroLocal, nroAula));
+                txtTransferidos.setText("Transferidos: " + data.getNroFichasTransferidas(nroLocal,nroAula)+ "/" + data.getNroFichasTotales(nroLocal, nroAula));
                 lytCorrecto.setVisibility(View.GONE);
                 lytErrorFicha.setVisibility(View.GONE);
                 lytYaRegistrado.setVisibility(View.GONE);
@@ -237,9 +233,9 @@ public class InvFichaFragment extends Fragment {
         contentValues.put(SQLConstantes.inventarioreg_seg,seg);
         contentValues.put(SQLConstantes.inventarioreg_estado,1);
         data.actualizarFichaReg(codInventario,contentValues);
-        InventarioReg inventarioReg = data.getFichaReg(codInventario);
-        txtFaltan.setText("Faltan: " + data.getNroFichasFaltan(nroLocal,inventarioReg.getNaula()));
-        txtRegistrados.setText("Registrados: " + data.getNroFichasRegistradas(nroLocal,inventarioReg.getNaula()));
+        final InventarioReg inventarioReg = data.getFichaReg(codInventario);
+//        txtFaltan.setText("Faltan: " + data.getNroFichasFaltan(nroLocal,inventarioReg.getNaula()));
+        txtRegistrados.setText("Registrados: " + data.getNroFichasRegistradas(nroLocal,inventarioReg.getNaula())+ "/" + data.getNroFichasTotales(nroLocal, inventarioReg.getNaula()));
         data.close();
         mostrarCorrecto(inventarioReg.getDni(),inventarioReg.getNombres() +" "+ inventarioReg.getApe_paterno() +" "+ inventarioReg.getApe_materno(),inventarioReg.getCodigo());
         final String c = inventarioReg.getCodigo();
@@ -257,6 +253,7 @@ public class InvFichaFragment extends Fragment {
                 Data data = new Data(context);
                 data.open();
                 data.actualizarFichaRegSubido(c);
+                txtTransferidos.setText("Transferidos: " + data.getNroFichasTransferidas(nroLocal,inventarioReg.getNaula())+ "/" + data.getNroFichasTotales(nroLocal, inventarioReg.getNaula()));
                 data.close();
             }
         }).addOnFailureListener(new OnFailureListener() {

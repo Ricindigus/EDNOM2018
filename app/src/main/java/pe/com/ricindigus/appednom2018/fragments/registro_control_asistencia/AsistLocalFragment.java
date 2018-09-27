@@ -65,8 +65,6 @@ public class AsistLocalFragment extends Fragment {
     LinearLayout lytErrorDni;
 
     TextView txtRegistrados;
-    TextView txtFaltan;
-    TextView txtTotal;
     TextView txtTransferidos;
 
     EditText edtDni;
@@ -77,6 +75,7 @@ public class AsistLocalFragment extends Fragment {
     Context context;
     String usuario;
     String nombreColeccion;
+    int nroTotal;
 
     public AsistLocalFragment() {
         // Required empty public constructor
@@ -115,8 +114,7 @@ public class AsistLocalFragment extends Fragment {
         lytYaRegistrado = (LinearLayout) rootView.findViewById(R.id.asistencia_local_lytYaRegistrado);
         lytErrorDni = (LinearLayout) rootView.findViewById(R.id.asistencia_local_ErrorDni);
 
-        txtTotal = (TextView) rootView.findViewById(R.id.asistencia_local_txtTotal);
-//        txtFaltan = (TextView) rootView.findViewById(R.id.asistencia_local_txtFaltan);
+
         txtRegistrados = (TextView) rootView.findViewById(R.id.asistencia_local_txtRegistrados);
         txtTransferidos = (TextView) rootView.findViewById(R.id.asistencia_local_txtTransferidos);
 
@@ -134,11 +132,12 @@ public class AsistLocalFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Data data =  new Data(context);
         data.open();
+        nroTotal = (int) data.getNumeroItemsAsistenciaReg();
         nombreColeccion = data.getNombreColeccionAsistencia();
-        txtTotal.setText("Total: " + data.getNumeroItemsAsistenciaReg());
+//        txtTotal.setText("Total: " + data.getNumeroItemsAsistenciaReg());
 //        txtFaltan.setText("Faltan: " + data.getNroAsistenciasLocalSinRegistro(nroLocal));
-        txtRegistrados.setText("Leidos: " + data.getNroAsistenciasLocalLeidas(nroLocal));
-        txtTransferidos.setText("Transferidos: " + data.getNroAsistenciasLocalTransferidos(nroLocal));
+        txtRegistrados.setText("Leidos: " + data.getNroAsistenciasLocalLeidas(nroLocal)+"/"+  nroTotal);
+        txtTransferidos.setText("Transferidos: " + data.getNroAsistenciasLocalTransferidos(nroLocal)+"/" + nroTotal);
         data.close();
         btnBuscar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -201,8 +200,7 @@ public class AsistLocalFragment extends Fragment {
         contentValues.put(SQLConstantes.asistenciareg_estado_local,1);
         data.actualizarAsistenciaReg(asistenciaReg.getDni(),contentValues);
 //        txtFaltan.setText("Faltan: " + data.getNroAsistenciasLocalSinRegistro(nroLocal));
-        txtRegistrados.setText("Leidos: " + data.getNroAsistenciasLocalLeidas(nroLocal));
-
+        txtRegistrados.setText("Leidos: " + data.getNroAsistenciasLocalLeidas(nroLocal)+"/"+  nroTotal);
         AsistenciaReg asis = data.getAsistenciaReg(asistenciaReg.getDni());
         data.close();
         mostrarCorrecto(asis.getDni(),asis.getNombres() +" "+ asis.getApe_paterno() +" "+ asis.getApe_materno(),asis.getNom_sede(),asis.getNom_local(),asis.getNaula());
@@ -221,7 +219,7 @@ public class AsistLocalFragment extends Fragment {
                 Data data = new Data(context);
                 data.open();
                 data.actualizarAsistenciaRegLocalSubido(c);
-                txtTransferidos.setText("Transferidos: " + data.getNroAsistenciasLocalTransferidos(nroLocal));
+                txtTransferidos.setText("Transferidos: " + data.getNroAsistenciasLocalTransferidos(nroLocal)+"/" + nroTotal);
                 data.close();
             }
         }).addOnFailureListener(new OnFailureListener() {
