@@ -90,7 +90,7 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/margin16dp"
+            android:padding="@dimen/margin8dp"
             android:visibility="gone"
             android:background="@drawable/fondo_verde">
             <TextView
@@ -110,7 +110,6 @@
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/margin8dp"
                     android:background="@drawable/fondo_blanco">
                     <TextView
                         android:layout_width="wrap_content"
@@ -132,7 +131,6 @@
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/margin8dp"
                     android:background="@drawable/fondo_blanco">
                     <TextView
 
@@ -166,7 +164,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="ERROR. EL AULA DE LA HOJA DE LISTADO ES"
-                android:textColor="@color/redPrimaryDark"
+                android:textColor="@color/amberPrimaryDark"
                 android:gravity="center"
                 android:textStyle="bold"
                 android:textSize="@dimen/texto_grande"/>
@@ -199,7 +197,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textStyle="bold"
-                            android:textColor="@color/redPrimaryDark"
                             android:textSize="@dimen/texto_mediano"
                             android:text="7001653552"/>
                     </LinearLayout>
@@ -219,7 +216,6 @@
                             android:id="@+id/error_lista_txtNroPostulantes"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/redPrimaryDark"
                             android:textSize="@dimen/texto_mediano"
                             android:textStyle="bold"
                             android:text="13"/>
@@ -256,8 +252,8 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/margin16dp"
-            android:visibility="gone"
+            android:padding="@dimen/margin8dp"
+            android:visibility="visible"
             android:background="@drawable/fondo_rojo">
             <TextView
                 android:layout_width="match_parent"
@@ -283,7 +279,6 @@
                         android:orientation="horizontal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/margin8dp"
                         android:background="@drawable/fondo_blanco">
                         <TextView
                             android:layout_width="match_parent"

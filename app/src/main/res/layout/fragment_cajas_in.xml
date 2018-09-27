@@ -82,7 +82,7 @@
             android:background="@drawable/fondo_verde"
             android:orientation="vertical"
             android:padding="@dimen/margin8dp"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="match_parent"
@@ -214,7 +214,6 @@
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/margin8dp"
                     android:background="@drawable/fondo_blanco">
                     <TextView
                         android:layout_width="wrap_content"
@@ -252,7 +251,6 @@
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/margin8dp"
                     android:background="@drawable/fondo_blanco">
                     <TextView
                         android:layout_width="wrap_content"
@@ -288,7 +286,8 @@
                 android:gravity="center"
                 android:text="ERROR DE LOCAL. LA CAJA CORRESPONDE A:"
                 android:textSize="@dimen/texto_mediano"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/amberPrimaryDark"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -300,7 +299,6 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/margin8dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -320,7 +318,6 @@
                         android:textColor="@color/greenPrimaryDark"
                         android:textStyle="bold" />
                 </LinearLayout>
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -347,7 +344,6 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/margin8dp"
                     android:background="@drawable/fondo_blanco"
                     android:orientation="vertical">
 
@@ -371,7 +367,6 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/margin8dp"
                     android:orientation="vertical">
                     <TextView
                         android:layout_width="match_parent"

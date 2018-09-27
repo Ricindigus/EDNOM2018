@@ -93,14 +93,13 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/margin16dp"
+            android:padding="@dimen/margin8dp"
             android:visibility="gone"
             android:background="@drawable/fondo_verde">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="SE GRABO LA FICHA CORRECTAMENTE"
-                android:layout_marginBottom="@dimen/margin8dp"
                 android:gravity="center"
                 android:textStyle="bold"
                 android:textSize="@dimen/texto_grande"/>
@@ -114,7 +113,6 @@
                     android:orientation="horizontal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/margin8dp"
                     android:background="@drawable/fondo_blanco">
                     <TextView
                         android:layout_width="match_parent"
@@ -136,7 +134,6 @@
                     android:orientation="horizontal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/margin8dp"
                     android:background="@drawable/fondo_blanco">
                     <TextView
                         android:layout_width="match_parent"
@@ -154,7 +151,6 @@
                         android:textStyle="bold"
                         android:text="43372489"/>
                 </LinearLayout>
-
                 <TextView
                     android:id="@+id/ficha_correcta_txtNombre"
                     android:layout_width="match_parent"
@@ -162,7 +158,6 @@
                     android:textStyle="bold"
                     android:textColor="@color/greenPrimaryDark"
                     android:textSize="@dimen/texto_grande"
-                    android:layout_marginTop="@dimen/margin8dp"
                     android:text="DENIS RICARDO MORALES RETAMOZO"/>
             </LinearLayout>
 
@@ -173,14 +168,14 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/margin16dp"
+            android:padding="@dimen/margin8dp"
             android:visibility="gone"
             android:background="@drawable/fondo_crema">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="ERROR. LA FICHA NO PERTENECE AL AULA"
-                android:textColor="@color/redPrimaryDark"
+                android:textColor="@color/amberPrimaryDark"
                 android:gravity="center"
                 android:textStyle="bold"
                 android:textSize="@dimen/texto_grande"/>
@@ -200,7 +195,6 @@
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/margin8dp"
                         android:background="@drawable/fondo_blanco">
                         <TextView
                             android:layout_width="wrap_content"
@@ -214,7 +208,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textStyle="bold"
-                            android:textColor="@color/redPrimaryDark"
                             android:textSize="@dimen/texto_mediano"
                             android:text="43372489"/>
                     </LinearLayout>
@@ -222,7 +215,6 @@
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/margin8dp"
                         android:background="@drawable/fondo_blanco">
                         <TextView
                             android:id="@+id/error_ficha_txtNombre"
@@ -230,7 +222,6 @@
                             android:layout_height="wrap_content"
                             android:textSize="@dimen/texto_grande"
                             android:textStyle="bold"
-                            android:textColor="@color/redPrimaryDark"
                             android:text="DENIS RICARDO MORALES RETAMOZO"/>
                     </LinearLayout>
                 </LinearLayout>
@@ -266,7 +257,7 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/margin16dp"
+            android:padding="@dimen/margin8dp"
             android:visibility="gone"
             android:background="@drawable/fondo_rojo">
             <TextView
@@ -293,7 +284,6 @@
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/margin8dp"
                         android:background="@drawable/fondo_blanco">
                         <TextView
                             android:layout_width="wrap_content"
@@ -315,7 +305,6 @@
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/margin8dp"
                         android:background="@drawable/fondo_blanco">
                         <TextView
                             android:layout_width="wrap_content"
@@ -337,7 +326,6 @@
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/margin8dp"
                         android:background="@drawable/fondo_blanco">
                         <ImageView
                             android:layout_width="wrap_content"
@@ -384,7 +372,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/margin16dp"
-            android:visibility="gone"
+            android:visibility="visible"
             android:background="@drawable/fondo_rojo">
             <TextView
                 android:layout_width="match_parent"
