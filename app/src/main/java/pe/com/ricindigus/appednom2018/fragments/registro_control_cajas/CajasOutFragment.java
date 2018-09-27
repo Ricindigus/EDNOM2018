@@ -177,6 +177,7 @@ public class CajasOutFragment extends Fragment {
             contentValues.put(SQLConstantes.cajasreg_min_salida,minuto);
             contentValues.put(SQLConstantes.cajasreg_seg_salida,segundos);
             contentValues.put(SQLConstantes.cajasreg_check_salida,1);
+            data.actualizarCajaReg(codigoBarra,contentValues);
             if (cajaOut.getNlado() == 1){
                 ContentValues contentValues1 = new ContentValues();
                 if (cajaOut.getTipo() == 3) contentValues1.put(SQLConstantes.cajasreg_estado_salida,2);

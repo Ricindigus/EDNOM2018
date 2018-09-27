@@ -66,6 +66,7 @@ public class AdminActivity extends AppCompatActivity {
                         if(filename.substring(filename.length()-7,filename.length()).toLowerCase().equals(".sqlite")){
                             Intent intent = new Intent(AdminActivity.this, AdmMarcoActivity.class);
                             intent.putExtra("filename",filename);
+                            intent.putExtra("tipo_carga",1);
                             startActivity(intent);
                         }else{
                             Toast.makeText(AdminActivity.this, "archivo de tipo incorrecto", Toast.LENGTH_SHORT).show();
@@ -80,11 +81,9 @@ public class AdminActivity extends AppCompatActivity {
         btnExportarBD.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    exportarBD();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                Intent intent = new Intent(AdminActivity.this, AdmMarcoActivity.class);
+                intent.putExtra("tipo_carga",2);
+                startActivity(intent);
             }
         });
 
@@ -205,23 +204,7 @@ public class AdminActivity extends AppCompatActivity {
     }
 
 
-    public void exportarBD()throws IOException {
-        String inFileName = SQLConstantes.DB_PATH + SQLConstantes.DB_NAME;
-        InputStream myInput = new FileInputStream(inFileName);
-        String outFileName = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath() + "/miBD1.sqlite";
-        OutputStream myOutput = new FileOutputStream(outFileName);
-        byte[] buffer = new byte[1024];
-        int length;
-        while ((length = myInput.read(buffer)) != -1){
-            if (length > 0){
-                myOutput.write(buffer,0,length);
-            }
-        }
-        myOutput.flush();
-        myInput.close();
-        myOutput.close();
-        Toast.makeText(this, "Copiado", Toast.LENGTH_SHORT).show();
-    }
+
 
     public Map<String, Object> asistenciaRaToMap(AsistenciaRa asistenciaRa){
         Map<String, Object> map = new HashMap<>();
