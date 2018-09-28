@@ -119,10 +119,10 @@ public class ListAsisLocalFragment extends Fragment {
                         final String c = asistenciaLocal.getDni();
                         WriteBatch batch = FirebaseFirestore.getInstance().batch();
                         DocumentReference documentReference = FirebaseFirestore.getInstance().collection(nombreColeccion).document(asistenciaLocal.getDni());
-                        batch.update(documentReference, "check_registro", 1);
-                        batch.update(documentReference, "fecha_transferencia", FieldValue.serverTimestamp());
-                        batch.update(documentReference, "usuario_registro", usuario);
-                        batch.update(documentReference, "fecha_registro",
+                        batch.update(documentReference, "check_registro_local", 1);
+                        batch.update(documentReference, "fecha_transferencia_local", FieldValue.serverTimestamp());
+                        batch.update(documentReference, "usuario_registro_local", usuario);
+                        batch.update(documentReference, "fecha_registro_local",
                                 new Timestamp(new Date(asistenciaLocal.getAnio_local()-1900,asistenciaLocal.getMes_local()-1,asistenciaLocal.getDia_local(),
                                         asistenciaLocal.getHora_local(),asistenciaLocal.getMin_local(),asistenciaLocal.getSeg_local())));
                         batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {

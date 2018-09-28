@@ -157,10 +157,10 @@ public class ListAsisAulaFragment extends Fragment {
                         final String c = asistenciaAula.getDni();
                         WriteBatch batch = FirebaseFirestore.getInstance().batch();
                         DocumentReference documentReference = FirebaseFirestore.getInstance().collection(nombreColeccion).document(asistenciaAula.getDni());
-                        batch.update(documentReference, "check_registro", 1);
-                        batch.update(documentReference, "fecha_transferencia", FieldValue.serverTimestamp());
-                        batch.update(documentReference, "usuario_registro", usuario);
-                        batch.update(documentReference, "fecha_registro",
+                        batch.update(documentReference, "check_registro_aula", 1);
+                        batch.update(documentReference, "fecha_transferencia_aula", FieldValue.serverTimestamp());
+                        batch.update(documentReference, "usuario_registro_aula", usuario);
+                        batch.update(documentReference, "fecha_registro_aula",
                                 new Timestamp(new Date(asistenciaAula.getAnio_aula()-1900,asistenciaAula.getMes_aula()-1,asistenciaAula.getDia_aula(),
                                         asistenciaAula.getHora_aula(),asistenciaAula.getMin_aula(),asistenciaAula.getSeg_aula())));
                         batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -193,6 +193,7 @@ public class ListAsisAulaFragment extends Fragment {
 
         spAulas.setSelection(seleccion);
     }
+
     public void cargaData(){
         asistenciaAulas = new ArrayList<AsistenciaReg>();
         Data d = new Data(context);
@@ -206,6 +207,7 @@ public class ListAsisAulaFragment extends Fragment {
         txtTransferidos.setText("Transferidos: " + d.getNroAsistenciasAulaTransferidos(nroLocal,nroAula)+"/"+ asistenciaAulas.size());
         d.close();
     }
+
     public String checkDigito (int number) {
         return number <= 9 ? "0" + number : String.valueOf(number);
     }

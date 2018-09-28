@@ -168,7 +168,7 @@ public class ListInvListadoFragment extends Fragment {
                             public void onSuccess(Void aVoid) {
                                 Data data = new Data(context);
                                 data.open();
-                                data.actualizarFichaRegSubido(c);
+                                data.actualizarListadoRegSubido(c);
                                 data.close();
                                 if (j == total) {
                                     Toast.makeText(context, total + " registros subidos", Toast.LENGTH_SHORT).show();

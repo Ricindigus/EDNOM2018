@@ -102,6 +102,8 @@ public class AdminActivity extends AppCompatActivity {
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 Data data = new Data(AdminActivity.this);
                 data.open();
+
+
 //                ArrayList<AsistenciaRa> asistenciaRas = data.getAllAsistenciaRaxLocal(1);
 //                WriteBatch batch = db.batch();
 //                for (AsistenciaRa asistenciaRa : asistenciaRas){
@@ -119,6 +121,7 @@ public class AdminActivity extends AppCompatActivity {
 //                        Toast.makeText(AdminActivity.this, "NO SE PUDO SUBIR", Toast.LENGTH_SHORT).show();
 //                    }
 //                });
+
 
 
 //                ArrayList<Caja> cajas = data.getAllCajas(1);
