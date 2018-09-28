@@ -151,6 +151,7 @@ public class AsistenciaRAFragment extends Fragment {
             public void onClick(View v) {
                 ActividadInterfaz actividadInterfaz = (ActividadInterfaz) getActivity();
                 actividadInterfaz.irReporte(TipoFragment.REPORTE_LISTADO_ASISTENCIA_RA);
+                ocultarTeclado(btnReporte);
             }
         });
     }
@@ -198,6 +199,7 @@ public class AsistenciaRAFragment extends Fragment {
         contentValues.put(SQLConstantes.asistenciareg_ra_min,minuto);
         contentValues.put(SQLConstantes.asistenciareg_ra_seg,seg);
         contentValues.put(SQLConstantes.asistenciareg_ra_estado,1);
+        contentValues.put(SQLConstantes.asistenciareg_ra_leida_orden,hora*60*60+minuto*60+seg);
         data.actualizarAsistenciaRaReg(asistenciaReg.getDni(),contentValues);
         txtRegistrados.setText("Registrados: " + data.getNroAsistenciasRALeidas(nroLocal) +"/"+data.getNroAsistenciasRa(nroLocal));
         AsistenciaRaReg asis = data.getAsistenciaRaReg(asistenciaReg.getDni());

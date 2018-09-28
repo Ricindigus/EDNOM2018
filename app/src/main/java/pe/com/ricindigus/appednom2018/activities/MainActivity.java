@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements ActividadInterfaz
                 fragmentTransaction.replace(R.id.fragment_layout, cajasInFragment,"fragment_actual");
                 break;
             case TipoFragment.REGISTRO_ASISTENCIA_AULA:
-                AsistAulaFragment asistAulaFragment = new AsistAulaFragment(nroLocal,MainActivity.this,usuario);
+                AsistAulaFragment asistAulaFragment = new AsistAulaFragment(nroLocal,MainActivity.this,usuario,0);
                 fragmentTransaction.replace(R.id.fragment_layout, asistAulaFragment,"fragment_actual");
                 break;
             case TipoFragment.REGISTRO_ASISTENCIA_RA:
@@ -235,6 +235,47 @@ public class MainActivity extends AppCompatActivity implements ActividadInterfaz
         }
         fragmentTransaction.commit();
     }
+
+    public void setFragment(int tipoFragment, int seleccion){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        switch (tipoFragment){
+            case TipoFragment.REGISTRO_ASISTENCIA_AULA:
+                AsistAulaFragment asistAulaFragment = new AsistAulaFragment(nroLocal,MainActivity.this,usuario,seleccion);
+                fragmentTransaction.replace(R.id.fragment_layout, asistAulaFragment,"fragment_actual");
+                break;
+            case TipoFragment.REGISTRO_INVENTARIO_CUADERNILLO:
+                InvCuaderFragment invCuaderFragment = new InvCuaderFragment(nroLocal,MainActivity.this,usuario,seleccion);
+                fragmentTransaction.replace(R.id.fragment_layout, invCuaderFragment,"fragment_actual");
+                break;
+            case TipoFragment.REGISTRO_INVENTARIO_FICHA:
+                InvFichaFragment invFichaFragment = new InvFichaFragment(nroLocal,MainActivity.this,usuario,seleccion);
+                fragmentTransaction.replace(R.id.fragment_layout, invFichaFragment,"fragment_actual");
+                break;
+            case TipoFragment.REGISTRO_INVENTARIO_LISTA_ASISTENCIA:
+                InvListAsisFragment invListAsisFragment = new InvListAsisFragment(nroLocal,MainActivity.this,usuario,seleccion);
+                fragmentTransaction.replace(R.id.fragment_layout, invListAsisFragment,"fragment_actual");
+                break;
+            case TipoFragment.REPORTES_LISTADO_ASISTENCIA_AULA:
+                ListAsisAulaFragment listAsisAulaFragment = new ListAsisAulaFragment(MainActivity.this,nroLocal,usuario,seleccion);
+                fragmentTransaction.replace(R.id.fragment_layout, listAsisAulaFragment,"fragment_actual");
+                break;
+            case TipoFragment.REPORTES_LISTADO_INVENTARIO_FICHA:
+                ListInvFichaFragment listInvFichaFragment = new ListInvFichaFragment(MainActivity.this,nroLocal,usuario,seleccion);
+                fragmentTransaction.replace(R.id.fragment_layout, listInvFichaFragment,"fragment_actual");
+                break;
+            case TipoFragment.REPORTES_LISTADO_INVENTARIO_CUADERNILLO:
+                ListInvCuadernilloFragment listInvCuadernilloFragment = new ListInvCuadernilloFragment(MainActivity.this,nroLocal,usuario,seleccion);
+                fragmentTransaction.replace(R.id.fragment_layout, listInvCuadernilloFragment,"fragment_actual");
+                break;
+            case TipoFragment.REPORTES_LISTADO_INVENTARIO_LISTADO_ASISTENCIA:
+                ListInvListadoFragment listInvListadoFragment = new ListInvListadoFragment(MainActivity.this,nroLocal,usuario,seleccion);
+                fragmentTransaction.replace(R.id.fragment_layout, listInvListadoFragment,"fragment_actual");
+                break;
+        }
+        fragmentTransaction.commit();
+    }
+
 
     private void enableExpandableList() {
         listDataHeader = new ArrayList<String>();
@@ -460,4 +501,13 @@ public class MainActivity extends AppCompatActivity implements ActividadInterfaz
     public void irReporte(int fragment) {
         setFragment(fragment);
     }
+
+    @Override
+    public void irReportexAula(int tipoFragment, int nAula) {
+            setFragment(tipoFragment,nAula);
+    }
+
+
+
+
 }

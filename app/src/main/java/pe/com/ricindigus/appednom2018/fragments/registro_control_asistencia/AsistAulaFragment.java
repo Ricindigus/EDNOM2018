@@ -77,6 +77,7 @@ public class AsistAulaFragment extends Fragment {
 
     TextView txtRegistrados;
     TextView txtTransferidos;
+    int seleccion;
 
 
 
@@ -89,6 +90,15 @@ public class AsistAulaFragment extends Fragment {
         this.context = context;
         this.nroLocal = nroLocal;
         this.usuario = usuario;
+        this.seleccion = 0;
+    }
+
+    @SuppressLint("ValidFragment")
+    public AsistAulaFragment(int nroLocal, Context context, String usuario, int seleccion) {
+        this.context = context;
+        this.nroLocal = nroLocal;
+        this.usuario = usuario;
+        this.seleccion = seleccion;
     }
 
     @Override
@@ -145,6 +155,7 @@ public class AsistAulaFragment extends Fragment {
         spAulas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                seleccion = position;
                 Data data =  new Data(context);
                 data.open();
                 String aula = spAulas.getSelectedItem().toString();
@@ -175,9 +186,11 @@ public class AsistAulaFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 ActividadInterfaz actividadInterfaz = (ActividadInterfaz) getActivity();
-                actividadInterfaz.irReporte(TipoFragment.REPORTES_LISTADO_ASISTENCIA_AULA);
+                actividadInterfaz.irReportexAula(TipoFragment.REPORTES_LISTADO_ASISTENCIA_AULA, seleccion);
+                ocultarTeclado(btnReporte);
             }
         });
+        spAulas.setSelection(seleccion);
     }
 
     public void clickBoton(){
@@ -228,8 +241,9 @@ public class AsistAulaFragment extends Fragment {
         contentValues.put(SQLConstantes.asistenciareg_min_aula,minuto);
         contentValues.put(SQLConstantes.asistenciareg_seg_aula,seg);
         contentValues.put(SQLConstantes.asistenciareg_estado_aula,1);
+        contentValues.put(SQLConstantes.asistenciareg_lei_orden_aula,hora*60*60+minuto*60+seg);
         data.actualizarAsistenciaReg(asistenciaReg.getDni(),contentValues);
-        txtRegistrados.setText("Registrados: " + data.getNroAsistenciasAulaLeidas(nroLocal,asistenciaReg.getNaula()) + "/" + data.getNroAsistenciasAulaSinRegistro(nroLocal,asistenciaReg.getNaula()));
+        txtRegistrados.setText("Leídos: " + data.getNroAsistenciasAulaLeidas(nroLocal,asistenciaReg.getNaula()) + "/" + data.getNroAsistenciasAulaSinRegistro(nroLocal,asistenciaReg.getNaula()));
         AsistenciaReg asis = data.getAsistenciaReg(asistenciaReg.getDni());
         data.close();
         mostrarCorrecto(asis.getDni(),asis.getNombres() +" "+ asis.getApe_paterno() +" "+ asis.getApe_materno());

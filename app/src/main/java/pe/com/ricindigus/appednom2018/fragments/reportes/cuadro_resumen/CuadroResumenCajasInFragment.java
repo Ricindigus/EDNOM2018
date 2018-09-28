@@ -60,10 +60,13 @@ public class CuadroResumenCajasInFragment extends Fragment {
         int ap = data.getNroCajasEntradaLeidasxTipo(nroLocal,1);
         int ad = data.getNroCajasEntradaLeidasxTipo(nroLocal,2);
         int cand = data.getNroCajasEntradaLeidasxTipo(nroLocal,3);
-        txtAplicacion.setText(ap+"");
-        txtAdicionales.setText(ad+"");
-        txtCandado.setText(cand+"");
-        txtTotal.setText((ap+ad+cand)+"");
+        int tAp=data.getNroCajasEntradaTotalxTipo(nroLocal,1);
+        int tAd = data.getNroCajasEntradaTotalxTipo(nroLocal,2);
+        int tCand = data.getNroCajasEntradaTotalxTipo(nroLocal,3);
+        txtAplicacion.setText(ap+"/"+tAp);
+        txtAdicionales.setText(ad+"/"+tAd);
+        txtCandado.setText(cand+"/"+tCand);
+        txtTotal.setText((ap+ad+cand)+"/"+(tAp+tAd+tCand));
         data.close();
     }
 }

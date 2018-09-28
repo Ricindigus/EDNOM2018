@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,18 +52,19 @@ public class ListInvCuadernilloFragment extends Fragment {
     ArrayList<InventarioReg> cuadernillos;
     ArrayList<InventarioReg> datosNoEnviados;
     Data data;
-    FloatingActionButton fabUpLoad;
-    FloatingActionButton fabSearch;
+    ImageButton fabUpLoad;
+    ImageButton fabSearch;
 
     InventarioCuadernilloAdapter inventarioCuadernilloAdapter;
     RecyclerView.LayoutManager layoutManager;
 
-    TextView txtTotal;
+
     TextView txtSinRegistro;
     TextView txtRegistrados;
     TextView txtTransferidos;
 
     String nombreColeccion;
+    int seleccion;
 
     public ListInvCuadernilloFragment() {
         // Required empty public constructor
@@ -73,6 +75,16 @@ public class ListInvCuadernilloFragment extends Fragment {
         this.context = context;
         this.nroLocal = nroLocal;
         this.usuario = usuario;
+        this.seleccion = 0;
+
+    }
+
+    @SuppressLint("ValidFragment")
+    public ListInvCuadernilloFragment(Context context, int nroLocal, String usuario,int seleccion) {
+        this.context = context;
+        this.nroLocal = nroLocal;
+        this.usuario = usuario;
+        this.seleccion = seleccion;
     }
 
     @Override
@@ -82,10 +94,9 @@ public class ListInvCuadernilloFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_lis_inv_cuadernillo, container, false);
         spAulas = (Spinner) rootView.findViewById(R.id.lista_spAula);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.lista_recycler);
-        fabUpLoad = (FloatingActionButton) rootView.findViewById(R.id.lista_btnUpload);
-        fabSearch = (FloatingActionButton) rootView.findViewById(R.id.listado_btnBuscar);
+        fabUpLoad = (ImageButton) rootView.findViewById(R.id.lista_btnUpload);
+        fabSearch = (ImageButton) rootView.findViewById(R.id.lista_btnBuscar);
 
-        txtTotal = (TextView) rootView.findViewById(R.id.lista_txtTotales);
         txtSinRegistro = (TextView) rootView.findViewById(R.id.lista_txtSinRegistro);
         txtRegistrados = (TextView) rootView.findViewById(R.id.lista_txtRegistrados);
         txtTransferidos = (TextView) rootView.findViewById(R.id.lista_txtTransferidos);
@@ -108,6 +119,7 @@ public class ListInvCuadernilloFragment extends Fragment {
         spAulas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                seleccion = position;
                 cargaData();
                 inventarioCuadernilloAdapter = new InventarioCuadernilloAdapter(cuadernillos,context);
                 recyclerView.setLayoutManager(layoutManager);
@@ -124,7 +136,7 @@ public class ListInvCuadernilloFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 ActividadInterfaz actividadInterfaz = (ActividadInterfaz) getActivity();
-                actividadInterfaz.irReporte(TipoFragment.REGISTRO_INVENTARIO_CUADERNILLO);
+                actividadInterfaz.irReportexAula(TipoFragment.REGISTRO_INVENTARIO_CUADERNILLO,seleccion);
             }
         });
 
@@ -154,7 +166,6 @@ public class ListInvCuadernilloFragment extends Fragment {
                         batch.update(documentReference, "fecha_registro_cuadernillo",
                                 new Timestamp(new Date(cuadernillo.getAnio()-1900,cuadernillo.getMes()-1,cuadernillo.getDia(),
                                         cuadernillo.getHora(),cuadernillo.getMin(),cuadernillo.getSeg())));
-
                         batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
@@ -182,6 +193,7 @@ public class ListInvCuadernilloFragment extends Fragment {
 
             }
         });
+        spAulas.setSelection(seleccion);
     }
     public void cargaData(){
         cuadernillos = new ArrayList<InventarioReg>();
@@ -192,10 +204,9 @@ public class ListInvCuadernilloFragment extends Fragment {
         int nroAula = 0;
         nroAula = d.getNumeroAula(aula,nroLocal);
         cuadernillos = d.getListadoInventarioCuadernillo(nroLocal,nroAula);
-        txtTotal.setText("Total: " + cuadernillos.size());
-        txtSinRegistro.setText("Faltan: " + d.getNroCuadernillosFaltan(nroLocal,nroAula));
-        txtRegistrados.setText("Leídos: " + d.getNroCuadernillosRegistrados(nroLocal,nroAula));
-        txtTransferidos.setText("Transferidos: " + d.getNroCuadernillosTransferidos(nroLocal,nroAula));
+        txtSinRegistro.setText("Faltan: " + d.getNroCuadernillosFaltan(nroLocal,nroAula) +"/"+cuadernillos.size());
+        txtRegistrados.setText("Leídos: " + d.getNroCuadernillosLeidos(nroLocal,nroAula)+"/"+cuadernillos.size());
+        txtTransferidos.setText("Transferidos: " + d.getNroCuadernillosTransferidos(nroLocal,nroAula)+"/"+cuadernillos.size());
         d.close();
     }
     public String checkDigito (int number) {

@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,10 +49,9 @@ public class ListIngresoCajasFragment extends Fragment {
 
     int nroLocal;
     Data data;
-    FloatingActionButton fabUpLoad;
-    FloatingActionButton fabSearch;
+    ImageButton fabUpLoad;
+    ImageButton fabSearch;
 
-    TextView txtNumero;
     TextView txtNoRegistrados;
     TextView txtIncompletos;
     TextView txtCompletos;
@@ -80,10 +80,8 @@ public class ListIngresoCajasFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView =  inflater.inflate(R.layout.fragment_list_ingreso_cajas, container, false);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.listado_recycler);
-        fabUpLoad = (FloatingActionButton) rootView.findViewById(R.id.listado_btnUpload);
-        fabSearch = (FloatingActionButton) rootView.findViewById(R.id.listado_btnBuscar);
-
-        txtNumero = (TextView) rootView.findViewById(R.id.listado_txtNumero);
+        fabUpLoad = (ImageButton) rootView.findViewById(R.id.lista_btnUpload);
+        fabSearch = (ImageButton) rootView.findViewById(R.id.lista_btnBuscar);
         txtNoRegistrados = (TextView) rootView.findViewById(R.id.listado_txtNoRegistrados);
         txtIncompletos = (TextView) rootView.findViewById(R.id.listado_txtIncompletos);
         txtCompletos = (TextView) rootView.findViewById(R.id.listado_txtCompletos);
@@ -207,11 +205,10 @@ public class ListIngresoCajasFragment extends Fragment {
         data.open();
         nombreColeccion = data.getNombreColeccionCajas();
         cajaRegs = data.getListadoCajasEntrada(nroLocal);
-        txtNumero.setText("Totales: " + cajaRegs.size());
-        txtNoRegistrados.setText("No registrados: " + data.getNroCajasEntradaSinRegistrar(nroLocal));
-        txtIncompletos.setText("Incompletos: " + data.getNroCajasEntradaIncompletas(nroLocal));
-        txtCompletos.setText("Completos: " + data.getNroCajasEntradaCompletas(nroLocal));
-        txtTransferidos.setText("Tranferidos: " + data.getNroCajasEntradaTransferidos(nroLocal));
+        txtNoRegistrados.setText("No registrados: " + data.getNroCajasEntradaSinRegistrar(nroLocal)+"/" + cajaRegs.size());
+        txtIncompletos.setText("Incompletos: " + data.getNroCajasEntradaIncompletas(nroLocal)+"/" + cajaRegs.size());
+        txtCompletos.setText("Registrados: " + data.getNroCajasEntradaLeidas(nroLocal)+"/" + cajaRegs.size());
+        txtTransferidos.setText("Tranferidos: " + data.getNroCajasEntradaTransferidos(nroLocal)+"/" + cajaRegs.size());
         data.close();
     }
 

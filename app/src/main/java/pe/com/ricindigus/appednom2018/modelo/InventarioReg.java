@@ -28,6 +28,8 @@ public class InventarioReg {
     private int seg;
     private int estado;
     private int npostulantes;
+    public int leida_orden;
+    public int trans_orden;
 
     public InventarioReg(){
         this.dia = 0;
@@ -38,10 +40,11 @@ public class InventarioReg {
         this.seg = 0;
         this.estado = 0;
         this.npostulantes = 0;
+        this.leida_orden = 0;
+        this.trans_orden = 0;
     }
 
-    public InventarioReg(String _id, String codigo, int tipo, String ccdd, String departamento, int idnacional, String idsede, String nom_sede, int idlocal, String nom_local, String dni, String ape_paterno, String ape_materno, String nombres, int naula, String codpagina, String direccion, int dia, int mes, int anio, int hora, int min, int seg, int estado, int npostulantes) {
-        this._id = _id;
+    public InventarioReg(String codigo, int tipo, String ccdd, String departamento, int idnacional, String idsede, String nom_sede, int idlocal, String nom_local, String dni, String ape_paterno, String ape_materno, String nombres, int naula, String codpagina, String direccion, int dia, int mes, int anio, int hora, int min, int seg, int estado, int npostulantes, int leida_orden, int trans_orden) {
         this.codigo = codigo;
         this.tipo = tipo;
         this.ccdd = ccdd;
@@ -66,6 +69,24 @@ public class InventarioReg {
         this.seg = seg;
         this.estado = estado;
         this.npostulantes = npostulantes;
+        this.leida_orden = leida_orden;
+        this.trans_orden = trans_orden;
+    }
+
+    public int getLeida_orden() {
+        return leida_orden;
+    }
+
+    public void setLeida_orden(int leida_orden) {
+        this.leida_orden = leida_orden;
+    }
+
+    public int getTrans_orden() {
+        return trans_orden;
+    }
+
+    public void setTrans_orden(int trans_orden) {
+        this.trans_orden = trans_orden;
     }
 
     public String getId() {
@@ -303,6 +324,8 @@ public class InventarioReg {
         contentValues.put(SQLConstantes.inventarioreg_seg,seg);
         contentValues.put(SQLConstantes.inventarioreg_estado,estado);
         contentValues.put(SQLConstantes.inventarioreg_npostulantes,npostulantes);
+        contentValues.put(SQLConstantes.inventarioreg_leida_orden,leida_orden);
+        contentValues.put(SQLConstantes.inventarioreg_trans_orden,trans_orden);
         return contentValues;
     }
 }

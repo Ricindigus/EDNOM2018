@@ -611,7 +611,7 @@ public class Data {
         try{
             cursor = sqLiteDatabase.query(SQLConstantes.tablacajasreg, null,
                     SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " + SQLConstantes.WHERE_CLAUSE_NRO_LADO
-                    ,whereArgs,null,null,"estado_entrada ASC");
+                    ,whereArgs,null,null,"estado_entrada ASC, leido_orden_entrada DESC");
             while (cursor.moveToNext()){
                 CajaReg cajaReg = new CajaReg();
                 cajaReg.set_id(cursor.getString(cursor.getColumnIndex(SQLConstantes.cajasreg_id)));
@@ -652,7 +652,7 @@ public class Data {
         try{
             cursor = sqLiteDatabase.query(SQLConstantes.tablacajasreg, null,
                     SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " + SQLConstantes.WHERE_CLAUSE_NRO_LADO
-                    ,whereArgs,null,null,"estado_salida ASC");
+                    ,whereArgs,null,null,"estado_salida ASC, leido_orden_salida DESC");
             while (cursor.moveToNext()){
                 CajaReg cajaReg = new CajaReg();
                 cajaReg.set_id(cursor.getString(cursor.getColumnIndex(SQLConstantes.cajasreg_id)));
@@ -879,6 +879,23 @@ public class Data {
         return numero;
     }
 
+    public int getNroCajasEntradaScaneadas(int nroLocal){
+        int numero = 0;
+        String[] whereArgs = new String[]{String.valueOf(nroLocal),"1","0"};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablacajasreg, null,
+                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL +" AND " +
+                            SQLConstantes.WHERE_CLAUSE_NRO_LADO+" AND " +
+                            "estado_entrada>?",whereArgs,null,null,null);
+
+            if (cursor != null) numero = cursor.getCount();
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return numero;
+    }
+
     public int getNroCajasEntradaLeidas(int nroLocal){
         int numero = 0;
         String[] whereArgs = new String[]{String.valueOf(nroLocal),"1","1"};
@@ -962,6 +979,21 @@ public class Data {
         }
         return cantidad;
     }
+    public int getNroCajasEntradaTotalxTipo(int nroLocal, int tipo){
+        int cantidad = 0;
+        String[] whereArgs = new String[]{String.valueOf(nroLocal), String.valueOf(tipo),"1"};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablacajasreg, null,
+                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL +
+                            " AND " + SQLConstantes.WHERE_CLAUSE_TIPO_CAJA +
+                            " AND " + SQLConstantes.WHERE_CLAUSE_NRO_LADO ,whereArgs,null,null,null);
+            if(cursor.getCount() > 0) cantidad = cursor.getCount();
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return cantidad;
+    }
     public int getNroCajasSalidaLeidasxTipo(int nroLocal, int tipo){
         int cantidad = 0;
         String[] whereArgs = new String[]{String.valueOf(nroLocal), String.valueOf(tipo),"1","1"};
@@ -972,6 +1004,22 @@ public class Data {
                             " AND " + SQLConstantes.WHERE_CLAUSE_TIPO_CAJA +
                             " AND " + SQLConstantes.WHERE_CLAUSE_NRO_LADO +
                             " AND " + "estado_salida>?",whereArgs,null,null,null);
+            if(cursor.getCount() > 0) cantidad = cursor.getCount();
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return cantidad;
+    }
+
+    public int getNroCajasSalidaTotalxTipo(int nroLocal, int tipo){
+        int cantidad = 0;
+        String[] whereArgs = new String[]{String.valueOf(nroLocal), String.valueOf(tipo),"1"};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablacajasreg, null,
+                    SQLConstantes.WHERE_CLAUSE_ID_LOCAL +
+                            " AND " + SQLConstantes.WHERE_CLAUSE_TIPO_CAJA +
+                            " AND " + SQLConstantes.WHERE_CLAUSE_NRO_LADO,whereArgs,null,null,null);
             if(cursor.getCount() > 0) cantidad = cursor.getCount();
         }finally{
             if(cursor != null) cursor.close();
@@ -1339,7 +1387,7 @@ public class Data {
         try{
             cursor = sqLiteDatabase.query(SQLConstantes.tablaasistenciasreg,
                     null,SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND "
-                    + "estado_local>?",whereArgs,null,null,"estado_local ASC");
+                    + "estado_local>?",whereArgs,null,null,"estado_local ASC,lei_orden_local DESC");
             while(cursor.moveToNext()){
                 AsistenciaReg asistenciaReg = new AsistenciaReg();
                 asistenciaReg = new AsistenciaReg();
@@ -1380,7 +1428,7 @@ public class Data {
         Cursor cursor = null;
         try{
             cursor = sqLiteDatabase.query(SQLConstantes.tablaasistencias_ra_reg,
-                    null,SQLConstantes.WHERE_CLAUSE_ID_LOCAL,whereArgs,null,null,"estado ASC");
+                    null,SQLConstantes.WHERE_CLAUSE_ID_LOCAL,whereArgs,null,null,"estado ASC,leida_orden DESC");
             while(cursor.moveToNext()){
                 AsistenciaRaReg asistenciaRaReg = new AsistenciaRaReg();
                 asistenciaRaReg.setCcdd(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistenciareg_ra_ccdd)));
@@ -1417,7 +1465,7 @@ public class Data {
         try{
             cursor = sqLiteDatabase.query(SQLConstantes.tablaasistenciasreg,
                     null,SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
-                            SQLConstantes.WHERE_CLAUSE_NRO_AULA,whereArgs,null,null,"estado_aula ASC");
+                            SQLConstantes.WHERE_CLAUSE_NRO_AULA,whereArgs,null,null,"estado_aula ASC,lei_orden_aula DESC");
             while(cursor.moveToNext()){
                 AsistenciaReg asistenciaReg = new AsistenciaReg();
                 asistenciaReg = new AsistenciaReg();
@@ -1604,13 +1652,13 @@ public class Data {
                 asistenciaReg.setIdlocal(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_idlocal)));
                 asistenciaReg.setNom_local(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistenciareg_nom_local)));
                 asistenciaReg.setDireccion(cursor.getString(cursor.getColumnIndex(SQLConstantes.asistenciareg_direccion)));
-                asistenciaReg.setDia_local(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_dia_local)));
-                asistenciaReg.setMes_local(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_mes_local)));
-                asistenciaReg.setAnio_local(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_anio_local)));
-                asistenciaReg.setHora_local(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_hora_local)));
-                asistenciaReg.setMin_local(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_min_local)));
-                asistenciaReg.setSeg_local(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_seg_local)));
-                asistenciaReg.setEstado_local(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_estado_local)));
+                asistenciaReg.setDia_aula(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_dia_aula)));
+                asistenciaReg.setMes_aula(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_mes_aula)));
+                asistenciaReg.setAnio_aula(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_anio_aula)));
+                asistenciaReg.setHora_aula(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_hora_aula)));
+                asistenciaReg.setMin_aula(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_min_aula)));
+                asistenciaReg.setSeg_aula(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_seg_aula)));
+                asistenciaReg.setEstado_aula(cursor.getInt(cursor.getColumnIndex(SQLConstantes.asistenciareg_estado_aula)));
                 asistenciaRegs.add(asistenciaReg);
             }
         }finally{
@@ -1674,6 +1722,21 @@ public class Data {
             cursor = sqLiteDatabase.query(SQLConstantes.tablaasistenciasreg,
                     null,SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
                             SQLConstantes.WHERE_CLAUSE_ESTADO_LOCAL ,whereArgs,null,null,null);
+            if (cursor != null) numero =  cursor.getCount();
+        }finally{
+            if(cursor != null) cursor.close();
+        }
+        return numero;
+    }
+
+    public int getNroAsistenciasRaSinRegistro(int idLocal){
+        int numero = 0;
+        String[] whereArgs = new String[]{String.valueOf(idLocal),"0"};
+        Cursor cursor = null;
+        try{
+            cursor = sqLiteDatabase.query(SQLConstantes.tablaasistencias_ra_reg,
+                    null,SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
+                            SQLConstantes.WHERE_CLAUSE_ESTADO ,whereArgs,null,null,null);
             if (cursor != null) numero =  cursor.getCount();
         }finally{
             if(cursor != null) cursor.close();
@@ -2271,7 +2334,7 @@ public class Data {
             String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula)};
             cursor = sqLiteDatabase.query(SQLConstantes.tablafichasreg, null,
                     SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
-                            SQLConstantes.WHERE_CLAUSE_NRO_AULA,whereArgs,null,null,"estado ASC");
+                            SQLConstantes.WHERE_CLAUSE_NRO_AULA,whereArgs,null,null,"estado ASC,leida_orden DESC");
             while(cursor.moveToNext()){
                 InventarioReg inventarioReg = new InventarioReg();
                 inventarioReg.setId(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_dni)));
@@ -2316,7 +2379,7 @@ public class Data {
             String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula)};
             cursor = sqLiteDatabase.query(SQLConstantes.tablacuadernillosreg, null,
                     SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
-                            SQLConstantes.WHERE_CLAUSE_NRO_AULA,whereArgs,null,null,"estado ASC");
+                            SQLConstantes.WHERE_CLAUSE_NRO_AULA,whereArgs,null,null,"estado ASC,leida_orden DESC");
             while(cursor.moveToNext()){
                 InventarioReg inventarioReg = new InventarioReg();
                 inventarioReg.setId(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_dni)));
@@ -2359,7 +2422,7 @@ public class Data {
             String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula)};
             cursor = sqLiteDatabase.query(SQLConstantes.tablalistadosreg, null,
                     SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
-                            SQLConstantes.WHERE_CLAUSE_NRO_AULA,whereArgs,null,null,"estado ASC");
+                            SQLConstantes.WHERE_CLAUSE_NRO_AULA,whereArgs,null,null,"estado ASC,leida_orden DESC");
             while(cursor.moveToNext()){
                 InventarioReg inventarioReg = new InventarioReg();
                 inventarioReg.setId(cursor.getString(cursor.getColumnIndex(SQLConstantes.inventarioreg_dni)));
@@ -2442,15 +2505,15 @@ public class Data {
 
     ////NUMERO INVENTARIOS TOTALES REGISTRADOS: FICHAS,CUADERNILLOS Y LISTADOS
 
-    public int getNroFichasRegistradas(int idLocal, int nroAula){
+    public int getNroFichasLeidas(int idLocal, int nroAula){
         int numero = 0;
         Cursor cursor = null;
         try{
-            String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula),"1"};
+            String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula),"0"};
             cursor = sqLiteDatabase.query(SQLConstantes.tablafichasreg, null,
                     SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
                             SQLConstantes.WHERE_CLAUSE_NRO_AULA+ " AND " +
-                            SQLConstantes.WHERE_CLAUSE_ESTADO,whereArgs,null,null,null);
+                           "estado>?",whereArgs,null,null,null);
             if (cursor != null) numero = cursor.getCount();
         }finally{
             if(cursor != null) cursor.close();
@@ -2458,15 +2521,15 @@ public class Data {
         return numero;
     }
 
-    public int getNroCuadernillosRegistrados(int idLocal, int nroAula){
+    public int getNroCuadernillosLeidos(int idLocal, int nroAula){
         int numero = 0;
         Cursor cursor = null;
         try{
-            String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula),"1"};
+            String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula),"0"};
             cursor = sqLiteDatabase.query(SQLConstantes.tablacuadernillosreg, null,
                     SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
                             SQLConstantes.WHERE_CLAUSE_NRO_AULA+ " AND " +
-                            SQLConstantes.WHERE_CLAUSE_ESTADO,whereArgs,null,null,null);
+                            "estado>?",whereArgs,null,null,null);
             if (cursor != null) numero = cursor.getCount();
         }finally{
             if(cursor != null) cursor.close();
@@ -2474,15 +2537,15 @@ public class Data {
         return numero;
     }
 
-    public int getNroListasRegistradas(int idLocal, int nroAula){
+    public int getNroListasLeidas(int idLocal, int nroAula){
         int numero = 0;
         Cursor cursor = null;
         try{
-            String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula),"1"};
+            String[] whereArgs = new String[]{String.valueOf(idLocal), String.valueOf(nroAula),"0"};
             cursor = sqLiteDatabase.query(SQLConstantes.tablalistadosreg, null,
                     SQLConstantes.WHERE_CLAUSE_ID_LOCAL + " AND " +
                             SQLConstantes.WHERE_CLAUSE_NRO_AULA+ " AND " +
-                            SQLConstantes.WHERE_CLAUSE_ESTADO,whereArgs,null,null,null);
+                            "estado>?",whereArgs,null,null,null);
             if (cursor != null) numero = cursor.getCount();
         }finally{
             if(cursor != null) cursor.close();

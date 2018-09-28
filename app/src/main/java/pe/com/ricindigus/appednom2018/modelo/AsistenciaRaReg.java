@@ -23,10 +23,11 @@ public class AsistenciaRaReg {
     private int min;
     private int seg;
     private int estado;
+    public int leida_orden;
+    public int trans_orden;
 
 
-    public AsistenciaRaReg(int id, String ccdd, String departamento, String idsede, String nom_sede, int idnacional, int idlocal, String nom_local, int red, int tipo_cargo, String nombre_cargo, String dni, String nombres_completos, int dia, int mes, int anio, int hora, int min, int seg, int estado) {
-        this.id = id;
+    public AsistenciaRaReg(String ccdd, String departamento, String idsede, String nom_sede, int idnacional, int idlocal, String nom_local, int red, int tipo_cargo, String nombre_cargo, String dni, String nombres_completos, int dia, int mes, int anio, int hora, int min, int seg, int estado, int leida_orden, int trans_orden) {
         this.ccdd = ccdd;
         this.departamento = departamento;
         this.idsede = idsede;
@@ -46,6 +47,8 @@ public class AsistenciaRaReg {
         this.min = min;
         this.seg = seg;
         this.estado = estado;
+        this.leida_orden = leida_orden;
+        this.trans_orden = trans_orden;
     }
 
     public AsistenciaRaReg() {
@@ -56,6 +59,25 @@ public class AsistenciaRaReg {
         this.min = 0;
         this.seg = 0;
         this.estado = 0;
+        this.leida_orden = 0;
+        this.trans_orden = 0;
+    }
+
+
+    public int getLeida_orden() {
+        return leida_orden;
+    }
+
+    public void setLeida_orden(int leida_orden) {
+        this.leida_orden = leida_orden;
+    }
+
+    public int getTrans_orden() {
+        return trans_orden;
+    }
+
+    public void setTrans_orden(int trans_orden) {
+        this.trans_orden = trans_orden;
     }
 
     public int getId() {
@@ -239,6 +261,8 @@ public class AsistenciaRaReg {
         contentValues.put(SQLConstantes.asistenciareg_ra_min,min);
         contentValues.put(SQLConstantes.asistenciareg_ra_seg,seg);
         contentValues.put(SQLConstantes.asistenciareg_ra_estado,estado);
+        contentValues.put(SQLConstantes.asistenciareg_ra_leida_orden,leida_orden);
+        contentValues.put(SQLConstantes.asistenciareg_ra_trans_orden,trans_orden);
         return contentValues;
     }
 }

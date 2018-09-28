@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,17 +51,17 @@ public class ListInvFichaFragment extends Fragment {
     ArrayList<InventarioReg> datosNoEnviados;
     Data data;
     RecyclerView.LayoutManager layoutManager;
-    FloatingActionButton fabUpLoad;
-    FloatingActionButton fabSearch;
+    ImageButton fabUpLoad;
+    ImageButton fabSearch;
 
     InventarioFichaAdapter inventarioFichaAdapter;
 
-    TextView txtTotal;
     TextView txtSinRegistro;
     TextView txtRegistrados;
     TextView txtTransferidos;
 
     String nombreColeccion;
+    int seleccion;
 
     public ListInvFichaFragment() {
         // Required empty public constructor
@@ -71,6 +72,15 @@ public class ListInvFichaFragment extends Fragment {
         this.context = context;
         this.nroLocal = nroLocal;
         this.usuario = usuario;
+        this.seleccion = 0;
+    }
+
+    @SuppressLint("ValidFragment")
+    public ListInvFichaFragment(Context context, int nroLocal, String usuario, int seleccion) {
+        this.context = context;
+        this.nroLocal = nroLocal;
+        this.usuario = usuario;
+        this.seleccion = seleccion;
     }
 
     @Override
@@ -80,10 +90,8 @@ public class ListInvFichaFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_list_inv_ficha, container, false);
         spAulas = (Spinner) rootView.findViewById(R.id.lista_spAula);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.lista_recycler);
-        fabUpLoad = (FloatingActionButton) rootView.findViewById(R.id.lista_btnUpload);
-        fabSearch = (FloatingActionButton) rootView.findViewById(R.id.listado_btnBuscar);
-
-        txtTotal = (TextView) rootView.findViewById(R.id.lista_txtTotales);
+        fabUpLoad = (ImageButton) rootView.findViewById(R.id.lista_btnUpload);
+        fabSearch = (ImageButton) rootView.findViewById(R.id.lista_btnBuscar);
         txtSinRegistro = (TextView) rootView.findViewById(R.id.lista_txtSinRegistro);
         txtRegistrados = (TextView) rootView.findViewById(R.id.lista_txtRegistrados);
         txtTransferidos = (TextView) rootView.findViewById(R.id.lista_txtTransferidos);
@@ -102,10 +110,10 @@ public class ListInvFichaFragment extends Fragment {
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spAulas.setAdapter(dataAdapter);
         d.close();
-
         spAulas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                seleccion = position;
                 cargaData();
                 inventarioFichaAdapter = new InventarioFichaAdapter(fichas,context);
                 recyclerView.setLayoutManager(layoutManager);
@@ -122,7 +130,7 @@ public class ListInvFichaFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 ActividadInterfaz actividadInterfaz = (ActividadInterfaz) getActivity();
-                actividadInterfaz.irReporte(TipoFragment.REGISTRO_INVENTARIO_FICHA);
+                actividadInterfaz.irReportexAula(TipoFragment.REGISTRO_INVENTARIO_FICHA,seleccion);
             }
         });
 
@@ -178,9 +186,9 @@ public class ListInvFichaFragment extends Fragment {
                 }else{
                     Toast.makeText(context, "No hay registros nuevos para subir", Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
+        spAulas.setSelection(seleccion);
     }
     public void cargaData(){
         fichas = new ArrayList<InventarioReg>();
@@ -190,14 +198,12 @@ public class ListInvFichaFragment extends Fragment {
         String aula = spAulas.getSelectedItem().toString();
         int nroAula = d.getNumeroAula(aula,nroLocal);
         fichas = d.getListadoInventarioFichas(nroLocal,nroAula);
-        txtTotal.setText("Total: " + fichas.size());
-        txtSinRegistro.setText("Faltan: " + d.getNroFichasFaltan(nroLocal,nroAula));
-        txtRegistrados.setText("Leídos: " + d.getNroFichasRegistradas(nroLocal,nroAula));
-        txtTransferidos.setText("Transferidos: " + d.getNroFichasTransferidas(nroLocal,nroAula));
+        txtSinRegistro.setText("Faltan: " + d.getNroFichasFaltan(nroLocal,nroAula)+"/"+fichas.size());
+        txtRegistrados.setText("Registrados: " + d.getNroFichasLeidas(nroLocal,nroAula)+"/"+fichas.size());
+        txtTransferidos.setText("Transferidos: " + d.getNroFichasTransferidas(nroLocal,nroAula)+"/"+fichas.size());
         d.close();
     }
     public String checkDigito (int number) {
         return number <= 9 ? "0" + number : String.valueOf(number);
     }
-
 }

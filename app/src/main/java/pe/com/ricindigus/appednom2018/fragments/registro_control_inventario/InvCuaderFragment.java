@@ -78,6 +78,7 @@ public class InvCuaderFragment extends Fragment {
 
 
     String nombreColeccion;
+    int seleccion;
 
     public InvCuaderFragment() {
         // Required empty public constructor
@@ -88,6 +89,15 @@ public class InvCuaderFragment extends Fragment {
         this.context = context;
         this.nroLocal = nroLocal;
         this.usuario = usuario;
+        this.seleccion = 0;
+    }
+
+    @SuppressLint("ValidFragment")
+    public InvCuaderFragment(int nroLocal, Context context, String usuario,int seleccion) {
+        this.context = context;
+        this.nroLocal = nroLocal;
+        this.usuario = usuario;
+        this.seleccion = seleccion;
     }
 
     @Override
@@ -143,13 +153,12 @@ public class InvCuaderFragment extends Fragment {
         spAulas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                int seleccion;
                 Data data =  new Data(context);
                 data.open();
                 String aula = spAulas.getSelectedItem().toString();
                 int nroAula = data.getNumeroAula(aula,nroLocal);
-//                txtTotal.setText("Total: " + data.getNroCuadernillosTotales(nroLocal, nroAula));
-//                txtFaltan.setText("Faltan: " + data.getNroCuadernillosFaltan(nroLocal,nroAula));
-                txtRegistrados.setText("Registrados: " + data.getNroCuadernillosRegistrados(nroLocal,nroAula)+"/"+ data.getNroCuadernillosTotales(nroLocal, nroAula));
+                txtRegistrados.setText("Registrados: " + data.getNroCuadernillosLeidos(nroLocal,nroAula)+"/"+ data.getNroCuadernillosTotales(nroLocal, nroAula));
                 txtTransferidos.setText("Transferidos: " + data.getNroCuadernillosTransferidos(nroLocal,nroAula)+"/"+ data.getNroCuadernillosTotales(nroLocal, nroAula));
                 lytCorrecto.setVisibility(View.GONE);
                 lytErrorCuadernillo.setVisibility(View.GONE);
@@ -174,9 +183,12 @@ public class InvCuaderFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 ActividadInterfaz actividadInterfaz = (ActividadInterfaz) getActivity();
-                actividadInterfaz.irReporte(TipoFragment.REPORTES_LISTADO_INVENTARIO_CUADERNILLO);
+                actividadInterfaz.irReportexAula(TipoFragment.REPORTES_LISTADO_INVENTARIO_CUADERNILLO,seleccion);
+                ocultarTeclado(btnReporte);
             }
         });
+
+        spAulas.setSelection(seleccion);
 
     }
 
@@ -233,9 +245,10 @@ public class InvCuaderFragment extends Fragment {
         contentValues.put(SQLConstantes.inventarioreg_min,minuto);
         contentValues.put(SQLConstantes.inventarioreg_seg,seg);
         contentValues.put(SQLConstantes.inventarioreg_estado,1);
+        contentValues.put(SQLConstantes.inventarioreg_leida_orden,hora*60*60+minuto*60+seg);
         data.actualizarCuadernilloReg(codInventario,contentValues);
         final InventarioReg inventarioReg = data.getCuadernilloReg(codInventario);
-        txtRegistrados.setText("Registrados: " + data.getNroCuadernillosRegistrados(nroLocal,inventarioReg.getNaula())+"/"+data.getNroCuadernillosTotales(nroLocal,inventarioReg.getNaula()));
+        txtRegistrados.setText("Registrados: " + data.getNroCuadernillosLeidos(nroLocal,inventarioReg.getNaula())+"/"+data.getNroCuadernillosTotales(nroLocal,inventarioReg.getNaula()));
         data.close();
         mostrarCorrecto(inventarioReg.getDni(),inventarioReg.getNombres() +" "+ inventarioReg.getApe_paterno() +" "+ inventarioReg.getApe_materno(),inventarioReg.getCodigo());
         final String c = inventarioReg.getCodigo();

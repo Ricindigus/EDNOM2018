@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,16 +51,18 @@ public class ListInvListadoFragment extends Fragment {
     ArrayList<InventarioReg> listados;
     ArrayList<InventarioReg> datosNoEnviados;
     Data data;
-    FloatingActionButton fabUpLoad;
-    FloatingActionButton fabSearch;
+    ImageButton fabUpLoad;
+    ImageButton fabSearch;
 
     InventarioListadoAdapter inventarioListadoAdapter;
-    TextView txtTotal;
+
     TextView txtSinRegistro;
     TextView txtRegistrados;
     TextView txtTransferidos;
     RecyclerView.LayoutManager layoutManager;
     String nombreColeccion;
+
+    int seleccion;
 
     public ListInvListadoFragment() {
         // Required empty public constructor
@@ -70,6 +73,15 @@ public class ListInvListadoFragment extends Fragment {
         this.context = context;
         this.nroLocal = nroLocal;
         this.usuario = usuario;
+        this.seleccion = 0;
+    }
+
+    @SuppressLint("ValidFragment")
+    public ListInvListadoFragment(Context context, int nroLocal, String usuario, int seleccion) {
+        this.context = context;
+        this.nroLocal = nroLocal;
+        this.usuario = usuario;
+        this.seleccion = seleccion;
     }
 
     @Override
@@ -79,10 +91,8 @@ public class ListInvListadoFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_lis_inv_listado, container, false);
         spAulas = (Spinner) rootView.findViewById(R.id.lista_spAula);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.lista_recycler);
-        fabUpLoad = (FloatingActionButton) rootView.findViewById(R.id.lista_btnUpload);
-        fabSearch = (FloatingActionButton) rootView.findViewById(R.id.listado_btnBuscar);
-
-        txtTotal = (TextView) rootView.findViewById(R.id.lista_txtTotales);
+        fabUpLoad = (ImageButton) rootView.findViewById(R.id.lista_btnUpload);
+        fabSearch = (ImageButton) rootView.findViewById(R.id.lista_btnBuscar);
         txtSinRegistro = (TextView) rootView.findViewById(R.id.lista_txtSinRegistro);
         txtRegistrados = (TextView) rootView.findViewById(R.id.lista_txtRegistrados);
         txtTransferidos = (TextView) rootView.findViewById(R.id.lista_txtTransferidos);
@@ -121,7 +131,7 @@ public class ListInvListadoFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 ActividadInterfaz actividadInterfaz = (ActividadInterfaz) getActivity();
-                actividadInterfaz.irReporte(TipoFragment.REGISTRO_INVENTARIO_LISTA_ASISTENCIA);
+                actividadInterfaz.irReportexAula(TipoFragment.REGISTRO_INVENTARIO_LISTA_ASISTENCIA,seleccion);
             }
         });
 
@@ -181,6 +191,7 @@ public class ListInvListadoFragment extends Fragment {
 
             }
         });
+        spAulas.setSelection(seleccion);
     }
     public void cargaData(){
         listados = new ArrayList<InventarioReg>();
@@ -191,10 +202,9 @@ public class ListInvListadoFragment extends Fragment {
         int nroAula = 0;
         nroAula = d.getNumeroAula(aula,nroLocal);
         listados = d.getListadoInventarioLista(nroLocal,nroAula);
-        txtTotal.setText("Total: " + listados.size());
-        txtSinRegistro.setText("Faltan: " + d.getNroListasFaltan(nroLocal,nroAula));
-        txtRegistrados.setText("Leídos: " + d.getNroListasRegistradas(nroLocal,nroAula));
-        txtTransferidos.setText("Transferidos: " + d.getNroListasTransferidas(nroLocal,nroAula));
+        txtSinRegistro.setText("Faltan: " + d.getNroListasFaltan(nroLocal,nroAula)+"/"+listados.size());
+        txtRegistrados.setText("Registrados: " + d.getNroListasLeidas(nroLocal,nroAula)+"/"+listados.size());
+        txtTransferidos.setText("Transferidos: " + d.getNroListasTransferidas(nroLocal,nroAula)+"/"+listados.size());
         d.close();
     }
     public String checkDigito (int number) {

@@ -21,17 +21,22 @@
             android:configChanges="screenSize|orientation|keyboardHidden"
             android:screenOrientation="landscape"
             android:windowSoftInputMode="adjustNothing|stateAlwaysHidden" />
-        <activity android:name=".activities.SplashActivity">
+        <activity android:name=".activities.SplashActivity"
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.ProgressActivity" />
-        <activity android:name=".activities.AdminActivity" />
-        <activity android:name=".activities.admin.AdmMarcoActivity" />
-        <activity android:name=".activities.admin.AdmHorarioActivity"></activity>
+        <activity android:name=".activities.ProgressActivity"
+            android:screenOrientation="landscape"/>
+        <activity android:name=".activities.AdminActivity"
+            android:screenOrientation="landscape"/>
+        <activity android:name=".activities.admin.AdmMarcoActivity"
+            android:screenOrientation="landscape"/>
+        <activity android:name=".activities.admin.AdmHorarioActivity"
+            android:screenOrientation="landscape"></activity>
     </application>
 
 </manifest>

@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,16 +48,15 @@ public class ListAsisRAFragment extends Fragment {
     ArrayList<AsistenciaRaReg> noEnviados;
     int nroLocal;
     Data data;
-    FloatingActionButton fabUpLoad;
-    FloatingActionButton fabSearch;
+    ImageButton fabUpLoad;
+    ImageButton fabSearch;
 
     AsistenciaRaAdapter asistenciaRaAdapter;
     boolean b = false;
 
-    TextView txtTotal;
-    TextView txtSinRegistro;
     TextView txtRegistrados;
     TextView txtTransferidos;
+    TextView txtSinRegistro;
 
     String nombreColeccion;
 
@@ -77,13 +77,13 @@ public class ListAsisRAFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView =  inflater.inflate(R.layout.fragment_list_asis_ra, container, false);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.listado_recycler);
-        fabUpLoad = (FloatingActionButton) rootView.findViewById(R.id.listado_btnUpload);
-        fabSearch = (FloatingActionButton) rootView.findViewById(R.id.listado_btnBuscar);
+        fabUpLoad = (ImageButton) rootView.findViewById(R.id.lista_btnUpload);
+        fabSearch = (ImageButton) rootView.findViewById(R.id.lista_btnBuscar);
 
-        txtTotal = (TextView) rootView.findViewById(R.id.lista_txtTotales);
-        txtSinRegistro = (TextView) rootView.findViewById(R.id.lista_txtSinRegistro);
         txtRegistrados = (TextView) rootView.findViewById(R.id.lista_txtRegistrados);
         txtTransferidos = (TextView) rootView.findViewById(R.id.lista_txtTransferidos);
+        txtSinRegistro = (TextView) rootView.findViewById(R.id.lista_txtSinRegistro);
+
         return rootView;
     }
 
@@ -164,10 +164,9 @@ public class ListAsisRAFragment extends Fragment {
         data.open();
         nombreColeccion = data.getNombreColeccionAsistenciaRA();
         asistenciaLocals = data.getListadoAsistenciaRA(nroLocal);
-        txtTotal.setText("Total: " + data.getNumeroItemsAsistenciaRaReg());
-//        txtSinRegistro.setText("Sin Registro: " + data.getNroAsistenciasLocalSinRegistro(nroLocal));
-        txtRegistrados.setText("Leídos: " + data.getNroAsistenciasRALeidas(nroLocal));
-        txtTransferidos.setText("Transferidos: " + data.getNroAsistenciasRATransferidos(nroLocal));
+        txtSinRegistro.setText("Sin Registro: " + data.getNroAsistenciasRaSinRegistro(nroLocal)+"/"+ data.getNumeroItemsAsistenciaRaReg());
+        txtRegistrados.setText("Registrados: " + data.getNroAsistenciasRALeidas(nroLocal)+"/"+ data.getNumeroItemsAsistenciaRaReg());
+        txtTransferidos.setText("Transferidos: " + data.getNroAsistenciasRATransferidos(nroLocal)+"/"+data.getNumeroItemsAsistenciaRaReg());
         data.close();
     }
 

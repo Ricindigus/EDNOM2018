@@ -52,7 +52,7 @@ public class AdminActivity extends AppCompatActivity {
         btnCargarMarco = (Button) findViewById(R.id.btnCargarMarco);
         btnExportarBD = (Button) findViewById(R.id.btnExportaBD);
 
-//        btnHorarioAsistencia = (Button) findViewById(R.id.btnHorarioAsistencia);
+        btnHorarioAsistencia = (Button) findViewById(R.id.btnHorarioAsistencia);
         btnSalir = (Button) findViewById(R.id.btnSalir);
 
         btnCargarMarco.setOnClickListener(new View.OnClickListener() {
@@ -96,12 +96,31 @@ public class AdminActivity extends AppCompatActivity {
 //            }
 //        });
 
-//        btnHorarioAsistencia.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                FirebaseFirestore db = FirebaseFirestore.getInstance();
-//                Data data = new Data(AdminActivity.this);
-//                data.open();
+        btnHorarioAsistencia.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                Data data = new Data(AdminActivity.this);
+                data.open();
+//                ArrayList<AsistenciaRa> asistenciaRas = data.getAllAsistenciaRaxLocal(1);
+//                WriteBatch batch = db.batch();
+//                for (AsistenciaRa asistenciaRa : asistenciaRas){
+//                    DocumentReference documentReference = db.collection("asistencia_ra").document(asistenciaRa.getDni());
+//                    batch.set(documentReference,asistenciaRaToMap(asistenciaRa));
+//                }
+//                batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
+//                    @Override
+//                    public void onSuccess(Void aVoid) {
+//                        Toast.makeText(AdminActivity.this, "SUBIDO ASISTENCIA RA", Toast.LENGTH_SHORT).show();
+//                    }
+//                }).addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        Toast.makeText(AdminActivity.this, "NO SE PUDO SUBIR", Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+
+
 //                ArrayList<Caja> cajas = data.getAllCajas(1);
 //                WriteBatch batchCaja = db.batch();
 //                for (Caja caja: cajas){
@@ -170,29 +189,10 @@ public class AdminActivity extends AppCompatActivity {
 //                    }
 //                });
 
+                data.close();
 
-//                ArrayList<AsistenciaRa> asistenciaRas = data.getAllAsistenciaRaxLocal(1);
-//                FirebaseFirestore db = FirebaseFirestore.getInstance();
-//                WriteBatch batch = db.batch();
-//                for (AsistenciaRa asistenciaRa : asistenciaRas){
-//                    DocumentReference documentReference = db.collection("asistencia_ra").document(asistenciaRa.getDni());
-//                    batch.set(documentReference,AsistenciaRaToMap(asistenciaRa));
-//                }
-//                batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
-//                    @Override
-//                    public void onSuccess(Void aVoid) {
-//                        Toast.makeText(AdminActivity.this, "SUBIDO ASISTENCIA RA", Toast.LENGTH_SHORT).show();
-//                    }
-//                }).addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Toast.makeText(AdminActivity.this, "NO SE PUDO SUBIR", Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-
-//                data.close();
-//            }
-//        });
+            }
+        });
 
         btnSalir.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -258,9 +258,9 @@ public class AdminActivity extends AppCompatActivity {
         map.put(SQLConstantes.inventario_naula, inventario.getNaula());
         if (inventario.getTipo() == 3){
             map.put(SQLConstantes.inventario_tipo, inventario.getTipo());
-            map.put(SQLConstantes.inventario_codpagina, inventario.getCodpagina());
             map.put("check_registro_listado", 0);
         } else{
+            map.put(SQLConstantes.inventario_codpagina, inventario.getCodpagina());
             map.put(SQLConstantes.inventario_tipo, 12);
             map.put(SQLConstantes.inventario_dni, inventario.getDni());
             map.put("check_registro_ficha", 0);

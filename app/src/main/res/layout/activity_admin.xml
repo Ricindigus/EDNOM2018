@@ -39,12 +39,13 @@
             android:text="EXPORTAR BD"
             android:layout_marginBottom="@dimen/margin8dp"
             android:theme="@style/RaisedButtonDark"/>
-        <!--<Button-->
-            <!--android:id="@+id/btnHorarioAsistencia"-->
-            <!--android:layout_width="400dp"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="HORARIO ASISTENCIA"-->
-            <!--android:theme="@style/RaisedButtonDark"/>-->
+        <Button
+            android:id="@+id/btnHorarioAsistencia"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:text="HORARIO ASISTENCIA"
+            android:visibility="gone"
+            android:theme="@style/RaisedButtonDark"/>
         <Button
             android:id="@+id/btnSalir"
             android:layout_width="400dp"

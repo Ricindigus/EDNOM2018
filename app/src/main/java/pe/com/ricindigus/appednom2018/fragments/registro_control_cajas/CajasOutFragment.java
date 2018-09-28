@@ -127,6 +127,7 @@ public class CajasOutFragment extends Fragment {
             public void onClick(View v) {
                 ActividadInterfaz actividadInterfaz = (ActividadInterfaz) getActivity();
                 actividadInterfaz.irReporte(TipoFragment.REPORTES_LISTADO_SALIDA_CAJAS);
+                ocultarTeclado(btnReporte);
             }
         });
     }
@@ -170,16 +171,17 @@ public class CajasOutFragment extends Fragment {
             int minuto = calendario.get(Calendar.MINUTE);
             int segundos = calendario.get(Calendar.SECOND);
             ContentValues contentValues = new ContentValues();
-            contentValues.put(SQLConstantes.cajasreg_dia_salida,dd);
-            contentValues.put(SQLConstantes.cajasreg_mes_salida,mm);
-            contentValues.put(SQLConstantes.cajasreg_anio_salida,yy);
-            contentValues.put(SQLConstantes.cajasreg_hora_salida,hora);
-            contentValues.put(SQLConstantes.cajasreg_min_salida,minuto);
-            contentValues.put(SQLConstantes.cajasreg_seg_salida,segundos);
             contentValues.put(SQLConstantes.cajasreg_check_salida,1);
             data.actualizarCajaReg(codigoBarra,contentValues);
             if (cajaOut.getNlado() == 1){
                 ContentValues contentValues1 = new ContentValues();
+                contentValues1.put(SQLConstantes.cajasreg_dia_salida,dd);
+                contentValues1.put(SQLConstantes.cajasreg_mes_salida,mm);
+                contentValues1.put(SQLConstantes.cajasreg_anio_salida,yy);
+                contentValues1.put(SQLConstantes.cajasreg_hora_salida,hora);
+                contentValues1.put(SQLConstantes.cajasreg_min_salida,minuto);
+                contentValues1.put(SQLConstantes.cajasreg_seg_salida,segundos);
+                contentValues1.put(SQLConstantes.cajasreg_leido_orden_salida,hora*60*60+minuto*60+segundos);
                 if (cajaOut.getTipo() == 3) contentValues1.put(SQLConstantes.cajasreg_estado_salida,2);
                 else contentValues1.put(SQLConstantes.cajasreg_estado_salida,cajaOut.getEstado_salida() + 1);
                 data.actualizarCajaReg(codigoBarra,contentValues1);
@@ -191,6 +193,13 @@ public class CajasOutFragment extends Fragment {
                 CajaReg cajaOut1 = data.getCajaReg(getCodigoAux(codigoBarra),numeroLocal);
                 ContentValues contentValues2 = new ContentValues();
                 contentValues2.put(SQLConstantes.cajasreg_estado_salida,cajaOut1.getEstado_salida() + 1);
+                contentValues2.put(SQLConstantes.cajasreg_dia_salida,dd);
+                contentValues2.put(SQLConstantes.cajasreg_mes_salida,mm);
+                contentValues2.put(SQLConstantes.cajasreg_anio_salida,yy);
+                contentValues2.put(SQLConstantes.cajasreg_hora_salida,hora);
+                contentValues2.put(SQLConstantes.cajasreg_min_salida,minuto);
+                contentValues2.put(SQLConstantes.cajasreg_seg_salida,segundos);
+                contentValues2.put(SQLConstantes.cajasreg_leido_orden_salida,hora*60*60+minuto*60+segundos);
                 data.actualizarCajaReg(cajaOut1.getCod_barra_caja(),contentValues2);
                 txtRegistrados.setText("Registrados: " + data.getNroCajasSalidaLeidas(numeroLocal)+"/"+ data.getNroCajasTotales(numeroLocal));
             }

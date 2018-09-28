@@ -12,29 +12,43 @@
         android:layout_height="match_parent"
         android:layout_margin="5dp"
         android:orientation="vertical">
-        <TextView
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="CAJAS CONSULTADAS POR CÓDIGO DE BARRA (ENTRADA)"
-            android:layout_marginBottom="@dimen/margin8dp"
-            android:textSize="@dimen/texto_grande"
-            android:gravity="center"
-            android:textStyle="bold"
-            android:textColor="@color/colorPrimaryDark"/>
+            android:layout_height="wrap_content">
+            <ImageButton
+                android:id="@+id/lista_btnBuscar"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_event_available"
+                android:tint="@color/colorIcons"
+                android:theme="@style/RaisedButtonDarkGrey"
+                android:layout_marginLeft="@dimen/margin8dp"
+                />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="CAJAS REGISTRADAS POR CODIGO DE BARRA (ENTRADA)"
+                android:theme="@style/estilo_titulo_listado_fragment"/>
+            <ImageButton
+                android:id="@+id/lista_btnUpload"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_file_upload"
+                android:tint="@color/colorIcons"
+                android:layout_marginRight="@dimen/margin8dp"
+                android:theme="@style/RaisedButtonDarkGrey"
+                />
+        </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-            <TextView
-                android:id="@+id/listado_txtNumero"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:text="Totales:"
-                android:gravity="center"
-                android:textStyle="bold"
-                android:textSize="@dimen/texto_medio"
-                android:textColor="@color/greyBluePrimaryDark"/>
             <TextView
                 android:id="@+id/listado_txtNoRegistrados"
                 android:layout_width="0dp"
@@ -123,26 +137,6 @@
                 android:id="@+id/listado_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/listado_btnBuscar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentBottom="true"
-                android:layout_margin="10dp"
-                android:src="@drawable/ic_event_available"
-                android:tint="@color/colorIcons"
-                />
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/listado_btnUpload"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentBottom="true"
-                android:layout_margin="10dp"
-                android:src="@drawable/ic_file_upload"
-                android:tint="@color/colorIcons"
-                />
         </RelativeLayout>
     </LinearLayout>
 

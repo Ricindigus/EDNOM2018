@@ -32,10 +32,13 @@ public class CajaReg {
     private int seg_salida;
     private int estado_salida;
     private int check_salida;
+    public int leido_orden_entrada;
+    public int leido_orden_salida;
+    public int trans_orden_entrada;
+    public int trans_orden_salida;
 
 
-    public CajaReg(String _id, String cod_barra_caja, String ccdd, String departamento, int idnacional, String idsede, String nom_sede, int idlocal, String nom_local, int tipo, int nlado, int acl, String direccion, int dia_entrada, int mes_entrada, int anio_entrada, int hora_entrada, int min_entrada, int seg_entrada, int estado_entrada, int check_entrada, int dia_salida, int mes_salida, int anio_salida, int hora_salida, int min_salida, int seg_salida, int estado_salida, int check_salida) {
-        this._id = _id;
+    public CajaReg(String cod_barra_caja, String ccdd, String departamento, int idnacional, String idsede, String nom_sede, int idlocal, String nom_local, int tipo, int nlado, int acl, String direccion, int dia_entrada, int mes_entrada, int anio_entrada, int hora_entrada, int min_entrada, int seg_entrada, int estado_entrada, int check_entrada, int dia_salida, int mes_salida, int anio_salida, int hora_salida, int min_salida, int seg_salida, int estado_salida, int check_salida, int leido_orden_entrada, int leido_orden_salida, int trans_orden_entrada, int trans_orden_salida) {
         this.cod_barra_caja = cod_barra_caja;
         this.ccdd = ccdd;
         this.departamento = departamento;
@@ -64,6 +67,10 @@ public class CajaReg {
         this.seg_salida = seg_salida;
         this.estado_salida = estado_salida;
         this.check_salida = check_salida;
+        this.leido_orden_entrada = leido_orden_entrada;
+        this.leido_orden_salida = leido_orden_salida;
+        this.trans_orden_entrada = trans_orden_entrada;
+        this.trans_orden_salida = trans_orden_salida;
     }
 
     public CajaReg() {
@@ -83,6 +90,10 @@ public class CajaReg {
         this.estado_salida = 0;
         this.check_entrada = 0;
         this.check_salida = 0;
+        this.leido_orden_entrada = 0;
+        this.leido_orden_salida = 0;
+        this.trans_orden_entrada = 0;
+        this.trans_orden_salida = 0;
     }
 
 
@@ -318,9 +329,40 @@ public class CajaReg {
         this.estado_salida = estado_salida;
     }
 
+    public int getLeido_orden_entrada() {
+        return leido_orden_entrada;
+    }
+
+    public void setLeido_orden_entrada(int leido_orden_entrada) {
+        this.leido_orden_entrada = leido_orden_entrada;
+    }
+
+    public int getLeido_orden_salida() {
+        return leido_orden_salida;
+    }
+
+    public void setLeido_orden_salida(int leido_orden_salida) {
+        this.leido_orden_salida = leido_orden_salida;
+    }
+
+    public int getTrans_orden_entrada() {
+        return trans_orden_entrada;
+    }
+
+    public void setTrans_orden_entrada(int trans_orden_entrada) {
+        this.trans_orden_entrada = trans_orden_entrada;
+    }
+
+    public int getTrans_orden_salida() {
+        return trans_orden_salida;
+    }
+
+    public void setTrans_orden_salida(int trans_orden_salida) {
+        this.trans_orden_salida = trans_orden_salida;
+    }
+
     public ContentValues toValues(){
         ContentValues contentValues = new ContentValues();
-        contentValues.put(SQLConstantes.cajasreg_id,_id);
         contentValues.put(SQLConstantes.cajasreg_cod_barra,cod_barra_caja);
         contentValues.put(SQLConstantes.cajasreg_ccdd,ccdd);
         contentValues.put(SQLConstantes.cajasreg_departamento,departamento);
@@ -347,6 +389,10 @@ public class CajaReg {
         contentValues.put(SQLConstantes.cajasreg_min_salida,min_salida);
         contentValues.put(SQLConstantes.cajasreg_seg_salida,seg_salida);
         contentValues.put(SQLConstantes.cajasreg_estado_salida,estado_salida);
+        contentValues.put(SQLConstantes.cajasreg_leido_orden_entrada,leido_orden_entrada);
+        contentValues.put(SQLConstantes.cajasreg_leido_orden_salida,leido_orden_salida);
+        contentValues.put(SQLConstantes.cajasreg_trans_orden_entrada,trans_orden_entrada);
+        contentValues.put(SQLConstantes.cajasreg_trans_orden_salida,trans_orden_salida);
         return contentValues;
     }
 }

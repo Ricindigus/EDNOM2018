@@ -372,7 +372,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/margin16dp"
-            android:visibility="visible"
+            android:visibility="gone"
             android:background="@drawable/fondo_rojo">
             <TextView
                 android:layout_width="match_parent"

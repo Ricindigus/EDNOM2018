@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,18 +51,18 @@ public class ListAsisAulaFragment extends Fragment {
     ArrayList<AsistenciaReg> asistenciaAulas;
     ArrayList<AsistenciaReg> noEnviados;
     Data data;
-    FloatingActionButton fabUpLoad;
-    FloatingActionButton fabSearch;
+    ImageButton fabUpLoad;
+    ImageButton fabSearch;
 
     AsistenciaAulaAdapter asistenciaAulaAdapter;
     boolean b = false;
 
-    TextView txtTotal;
     TextView txtSinRegistro;
     TextView txtRegistrados;
     TextView txtTransferidos;
 
     String nombreColeccion;
+    int seleccion;
 
     public ListAsisAulaFragment() {
         // Required empty public constructor
@@ -72,6 +73,15 @@ public class ListAsisAulaFragment extends Fragment {
         this.context = context;
         this.nroLocal = nroLocal;
         this.usuario = usuario;
+        this.seleccion = 0;
+    }
+
+    @SuppressLint("ValidFragment")
+    public ListAsisAulaFragment(Context context, int nroLocal, String usuario, int seleccion) {
+        this.context = context;
+        this.nroLocal = nroLocal;
+        this.usuario = usuario;
+        this.seleccion = seleccion;
     }
 
     @Override
@@ -81,10 +91,9 @@ public class ListAsisAulaFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_list_asis_aula, container, false);
         spAulas = (Spinner) rootView.findViewById(R.id.asistencia_aula_spAula);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.listado_recycler);
-        fabUpLoad = (FloatingActionButton) rootView.findViewById(R.id.listado_btnUpload);
-        fabSearch = (FloatingActionButton) rootView.findViewById(R.id.listado_btnBuscar);
+        fabUpLoad = (ImageButton) rootView.findViewById(R.id.lista_btnUpload);
+        fabSearch = (ImageButton) rootView.findViewById(R.id.lista_btnBuscar);
 
-        txtTotal = (TextView) rootView.findViewById(R.id.lista_txtTotales);
         txtSinRegistro = (TextView) rootView.findViewById(R.id.lista_txtSinRegistro);
         txtRegistrados = (TextView) rootView.findViewById(R.id.lista_txtRegistrados);
         txtTransferidos = (TextView) rootView.findViewById(R.id.lista_txtTransferidos);
@@ -109,13 +118,14 @@ public class ListAsisAulaFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 ActividadInterfaz actividadInterfaz = (ActividadInterfaz) getActivity();
-                actividadInterfaz.irReporte(TipoFragment.REGISTRO_ASISTENCIA_AULA);
+                actividadInterfaz.irReportexAula(TipoFragment.REGISTRO_ASISTENCIA_AULA,seleccion);
             }
         });
 
         spAulas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                seleccion = position;
                 cargaData();
                 asistenciaAulaAdapter = new AsistenciaAulaAdapter(asistenciaAulas,context);
                 recyclerView.setAdapter(asistenciaAulaAdapter);
@@ -180,6 +190,8 @@ public class ListAsisAulaFragment extends Fragment {
 
             }
         });
+
+        spAulas.setSelection(seleccion);
     }
     public void cargaData(){
         asistenciaAulas = new ArrayList<AsistenciaReg>();
@@ -189,10 +201,9 @@ public class ListAsisAulaFragment extends Fragment {
         String aula = spAulas.getSelectedItem().toString();
         int nroAula = d.getNumeroAula(aula,nroLocal);
         asistenciaAulas = d.getListadoAsistenciaAula(nroLocal,nroAula);
-        txtTotal.setText("Total: " + asistenciaAulas.size());
-        txtSinRegistro.setText("Sin Registro: " + d.getNroAsistenciasAulaSinRegistro(nroLocal,nroAula));
-        txtRegistrados.setText("Registrados: " + d.getNroAsistenciasAulaLeidas(nroLocal,nroAula));
-        txtTransferidos.setText("Transferidos: " + d.getNroAsistenciasAulaTransferidos(nroLocal,nroAula));
+        txtSinRegistro.setText("Sin Registro: " + d.getNroAsistenciasAulaSinRegistro(nroLocal,nroAula)+"/"+ asistenciaAulas.size());
+        txtRegistrados.setText("Registrados: " + d.getNroAsistenciasAulaLeidas(nroLocal,nroAula)+"/"+ asistenciaAulas.size());
+        txtTransferidos.setText("Transferidos: " + d.getNroAsistenciasAulaTransferidos(nroLocal,nroAula)+"/"+ asistenciaAulas.size());
         d.close();
     }
     public String checkDigito (int number) {

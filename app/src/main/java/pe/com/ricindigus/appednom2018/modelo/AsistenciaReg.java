@@ -33,6 +33,10 @@ public class AsistenciaReg {
     private int min_aula;
     private int seg_aula;
     private int estado_aula;
+    public int lei_orden_local;
+    public int lei_orden_aula;
+    public int trans_orden_local;
+    public int trans_orden_aula;
 
     public AsistenciaReg(){
         this.dia_local = 0;
@@ -49,10 +53,13 @@ public class AsistenciaReg {
         this.min_aula = 0;
         this.seg_aula = 0;
         this.estado_aula = 0;
+        this.lei_orden_local = 0;
+        this.lei_orden_aula = 0;
+        this.trans_orden_local = 0;
+        this.trans_orden_aula = 0;
     }
 
-    public AsistenciaReg(String _id, String dni, String nombres, String ape_paterno, String ape_materno, int naula, String discapacidad, String prioridad, int idnacional, String idsede, String nom_sede, String ccdd, String departamento, int idlocal, String nom_local, String direccion, int dia_local, int mes_local, int anio_local, int hora_local, int min_local, int seg_local, int estado_local, int dia_aula, int mes_aula, int anio_aula, int hora_aula, int min_aula, int seg_aula, int estado_aula) {
-        this._id = _id;
+    public AsistenciaReg(String dni, String nombres, String ape_paterno, String ape_materno, int naula, String discapacidad, String prioridad, int idnacional, String idsede, String nom_sede, String ccdd, String departamento, int idlocal, String nom_local, String direccion, int dia_local, int mes_local, int anio_local, int hora_local, int min_local, int seg_local, int estado_local, int dia_aula, int mes_aula, int anio_aula, int hora_aula, int min_aula, int seg_aula, int estado_aula, int lei_orden_local, int lei_orden_aula, int trans_orden_local, int trans_orden_aula) {
         this.dni = dni;
         this.nombres = nombres;
         this.ape_paterno = ape_paterno;
@@ -82,6 +89,43 @@ public class AsistenciaReg {
         this.min_aula = min_aula;
         this.seg_aula = seg_aula;
         this.estado_aula = estado_aula;
+        this.lei_orden_local = lei_orden_local;
+        this.lei_orden_aula = lei_orden_aula;
+        this.trans_orden_local = trans_orden_local;
+        this.trans_orden_aula = trans_orden_aula;
+    }
+
+
+    public int getLei_orden_local() {
+        return lei_orden_local;
+    }
+
+    public void setLei_orden_local(int lei_orden_local) {
+        this.lei_orden_local = lei_orden_local;
+    }
+
+    public int getLei_orden_aula() {
+        return lei_orden_aula;
+    }
+
+    public void setLei_orden_aula(int lei_orden_aula) {
+        this.lei_orden_aula = lei_orden_aula;
+    }
+
+    public int getTrans_orden_local() {
+        return trans_orden_local;
+    }
+
+    public void setTrans_orden_local(int trans_orden_local) {
+        this.trans_orden_local = trans_orden_local;
+    }
+
+    public int getTrans_orden_aula() {
+        return trans_orden_aula;
+    }
+
+    public void setTrans_orden_aula(int trans_orden_aula) {
+        this.trans_orden_aula = trans_orden_aula;
     }
 
     public String get_id() {
@@ -356,6 +400,10 @@ public class AsistenciaReg {
         contentValues.put(SQLConstantes.asistenciareg_min_aula,min_aula);
         contentValues.put(SQLConstantes.asistenciareg_seg_aula,seg_aula);
         contentValues.put(SQLConstantes.asistenciareg_estado_aula,estado_aula);
+        contentValues.put(SQLConstantes.asistenciareg_lei_orden_local,lei_orden_local);
+        contentValues.put(SQLConstantes.asistenciareg_lei_orden_aula,lei_orden_aula);
+        contentValues.put(SQLConstantes.asistenciareg_trans_orden_local,trans_orden_local);
+        contentValues.put(SQLConstantes.asistenciareg_trans_orden_aula,trans_orden_aula);
         return contentValues;
     }
 }

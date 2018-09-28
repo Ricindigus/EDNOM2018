@@ -136,7 +136,7 @@ public class AsistLocalFragment extends Fragment {
         nombreColeccion = data.getNombreColeccionAsistencia();
 //        txtTotal.setText("Total: " + data.getNumeroItemsAsistenciaReg());
 //        txtFaltan.setText("Faltan: " + data.getNroAsistenciasLocalSinRegistro(nroLocal));
-        txtRegistrados.setText("Leidos: " + data.getNroAsistenciasLocalLeidas(nroLocal)+"/"+  nroTotal);
+        txtRegistrados.setText("Registrados: " + data.getNroAsistenciasLocalLeidas(nroLocal)+"/"+  nroTotal);
         txtTransferidos.setText("Transferidos: " + data.getNroAsistenciasLocalTransferidos(nroLocal)+"/" + nroTotal);
         data.close();
         btnBuscar.setOnClickListener(new View.OnClickListener() {
@@ -151,6 +151,7 @@ public class AsistLocalFragment extends Fragment {
             public void onClick(View v) {
                 ActividadInterfaz actividadInterfaz = (ActividadInterfaz) getActivity();
                 actividadInterfaz.irReporte(TipoFragment.REPORTES_LISTADO_ASISTENCIA_LOCAL);
+                ocultarTeclado(btnReporte);
             }
         });
     }
@@ -198,9 +199,10 @@ public class AsistLocalFragment extends Fragment {
         contentValues.put(SQLConstantes.asistenciareg_min_local,minuto);
         contentValues.put(SQLConstantes.asistenciareg_seg_local,seg);
         contentValues.put(SQLConstantes.asistenciareg_estado_local,1);
+        contentValues.put(SQLConstantes.asistenciareg_lei_orden_local,hora*60*60+minuto*60+seg);
         data.actualizarAsistenciaReg(asistenciaReg.getDni(),contentValues);
 //        txtFaltan.setText("Faltan: " + data.getNroAsistenciasLocalSinRegistro(nroLocal));
-        txtRegistrados.setText("Leidos: " + data.getNroAsistenciasLocalLeidas(nroLocal)+"/"+  nroTotal);
+        txtRegistrados.setText("Registrados: " + data.getNroAsistenciasLocalLeidas(nroLocal)+"/"+  nroTotal);
         AsistenciaReg asis = data.getAsistenciaReg(asistenciaReg.getDni());
         data.close();
         mostrarCorrecto(asis.getDni(),asis.getNombres() +" "+ asis.getApe_paterno() +" "+ asis.getApe_materno(),asis.getNom_sede(),asis.getNom_local(),asis.getNaula());

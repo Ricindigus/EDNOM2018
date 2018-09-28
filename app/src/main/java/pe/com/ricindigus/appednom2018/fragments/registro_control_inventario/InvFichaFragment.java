@@ -78,6 +78,8 @@ public class InvFichaFragment extends Fragment {
     TextView txtTransferidos;
 
     String nombreColeccion;
+    int seleccion;
+
 
     public InvFichaFragment() {
         // Required empty public constructor
@@ -88,6 +90,15 @@ public class InvFichaFragment extends Fragment {
         this.context = context;
         this.nroLocal = nroLocal;
         this.usuario = usuario;
+        this.seleccion = 0;
+    }
+
+    @SuppressLint("ValidFragment")
+    public InvFichaFragment(int nroLocal, Context context, String usuario, int seleccion) {
+        this.context = context;
+        this.nroLocal = nroLocal;
+        this.usuario = usuario;
+        this.seleccion = seleccion;
     }
 
 
@@ -145,13 +156,14 @@ public class InvFichaFragment extends Fragment {
         spAulas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                seleccion = position;
                 Data data =  new Data(context);
                 data.open();
                 String aula = spAulas.getSelectedItem().toString();
                 int nroAula = data.getNumeroAula(aula,nroLocal);
 //                txtTotal.setText("Total: " + data.getNroFichasTotales(nroLocal, nroAula));
 //                txtFaltan.setText("Faltan: " + data.getNroFichasFaltan(nroLocal,nroAula));
-                txtRegistrados.setText("Registrados: " + data.getNroFichasRegistradas(nroLocal,nroAula) + "/" + data.getNroFichasTotales(nroLocal, nroAula));
+                txtRegistrados.setText("Registrados: " + data.getNroFichasLeidas(nroLocal,nroAula) + "/" + data.getNroFichasTotales(nroLocal, nroAula));
                 txtTransferidos.setText("Transferidos: " + data.getNroFichasTransferidas(nroLocal,nroAula)+ "/" + data.getNroFichasTotales(nroLocal, nroAula));
                 lytCorrecto.setVisibility(View.GONE);
                 lytErrorFicha.setVisibility(View.GONE);
@@ -177,9 +189,12 @@ public class InvFichaFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 ActividadInterfaz actividadInterfaz = (ActividadInterfaz) getActivity();
-                actividadInterfaz.irReporte(TipoFragment.REPORTES_LISTADO_INVENTARIO_FICHA);
+                actividadInterfaz.irReportexAula(TipoFragment.REPORTES_LISTADO_INVENTARIO_FICHA,seleccion);
+                ocultarTeclado(btnReporte);
             }
         });
+
+        spAulas.setSelection(seleccion);
     }
 
     public void clickBoton(){
@@ -232,10 +247,12 @@ public class InvFichaFragment extends Fragment {
         contentValues.put(SQLConstantes.inventarioreg_min,minuto);
         contentValues.put(SQLConstantes.inventarioreg_seg,seg);
         contentValues.put(SQLConstantes.inventarioreg_estado,1);
+        contentValues.put(SQLConstantes.inventarioreg_leida_orden,hora*60*60+minuto*60+seg);
+
         data.actualizarFichaReg(codInventario,contentValues);
         final InventarioReg inventarioReg = data.getFichaReg(codInventario);
 //        txtFaltan.setText("Faltan: " + data.getNroFichasFaltan(nroLocal,inventarioReg.getNaula()));
-        txtRegistrados.setText("Registrados: " + data.getNroFichasRegistradas(nroLocal,inventarioReg.getNaula())+ "/" + data.getNroFichasTotales(nroLocal, inventarioReg.getNaula()));
+        txtRegistrados.setText("Registrados: " + data.getNroFichasLeidas(nroLocal,inventarioReg.getNaula())+ "/" + data.getNroFichasTotales(nroLocal, inventarioReg.getNaula()));
         data.close();
         mostrarCorrecto(inventarioReg.getDni(),inventarioReg.getNombres() +" "+ inventarioReg.getApe_paterno() +" "+ inventarioReg.getApe_materno(),inventarioReg.getCodigo());
         final String c = inventarioReg.getCodigo();

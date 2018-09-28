@@ -12,39 +12,44 @@
         android:layout_height="match_parent"
         android:layout_margin="5dp"
         android:orientation="vertical">
-        <TextView
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="LISTA DE ASISTENCIA REGISTRADA POR LOCAL"
-            android:theme="@style/estilo_titulo_fragment"
-            />
+            android:layout_height="wrap_content">
+            <ImageButton
+                android:id="@+id/lista_btnBuscar"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_event_available"
+                android:tint="@color/colorIcons"
+                android:theme="@style/RaisedButtonDarkGrey"
+                android:layout_marginLeft="@dimen/margin8dp"
+                />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="LISTA DE REGISTRO DE ASISTENCIA AL LOCAL"
+                android:theme="@style/estilo_titulo_listado_fragment"/>
+            <ImageButton
+                android:id="@+id/lista_btnUpload"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_file_upload"
+                android:tint="@color/colorIcons"
+                android:layout_marginRight="@dimen/margin8dp"
+                android:theme="@style/RaisedButtonDarkGrey"
+                />
+        </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal">
-            <TextView
-                android:id="@+id/lista_txtTotales"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:paddingLeft="8dp"
-                android:textStyle="bold"
-                android:textSize="@dimen/texto_medio"
-                android:textColor="@color/greyBluePrimary"
-                android:layout_height="wrap_content"
-                android:text="Totales:"
-                android:gravity="center"
-                />
-            <!--<TextView-->
-                <!--android:id="@+id/lista_txtSinRegistro"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_width="0dp"-->
-                <!--android:layout_weight="1"-->
-                <!--android:textStyle="bold"-->
-                <!--android:textSize="@dimen/texto_medio"-->
-                <!--android:textColor="@color/redPrimary"-->
-                <!--android:text="Sin registro:"-->
-                <!--/>-->
             <TextView
                 android:id="@+id/lista_txtRegistrados"
                 android:layout_width="0dp"
@@ -54,7 +59,7 @@
                 android:gravity="center"
                 android:textColor="@color/amberPrimaryDark"
                 android:layout_height="wrap_content"
-                android:text="Registrados:"
+                android:text="Leídos:"
                 />
             <TextView
                 android:id="@+id/lista_txtTransferidos"
@@ -116,26 +121,7 @@
                 android:id="@+id/listado_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/listado_btnBuscar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentBottom="true"
-                android:layout_margin="10dp"
-                android:src="@drawable/ic_event_available"
-                android:tint="@color/colorIcons"
-                />
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/listado_btnUpload"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentBottom="true"
-                android:layout_margin="10dp"
-                android:src="@drawable/ic_file_upload"
-                android:tint="@color/colorIcons"
-                />
+
         </RelativeLayout>
     </LinearLayout>
 

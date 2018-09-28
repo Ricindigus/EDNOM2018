@@ -153,6 +153,7 @@ public class SQLConstantes {
     public static String usuario_actual_idsede = "idsede";
     public static String usuario_actual_nom_sede = "nom_sede";
 
+
     public static final String SQL_CREATE_TABLA_USUARIO_ACTUAL =
             "CREATE TABLE " + tablausuarioactual + "(" +
                     usuario_actual_id + " INTEGER PRIMARY KEY," +
@@ -206,6 +207,13 @@ public class SQLConstantes {
     public static String cajasreg_seg_salida = "seg_salida";
     public static String cajasreg_estado_salida = "estado_salida";
     public static String cajasreg_check_salida = "check_salida";
+    public static String cajasreg_leido_orden_entrada = "leido_orden_entrada";
+    public static String cajasreg_leido_orden_salida = "leido_orden_salida";
+    public static String cajasreg_trans_orden_entrada = "trans_orden_entrada";
+    public static String cajasreg_trans_orden_salida = "trans_orden_salida";
+
+
+
 
 
     public static final String SQL_CREATE_TABLA_CAJAS_REGISTRADAS =
@@ -238,7 +246,11 @@ public class SQLConstantes {
                     cajasreg_seg_salida + " INTEGER," +
                     cajasreg_estado_salida + " INTEGER," +
                     cajasreg_check_entrada + " INTEGER," +
-                    cajasreg_check_salida + " INTEGER" + ");"
+                    cajasreg_check_salida + " INTEGER," +
+                    cajasreg_leido_orden_entrada + " INTEGER," +
+                    cajasreg_trans_orden_entrada + " INTEGER," +
+                    cajasreg_leido_orden_salida + " INTEGER," +
+                    cajasreg_trans_orden_salida + " INTEGER" + ");"
             ;
 
 
@@ -274,6 +286,11 @@ public class SQLConstantes {
     public static String asistenciareg_min_aula = "min_aula";
     public static String asistenciareg_seg_aula = "seg_aula";
     public static String asistenciareg_estado_aula = "estado_aula";
+    public static String asistenciareg_lei_orden_local = "lei_orden_local";
+    public static String asistenciareg_lei_orden_aula = "lei_orden_aula";
+    public static String asistenciareg_trans_orden_local = "trans_orden_local";
+    public static String asistenciareg_trans_orden_aula = "trans_orden_aula";
+
 
     public static final String SQL_CREATE_TABLA_ASISTENCIAS_REGISTRADAS =
             "CREATE TABLE " + tablaasistenciasreg + "(" +
@@ -307,8 +324,13 @@ public class SQLConstantes {
                     asistenciareg_hora_aula + " INTEGER," +
                     asistenciareg_min_aula + " INTEGER," +
                     asistenciareg_seg_aula + " INTEGER," +
-                    asistenciareg_estado_aula + " INTEGER" + ");"
+                    asistenciareg_estado_aula + " INTEGER," +
+                    asistenciareg_lei_orden_aula + " INTEGER," +
+                    asistenciareg_lei_orden_local + " INTEGER," +
+                    asistenciareg_trans_orden_aula + " INTEGER," +
+                    asistenciareg_trans_orden_local + " INTEGER" + ");"
             ;
+
 
     //TABLA ASISTENCIA RA REGISTRADOS
     public static String asistenciareg_ra_id= "_id";
@@ -331,6 +353,10 @@ public class SQLConstantes {
     public static String asistenciareg_ra_min = "min";
     public static String asistenciareg_ra_seg = "seg";
     public static String asistenciareg_ra_estado = "estado";
+    public static String asistenciareg_ra_leida_orden = "leida_orden";
+    public static String asistenciareg_ra_trans_orden = "trans_orden";
+
+
 
     public static final String SQL_CREATE_TABLA_ASISTENCIAS_RA_REGISTRADAS =
             "CREATE TABLE " + tablaasistencias_ra_reg + "(" +
@@ -353,7 +379,9 @@ public class SQLConstantes {
                     asistenciareg_ra_hora + " INTEGER," +
                     asistenciareg_ra_min + " INTEGER," +
                     asistenciareg_ra_seg + " INTEGER," +
-                    asistenciareg_ra_estado + " INTEGER" + ");"
+                    asistenciareg_ra_estado + " INTEGER," +
+                    asistenciareg_ra_leida_orden + " INTEGER," +
+                    asistenciareg_ra_trans_orden + " INTEGER" + ");"
             ;
 
 
@@ -383,6 +411,8 @@ public class SQLConstantes {
     public static String inventarioreg_seg = "seg";
     public static String inventarioreg_estado = "estado";
     public static String inventarioreg_npostulantes = "npostulantes";
+    public static String inventarioreg_leida_orden = "leida_orden";
+    public static String inventarioreg_trans_orden = "trans_orden";
 
     public static final String SQL_CREATE_TABLA_FICHAS_REGISTRADAS=
             "CREATE TABLE " + tablafichasreg + "(" +
@@ -410,7 +440,9 @@ public class SQLConstantes {
                     inventarioreg_min + " INTEGER," +
                     inventarioreg_seg + " INTEGER," +
                     inventarioreg_estado + " INTEGER," +
-                    inventarioreg_npostulantes + " INTEGER" + ");"
+                    inventarioreg_npostulantes + " INTEGER," +
+                    inventarioreg_leida_orden + " INTEGER," +
+                    inventarioreg_trans_orden + " INTEGER" + ");"
             ;
 
 
@@ -442,7 +474,9 @@ public class SQLConstantes {
                     inventarioreg_min + " INTEGER," +
                     inventarioreg_seg + " INTEGER," +
                     inventarioreg_estado + " INTEGER," +
-                    inventarioreg_npostulantes + " INTEGER" + ");"
+                    inventarioreg_npostulantes + " INTEGER," +
+                    inventarioreg_leida_orden + " INTEGER," +
+                    inventarioreg_trans_orden + " INTEGER" + ");"
             ;
 
 
@@ -472,7 +506,9 @@ public class SQLConstantes {
                     inventarioreg_min + " INTEGER," +
                     inventarioreg_seg + " INTEGER," +
                     inventarioreg_estado + " INTEGER," +
-                    inventarioreg_npostulantes + " INTEGER" + ");"
+                    inventarioreg_npostulantes + " INTEGER," +
+                    inventarioreg_leida_orden + " INTEGER," +
+                    inventarioreg_trans_orden + " INTEGER" + ");"
             ;
     /**
      * -----------------FIN TABLAS GENERADAS PARA GUARDAR RESPUESTAS--------------------

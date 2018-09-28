@@ -76,6 +76,7 @@ public class InvListAsisFragment extends Fragment {
     TextView txtTransferidos;
 
     String nombreColeccion;
+    int seleccion;
 
 
     public InvListAsisFragment() {
@@ -87,6 +88,16 @@ public class InvListAsisFragment extends Fragment {
         this.context = context;
         this.nroLocal = nroLocal;
         this.usuario = usuario;
+        this.seleccion = 0;
+    }
+
+
+    @SuppressLint("ValidFragment")
+    public InvListAsisFragment(int nroLocal, Context context, String usuario,int seleccion) {
+        this.context = context;
+        this.nroLocal = nroLocal;
+        this.usuario = usuario;
+        this.seleccion = seleccion;
     }
 
     @Override
@@ -142,13 +153,14 @@ public class InvListAsisFragment extends Fragment {
         spAulas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                seleccion = position;
                 Data data =  new Data(context);
                 data.open();
                 String aula = spAulas.getSelectedItem().toString();
                 int nroAula = data.getNumeroAula(aula,nroLocal);
 //                txtTotal.setText("Total: " + data.getNroListasTotales(nroLocal, nroAula));
 //                txtFaltan.setText("Faltan: " + data.getNroListasFaltan(nroLocal,nroAula));
-                txtRegistrados.setText("Registrados: " + data.getNroListasRegistradas(nroLocal,nroAula) + "/"  + data.getNroListasTotales(nroLocal, nroAula));
+                txtRegistrados.setText("Registrados: " + data.getNroListasLeidas(nroLocal,nroAula) + "/"  + data.getNroListasTotales(nroLocal, nroAula));
                 txtTransferidos.setText("Transferidos: " + data.getNroListasTransferidas(nroLocal,nroAula)+ "/"  + data.getNroListasTotales(nroLocal, nroAula));
                 lytCorrecto.setVisibility(View.GONE);
                 lytErrorLista.setVisibility(View.GONE);
@@ -174,9 +186,12 @@ public class InvListAsisFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 ActividadInterfaz actividadInterfaz = (ActividadInterfaz) getActivity();
-                actividadInterfaz.irReporte(TipoFragment.REPORTES_LISTADO_INVENTARIO_LISTADO_ASISTENCIA);
+                actividadInterfaz.irReportexAula(TipoFragment.REPORTES_LISTADO_INVENTARIO_LISTADO_ASISTENCIA,seleccion);
+                ocultarTeclado(btnReporte);
             }
         });
+
+        spAulas.setSelection(seleccion);
     }
 
     public void clickBoton(){
@@ -229,9 +244,10 @@ public class InvListAsisFragment extends Fragment {
         contentValues.put(SQLConstantes.inventarioreg_seg,seg);
         contentValues.put(SQLConstantes.inventarioreg_npostulantes,nroPostulantes);
         contentValues.put(SQLConstantes.inventarioreg_estado,1);
+        contentValues.put(SQLConstantes.inventarioreg_leida_orden,hora*60*60+minuto*60+seg);
         data.actualizarListadoReg(inventarioReg.getCodigo(),contentValues);
         InventarioReg invReg = data.getListadoReg(inventarioReg.getCodigo());
-        txtRegistrados.setText("Registrados: " + data.getNroListasRegistradas(nroLocal,inventarioReg.getNaula()) + "/"  + data.getNroListasTotales(nroLocal, inventarioReg.getNaula()));
+        txtRegistrados.setText("Registrados: " + data.getNroListasLeidas(nroLocal,inventarioReg.getNaula()) + "/"  + data.getNroListasTotales(nroLocal, inventarioReg.getNaula()));
         data.close();
         mostrarCorrecto(invReg.getCodigo(),invReg.getNpostulantes());
         final String c = invReg.getCodigo();
