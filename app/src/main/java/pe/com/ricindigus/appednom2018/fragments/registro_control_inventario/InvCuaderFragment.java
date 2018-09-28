@@ -153,7 +153,7 @@ public class InvCuaderFragment extends Fragment {
         spAulas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                int seleccion;
+                seleccion = position;
                 Data data =  new Data(context);
                 data.open();
                 String aula = spAulas.getSelectedItem().toString();
@@ -251,30 +251,30 @@ public class InvCuaderFragment extends Fragment {
         txtRegistrados.setText("Registrados: " + data.getNroCuadernillosLeidos(nroLocal,inventarioReg.getNaula())+"/"+data.getNroCuadernillosTotales(nroLocal,inventarioReg.getNaula()));
         data.close();
         mostrarCorrecto(inventarioReg.getDni(),inventarioReg.getNombres() +" "+ inventarioReg.getApe_paterno() +" "+ inventarioReg.getApe_materno(),inventarioReg.getCodigo());
-        final String c = inventarioReg.getCodigo();
-        WriteBatch batch = FirebaseFirestore.getInstance().batch();
-        DocumentReference documentReference = FirebaseFirestore.getInstance().collection(nombreColeccion).document(inventarioReg.getCodigo());
-        batch.update(documentReference, "check_registro_cuadernillo", 1);
-        batch.update(documentReference, "fecha_transferencia_cuadernillo", FieldValue.serverTimestamp());
-        batch.update(documentReference, "usuario_registro_cuadernillo", usuario);
-        batch.update(documentReference, "fecha_registro_cuadernillo",
-                new Timestamp(new Date(inventarioReg.getAnio()-1900,inventarioReg.getMes()-1,inventarioReg.getDia(),
-                        inventarioReg.getHora(),inventarioReg.getMin(),inventarioReg.getSeg())));
-        batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Data data = new Data(context);
-                data.open();
-                data.actualizarCuadernilloRegSubido(c);
-                txtTransferidos.setText("Transferidos: " + data.getNroCuadernillosTransferidos(nroLocal,inventarioReg.getNaula())+"/"+ data.getNroCuadernillosTotales(nroLocal, inventarioReg.getNaula()));
-                data.close();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(context, "NO GUARDO", Toast.LENGTH_SHORT).show();
-            }
-        });
+//        final String c = inventarioReg.getCodigo();
+//        WriteBatch batch = FirebaseFirestore.getInstance().batch();
+//        DocumentReference documentReference = FirebaseFirestore.getInstance().collection(nombreColeccion).document(inventarioReg.getCodigo());
+//        batch.update(documentReference, "check_registro_cuadernillo", 1);
+//        batch.update(documentReference, "fecha_transferencia_cuadernillo", FieldValue.serverTimestamp());
+//        batch.update(documentReference, "usuario_registro_cuadernillo", usuario);
+//        batch.update(documentReference, "fecha_registro_cuadernillo",
+//                new Timestamp(new Date(inventarioReg.getAnio()-1900,inventarioReg.getMes()-1,inventarioReg.getDia(),
+//                        inventarioReg.getHora(),inventarioReg.getMin(),inventarioReg.getSeg())));
+//        batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
+//            @Override
+//            public void onSuccess(Void aVoid) {
+//                Data data = new Data(context);
+//                data.open();
+//                data.actualizarCuadernilloRegSubido(c);
+//                txtTransferidos.setText("Transferidos: " + data.getNroCuadernillosTransferidos(nroLocal,inventarioReg.getNaula())+"/"+ data.getNroCuadernillosTotales(nroLocal, inventarioReg.getNaula()));
+//                data.close();
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception e) {
+//                Toast.makeText(context, "NO GUARDO", Toast.LENGTH_SHORT).show();
+//            }
+//        });
     }
 
     public void mostrarCorrecto(String dni, String nombre, String codigoCuadernillo){

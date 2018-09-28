@@ -177,17 +177,23 @@ public class CajasInFragment extends Fragment {
             int minuto = calendario.get(Calendar.MINUTE);
             int segundos = calendario.get(Calendar.SECOND);
             ContentValues contentValues = new ContentValues();
+            contentValues.put(SQLConstantes.cajasreg_dia_entrada,dd);
+            contentValues.put(SQLConstantes.cajasreg_mes_entrada,mm);
+            contentValues.put(SQLConstantes.cajasreg_anio_entrada,yy);
+            contentValues.put(SQLConstantes.cajasreg_hora_entrada,hora);
+            contentValues.put(SQLConstantes.cajasreg_min_entrada,minuto);
+            contentValues.put(SQLConstantes.cajasreg_seg_entrada,segundos);
             contentValues.put(SQLConstantes.cajasreg_check_entrada,1);
             data.actualizarCajaReg(codigoBarra,contentValues);
             if (cajaIn.getNlado() == 1){
                 ContentValues contentValues1 = new ContentValues();
-                contentValues1.put(SQLConstantes.cajasreg_dia_entrada,dd);
-                contentValues1.put(SQLConstantes.cajasreg_mes_entrada,mm);
-                contentValues1.put(SQLConstantes.cajasreg_anio_entrada,yy);
-                contentValues1.put(SQLConstantes.cajasreg_hora_entrada,hora);
-                contentValues1.put(SQLConstantes.cajasreg_min_entrada,minuto);
-                contentValues1.put(SQLConstantes.cajasreg_seg_entrada,segundos);
                 contentValues1.put(SQLConstantes.cajasreg_leido_orden_entrada,hora*60*60+minuto*60+segundos);
+                contentValues1.put(SQLConstantes.cajasreg_dia_entrada_final,dd);
+                contentValues1.put(SQLConstantes.cajasreg_mes_entrada_final,mm);
+                contentValues1.put(SQLConstantes.cajasreg_anio_entrada_final,yy);
+                contentValues1.put(SQLConstantes.cajasreg_hora_entrada_final,hora);
+                contentValues1.put(SQLConstantes.cajasreg_min_entrada_final,minuto);
+                contentValues1.put(SQLConstantes.cajasreg_seg_entrada_final,segundos);
                 if (cajaIn.getTipo() == 3) contentValues1.put(SQLConstantes.cajasreg_estado_entrada,2);
                 else contentValues1.put(SQLConstantes.cajasreg_estado_entrada,cajaIn.getEstado_entrada() + 1);
                 data.actualizarCajaReg(codigoBarra,contentValues1);
@@ -198,12 +204,12 @@ public class CajasInFragment extends Fragment {
             if(cajaIn.getNlado() == 2){
                 CajaReg cajaIn1 = data.getCajaReg(getCodigoAux(codigoBarra),numeroLocal);
                 ContentValues contentValues2 = new ContentValues();
-                contentValues2.put(SQLConstantes.cajasreg_dia_entrada,dd);
-                contentValues2.put(SQLConstantes.cajasreg_mes_entrada,mm);
-                contentValues2.put(SQLConstantes.cajasreg_anio_entrada,yy);
-                contentValues2.put(SQLConstantes.cajasreg_hora_entrada,hora);
-                contentValues2.put(SQLConstantes.cajasreg_min_entrada,minuto);
-                contentValues2.put(SQLConstantes.cajasreg_seg_entrada,segundos);
+                contentValues2.put(SQLConstantes.cajasreg_dia_entrada_final,dd);
+                contentValues2.put(SQLConstantes.cajasreg_mes_entrada_final,mm);
+                contentValues2.put(SQLConstantes.cajasreg_anio_entrada_final,yy);
+                contentValues2.put(SQLConstantes.cajasreg_hora_entrada_final,hora);
+                contentValues2.put(SQLConstantes.cajasreg_min_entrada_final,minuto);
+                contentValues2.put(SQLConstantes.cajasreg_seg_entrada_final,segundos);
                 contentValues2.put(SQLConstantes.cajasreg_leido_orden_entrada,hora*60*60+minuto*60+segundos);
                 contentValues2.put(SQLConstantes.cajasreg_estado_entrada,cajaIn1.getEstado_entrada() + 1);
                 data.actualizarCajaReg(cajaIn1.getCod_barra_caja(),contentValues2);

@@ -35,14 +35,17 @@ public class CajasEntradaAdapter extends RecyclerView.Adapter<CajasEntradaAdapte
         CajaReg cajaReg = cajaRegs.get(position);
         holder.txtCodBarra.setText(cajaReg.getCod_barra_caja());
         holder.txtAcl.setText("ACL: " + cajaReg.getAcl());
-        holder.txtFecha.setText(checkDigito(cajaReg.getDia_entrada()) + "-"
-                + checkDigito(cajaReg.getMes_entrada()) + "-" + checkDigito(cajaReg.getAnio_entrada()) + " "
-                + checkDigito(cajaReg.getHora_entrada()) + ":" + checkDigito(cajaReg.getMin_entrada())+ ":"
-                + checkDigito(cajaReg.getSeg_entrada()));
-
         if(cajaReg.getEstado_entrada() == 3){
+            holder.txtFecha.setText(checkDigito(cajaReg.getDia_entrada_final()) + "-"
+                    + checkDigito(cajaReg.getMes_entrada_final()) + "-" + checkDigito(cajaReg.getAnio_entrada_final()) + " "
+                    + checkDigito(cajaReg.getHora_entrada_final()) + ":" + checkDigito(cajaReg.getMin_entrada_final())+ ":"
+                    + checkDigito(cajaReg.getSeg_entrada_final()));
             holder.cv.setCardBackgroundColor(ContextCompat.getColor(context, R.color.greenPrimaryLight));
         }else if(cajaReg.getEstado_entrada() == 2){
+            holder.txtFecha.setText(checkDigito(cajaReg.getDia_entrada()) + "-"
+                    + checkDigito(cajaReg.getMes_entrada_final()) + "-" + checkDigito(cajaReg.getAnio_entrada_final()) + " "
+                    + checkDigito(cajaReg.getHora_entrada_final()) + ":" + checkDigito(cajaReg.getMin_entrada_final())+ ":"
+                    + checkDigito(cajaReg.getSeg_entrada_final()));
             holder.cv.setCardBackgroundColor(ContextCompat.getColor(context, R.color.amberPrimaryLight));
         }else if(cajaReg.getEstado_entrada() == 1){
             holder.cv.setCardBackgroundColor(ContextCompat.getColor(context, R.color.bluePrimaryLight));

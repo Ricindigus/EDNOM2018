@@ -144,7 +144,7 @@ public class ListInvFichaFragment extends Fragment {
                 int seleccion = spAulas.getSelectedItemPosition();
                 String aula = spAulas.getSelectedItem().toString();
                 int nroAula = 0;
-                if(seleccion > 0) nroAula = data.getNumeroAula(aula,nroLocal);
+                nroAula = data.getNumeroAula(aula,nroLocal);
                 datosNoEnviados = data.getInventarioFichasSinEnviar(nroLocal,nroAula);
                 data.close();
                 if(datosNoEnviados.size() > 0){

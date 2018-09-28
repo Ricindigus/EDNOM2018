@@ -35,15 +35,18 @@ public class CajasSalidaAdapter extends RecyclerView.Adapter<CajasSalidaAdapter.
         CajaReg cajaReg = cajaRegs.get(position);
         holder.txtCodBarra.setText(cajaReg.getCod_barra_caja());
         holder.txtAcl.setText("ACL: " + cajaReg.getAcl());
-        holder.txtFecha.setText(checkDigito(cajaReg.getDia_salida()) + "-"
-                + checkDigito(cajaReg.getMes_salida()) + "-" + checkDigito(cajaReg.getAnio_salida()) + " "
-                + checkDigito(cajaReg.getHora_salida()) + ":" + checkDigito(cajaReg.getMin_salida())+ ":"
-                + checkDigito(cajaReg.getSeg_salida()));
-
         if(cajaReg.getEstado_salida() == 3){
             holder.cv.setCardBackgroundColor(ContextCompat.getColor(context, R.color.greenPrimaryLight));
+            holder.txtFecha.setText(checkDigito(cajaReg.getDia_salida_final()) + "-"
+                    + checkDigito(cajaReg.getMes_salida_final()) + "-" + checkDigito(cajaReg.getAnio_salida_final()) + " "
+                    + checkDigito(cajaReg.getHora_salida_final()) + ":" + checkDigito(cajaReg.getMin_salida_final())+ ":"
+                    + checkDigito(cajaReg.getSeg_salida_final()));
         }else if(cajaReg.getEstado_salida() == 2){
             holder.cv.setCardBackgroundColor(ContextCompat.getColor(context, R.color.amberPrimaryLight));
+            holder.txtFecha.setText(checkDigito(cajaReg.getDia_salida()) + "-"
+                    + checkDigito(cajaReg.getMes_salida_final()) + "-" + checkDigito(cajaReg.getAnio_salida_final()) + " "
+                    + checkDigito(cajaReg.getHora_salida_final()) + ":" + checkDigito(cajaReg.getMin_salida_final())+ ":"
+                    + checkDigito(cajaReg.getSeg_salida_final()));
         }else if(cajaReg.getEstado_salida() == 1){
             holder.cv.setCardBackgroundColor(ContextCompat.getColor(context, R.color.bluePrimaryLight));
         }else{

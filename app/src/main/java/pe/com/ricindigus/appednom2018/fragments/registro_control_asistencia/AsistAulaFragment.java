@@ -247,31 +247,31 @@ public class AsistAulaFragment extends Fragment {
         AsistenciaReg asis = data.getAsistenciaReg(asistenciaReg.getDni());
         data.close();
         mostrarCorrecto(asis.getDni(),asis.getNombres() +" "+ asis.getApe_paterno() +" "+ asis.getApe_materno());
-        final String c = asis.getDni();
-        WriteBatch batch = FirebaseFirestore.getInstance().batch();
-        DocumentReference documentReference = FirebaseFirestore.getInstance().collection(nombreColeccion).document(asis.getDni());
-        batch.update(documentReference, "check_registro_aula", 1);
-        batch.update(documentReference, "fecha_transferencia_aula", FieldValue.serverTimestamp());
-        batch.update(documentReference, "usuario_registro_aula", usuario);
-        batch.update(documentReference, "fecha_registro_aula",
-                new Timestamp(new Date(asis.getAnio_aula()-1900,asis.getMes_aula()-1,asis.getDia_aula(),
-                        asis.getHora_aula(),asis.getMin_aula(),asis.getSeg_aula())));
-        batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Data data = new Data(context);
-                data.open();
-                data.actualizarAsistenciaRegAulaSubido(c);
-                txtTransferidos.setText("Transferidos: " + data.getNroAsistenciasAulaTransferidos(nroLocal,asistenciaReg.getNaula())+"/"+data.getNroAsistenciasAulaSinRegistro(nroLocal,asistenciaReg.getNaula()));
-
-                data.close();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(context, "NO GUARDO", Toast.LENGTH_SHORT).show();
-            }
-        });
+//        final String c = asis.getDni();
+//        WriteBatch batch = FirebaseFirestore.getInstance().batch();
+//        DocumentReference documentReference = FirebaseFirestore.getInstance().collection(nombreColeccion).document(asis.getDni());
+//        batch.update(documentReference, "check_registro_aula", 1);
+//        batch.update(documentReference, "fecha_transferencia_aula", FieldValue.serverTimestamp());
+//        batch.update(documentReference, "usuario_registro_aula", usuario);
+//        batch.update(documentReference, "fecha_registro_aula",
+//                new Timestamp(new Date(asis.getAnio_aula()-1900,asis.getMes_aula()-1,asis.getDia_aula(),
+//                        asis.getHora_aula(),asis.getMin_aula(),asis.getSeg_aula())));
+//        batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
+//            @Override
+//            public void onSuccess(Void aVoid) {
+//                Data data = new Data(context);
+//                data.open();
+//                data.actualizarAsistenciaRegAulaSubido(c);
+//                txtTransferidos.setText("Transferidos: " + data.getNroAsistenciasAulaTransferidos(nroLocal,asistenciaReg.getNaula())+"/"+data.getNroAsistenciasAulaSinRegistro(nroLocal,asistenciaReg.getNaula()));
+//
+//                data.close();
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception e) {
+//                Toast.makeText(context, "NO GUARDO", Toast.LENGTH_SHORT).show();
+//            }
+//        });
     }
 
     public void mostrarCorrecto(String dni, String nombre){

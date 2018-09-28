@@ -207,6 +207,18 @@ public class SQLConstantes {
     public static String cajasreg_seg_salida = "seg_salida";
     public static String cajasreg_estado_salida = "estado_salida";
     public static String cajasreg_check_salida = "check_salida";
+    public static String cajasreg_dia_entrada_final = "dia_entrada_final";
+    public static String cajasreg_mes_entrada_final = "mes_entrada_final";
+    public static String cajasreg_anio_entrada_final = "anio_entrada_final";
+    public static String cajasreg_hora_entrada_final = "hora_entrada_final";
+    public static String cajasreg_min_entrada_final = "min_entrada_final";
+    public static String cajasreg_seg_entrada_final = "seg_entrada_final";
+    public static String cajasreg_dia_salida_final = "dia_salida_final";
+    public static String cajasreg_mes_salida_final = "mes_salida_final";
+    public static String cajasreg_anio_salida_final = "anio_salida_final";
+    public static String cajasreg_hora_salida_final = "hora_salida_final";
+    public static String cajasreg_min_salida_final = "min_salida_final";
+    public static String cajasreg_seg_salida_final = "seg_salida_final";
     public static String cajasreg_leido_orden_entrada = "leido_orden_entrada";
     public static String cajasreg_leido_orden_salida = "leido_orden_salida";
     public static String cajasreg_trans_orden_entrada = "trans_orden_entrada";
@@ -237,6 +249,12 @@ public class SQLConstantes {
                     cajasreg_hora_entrada + " INTEGER," +
                     cajasreg_min_entrada + " INTEGER," +
                     cajasreg_seg_entrada + " INTEGER," +
+                    cajasreg_dia_entrada_final + " INTEGER," +
+                    cajasreg_mes_entrada_final + " INTEGER," +
+                    cajasreg_anio_entrada_final + " INTEGER," +
+                    cajasreg_hora_entrada_final + " INTEGER," +
+                    cajasreg_min_entrada_final + " INTEGER," +
+                    cajasreg_seg_entrada_final + " INTEGER," +
                     cajasreg_estado_entrada + " INTEGER," +
                     cajasreg_dia_salida + " INTEGER," +
                     cajasreg_mes_salida + " INTEGER," +
@@ -244,6 +262,12 @@ public class SQLConstantes {
                     cajasreg_hora_salida + " INTEGER," +
                     cajasreg_min_salida + " INTEGER," +
                     cajasreg_seg_salida + " INTEGER," +
+                    cajasreg_dia_salida_final + " INTEGER," +
+                    cajasreg_mes_salida_final + " INTEGER," +
+                    cajasreg_anio_salida_final + " INTEGER," +
+                    cajasreg_hora_salida_final + " INTEGER," +
+                    cajasreg_min_salida_final + " INTEGER," +
+                    cajasreg_seg_salida_final + " INTEGER," +
                     cajasreg_estado_salida + " INTEGER," +
                     cajasreg_check_entrada + " INTEGER," +
                     cajasreg_check_salida + " INTEGER," +
