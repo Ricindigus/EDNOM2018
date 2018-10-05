@@ -164,9 +164,9 @@ public class ListAsisRAFragment extends Fragment {
         data.open();
         nombreColeccion = data.getNombreColeccionAsistenciaRA();
         asistenciaLocals = data.getListadoAsistenciaRA(nroLocal);
-        txtSinRegistro.setText("Sin Registro: " + data.getNroAsistenciasRaSinRegistro(nroLocal)+"/"+ data.getNumeroItemsAsistenciaRaReg());
-        txtRegistrados.setText("Registrados: " + data.getNroAsistenciasRALeidas(nroLocal)+"/"+ data.getNumeroItemsAsistenciaRaReg());
-        txtTransferidos.setText("Transferidos: " + data.getNroAsistenciasRATransferidos(nroLocal)+"/"+data.getNumeroItemsAsistenciaRaReg());
+        txtSinRegistro.setText("Sin Registro: " + data.getNroAsistenciasRaSinRegistro(nroLocal)+"/"+ asistenciaLocals.size());
+        txtRegistrados.setText("Registrados: " + data.getNroAsistenciasRALeidas(nroLocal)+"/"+ asistenciaLocals.size());
+        txtTransferidos.setText("Transferidos: " + data.getNroAsistenciasRATransferidos(nroLocal)+"/"+asistenciaLocals.size());
         data.close();
     }
 

@@ -22,4 +22,5 @@ public class TipoFragment {
     public static final int CONSULTA_PADRON_NACIONAL = 19;
     public static final int REGISTRO_ASISTENCIA_RA = 20;
     public static final int REPORTE_LISTADO_ASISTENCIA_RA = 21;
+    public static final int REPORTES_RESUMEN_RA = 22;
 }

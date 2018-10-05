@@ -160,8 +160,8 @@ public class ListAsisLocalFragment extends Fragment {
         data.open();
         nombreColeccion = data.getNombreColeccionAsistencia();
         asistenciaLocals = data.getListadoAsistenciaLocal(nroLocal);
-        txtRegistrados.setText("Registrados: " + data.getNroAsistenciasLocalLeidas(nroLocal)+"/"+data.getNumeroItemsAsistenciaReg());
-        txtTransferidos.setText("Transferidos: " + data.getNroAsistenciasLocalTransferidos(nroLocal)+"/"+ data.getNumeroItemsAsistenciaReg());
+        txtRegistrados.setText("Registrados: " + data.getNroAsistenciasLocalLeidas(nroLocal)+"/"+data.getNroAsistenciasLocalTotal(nroLocal));
+        txtTransferidos.setText("Transferidos: " + data.getNroAsistenciasLocalTransferidos(nroLocal)+"/"+ data.getNroAsistenciasLocalTotal(nroLocal));
         data.close();
     }
 

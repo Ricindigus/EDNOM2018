@@ -250,30 +250,30 @@ public class InvListAsisFragment extends Fragment {
         txtRegistrados.setText("Registrados: " + data.getNroListasLeidas(nroLocal,inventarioReg.getNaula()) + "/"  + data.getNroListasTotales(nroLocal, inventarioReg.getNaula()));
         data.close();
         mostrarCorrecto(invReg.getCodigo(),invReg.getNpostulantes());
-//        final String c = invReg.getCodigo();
-//        WriteBatch batch = FirebaseFirestore.getInstance().batch();
-//        DocumentReference documentReference = FirebaseFirestore.getInstance().collection(nombreColeccion).document(invReg.getCodigo());
-//        batch.update(documentReference, "check_registro_listado", 1);
-//        batch.update(documentReference, "fecha_transferencia", FieldValue.serverTimestamp());
-//        batch.update(documentReference, "usuario_registro", usuario);
-//        batch.update(documentReference, "fecha_registro",
-//                new Timestamp(new Date(invReg.getAnio()-1900,invReg.getMes()-1,invReg.getDia(),
-//                        invReg.getHora(),invReg.getMin(),invReg.getSeg())));
-//        batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
-//            @Override
-//            public void onSuccess(Void aVoid) {
-//                Data data = new Data(context);
-//                data.open();
-//                data.actualizarListadoRegSubido(c);
-//                txtTransferidos.setText("Transferidos: " + data.getNroListasTransferidas(nroLocal,inventarioReg.getNaula())+ "/"  + data.getNroListasTotales(nroLocal, inventarioReg.getNaula()));
-//                data.close();
-//            }
-//        }).addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(@NonNull Exception e) {
-//                Toast.makeText(context, "NO GUARDO", Toast.LENGTH_SHORT).show();
-//            }
-//        });
+        final String c = invReg.getCodigo();
+        WriteBatch batch = FirebaseFirestore.getInstance().batch();
+        DocumentReference documentReference = FirebaseFirestore.getInstance().collection(nombreColeccion).document(invReg.getCodigo());
+        batch.update(documentReference, "check_registro_listado", 1);
+        batch.update(documentReference, "fecha_transferencia", FieldValue.serverTimestamp());
+        batch.update(documentReference, "usuario_registro", usuario);
+        batch.update(documentReference, "fecha_registro",
+                new Timestamp(new Date(invReg.getAnio()-1900,invReg.getMes()-1,invReg.getDia(),
+                        invReg.getHora(),invReg.getMin(),invReg.getSeg())));
+        batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Data data = new Data(context);
+                data.open();
+                data.actualizarListadoRegSubido(c);
+                txtTransferidos.setText("Transferidos: " + data.getNroListasTransferidas(nroLocal,inventarioReg.getNaula())+ "/"  + data.getNroListasTotales(nroLocal, inventarioReg.getNaula()));
+                data.close();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(context, "NO GUARDO", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public void mostrarCorrecto(String codLista, int nroPostulantes){

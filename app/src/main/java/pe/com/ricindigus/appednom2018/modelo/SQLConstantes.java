@@ -552,6 +552,7 @@ public class SQLConstantes {
     public static final String WHERE_CLAUSE_ESTADO_ENTRADA = "estado_entrada=?";
     public static final String WHERE_CLAUSE_ESTADO_SALIDA = "estado_salida=?";
     public static final String WHERE_CLAUSE_ESTADO_LOCAL = "estado_local=?";
+    public static final String WHERE_CLAUSE_RA_TIPO_CARGO = "tipo_cargo=?";
 
     public static final String WHERE_CLAUSE_ESTADO_AULA = "estado_aula=?";
     public static final String WHERE_CLAUSE_ESTADO = "estado=?";
